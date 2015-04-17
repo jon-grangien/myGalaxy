@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
-
     <head>
-	
+		<title>I'm a goose</title>
 		<meta charset="utf-8">
 	</head>
     <body>
@@ -12,19 +11,12 @@
         <script>
 
             //VARIABLES
-
-			var clock = new THREE.Clock;
-
-			var container, stats;
-
-			var cubes = [];
+			var camera, scene, renderer, clock, container, stats;
 
 			var cube, cube2;
 
-
 			init();
 			animate();
-
 
 			function init(){
 
@@ -109,7 +101,7 @@
 			
 			//Render
 			function render() {
-				delta = clock.getDelta();
+				// delta = clock.getDelta();
 				renderer.render( scene, camera );
 				controls.update();
 			}
