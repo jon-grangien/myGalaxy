@@ -1,8 +1,15 @@
 3D-projekt
 test2
-jamä/simon
+
 git:
 status
+
+if(not-up-todate)
+{
+	git pull
+	git merge
+}
+
 add .
 commit -m"en kommentar"
 push
