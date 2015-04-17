@@ -9,7 +9,7 @@ if(not-up-todate)
 	git pull
 	git merge
 }
-
+haha pruuuut
 add .
 commit -m"en kommentar"
 push
