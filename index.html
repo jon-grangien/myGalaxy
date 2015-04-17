@@ -1,115 +1,135 @@
 <!DOCTYPE html>
 <html>
-    <head>
-		<title>I'm a goose</title>
-		<meta charset="utf-8">
+	<head>
+		<title> Solsystem av Anton Kaiser</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
 	</head>
-    <body>
-        <script src="js/three.js"></script>
-        <script src="js/TrackballControls.js"></script>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			camera.position.z = 300;
+			scene.add(camera);
+			
+			var planetSplit = 6;
+			var planetSpeed = 0.5;
+			
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			//Skapar en grupp som ska innehålla hela scengrafen
+			sceneGraph = new THREE.Object3D;
+			
+			
+			var A_light = new THREE.AmbientLight( 0x404040 ); // soft white light
+			sceneGraph.add( A_light );
+			
+			
+			var light = new THREE.DirectionalLight( 0xffffff,0.7 );
+			light.position.set( 20, 20, 20 ).normalize();
+			sceneGraph.add(light);
+
+			
+			sunGroup =new THREE.Object3D;
+			//***********************************
+			var sunGeometry = new THREE.SphereGeometry( 5, 32, 32 );
+			var sunMaterial = new THREE.MeshPhongMaterial();
+			
+			sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/sunmap.jpg');
+			sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/moonbump.jpg');
+			sunMaterial.bumpScale = 0.06;
+			sunMaterial.specular  = new THREE.Color('grey');
+			
+			var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
+			sunGroup.add( sunSphere);
+			//***********************************
+
+			
+			
+			
+			galaxyGroup = new THREE.Object3D;
+			//**********************************
+			var galaxyGeometry = new THREE.SphereGeometry( 300, 32, 32 );
+			var galaxyMaterial = new THREE.MeshPhongMaterial();
+			
+			galaxyMaterial.map    = THREE.ImageUtils.loadTexture('textures/galaxy.png');
+			//galaxyMaterial.specular  = new THREE.Color('grey');
+			galaxyMaterial.side = THREE.DoubleSide;
+			
+			var galaxySphere = new THREE.Mesh( galaxyGeometry, galaxyMaterial );
 		
-        <script>
+			galaxyGroup.add( galaxySphere);
+			//*********************************
+			
+			
+			/*
+			objectGroup = new THREE.Object3D;
+			//************************************
+			//****************************************************
+			var manager = new THREE.LoadingManager();
+			manager.onProgress = function ( item, loaded, total ) {
 
-            //VARIABLES
-			var camera, scene, renderer, clock, container, stats;
+					console.log( item, loaded, total );
+			};
 
-			var cube, cube2;
+				// model
+			var loader = new THREE.OBJLoader( manager );
+			loader.load( 'models/trex.obj', function ( object ) {
 
-			init();
-			animate();
+			object.traverse( function ( child ) {
 
-			function init(){
+				if ( child instanceof THREE.Mesh ) {
 
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+					//child.material.map = texture;
+				}
+			} );
 
-				renderer = new THREE.WebGLRenderer({ antialias: true });
-				renderer.setClearColor( 0x000000 );
-				renderer.setSize( window.innerWidth, window.innerHeight );
+			objectGroup.add( object);
+			*/
+			
+			//****************************************************
+			//************************************
+			
+			
+			
+			
+			
+			
+			sceneGraph.add(galaxyGroup);
+			//Lägger till grupper till scengraf
+			galaxyGroup.add(sunGroup);
+			
+			
+			//Lägger till scengraf till scen
+			scene.add(sceneGraph);
+			
+			sceneGraph.rotation.x += 0.5;
+			
+			
 
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.set( 0, 0, 20 );
-
-				scene = new THREE.Scene();
-				//scene.fog = new THREE.FogExp2( 0x000022, 0.005 );
-
-
-				//Cube	
-				geometry = new THREE.BoxGeometry( 1, 1, 1 );
-				material = new THREE.MeshPhongMaterial( { color: 0xff8914 } );
-				cube = new THREE.Mesh( geometry, material );
-				cube.rotation.x = Math.PI * 10 / 180;
-				scene.add( cube );
-
-				/*
-
-				var helper = new THREE.GridHelper( 500, 10 );
-						helper.color1.setHex( 0x444444 );
-						helper.color2.setHex( 0x444444 );
-						helper.position.y = 0.1
-						scene.add( helper );
-				*/ 
-
-				//MODEL
-				//Pointlight
-				var pointLight = new THREE.PointLight(0xffffff);
-				pointLight.position.set(0, 300, 200);
-
-				scene.add(pointLight);
-
-
-				var pointLight2 = new THREE.PointLight(0xaaaaaa);
-				pointLight2.position.set(50, -200, -200);
-				 
-				scene.add(pointLight2);
-
-
-				//Ambient
-				//var ambient = new THREE.AmbientLight( 0x101030 );
-				//		scene.add( ambient );
-
-
-
-				//Camera
-				camera.lookAt(cube.position);
+			//Renderingsloop
+			var render = function () {
+				requestAnimationFrame( render );
 				
-				controls = new THREE.TrackballControls( camera );
-				controls.zoomSpeed = 0.5;
-				controls.panSpeed = 0;
-				controls.rotateSpeed = 0.5;
-
-				//Eventlisteners
-			
-				window.addEventListener( 'resize', onWindowResize, false );
-			}
-
-
-			function onWindowResize() {
-
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize( window.innerWidth, window.innerHeight );
-			}
-
-			function animate() {
-
-				requestAnimationFrame( animate );
-				render();
-
-			}
-			
-			//Render
-			function render() {
-				// delta = clock.getDelta();
-				renderer.render( scene, camera );
-				controls.update();
-			}
+				if (camera.position.z > 40){
+				camera.position.z -= 0.9;
+				//camera.lookAt( earthGroup.position );
+				}
+				
+				
 
 
 
 
-        </script>
-    </body>
+				renderer.render(scene, camera);
+			};
 
+			render();
+		</script>
+	</body>
 </html>
