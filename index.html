@@ -1,0 +1,147 @@
+tml>
+
+<html>
+
+    <head></head>
+    <body>
+        <script src="js/three.js"></script>
+        <script src="js/TrackballControls.js"></script>
+		
+        <script>
+
+            //VARIABLES
+
+			var clock = new THREE.Clock;
+
+			var container, stats;
+
+			var cubes = [];
+
+			var cube, cube2;
+
+			//------------
+
+
+			init();
+			animate();
+
+
+			function init(){
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				//Text
+				var info = document.createElement( 'div' );
+				info.style.position = 'absolute';
+				info.style.top = '10px';
+				info.style.width = '100%';
+				info.style.textAlign = 'center';
+				info.innerHTML = '<p>Galaxy Goose</p>';
+				container.appendChild( info );
+
+				renderer = new THREE.WebGLRenderer({ antialias: true });
+				renderer.setClearColor( 0x000000 );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				/*		//fps stats
+						stats = new Stats();
+						stats.domElement.style.position = 'absolute';
+						stats.domElement.style.top = '0px';
+						container.appendChild( stats.domElement );
+				*/
+
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.set( 0, 0, 20 );
+
+
+				scene = new THREE.Scene();
+				scene.fog = new THREE.FogExp2( 0x000022, 0.005 );
+
+
+				//Cube	
+				geometry = new THREE.BoxGeometry( 1, 1, 1 );
+				material = new THREE.MeshPhongMaterial( { color: 0xff8914 } );
+				cube = new THREE.Mesh( geometry, material );
+				cube.rotation.x = Math.PI * 10 / 180;
+				scene.add( cube );
+
+				/*
+
+				var helper = new THREE.GridHelper( 500, 10 );
+						helper.color1.setHex( 0x444444 );
+						helper.color2.setHex( 0x444444 );
+						helper.position.y = 0.1
+						scene.add( helper );
+				*/ 
+
+				//MODEL
+				
+
+
+				//Pointlight
+				var pointLight = new THREE.PointLight(0xffffff);
+				pointLight.position.set(0, 300, 200);
+
+				scene.add(pointLight);
+
+
+				var pointLight2 = new THREE.PointLight(0xaaaaaa);
+				pointLight2.position.set(50, -200, -200);
+				 
+				scene.add(pointLight2);
+
+
+				//Ambient
+				//var ambient = new THREE.AmbientLight( 0x101030 );
+				//		scene.add( ambient );
+
+
+
+				//Camera
+				camera.lookAt(cube.position);
+				
+				controls = new THREE.TrackballControls( camera );
+				controls.zoomSpeed = 0.5;
+				controls.panSpeed = 0;
+				controls.rotateSpeed = 0.5;
+
+				//Eventlisteners
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+				window.addEventListener( 'mousemove', onMouseMove, false );
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				render();
+				stats.update();
+
+			}
+			
+			//Render
+			function render() {
+				delta = clock.getDelta();
+				renderer.render( scene, camera );
+				controls.update();
+			}
+
+
+
+
+        </script>
+    </body>
+
+</html>
