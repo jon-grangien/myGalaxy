@@ -100,15 +100,13 @@
 			var gui = new DAT.GUI();
 
 			var parameters = {
-				a: "nu tar du det jävligt lugnt",
-				b: function() { alert("Hello!") },
-				c: function() { alert( parameters.a ) }
+				a: "ta det lugnt",
+				b: function() { alert( parameters.a ) }
 			};
 
 			// gui.add( parameters )
-			gui.add( parameters, 'a' ).name('String');						
-			gui.add( parameters, 'b' ).name('Say "Hello!"');
-			gui.add( parameters, 'c' ).name("Alert Message");
+			gui.add( parameters, 'a' ).name('Meddelande');						
+			gui.add( parameters, 'b' ).name("Visa");
 			
 			gui.open();
 
