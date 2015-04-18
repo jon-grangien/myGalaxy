@@ -9,8 +9,10 @@
 	</head>
 	<body>
 		<script src="js/three.js"></script>
-
 		<script src="js/TrackballControls.js"></script>
+		<script src="js/MTLLoader.js"></script>
+		<script src="js/OBJMTLLoader.js"></script>
+		<script src="js/OBJLoader.js"></script>
 		
 		<script>
 			var scene = new THREE.Scene();
@@ -23,12 +25,10 @@
 			document.body.appendChild( renderer.domElement );
 
 			//Skapar en grupp som ska innehålla hela scengrafen
-			sceneGraph = new THREE.Object3D;
-			
+			sceneGraph = new THREE.Object3D;		
 			
 			var A_light = new THREE.AmbientLight( 0x404040 ); // soft white light
 			sceneGraph.add( A_light );
-			
 			
 			var light = new THREE.DirectionalLight( 0xffffff,0.7 );
 			light.position.set( 20, 20, 20 ).normalize();
@@ -36,7 +36,6 @@
 
 			
 			sunGroup =new THREE.Object3D;
-			//***********************************
 			var sunGeometry = new THREE.SphereGeometry( 5, 32, 32 );
 			var sunMaterial = new THREE.MeshPhongMaterial();
 			
@@ -47,13 +46,33 @@
 			
 			var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
 			sunGroup.add( sunSphere);
-			//***********************************
 
-			
-			
+	        // Normandy
+			var normandyOnProgress = function ( xhr ) {
+	            if ( xhr.lengthComputable ) {
+	                var percentComplete = xhr.loaded / xhr.total * 100;
+	                console.log( Math.round(percentComplete, 2) + '% of Normandy downloaded' );
+	            }
+	        };
+
+	        var onError = function ( xhr ) {
+				console.log( 'Error loading Normandy' );
+	        };
+
+	        var loader2 = new THREE.OBJMTLLoader();
+	        loader2.load( "normandy/normandysr3.obj", "normandy/normandysr3.mtl", function(object){ 
+	            object.scale.x = 0.002;
+	            object.scale.y = 0.002;
+	            object.scale.z = 0.002;
+
+	            object.position.x = 10;
+
+	            object.rotation.x = -Math.PI / 2;
+
+	            sunGroup.add(object);
+	        },normandyOnProgress, onError);
 			
 			galaxyGroup = new THREE.Object3D;
-			//**********************************
 			var galaxyGeometry = new THREE.SphereGeometry( 300, 32, 32 );
 			var galaxyMaterial = new THREE.MeshPhongMaterial();
 			
@@ -62,39 +81,27 @@
 			galaxyMaterial.side = THREE.DoubleSide;
 			
 			var galaxySphere = new THREE.Mesh( galaxyGeometry, galaxyMaterial );
-		
-			galaxyGroup.add( galaxySphere);
-			//*********************************
-			
-			
-	
-			
-			
-			
-			
-			
-			
+			galaxyGroup.add( galaxySphere);			
 			sceneGraph.add(galaxyGroup);
+
 			//Lägger till grupper till scengraf
 			galaxyGroup.add(sunGroup);
 			
-			
 			//Lägger till scengraf till scen
 			scene.add(sceneGraph);
-			
 			sceneGraph.rotation.x += 0.5;
-			
 			
 			controls = new THREE.TrackballControls( camera );
 			controls.zoomSpeed = 0.5;
 			controls.panSpeed = 0;
 			controls.rotateSpeed = 3;
-			
 
 			//Renderingsloop
 			var render = function () {
 				requestAnimationFrame( render );
 				controls.update();
+
+				sunGroup.rotation.z += 0.01;
 
 				renderer.render(scene, camera);
 			};
