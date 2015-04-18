@@ -77,12 +77,12 @@
 				console.log( 'Error loading Normandy' );
 	        };
 
-	        var loader2 = new THREE.OBJMTLLoader();
+	        var loader2 = new THREE.OBJLoader();
 	        var normandy;
-	        loader2.load( "normandy/normandysr3.obj", "normandy/normandysr3.mtl", function(normandy){ 
-	            normandy.scale.x = 0.002;
-	            normandy.scale.y = 0.002;
-	            normandy.scale.z = 0.002;
+	        loader2.load( "normandy/normandy4.obj", function(normandy){ 
+	            normandy.scale.x = 0.02;
+	            normandy.scale.y = 0.02;
+	            normandy.scale.z = 0.02;
 
 	            normandy.position.x = 10;
 
