@@ -13,6 +13,7 @@
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
 		<script src="js/OBJLoader.js"></script>
+		<script type="text/javascript" src="js/DAT.GUI.min.js"></script>
 		
 		<script>
 			var scene = new THREE.Scene();
@@ -71,7 +72,7 @@
 
 	            sunGroup.add(object);
 	        },normandyOnProgress, onError);
-			
+
 			galaxyGroup = new THREE.Object3D;
 			var galaxyGeometry = new THREE.SphereGeometry( 300, 32, 32 );
 			var galaxyMaterial = new THREE.MeshPhongMaterial();
@@ -95,6 +96,21 @@
 			controls.zoomSpeed = 0.5;
 			controls.panSpeed = 0;
 			controls.rotateSpeed = 3;
+
+			var gui = new DAT.GUI();
+
+			var parameters = {
+				a: "nu tar du det jävligt lugnt",
+				b: function() { alert("Hello!") },
+				c: function() { alert( parameters.a ) }
+			};
+
+			// gui.add( parameters )
+			gui.add( parameters, 'a' ).name('String');						
+			gui.add( parameters, 'b' ).name('Say "Hello!"');
+			gui.add( parameters, 'c' ).name("Alert Message");
+			
+			gui.open();
 
 			//Renderingsloop
 			var render = function () {
