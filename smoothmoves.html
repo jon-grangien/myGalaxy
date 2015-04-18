@@ -15,6 +15,8 @@
 		<script src="js/DDSLoader.js"></script>
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
+		<script src="js/Projector.js"></script>
+		<script src="js/CanvasRenderer.js"></script>
 		
 		<script>
 			//Klickvariabler
@@ -47,7 +49,8 @@
 			
 			sunGroup =new THREE.Object3D;
 			//***********************************
-			var sunGeometry = new THREE.SphereGeometry( 5, 32, 32 );
+			var sunRadius = 5;
+			var sunGeometry = new THREE.SphereGeometry( sunRadius, 32, 32 );
 			var sunMaterial = new THREE.MeshPhongMaterial();
 			
 			sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
@@ -118,6 +121,67 @@
 				event.clientY = event.touches[0].clientY;
 				onDocumentMouseDown( event );
 			}	
+
+
+			//=======================MODELL==============)
+
+			var onProgress = function ( xhr ) {
+	            if ( xhr.lengthComputable ) {
+	                var percentComplete = xhr.loaded / xhr.total * 100;
+	                console.log( Math.round(percentComplete, 2) + '% downloaded' );
+	            }
+	        };
+
+	        var onError = function ( xhr ) {
+	        };
+
+	        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
+
+			lock = new THREE.Object3D();
+			scene.add( lock );
+	        // Loader
+	        var loader = new THREE.OBJMTLLoader();
+
+	        for(var i = 0; i < 3; i++){
+
+	        	function createHouse() {
+			        loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
+			 			
+
+			 			var xTrans = (Math.random() -0.5)*2*sunRadius;
+			 			var yTrans = (Math.random() -0.5)*2*sunRadius;
+			 			var zTrans;
+
+			 			if(Math.random() < 0.5)
+			 			{
+			 				zTrans = Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
+			 			}
+			 			else
+			 				zTrans = -Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
+			 			
+			 			object.translateX(xTrans);
+			 			object.translateY(yTrans);
+			 			object.translateZ(zTrans);
+
+
+			 			object.scale.x = 0.03;
+			 			object.scale.y = 0.03;
+			 			object.scale.z = 0.03;
+
+			 			//object.rotation.x = Math.PI * 90 / 180;
+
+			 			object.lookAt(sunSphere.position);
+
+			            sunSphere.add(object);
+			        }, onProgress, onError);
+	    		}
+	    	}
+	     
+
+	        //====================================SLUT================================
+
+
 			
 			function onDocumentMouseDown( event ) {
 
@@ -132,52 +196,92 @@
 
 				if ( intersects.length > 0 ) {
 
-					controls.target = intersects[ 0 ].object.position.clone();
+					//controls.target = intersects[ 0 ].object.position.clone();
+					
+					//Sätt ut en kub
+					/*var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+					var material = new THREE.MeshPhongMaterial();
+					var mesh = new THREE.Mesh( geometry, material );
+					
+					mesh.position.copy( intersects[ 0 ].point );*/
+					createHouse();
+					galaxyGroup.add( mesh);
+
+					
 
 				}
+
+
 			}
 			//=======SLUUUUUUUUUUUUUT======
+
+			window.addEventListener( 'resize', onWindowResize, false );
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
 
 
 			//=======================MODELL==============)
 
-		var onProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round(percentComplete, 2) + '% downloaded' );
-            }
-        };
+			var onProgress = function ( xhr ) {
+	            if ( xhr.lengthComputable ) {
+	                var percentComplete = xhr.loaded / xhr.total * 100;
+	                console.log( Math.round(percentComplete, 2) + '% downloaded' );
+	            }
+	        };
 
-        var onError = function ( xhr ) {
-        };
+	        var onError = function ( xhr ) {
+	        };
 
-        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+	        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
 
-		lock = new THREE.Object3D();
-		scene.add( lock );
-        // Loader
-        var loader = new THREE.OBJMTLLoader();
-        loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
- 			
- 			object.translateX(10);
- 			object.translateY(10);
+			lock = new THREE.Object3D();
+			scene.add( lock );
+	        // Loader
+	        var loader = new THREE.OBJMTLLoader();
 
- 			object.scale.x = 0.03;
- 			object.scale.y = 0.03;
- 			object.scale.z = 0.03;
+	        for(var i = 0; i < 20; i++){
+	        loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
+	 			
 
- 			//object.rotation.x = Math.PI * 90 / 180;
+	 			var xTrans = (Math.random() -0.5)*2*sunRadius;
+	 			var yTrans = (Math.random() -0.5)*2*sunRadius;
+	 			var zTrans;
 
- 			object.lookAt(sunSphere.position);
+	 			if(Math.random() < 0.5)
+	 			{
+	 				zTrans = Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
+	 			}
+	 			else
+	 				zTrans = -Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
+	 			
+	 			object.translateX(xTrans);
+	 			object.translateY(yTrans);
+	 			object.translateZ(zTrans);
 
-            sunSphere.add(object);
-        }, onProgress, onError);
 
-     
+	 			object.scale.x = 0.03;
+	 			object.scale.y = 0.03;
+	 			object.scale.z = 0.03;
 
-        //====================================SLUT================================
-					
+	 			//object.rotation.x = Math.PI * 90 / 180;
+
+	 			object.lookAt(sunSphere.position);
+
+	            sunSphere.add(object);
+	        }, onProgress, onError);
+	    	}
+	     
+
+	        //====================================SLUT================================
+						
 
 			
 			
@@ -205,9 +309,9 @@
 				requestAnimationFrame( render );
 				
 				controls.update();
-				moonGroup.rotation.y += 0.001;
-				moonSphere.rotation.y += 0.01;
-				sunSphere.rotation.y -= 0.001;
+				//moonGroup.rotation.y += 0.001;
+				//moonSphere.rotation.y += 0.01;
+				//sunSphere.rotation.y -= 0.001;
 
 				renderer.render(scene, camera);
 			};
