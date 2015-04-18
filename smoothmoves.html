@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title> Solsystem av Anton Kaiser</title>
+		<title> Solsystem Sandbox </title>
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
@@ -66,7 +66,7 @@
 			
 
 
-			var moonGeometry = new THREE.SphereGeometry( 2, 32, 32 );
+			var moonGeometry = new THREE.SphereGeometry( 2, 32,32 );
 			var moonMaterial = new THREE.MeshPhongMaterial();
 
 			moonMaterial.map    = THREE.ImageUtils.loadTexture('textures/moontexture.jpg');
@@ -100,6 +100,7 @@
 
 			objects.push(moonSphere);
 			objects.push(sunSphere);
+
 			//==========HÄÄÄÄÄÄÄÄÄÄÄÄJ========
 
 			raycaster = new THREE.Raycaster();
@@ -121,7 +122,42 @@
 				event.clientY = event.touches[0].clientY;
 				onDocumentMouseDown( event );
 			}	
+			
+			function onDocumentMouseDown( event ) {
 
+				event.preventDefault();
+
+				mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
+				mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
+
+
+				raycaster.setFromCamera( mouse, camera );
+
+				var intersects = raycaster.intersectObjects( objects );
+
+				if ( intersects.length > 0 ) {
+
+					//controls.target = intersects[ 0 ].object.position.clone();
+					
+					//Sätt ut en kub
+					var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+					var material = new THREE.MeshPhongMaterial();
+					var mesh = new THREE.Mesh( geometry, material );
+					
+					mesh.position.copy( intersects[ 0 ].point );
+					
+
+					//createHouse();
+					galaxyGroup.add( mesh);
+
+					
+
+				}
+
+
+			}
+
+			//==========SLUUUUUUUUT========
 
 			//=======================MODELL==============)
 
@@ -142,78 +178,52 @@
 			scene.add( lock );
 	        // Loader
 	        var loader = new THREE.OBJMTLLoader();
+	       
+	        function createHouse() {
+		        loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
+		 			
 
-	        for(var i = 0; i < 3; i++){
+		 			var xTrans = (Math.random() -0.5)*2*sunRadius;
+		 			
+		 			var yMax;
+					var yTrans = (Math.random() -0.5)*2*sunRadius;
+		 		
 
-	        	function createHouse() {
-			        loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
-			 			
+		 			var zTrans;
 
-			 			var xTrans = (Math.random() -0.5)*2*sunRadius;
-			 			var yTrans = (Math.random() -0.5)*2*sunRadius;
-			 			var zTrans;
-
-			 			if(Math.random() < 0.5)
-			 			{
-			 				zTrans = Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
-			 			}
-			 			else
-			 				zTrans = -Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
-			 			
-			 			object.translateX(xTrans);
-			 			object.translateY(yTrans);
-			 			object.translateZ(zTrans);
+		 			if(Math.random() < 0.5)
+		 			{
+		 				zTrans = Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
+		 			}
+		 			else
+		 				zTrans = -Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
+		 			
+		 			object.translateX(xTrans);
+		 			object.translateY(yTrans);
+		 			object.translateZ(zTrans);
 
 
-			 			object.scale.x = 0.03;
-			 			object.scale.y = 0.03;
-			 			object.scale.z = 0.03;
+		 			object.scale.x = 0.03;
+		 			object.scale.y = 0.03;
+		 			object.scale.z = 0.03;
 
-			 			//object.rotation.x = Math.PI * 90 / 180;
+		 			//object.rotation.x = Math.PI * 90 / 180;
 
-			 			object.lookAt(sunSphere.position);
+		 			object.lookAt(sunSphere.position);
 
-			            sunSphere.add(object);
-			        }, onProgress, onError);
-	    		}
+		            sunSphere.add(object);
+		        }, onProgress, onError);
+			}
+
+			for(var i = 0; i < 30; i++){
+	      		createHouse();
 	    	}
+
+
 	     
 
 	        //====================================SLUT================================
 
-
-			
-			function onDocumentMouseDown( event ) {
-
-				event.preventDefault();
-
-				mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
-				mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
-
-				raycaster.setFromCamera( mouse, camera );
-
-				var intersects = raycaster.intersectObjects( objects );
-
-				if ( intersects.length > 0 ) {
-
-					//controls.target = intersects[ 0 ].object.position.clone();
-					
-					//Sätt ut en kub
-					/*var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
-					var material = new THREE.MeshPhongMaterial();
-					var mesh = new THREE.Mesh( geometry, material );
-					
-					mesh.position.copy( intersects[ 0 ].point );*/
-					createHouse();
-					galaxyGroup.add( mesh);
-
-					
-
-				}
-
-
-			}
-			//=======SLUUUUUUUUUUUUUT======
 
 			window.addEventListener( 'resize', onWindowResize, false );
 
@@ -227,60 +237,6 @@
 			}
 
 
-			//=======================MODELL==============)
-
-			var onProgress = function ( xhr ) {
-	            if ( xhr.lengthComputable ) {
-	                var percentComplete = xhr.loaded / xhr.total * 100;
-	                console.log( Math.round(percentComplete, 2) + '% downloaded' );
-	            }
-	        };
-
-	        var onError = function ( xhr ) {
-	        };
-
-	        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-
-
-			lock = new THREE.Object3D();
-			scene.add( lock );
-	        // Loader
-	        var loader = new THREE.OBJMTLLoader();
-
-	        for(var i = 0; i < 20; i++){
-	        loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
-	 			
-
-	 			var xTrans = (Math.random() -0.5)*2*sunRadius;
-	 			var yTrans = (Math.random() -0.5)*2*sunRadius;
-	 			var zTrans;
-
-	 			if(Math.random() < 0.5)
-	 			{
-	 				zTrans = Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
-	 			}
-	 			else
-	 				zTrans = -Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
-	 			
-	 			object.translateX(xTrans);
-	 			object.translateY(yTrans);
-	 			object.translateZ(zTrans);
-
-
-	 			object.scale.x = 0.03;
-	 			object.scale.y = 0.03;
-	 			object.scale.z = 0.03;
-
-	 			//object.rotation.x = Math.PI * 90 / 180;
-
-	 			object.lookAt(sunSphere.position);
-
-	            sunSphere.add(object);
-	        }, onProgress, onError);
-	    	}
-	     
-
-	        //====================================SLUT================================
 						
 
 			
