@@ -48,7 +48,24 @@
 			var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
 			sunGroup.add( sunSphere);
 
-	        // Normandy
+
+			/******* GUI *******/
+	        var gui = new DAT.GUI();
+
+			var parameters = {
+				a: "ta det lugnt",
+				b: function() { alert( parameters.a ) },
+				visible: true
+			};
+
+			gui.add( parameters, 'a' ).name('Meddelande');						
+			gui.add( parameters, 'b' ).name("Visa");
+			
+			var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
+			/*******************/
+
+
+	        /****** NORMANDY *******/
 			var normandyOnProgress = function ( xhr ) {
 	            if ( xhr.lengthComputable ) {
 	                var percentComplete = xhr.loaded / xhr.total * 100;
@@ -61,17 +78,23 @@
 	        };
 
 	        var loader2 = new THREE.OBJMTLLoader();
-	        loader2.load( "normandy/normandysr3.obj", "normandy/normandysr3.mtl", function(object){ 
-	            object.scale.x = 0.002;
-	            object.scale.y = 0.002;
-	            object.scale.z = 0.002;
+	        var normandy;
+	        loader2.load( "normandy/normandysr3.obj", "normandy/normandysr3.mtl", function(normandy){ 
+	            normandy.scale.x = 0.002;
+	            normandy.scale.y = 0.002;
+	            normandy.scale.z = 0.002;
 
-	            object.position.x = 10;
+	            normandy.position.x = 10;
 
-	            object.rotation.x = -Math.PI / 2;
+	            normandy.rotation.x = -Math.PI / 2;
 
-	            sunGroup.add(object);
+				normandyVisible.onChange(function(value) 
+				{   normandy.visible = value;  	});
+	            
+	            sunGroup.add(normandy);
 	        },normandyOnProgress, onError);
+	        /************************/
+
 
 			galaxyGroup = new THREE.Object3D;
 			var galaxyGeometry = new THREE.SphereGeometry( 300, 32, 32 );
@@ -97,17 +120,6 @@
 			controls.panSpeed = 0;
 			controls.rotateSpeed = 3;
 
-			var gui = new DAT.GUI();
-
-			var parameters = {
-				a: "ta det lugnt",
-				b: function() { alert( parameters.a ) }
-			};
-
-			// gui.add( parameters )
-			gui.add( parameters, 'a' ).name('Meddelande');						
-			gui.add( parameters, 'b' ).name("Visa");
-			
 			gui.open();
 
 			//Renderingsloop
