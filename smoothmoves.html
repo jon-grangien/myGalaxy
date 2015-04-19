@@ -148,7 +148,7 @@
 					
 
 					//createHouse();
-					galaxyGroup.add( mesh);
+					intersects[0].object.add( mesh);
 
 					
 
@@ -265,9 +265,9 @@
 				requestAnimationFrame( render );
 				
 				controls.update();
-				//moonGroup.rotation.y += 0.001;
-				//moonSphere.rotation.y += 0.01;
-				//sunSphere.rotation.y -= 0.001;
+				moonGroup.rotation.y += 0.001;
+				moonSphere.rotation.y += 0.01;
+				sunSphere.rotation.y -= 0.001;
 
 				renderer.render(scene, camera);
 			};
