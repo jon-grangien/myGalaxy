@@ -54,6 +54,7 @@ session_start();
 
 			// User planet
 			var customSphere;
+			var customTexture;
 
 
 			/******* GUI *******/
@@ -65,7 +66,8 @@ session_start();
 				visible: true,
 				add: function() { addSphere() },
 				radius: 0,
-				size: 0
+				size: 0,
+				texture: "earth"
 			};
 
 			gui.add( parameters, 'msg' ).name('Meddelande');						
@@ -77,6 +79,10 @@ session_start();
 			var folder1 = gui.addFolder('Planet properties');
 			sphereX = folder1.add( parameters, 'radius' ).min(20).max(350).step(1).listen();
 			sphereSize = folder1.add( parameters, 'size' ).min(1).max(100).step(1).listen(); 
+			var sphereTexture = folder1.add(
+				parameters, 'texture', [ 
+				"Earth", "Cloudy", "Steel", "Terraformed mars", "Alien", "Desolate", "Sandy", "Klendathu", "Scarl" 
+				]).name('Texture').listen();
 			folder1.open();
 
 			sphereX.onChange(function(value) 
@@ -87,6 +93,9 @@ session_start();
 				customSphere.scale.y = value;
 				customSphere.scale.z = value;
 			});
+			
+			sphereTexture.onChange(function(value) 
+			{   updateSphere();   });
 			/*******************/
 
 	        /****** NORMANDY *******/
@@ -153,13 +162,60 @@ session_start();
 
 			function addSphere(){
 				var sphereGeometry = new THREE.SphereGeometry( 5, 32, 32 );
-				var sphereMaterial = new THREE.MeshPhongMaterial();
+				var sphereMaterial = new THREE.MeshLambertMaterial();
 				customSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
 				customSphere.position.x = 40;
 
 				sunGroup.add(customSphere);
 
+			}
+
+			function updateSphere(){
+				var value = parameters.texture;
+				var newMaterial;
+
+				if (value == "Earth") {
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
+					console.log('earth selected');
+				} else if (value == "Cloudy") {
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/cloudy.jpg' )} );
+					console.log('cloudy selected');
+				} else if (value == "Steel") {
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/steeltexture.jpg' )} );
+					console.log('steel selected');
+				} else if (value == "Terraformed mars") {
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/terramars.jpg' )} );
+					console.log('terramars selected');
+				} else if (value == "Alien") {
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/alien.jpg' )} );
+					console.log('alien selected');
+				} else if (value == "Desolate") {
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/desolate.png' )} );
+					console.log('desolate selected');
+				} else if (value == "Sandy") {
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/sandy.jpg' )} );
+					console.log('sandy selected');
+				} else if (value == "Klendathu") {
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/klendathu.png' )} );
+					console.log('klendathu selected');
+				} else { //Scarl
+					newMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/scarl.png' )} );
+					console.log('scarl selected');
+				}
+
+				customSphere.material = newMaterial;
+				customSphere.material.needsUpdate = true;
+				customSphere.texture.needsUpdate = true;	//gives error output but works anyway
+				
+				customSphere.position.x = parameters.x;
+
+				// customSphere.position.y = parameters.y;
+				// customSphere.position.z = parameters.z;
+				// customSphere.material.color.setHex( parameters.color.replace("#", "0x") );
+				// customSphere.material.opacity = parameters.opacity;  
+				// customSphere.material.transparent = true;
+				// customSphere.visible = parameters.visible;
 			}
 
 			//Renderingsloop
