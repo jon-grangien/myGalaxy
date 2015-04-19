@@ -40,18 +40,19 @@ session_start();
 			light.position.set( 20, 20, 20 ).normalize();
 			sceneGraph.add(light);
 
-			
+			// Sun
 			sunGroup =new THREE.Object3D;
 			var sunGeometry = new THREE.SphereGeometry( 5, 32, 32 );
 			var sunMaterial = new THREE.MeshPhongMaterial();
-			
 			sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
 			sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
 			sunMaterial.bumpScale = 0.06;
 			sunMaterial.specular  = new THREE.Color('grey');
-			
 			var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
-			sunGroup.add( sunSphere);
+			sunGroup.add(sunSphere);
+
+			// User planet
+			var customSphere;
 
 
 			/******* GUI *******/
@@ -60,11 +61,13 @@ session_start();
 			var parameters = {
 				a: "ta det lugnt",
 				b: function() { alert( parameters.a ) },
-				visible: true
+				visible: true,
+				add: function() { addSphere(customSphere) }
 			};
 
 			gui.add( parameters, 'a' ).name('Meddelande');						
 			gui.add( parameters, 'b' ).name("Visa");
+			gui.add( parameters, 'add').name("New planet");
 			
 			var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
 			/*******************/
@@ -82,9 +85,9 @@ session_start();
 				console.log( 'Error loading Normandy' );
 	        };
 
-	        var loader2 = new THREE.OBJLoader();
+	        var loader = new THREE.OBJLoader();
 	        var normandy;
-	        loader2.load( "normandy/normandy4.obj", function(normandy){ 
+	        loader.load( "normandy/normandy4.obj", function(normandy){ 
 	            normandy.scale.x = 0.02;
 	            normandy.scale.y = 0.02;
 	            normandy.scale.z = 0.02;
@@ -132,6 +135,17 @@ session_start();
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
 				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function addSphere(customSphere){
+				var sphereGeometry = new THREE.SphereGeometry( 5, 32, 32 );
+				var sphereMaterial = new THREE.MeshPhongMaterial();
+				customSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+				customSphere.position.x = 40;
+
+				sunGroup.add(customSphere);
+
 			}
 
 			//Renderingsloop
