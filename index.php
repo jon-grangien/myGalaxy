@@ -56,20 +56,28 @@ session_start();
 
 
 			/******* GUI *******/
-	        var gui = new DAT.GUI();
+	        var gui = new dat.GUI();
 
 			var parameters = {
-				a: "ta det lugnt",
-				b: function() { alert( parameters.a ) },
+				msg: "ta det lugnt",
+				showMsg: function() { alert( parameters.a ) },
 				visible: true,
-				add: function() { addSphere(customSphere) }
+				add: function() { addSphere() },
+				x: 0
 			};
 
-			gui.add( parameters, 'a' ).name('Meddelande');						
-			gui.add( parameters, 'b' ).name("Visa");
+			gui.add( parameters, 'msg' ).name('Meddelande');						
+			gui.add( parameters, 'showMsg' ).name("Visa");
 			gui.add( parameters, 'add').name("New planet");
-			
+
 			var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
+			
+			var folder1 = gui.addFolder('New planet properties');
+			sphereX = folder1.add( parameters, 'x' ).min(20).max(100).step(1).listen();
+			folder1.open();
+
+			sphereX.onChange(function(value) 
+			{   customSphere.position.x = value;   });
 			/*******************/
 
 
@@ -137,7 +145,7 @@ session_start();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 			}
 
-			function addSphere(customSphere){
+			function addSphere(){
 				var sphereGeometry = new THREE.SphereGeometry( 5, 32, 32 );
 				var sphereMaterial = new THREE.MeshPhongMaterial();
 				customSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
