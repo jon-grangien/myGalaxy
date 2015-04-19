@@ -18,6 +18,7 @@ session_start();
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
 		<script src="js/OBJLoader.js"></script>
+		<script src="js/OrbitControls.js"></script>
 		<script type="text/javascript" src="js/DAT.GUI.min.js"></script>
 		
 		<script>
@@ -131,10 +132,11 @@ session_start();
 			scene.add(sceneGraph);
 			sceneGraph.rotation.x += 0.5;
 			
-			controls = new THREE.TrackballControls( camera );
-			controls.zoomSpeed = 0.5;
-			controls.panSpeed = 0;
-			controls.rotateSpeed = 3;
+			// controls = new THREE.TrackballControls( camera );
+			// controls.zoomSpeed = 0.5;
+			// controls.panSpeed = 0;
+			// controls.rotateSpeed = 3;
+			controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 			gui.open();
 
