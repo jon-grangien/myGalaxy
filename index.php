@@ -23,7 +23,7 @@ session_start();
 		
 		<script>
 			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
 			camera.position.z = 30;
 			scene.add(camera);
 			
@@ -69,12 +69,12 @@ session_start();
 
 			gui.add( parameters, 'msg' ).name('Meddelande');						
 			gui.add( parameters, 'showMsg' ).name("Visa");
-			gui.add( parameters, 'add').name("New planet");
+			gui.add( parameters, 'add').name("Spawn new planet");
 
 			var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
 			
-			var folder1 = gui.addFolder('New planet properties');
-			sphereX = folder1.add( parameters, 'x' ).min(20).max(100).step(1).listen();
+			var folder1 = gui.addFolder('Planet properties');
+			sphereX = folder1.add( parameters, 'x' ).min(20).max(350).step(1).listen();
 			folder1.open();
 
 			sphereX.onChange(function(value) 
@@ -114,10 +114,10 @@ session_start();
 
 
 			galaxyGroup = new THREE.Object3D;
-			var galaxyGeometry = new THREE.SphereGeometry( 300, 32, 32 );
+			var galaxyGeometry = new THREE.SphereGeometry( 1500, 32, 32 );
 			var galaxyMaterial = new THREE.MeshPhongMaterial();
 			
-			galaxyMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.png');
+			galaxyMaterial.map    = THREE.ImageUtils.loadTexture('textures/purplegalaxy.jpg');
 			//galaxyMaterial.specular  = new THREE.Color('grey');
 			galaxyMaterial.side = THREE.DoubleSide;
 			
