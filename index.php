@@ -81,7 +81,6 @@ session_start();
 			{   customSphere.position.x = value;   });
 			/*******************/
 
-
 	        /****** NORMANDY *******/
 			var normandyOnProgress = function ( xhr ) {
 	            if ( xhr.lengthComputable ) {
@@ -102,7 +101,6 @@ session_start();
 	            normandy.scale.z = 0.02;
 
 	            normandy.position.x = 10;
-
 	            normandy.rotation.x = -Math.PI / 2;
 
 				normandyVisible.onChange(function(value) 
@@ -116,13 +114,11 @@ session_start();
 			galaxyGroup = new THREE.Object3D;
 			var galaxyGeometry = new THREE.SphereGeometry( 1500, 32, 32 );
 			var galaxyMaterial = new THREE.MeshPhongMaterial();
-			
-			galaxyMaterial.map    = THREE.ImageUtils.loadTexture('textures/purplegalaxy.jpg');
-			//galaxyMaterial.specular  = new THREE.Color('grey');
+			galaxyMaterial.map = THREE.ImageUtils.loadTexture('textures/Starfield_by_meliad.jpg');
 			galaxyMaterial.side = THREE.DoubleSide;
-			
 			var galaxySphere = new THREE.Mesh( galaxyGeometry, galaxyMaterial );
-			galaxyGroup.add( galaxySphere);			
+			
+			galaxyGroup.add(galaxySphere);			
 			sceneGraph.add(galaxyGroup);
 
 			//Lägger till grupper till scengraf
