@@ -64,7 +64,8 @@ session_start();
 				showMsg: function() { alert( parameters.a ) },
 				visible: true,
 				add: function() { addSphere() },
-				x: 0
+				radius: 0,
+				size: 0
 			};
 
 			gui.add( parameters, 'msg' ).name('Meddelande');						
@@ -74,11 +75,18 @@ session_start();
 			var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
 			
 			var folder1 = gui.addFolder('Planet properties');
-			sphereX = folder1.add( parameters, 'x' ).min(20).max(350).step(1).listen();
+			sphereX = folder1.add( parameters, 'radius' ).min(20).max(350).step(1).listen();
+			sphereSize = folder1.add( parameters, 'size' ).min(1).max(100).step(1).listen(); 
 			folder1.open();
 
 			sphereX.onChange(function(value) 
 			{   customSphere.position.x = value;   });
+			
+			sphereSize.onChange(function(value) {
+				customSphere.scale.x = value;
+				customSphere.scale.y = value;
+				customSphere.scale.z = value;
+			});
 			/*******************/
 
 	        /****** NORMANDY *******/
