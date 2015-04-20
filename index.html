@@ -65,7 +65,16 @@
 			add: function() { addSphere() },
 			radius: 0,
 			size: 0,
-			texture: "earth"
+			texture1: function() { updateSphere("Earth") },
+			texture2: function() { updateSphere("Cloudy") },
+			texture3: function() { updateSphere("Steel") },
+			texture4: function() { updateSphere("Terraformed mars") },
+			texture5: function() { updateSphere("Alien") },
+			texture6: function() { updateSphere("Desolate") },
+			texture7: function() { updateSphere("Sandy") },
+			texture8: function() { updateSphere("Klendathu") },
+			texture9: function() { updateSphere() }
+
 		};
 
 		gui.add( parameters, 'msg' ).name('Meddelande');						
@@ -77,11 +86,19 @@
 		var folder1 = gui.addFolder('Planet properties');
 		var sphereX = folder1.add( parameters, 'radius' ).min(20).max(350).step(1).listen();
 		var sphereSize = folder1.add( parameters, 'size' ).min(1).max(100).step(1).listen(); 
-		var sphereTexture = folder1.add(
-			parameters, 'texture', [ 
-			"Earth", "Cloudy", "Steel", "Terraformed mars", "Alien", "Desolate", "Sandy", "Klendathu", "Scarl" 
-			]).name('Texture').listen();
 		folder1.open();
+
+		var folder2 = gui.addFolder('Planet textures');
+		
+		folder2.add( parameters, 'texture1' ).name("Earth");
+		folder2.add( parameters, 'texture2' ).name("Cloudy");
+		folder2.add( parameters, 'texture3' ).name("Steel");
+		folder2.add( parameters, 'texture4' ).name("Terraformed mars");
+		folder2.add( parameters, 'texture5' ).name("Alien");
+		folder2.add( parameters, 'texture6' ).name("Desolate");
+		folder2.add( parameters, 'texture7' ).name("Sandy");
+		folder2.add( parameters, 'texture8' ).name("Klendathu");
+		folder2.add( parameters, 'texture9' ).name("Scarl");
 
 		sphereX.onChange(function(value) 
 		{   activeSphere.position.x = value;   });
@@ -91,9 +108,7 @@
 			activeSphere.scale.y = value;
 			activeSphere.scale.z = value;
 		});
-		
-		sphereTexture.onChange(function(value) 
-		{   updateSphere();   });
+
 		/*******************/
 
         /****** NORMANDY *******/
@@ -167,8 +182,8 @@
 
 		}
 
-		function updateSphere(){
-			var value = parameters.texture;
+		function updateSphere(textureName){
+			var value = textureName;
 			var newMaterial;
 
 			if (value == "Earth") {
