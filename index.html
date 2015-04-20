@@ -59,8 +59,6 @@
         var gui = new dat.GUI();
 
 		var parameters = {
-			msg: "ta det lugnt",
-			showMsg: function() { alert( parameters.a ) },
 			visible: true,
 			add: function() { addSphere() },
 			radius: 0,
@@ -77,11 +75,8 @@
 
 		};
 
-		gui.add( parameters, 'msg' ).name('Meddelande');						
-		gui.add( parameters, 'showMsg' ).name("Visa");
-		gui.add( parameters, 'add').name("Spawn new planet");
-
 		var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
+		gui.add( parameters, 'add').name("Spawn new planet");
 		
 		var folder1 = gui.addFolder('Planet properties');
 		var sphereX = folder1.add( parameters, 'radius' ).min(20).max(350).step(1).listen();
