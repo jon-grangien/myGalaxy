@@ -18,7 +18,7 @@
 		<script type="text/javascript" src="js/DAT.GUI.min.js"></script>
 		
 		<script>
-		var planets = [];
+		var objects = [];
 
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
@@ -159,9 +159,11 @@
 			var sphereMaterial = new THREE.MeshLambertMaterial();
 			activeSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
+
 			activeSphere.position.x = 40;
 
 			sunGroup.add(activeSphere);
+			objects.push(activeSphere);
 
 		}
 
@@ -210,6 +212,40 @@
 			// activeSphere.material.opacity = parameters.opacity;  
 			// activeSphere.material.transparent = true;
 			// activeSphere.visible = parameters.visible;
+		}
+
+		// Klickfunktionalitet
+		var raycaster = new THREE.Raycaster();
+		var intersects = raycaster.intersectObjects( objects );	
+		var mouse = new THREE.Vector2();
+		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+		document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+
+		function onDocumentTouchStart( event ) {	
+			event.preventDefault();
+			
+			event.clientX = event.touches[0].clientX;
+			event.clientY = event.touches[0].clientY;
+			onDocumentMouseDown( event );
+		}	
+		
+		function onDocumentMouseDown( event ) {
+			console.log("mouse is down");
+
+			event.preventDefault();
+			mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
+			mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
+			raycaster.setFromCamera( mouse, camera );
+			intersects = raycaster.intersectObjects( objects );
+
+			if ( intersects.length > 0 ) {
+				console.log("we have an intersect");
+				// camera.lookAt(temp.position);
+				activeSphere = intersects[0].object;
+				//controls.target = intersects[ 0 ].object.position.clone();
+				console.log("avtiveSphere = " + activeSphere);
+				console.log("intersect = " + intersects[0].object);
+			}
 		}
 
 		//Renderingsloop
