@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title> Solsystem Sandbox </title>
+		<title> Generate houses </title>
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
@@ -101,63 +101,7 @@
 			objects.push(moonSphere);
 			objects.push(sunSphere);
 
-			//==========HÄÄÄÄÄÄÄÄÄÄÄÄJ========
-
-			raycaster = new THREE.Raycaster();
-			var intersects = raycaster.intersectObjects( objects );
-
-			if ( intersects.length > 0 ) {
-				controls.target = intersects[ 0 ].object.position.clone();
-			}
-		
-			mouse = new THREE.Vector2();
-			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-			document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-
-			function onDocumentTouchStart( event ) {
-		
-				event.preventDefault();
-				
-				event.clientX = event.touches[0].clientX;
-				event.clientY = event.touches[0].clientY;
-				onDocumentMouseDown( event );
-			}	
-			
-			function onDocumentMouseDown( event ) {
-
-				event.preventDefault();
-
-				mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
-				mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
-
-
-				raycaster.setFromCamera( mouse, camera );
-
-				var intersects = raycaster.intersectObjects( objects );
-
-				if ( intersects.length > 0 ) {
-
-					//controls.target = intersects[ 0 ].object.position.clone();
-					
-					//Sätt ut en kub
-					var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
-					var material = new THREE.MeshPhongMaterial();
-					var mesh = new THREE.Mesh( geometry, material );
-					
-					mesh.position.copy( intersects[ 0 ].point );
-					
-
-					//createHouse();
-					intersects[0].object.add( mesh);
-
-					
-
-				}
-
-
-			}
-
-			//==========SLUUUUUUUUT========
+	
 
 			//=======================MODELL==============)
 
@@ -185,8 +129,9 @@
 
 		 			var xTrans = (Math.random() -0.5)*2*sunRadius;
 		 			
-		 			var yMax;
-					var yTrans = (Math.random() -0.5)*2*sunRadius;
+		 			var yMax = Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
+
+					var yTrans = (Math.random() -0.5)*2*yMax;
 		 		
 
 		 			var zTrans;
@@ -215,7 +160,7 @@
 		        }, onProgress, onError);
 			}
 
-			for(var i = 0; i < 30; i++){
+			for(var i = 0; i < 100; i++){
 	      		createHouse();
 	    	}
 
@@ -237,7 +182,7 @@
 			}
 
 
-				
+						
 
 			
 			
@@ -265,9 +210,9 @@
 				requestAnimationFrame( render );
 				
 				controls.update();
-				moonGroup.rotation.y += 0.001;
-				moonSphere.rotation.y += 0.01;
-				sunSphere.rotation.y -= 0.001;
+				//moonGroup.rotation.y += 0.001;
+				//moonSphere.rotation.y += 0.01;
+				//sunSphere.rotation.y -= 0.001;
 
 				renderer.render(scene, camera);
 			};

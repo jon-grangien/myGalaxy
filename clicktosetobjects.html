@@ -6,15 +6,17 @@
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
 		</style>
+
+		<meta charset="utf-8">
 	</head>
 	<body>
 		<script src="js/three.js"></script>
 
-		<script src="js/TrackballControls.js"></script>
 		<script src="js/OBJLoader.js"></script>
 		<script src="js/DDSLoader.js"></script>
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
+		<script src="js/TrackballControls.js"></script>
 		<script src="js/Projector.js"></script>
 		<script src="js/CanvasRenderer.js"></script>
 		
@@ -53,33 +55,14 @@
 			var sunGeometry = new THREE.SphereGeometry( sunRadius, 32, 32 );
 			var sunMaterial = new THREE.MeshPhongMaterial();
 			
-			sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-			sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-			sunMaterial.bumpScale = 0.06;
+			sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/earthtexture.jpg');
+			sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/earthtexture.jpg');
+			sunMaterial.specularMap    = THREE.ImageUtils.loadTexture('textures/earth_specularMap.jpg');
+			sunMaterial.bumpScale = 0.02;
 			sunMaterial.specular  = new THREE.Color('grey');
 			
 			var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
-			sunGroup.add( sunSphere);
-
-			//Skapa en måne.
-			moonGroup = new THREE.Object3D;
-			
-
-
-			var moonGeometry = new THREE.SphereGeometry( 2, 32,32 );
-			var moonMaterial = new THREE.MeshPhongMaterial();
-
-			moonMaterial.map    = THREE.ImageUtils.loadTexture('textures/moontexture.jpg');
-			moonMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/moontexture.jpg');
-			moonMaterial.bumpScale = 0.06;
-			moonMaterial.specular  = new THREE.Color('grey');
-			
-			var moonSphere = new THREE.Mesh( moonGeometry, moonMaterial );
-			moonSphere.translateX(15);
-
-			moonGroup.add( moonSphere);
-			sunGroup.add(moonGroup);
-			//***********************************
+			scene.add( sunSphere);
 
 			
 			
@@ -98,7 +81,6 @@
 			galaxyGroup.add( galaxySphere);
 			//*********************************
 
-			objects.push(moonSphere);
 			objects.push(sunSphere);
 
 			//==========HÄÄÄÄÄÄÄÄÄÄÄÄJ========
@@ -137,21 +119,8 @@
 
 				if ( intersects.length > 0 ) {
 
-					//controls.target = intersects[ 0 ].object.position.clone();
-					
-					//Sätt ut en kub
-					var geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
-					var material = new THREE.MeshPhongMaterial();
-					var mesh = new THREE.Mesh( geometry, material );
-					
-					mesh.position.copy( intersects[ 0 ].point );
-					
-
-					//createHouse();
-					intersects[0].object.add( mesh);
-
-					
-
+					//mesh.position.copy( intersects[ 0 ].point );
+					createHouse(intersects[ 0 ].point);
 				}
 
 
@@ -179,33 +148,15 @@
 	        // Loader
 	        var loader = new THREE.OBJMTLLoader();
 	       
-	        function createHouse() {
+	        function createHouse(pos) {
 		        loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
 		 			
-
-		 			var xTrans = (Math.random() -0.5)*2*sunRadius;
-		 			
-		 			var yMax;
-					var yTrans = (Math.random() -0.5)*2*sunRadius;
-		 		
-
-		 			var zTrans;
-
-		 			if(Math.random() < 0.5)
-		 			{
-		 				zTrans = Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
-		 			}
-		 			else
-		 				zTrans = -Math.sqrt(sunRadius*sunRadius - xTrans*xTrans - yTrans*yTrans);
-		 			
-		 			object.translateX(xTrans);
-		 			object.translateY(yTrans);
-		 			object.translateZ(zTrans);
+		 			object.position.copy( pos );
 
 
-		 			object.scale.x = 0.03;
-		 			object.scale.y = 0.03;
-		 			object.scale.z = 0.03;
+		 			object.scale.x = 0.01;
+		 			object.scale.y = 0.01;
+		 			object.scale.z = 0.01;
 
 		 			//object.rotation.x = Math.PI * 90 / 180;
 
@@ -215,15 +166,14 @@
 		        }, onProgress, onError);
 			}
 
-			for(var i = 0; i < 30; i++){
-	      		createHouse();
-	    	}
+			
 
 
 	     
 
 	        //====================================SLUT================================
 
+		
 
 			window.addEventListener( 'resize', onWindowResize, false );
 
@@ -236,11 +186,6 @@
 
 			}
 
-
-				
-
-			
-			
 			
 			sceneGraph.add(galaxyGroup);
 			//Lägger till grupper till scengraf
@@ -252,7 +197,6 @@
 			
 			sceneGraph.rotation.x += 0.5;
 			
-			camera.lookAt(moonSphere.position);
 			controls = new THREE.TrackballControls( camera );
 			controls.zoomSpeed = 0.5;
 			controls.panSpeed = 0;
@@ -261,13 +205,13 @@
 			//Renderingsloop
 			var render = function () {
 
-
 				requestAnimationFrame( render );
 				
 				controls.update();
-				moonGroup.rotation.y += 0.001;
-				moonSphere.rotation.y += 0.01;
-				sunSphere.rotation.y -= 0.001;
+				//moonGroup.rotation.y += 0.001;
+				//moonSphere.rotation.y += 0.01;
+				//sunSphere.rotation.y -= 0.001;
+				//sunGroup.rotation.y -= 0.001;
 
 				renderer.render(scene, camera);
 			};
