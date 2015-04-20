@@ -142,7 +142,7 @@
 			//timer används i förflyttnings-loopen.
 			var timer = 0;
 			//variabler för att temporärt spara en position.
-			var posx, posz, roty;
+			var posx, posz, roty, camzoom;
 			//rotationGroup används för att motverka den markerade planetens rotation.
 			rotationGroup = new THREE.Object3D;
 			//**********************************		
@@ -199,12 +199,17 @@
 						posx = galaxyGroup.position.x;
 						posz = galaxyGroup.position.z;
 						roty = galaxyGroup.rotation.y + rotationGroup.rotation.y;
+						camzoom = camera.position.z;
 						console.log("Paborjar hopp");
 					}
 					//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
 					galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - temp.position.x*(1+Math.cos(timer))/2;
 					galaxyGroup.position.z = posz*(1-Math.cos(timer))/2 - temp.position.z*(1+Math.cos(timer))/2;
 					rotationGroup.rotation.y = roty*(1-Math.cos(timer))/2 - temp.rotation.y*(1+Math.cos(timer))/2;
+					//OBS: raden under är en idé för att klara av sista punkten under planetförflyttning,
+					//	dvs att automatisk skala zoomnivån efter planetens radie. För att den ska gå att implementera måste
+					//	det gå att komma åt en planets radie på ett bra sätt. /Albin
+					//camera.position.z = camzoom + (1-Math.cos(timer))*(1/2)*temp.;
 
 					//Hastigheten med vilken förflyttningen sker.
 					timer -= 0.02;
@@ -236,6 +241,7 @@
 						}
 				}
 
+				//Dessa rotationer är ganska snabba, lite för snabba.
 				moonSphere.rotation.y += 0.01;
 				sunSphere.rotation.y -= 0.001;
 				moon2Sphere.rotation.y -= 0.02;
