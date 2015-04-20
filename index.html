@@ -19,7 +19,8 @@
 		
 		<script>
 		var objects = [];
-
+		var planetGroups = [];
+		
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
 		camera.position.z = 30;
@@ -38,8 +39,6 @@
 		var light = new THREE.DirectionalLight( 0xffffff,0.7 );
 		light.position.set( 20, 20, 20 ).normalize();
 		sceneGraph.add(light);
-		
-		
 
 		// Sun
 		sunGroup =new THREE.Object3D;
@@ -51,10 +50,6 @@
 		sunMaterial.specular  = new THREE.Color('grey');
 		var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
 		sunGroup.add(sunSphere);
-
-		
-		
-		
 
 		// User planet
 		var activeSphere;
@@ -175,23 +170,29 @@
 			renderer.setSize( window.innerWidth, window.innerHeight );
 		}
 		
-	
 		function addSphere(){
 			var sphereGeometry = new THREE.SphereGeometry( 5, 32, 32 );
 			var sphereMaterial = new THREE.MeshLambertMaterial();
+
 			activeSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 			activeGroup = new THREE.Object3D;
-
 			activeGroup.position.x = 40;
 
-			sunGroup.add(activeGroup);
+			// sunGroup.add(activeGroup);
 			activeGroup.add(activeSphere);
 			objects.push(activeSphere);
+			planetGroups.push(activeGroup);
 
+			// Add missing planet groups to sungroup
+			for (var i = 0; i < planetGroups.length; i++) {
+			    if (planetGroups[i].parent !== sunGroup){
+			    	sunGroup.add(planetGroups[i]);
+			    	console.log("planetGroup tillagd")
+			    }
+
+			}
 		}
 		
-		
-
 		function updateSphere(textureName){
 			var value = textureName;
 			var newMaterial;
@@ -266,10 +267,6 @@
 			if ( intersects.length > 0 ) {
 				console.log("we have an intersect");
 				activeSphere = intersects[0].object;
-				// camera.lookAt(activeSphere.position.x);
-				//controls.target = intersects[ 0 ].object.position.clone();
-				// console.log("avtiveSphere = " + activeSphere);
-				// console.log("intersect = " + intersects[0].object);
 			}
 		}
 
@@ -278,8 +275,12 @@
 			requestAnimationFrame( render );
 			controls.update();
 
+			// add missing planetGroups and update rotation
+			for (var i = 0; i < planetGroups.length; ++i) 
+			    planetGroups[i].rotation.x += 0.08
+
 			sunGroup.rotation.z += 0.01;
-			activeGroup.rotation.y += 0.08;
+			// activeGroup.rotation.y += 0.08;
 			
 
 			renderer.render(scene, camera);
