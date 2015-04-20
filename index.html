@@ -10,7 +10,7 @@
 	</head>
 	<body>
 		<script src="js/three.js"></script>
-		<script src="js/TrackballControls.js"></script>
+		<!-- <script src="js/TrackballControls.js"></script> -->
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
 		<script src="js/OBJLoader.js"></script>
@@ -49,7 +49,7 @@
 			sunGroup.add(sunSphere);
 
 			// User planet
-			var customSphere;
+			var activeSphere;
 			var customTexture;
 
 
@@ -73,8 +73,8 @@
 			var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
 			
 			var folder1 = gui.addFolder('Planet properties');
-			sphereX = folder1.add( parameters, 'radius' ).min(20).max(350).step(1).listen();
-			sphereSize = folder1.add( parameters, 'size' ).min(1).max(100).step(1).listen(); 
+			var sphereX = folder1.add( parameters, 'radius' ).min(20).max(350).step(1).listen();
+			var sphereSize = folder1.add( parameters, 'size' ).min(1).max(100).step(1).listen(); 
 			var sphereTexture = folder1.add(
 				parameters, 'texture', [ 
 				"Earth", "Cloudy", "Steel", "Terraformed mars", "Alien", "Desolate", "Sandy", "Klendathu", "Scarl" 
@@ -82,12 +82,12 @@
 			folder1.open();
 
 			sphereX.onChange(function(value) 
-			{   customSphere.position.x = value;   });
+			{   activeSphere.position.x = value;   });
 			
 			sphereSize.onChange(function(value) {
-				customSphere.scale.x = value;
-				customSphere.scale.y = value;
-				customSphere.scale.z = value;
+				activeSphere.scale.x = value;
+				activeSphere.scale.y = value;
+				activeSphere.scale.z = value;
 			});
 			
 			sphereTexture.onChange(function(value) 
@@ -141,10 +141,6 @@
 			scene.add(sceneGraph);
 			sceneGraph.rotation.x += 0.5;
 			
-			// controls = new THREE.TrackballControls( camera );
-			// controls.zoomSpeed = 0.5;
-			// controls.panSpeed = 0;
-			// controls.rotateSpeed = 3;
 			controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 			gui.open();
@@ -159,11 +155,11 @@
 			function addSphere(){
 				var sphereGeometry = new THREE.SphereGeometry( 5, 32, 32 );
 				var sphereMaterial = new THREE.MeshLambertMaterial();
-				customSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+				activeSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
-				customSphere.position.x = 40;
+				activeSphere.position.x = 40;
 
-				sunGroup.add(customSphere);
+				sunGroup.add(activeSphere);
 
 			}
 
@@ -200,18 +196,18 @@
 					console.log('scarl selected');
 				}
 
-				customSphere.material = newMaterial;
-				customSphere.material.needsUpdate = true;
-				customSphere.texture.needsUpdate = true;	//gives error output but works anyway
+				activeSphere.material = newMaterial;
+				activeSphere.material.needsUpdate = true;
+				activeSphere.texture.needsUpdate = true;	//gives error output but works anyway
 				
-				customSphere.position.x = parameters.x;
+				activeSphere.position.x = parameters.x;
 
-				// customSphere.position.y = parameters.y;
-				// customSphere.position.z = parameters.z;
-				// customSphere.material.color.setHex( parameters.color.replace("#", "0x") );
-				// customSphere.material.opacity = parameters.opacity;  
-				// customSphere.material.transparent = true;
-				// customSphere.visible = parameters.visible;
+				// activeSphere.position.y = parameters.y;
+				// activeSphere.position.z = parameters.z;
+				// activeSphere.material.color.setHex( parameters.color.replace("#", "0x") );
+				// activeSphere.material.opacity = parameters.opacity;  
+				// activeSphere.material.transparent = true;
+				// activeSphere.visible = parameters.visible;
 			}
 
 			//Renderingsloop
