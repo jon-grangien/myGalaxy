@@ -38,6 +38,8 @@
 		var light = new THREE.DirectionalLight( 0xffffff,0.7 );
 		light.position.set( 20, 20, 20 ).normalize();
 		sceneGraph.add(light);
+		
+		
 
 		// Sun
 		sunGroup =new THREE.Object3D;
@@ -50,6 +52,10 @@
 		var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
 		sunGroup.add(sunSphere);
 
+		
+		
+		
+
 		// User planet
 		var activeSphere;
 		var customTexture;
@@ -59,12 +65,13 @@
         var gui = new dat.GUI();
 
 		var parameters = {
-			msg: "ta det lugnt",
+			msg: "",
 			showMsg: function() { alert( parameters.a ) },
 			visible: true,
 			add: function() { addSphere() },
-			radius: 0,
-			size: 0,
+			radius: 30,
+			size: 1,
+			rotation: 0,
 			texture1: function() { updateSphere("Earth") },
 			texture2: function() { updateSphere("Cloudy") },
 			texture3: function() { updateSphere("Steel") },
@@ -84,8 +91,9 @@
 		var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
 		
 		var folder1 = gui.addFolder('Planet properties');
-		var sphereRadius = folder1.add( parameters, 'radius',0 ).min(1).max(100).step(1).listen();
+		var sphereRadius = folder1.add( parameters, 'radius',0 ).min(1).max(300).step(1).listen();
 		var sphereSize = folder1.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
+		var sphereRotation = folder1.add(parameters, 'rotation').min(0.5).max(5).step(0.1).listen(); 
 		folder1.open();
 
 		var folder2 = gui.addFolder('Planet textures');
@@ -108,6 +116,9 @@
 			activeSphere.scale.y = value;
 			activeSphere.scale.z = value;
 		});
+		
+		sphereRotation.onChange(function(value) 
+		{   activeSphere.rotation.y = value;   });
 
 		/*******************/
 
@@ -168,19 +179,23 @@
 			camera.updateProjectionMatrix();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 		}
-
+		
+	
 		function addSphere(){
 			var sphereGeometry = new THREE.SphereGeometry( 5, 32, 32 );
 			var sphereMaterial = new THREE.MeshLambertMaterial();
 			activeSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+			activeGroup = new THREE.Object3D;
 
+			activeGroup.position.x = 40;
 
-			activeSphere.position.x = 40;
-
-			sunGroup.add(activeSphere);
+			sunGroup.add(activeGroup);
+			activeGroup.add(activeSphere);
 			objects.push(activeSphere);
 
 		}
+		
+		
 
 		function updateSphere(textureName){
 			var value = textureName;
@@ -269,6 +284,8 @@
 			controls.update();
 
 			sunGroup.rotation.z += 0.01;
+			activeGroup.rotation.y += 0.08;
+			
 
 			renderer.render(scene, camera);
 		};
