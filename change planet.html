@@ -55,8 +55,6 @@
 
 			//Skapa en måne.
 			moonGroup = new THREE.Object3D;
-			
-
 
 			var moonGeometry = new THREE.SphereGeometry( 2, 32,32 );
 			var moonMaterial = new THREE.MeshPhongMaterial();
@@ -71,11 +69,29 @@
 
 			moonGroup.add( moonSphere);
 			sunGroup.add(moonGroup);
+
+			//Skapa en till måne
+			moon2Group = new THREE.Object3D;
+
+			var moon2Geometry = new THREE.SphereGeometry( 3, 32,32 );
+			var moon2Material = new THREE.MeshPhongMaterial();
+
+			moon2Material.map    = THREE.ImageUtils.loadTexture('textures/moontexture.jpg');
+			moon2Material.bumpMap    = THREE.ImageUtils.loadTexture('textures/moontexture.jpg');
+			moon2Material.bumpScale = 0.06;
+			moon2Material.specular  = new THREE.Color('grey');
+			
+			var moon2Sphere = new THREE.Mesh( moon2Geometry, moon2Material );
+			moon2Sphere.position.x = 20;
+
+			moon2Group.add( moon2Sphere);
+			sunGroup.add(moon2Group);
 			//***********************************
 
 			//Lägg till alla klickbara objekt i en array.
 			objects.push(moonSphere);
 			objects.push(sunSphere);
+			objects.push(moon2Sphere);
 
 			//Kod för att hantera klick och upptäcka vilket objekt som blev klickat på.
 			//***********************************
@@ -110,15 +126,25 @@
 
 				if ( intersects.length > 0 ) {
 
-					console.log("Hej");
+					console.log("Click on planet registred.");
 					//camera.lookAt(temp.position);
 					temp = intersects[0].object;
+
 					//controls.target = intersects[ 0 ].object.position.clone();
 				}
 
 
 			}
+			//temp är planeten i fokus, har solen som startvärde.
 			var temp = sunSphere;
+			//temp2 är planeten man precis klickat på.
+			var temp2 = sunSphere;
+			//timer används i förflyttnings-loopen.
+			var timer = 0;
+			//variabler för att temporärt spara en position.
+			var posx, posz, roty;
+			//rotationGroup används för att motverka den markerade planetens rotation.
+			rotationGroup = new THREE.Object3D;
 			//**********************************		
 			
 			
@@ -137,17 +163,17 @@
 			//*********************************
 			
 			
-			
-			sceneGraph.add(galaxyGroup);
+			//rotationGroup ligger under sceneGraph och är parent till galaxyGroup.
+			sceneGraph.add(rotationGroup);
+			rotationGroup.add(galaxyGroup);
+
 			//Lägger till grupper till scengraf
 			galaxyGroup.add(sunGroup);
-			
 			
 			//Lägger till scengraf till scen
 			scene.add(sceneGraph);
 			
 			sceneGraph.rotation.x += 0.5;
-			
 			
 			controls = new THREE.TrackballControls( camera );
 			controls.zoomSpeed = 0.5;
@@ -158,27 +184,65 @@
 			//Renderingsloop
 			var render = function () {
 
+				//Variabeln time används till timern och även planeternas rotation.
 				var time = Date.now() * 0.0005;
 
 				requestAnimationFrame( render );
 				controls.update();
 
-				//moonGroup.rotation.y += 0.001;
-				//moonSphere.rotation.y += 0.01;
-				sunSphere.rotation.y -= 0.001;
+				//Aktiveras när man klickar på en annan planet.
+				if(temp != temp2) {
+					if(timer == 0){
+						//Timern börjar på pi och går ner till 0.
+						timer = Math.PI;
+						//Spara den förra planetens position och rotation.
+						posx = galaxyGroup.position.x;
+						posz = galaxyGroup.position.z;
+						roty = galaxyGroup.rotation.y + rotationGroup.rotation.y;
+						console.log("Paborjar hopp");
+					}
+					//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
+					galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - temp.position.x*(1+Math.cos(timer))/2;
+					galaxyGroup.position.z = posz*(1-Math.cos(timer))/2 - temp.position.z*(1+Math.cos(timer))/2;
+					rotationGroup.rotation.y = roty*(1-Math.cos(timer))/2 - temp.rotation.y*(1+Math.cos(timer))/2;
 
-				moonSphere.position.x = Math.cos( time * 0.5 ) * 10;
-				moonSphere.position.z = Math.sin( time * 0.5 ) * 10;
-
-				//camera.lookAt(intersects[0].position);
-				//camera.position.x = moonSphere.position.x;
-				//camera.position.y = moonSphere.position.y;
-				//camera.position.z = moonSphere.position.z - 20;
-
-				if(temp != 0){
+					//Hastigheten med vilken förflyttningen sker.
+					timer -= 0.02;
+						
+					if(timer < 0){
+						timer = 0;
+						//När förflyttningen är klar sätts temp2 (det klickade objektet) till objektet som nu är i fokus.
+						temp2 = temp;
+						//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
+						for(var i = 0; i < objects.length; i++)
+							if(Math.abs(objects[i].rotation.y) > Math.PI*2) {
+								objects[i].rotation.y = objects[i].rotation.y - Math.PI*2;
+								console.log("Nollstalld under hopp");
+							}
+						console.log("Fardig med hopp");
+					}
+				} else {
+					//Detta sker när det inte är ett hopp på g.
 					galaxyGroup.position.x = -temp.position.x;
 					galaxyGroup.position.z = -temp.position.z;
+					//Motverkar planeten i fokus's rotation så att den står stilla.
+					rotationGroup.rotation.y = -temp.rotation.y;
+
+					//Denna loop nollställer planetens rotation vid ett helt varv.
+					for(var i = 0; i < objects.length; i++)
+						if(Math.abs(objects[i].rotation.y) > Math.PI*2) {
+							objects[i].rotation.y = 0;
+							console.log("Nollstalld utanfor hopp");
+						}
 				}
+
+				moonSphere.rotation.y += 0.01;
+				sunSphere.rotation.y -= 0.001;
+				moon2Sphere.rotation.y -= 0.02;
+
+				//Använder position istället för rotation, det fungerar bättre av någon anledning.
+				moonSphere.position.x = Math.cos( time * 0.5 ) * 10;
+				moonSphere.position.z = Math.sin( time * 0.5 ) * 10;
 
 				renderer.render(scene, camera);
 			};
