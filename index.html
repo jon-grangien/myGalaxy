@@ -84,8 +84,8 @@
 		var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
 		
 		var folder1 = gui.addFolder('Planet properties');
-		var sphereX = folder1.add( parameters, 'radius' ).min(20).max(350).step(1).listen();
-		var sphereSize = folder1.add( parameters, 'size' ).min(1).max(100).step(1).listen(); 
+		var sphereRadius = folder1.add( parameters, 'radius',0 ).min(1).max(100).step(1).listen();
+		var sphereSize = folder1.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
 		folder1.open();
 
 		var folder2 = gui.addFolder('Planet textures');
@@ -100,7 +100,7 @@
 		folder2.add( parameters, 'texture8' ).name("Klendathu");
 		folder2.add( parameters, 'texture9' ).name("Scarl");
 
-		sphereX.onChange(function(value) 
+		sphereRadius.onChange(function(value) 
 		{   activeSphere.position.x = value;   });
 		
 		sphereSize.onChange(function(value) {
