@@ -1,9 +1,8 @@
 <!DOCTYPE HTML>
 <html lang="en">
 	<head>
-		<title>three.js webgl - lensflares</title>
+		<title>SOLEN</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style type="text/css">
 			body {
 				background:#000;
@@ -12,34 +11,13 @@
 				font-weight: bold;
 				overflow:hidden;
 			}
-			#info {
-				position: absolute;
-				top: 10px; width: 100%;
-				color: #ffffff;
-				padding: 5px;
-				font-family: Monospace;
-				font-size: 13px;
-				text-align: center;
-				z-index:100;
-			}
 
-			a {
-				color: orange;
-				text-decoration: none;
-			}
-
-			a:hover {
-				color: #0080ff;
-			}
 
 		</style>
 	</head>
 
 	<body>
-		<div id="info">
-			<a href="http://threejs.org" target="_blank">three.js</a> - lensflares -
-			textures from <a href="http://ro.me">ro.me</a> - fly with WASD/RF/QE + mouse
-		</div>
+		
 
 		<script src="js/three.js"></script>
 
@@ -79,33 +57,22 @@
 				scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 				scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
 
-				// world
+				var galaxyGeometry = new THREE.SphereGeometry( 10, 32, 32 );
+			var galaxyMaterial = new THREE.MeshPhongMaterial();
+			
+			galaxyMaterial.map    = THREE.ImageUtils.loadTexture('textures/earthtexture.jpg');
+			//galaxyMaterial.specular  = new THREE.Color('grey');
+			galaxyMaterial.side = THREE.DoubleSide;
+			
+			var galaxySphere = new THREE.Mesh( galaxyGeometry, galaxyMaterial );
 
-				var s = 250;
-
-				var cube = new THREE.BoxGeometry( s, s, s );
-				var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, shininess: 50 } );
-
-
-				for ( var i = 0; i < 3000; i ++ ) {
-
-					var mesh = new THREE.Mesh( cube, material );
-
-					mesh.position.x = 8000 * ( 2.0 * Math.random() - 1.0 );
-					mesh.position.y = 8000 * ( 2.0 * Math.random() - 1.0 );
-					mesh.position.z = 8000 * ( 2.0 * Math.random() - 1.0 );
-
-					mesh.rotation.x = Math.random() * Math.PI;
-					mesh.rotation.y = Math.random() * Math.PI;
-					mesh.rotation.z = Math.random() * Math.PI;
-
-					mesh.matrixAutoUpdate = false;
-					mesh.updateMatrix();
-
-					scene.add( mesh );
-
-				}
-
+			galaxySphere.position.x = 50;
+		
+		//ERROR BAD CODING:
+		//=======================
+		//Emelie was here
+		//========================
+			scene.add( galaxySphere);
 
 				// lights
 
@@ -126,13 +93,14 @@
 				var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
 				var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
 
-				addLight( 0.55, 0.9, 0.5, 5000, 0, -1000 );
-				addLight( 0.08, 0.8, 0.5,    0, 0, -1000 );
-				addLight( 0.995, 0.5, 0.9, 5000, 5000, -1000 );
+				//Origo
+				addLight( 0.55, 0.9, 0.5, 0, 0, 0 );
+				addLight( 0.08, 0.8, 0.5,    0, 0, 0 );
+				
 
 				function addLight( h, s, l, x, y, z ) {
 
-					var light = new THREE.PointLight( 0xffffff, 1.5, 4500 );
+					var light = new THREE.PointLight( 0xffffff, 1.5, 0 );
 					light.color.setHSL( h, s, l );
 					light.position.set( x, y, z );
 					scene.add( light );
@@ -146,6 +114,7 @@
 					lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
 					lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
 
+					//Lensflare
 					lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending );
 					lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending );
 					lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending );
