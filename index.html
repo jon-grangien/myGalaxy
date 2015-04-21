@@ -54,7 +54,8 @@
 		sunMaterial.bumpScale = 0.06;
 		sunMaterial.specular  = new THREE.Color('grey');
 		var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
-		sunGroup.add(sunSphere);
+		// sunGroup.add(sunSphere);
+		scene.add(sunSphere);
 
 		// User planet
 		var activeSphere;
@@ -143,7 +144,7 @@
 			normandyVisible.onChange(function(value) 
 			{   normandy.visible = value;  	});
             
-            sunGroup.add(normandy);
+            sunSphere.add(normandy);
         },normandyOnProgress, onError);
         /************************/
 
@@ -159,7 +160,7 @@
 		sceneGraph.add(galaxyGroup);
 
 		//Lägger till grupper till scengraf
-		galaxyGroup.add(sunGroup);
+		galaxyGroup.add(sunSphere);
 		
 		//Lägger till scengraf till scen
 		scene.add(sceneGraph);
@@ -194,8 +195,8 @@
 
 			// Add missing planet groups to sungroup
 			for (var i = 0; i < planetGroups.length; i++) {
-			    if (planetGroups[i].parent !== sunGroup){
-			    	sunGroup.add(planetGroups[i]);
+			    if (planetGroups[i].parent !== sunSphere){
+			    	sunSphere.add(planetGroups[i]);
 			    	console.log("planetGroup tillagd")
 			    }
 			}
