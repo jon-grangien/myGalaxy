@@ -20,7 +20,12 @@
 		<script>
 		var objects = [];
 		var planetGroups = [];
-		
+
+		var planetSpeeds = [];	//planet:rotationSpeed
+
+		var currentPlanet;			//renderingsloop
+		var currentRotationSpeed;	//renderingsloop
+
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
 		camera.position.z = 30;
@@ -54,6 +59,7 @@
 		// User planet
 		var activeSphere;
 		var customTexture;
+		var activeRotationSpeed;
 
 
 		/******* GUI *******/
@@ -178,6 +184,8 @@
 			activeGroup = new THREE.Object3D;
 			activeGroup.position.x = 40;
 
+			activeRotationSpeed = 0.01;
+
 			// sunGroup.add(activeGroup);
 			activeGroup.add(activeSphere);
 			objects.push(activeSphere);
@@ -190,6 +198,16 @@
 			    	console.log("planetGroup tillagd")
 			    }
 
+			}
+
+			// Push planet object + rotationSpeed
+			tempArray = [activeSphere, activeRotationSpeed];
+			planetSpeeds.push(tempArray);
+
+			//debug:
+			for (var i = 0; i < planetSpeeds.length; ++i) {
+				if (planetSpeeds[i][0] == activeSphere)
+					console.log("rotation speed of planet set to" + activeRotationSpeed);
 			}
 		}
 		
@@ -280,7 +298,17 @@
 			    planetGroups[i].rotation.x += 0.08
 
 			sunGroup.rotation.z += 0.01;
-			// activeGroup.rotation.y += 0.08;
+			// activeGroup.rotation.z += 0.08;
+
+			// rotation of planets
+			for (var i = 0; i < planetSpeeds.length; ++i) {
+				// planetSpeeds[i][0].rotation.y += planetSpeeds[i][1];
+				currentPlanet = planetSpeeds[i][0];
+				currentRotationSpeed = planetSpeeds[i][1];
+
+				currentPlanet.rotation.z += currentRotationSpeed;
+				console.log("planet " + currentPlanet + " rotates by " + currentRotationSpeed + " in z");
+			}
 			
 
 			renderer.render(scene, camera);
