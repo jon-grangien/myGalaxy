@@ -90,7 +90,7 @@
 		var folder1 = gui.addFolder('Planet properties');
 		var sphereRadius = folder1.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
 		var sphereSize = folder1.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
-		var sphereRotation = folder1.add(parameters, 'rotation').min(0.01).max(0.2).step(0.01).listen(); 
+		var sphereRotation = folder1.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
 		folder1.open();
 
 		var folder2 = gui.addFolder('Planet textures');
@@ -259,7 +259,7 @@
 			// activeSphere.visible = parameters.visible;
 		}
 
-		// click funcitionality
+		// click functionality
 		var raycaster = new THREE.Raycaster();
 		var intersects = raycaster.intersectObjects( objects );	
 		var mouse = new THREE.Vector2();
