@@ -122,6 +122,8 @@
 			}
 		});
 
+		gui.open();
+
 		/*******************/
 
         /****** NORMANDY *******/
@@ -172,8 +174,6 @@
 		sceneGraph.rotation.x += 0.5;
 		
 		controls = new THREE.OrbitControls( camera, renderer.domElement );
-
-		gui.open();
 
 		window.addEventListener( 'resize', onWindowResize, false );
 		function onWindowResize() {
@@ -309,7 +309,6 @@
 				currentRotationSpeed = planetSpeeds[i][1];
 
 				currentPlanetGroup.rotation.z += currentRotationSpeed;
-				console.log("planet " + currentPlanetGroup + " rotates by " + currentRotationSpeed + " in z");
 			}
 			
 
