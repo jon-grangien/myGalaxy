@@ -21,10 +21,10 @@
 		var objects = [];
 		var planetGroups = [];
 
-		var planetSpeeds = [];	//planet:rotationSpeed
+		var planetSpeeds = [];	//multiarray of planet|rotationSpeed
 
-		var currentPlanet;			//renderingsloop
-		var currentRotationSpeed;	//renderingsloop
+		var currentPlanet;			//render loop
+		var currentRotationSpeed;	//render loop
 
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
@@ -47,7 +47,7 @@
 
 		// Sun
 		sunGroup =new THREE.Object3D;
-		var sunGeometry = new THREE.SphereGeometry( 5, 32, 32 );
+		var sunGeometry = new THREE.SphereGeometry( 10, 32, 32 );
 		var sunMaterial = new THREE.MeshPhongMaterial();
 		sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
 		sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
@@ -71,7 +71,7 @@
 			add: function() { addSphere() },
 			radius: 30,
 			size: 1,
-			rotation: 0,
+			rotation: 0.01,
 			texture1: function() { updateSphereTexture("Earth") },
 			texture2: function() { updateSphereTexture("Cloudy") },
 			texture3: function() { updateSphereTexture("Steel") },
@@ -88,7 +88,7 @@
 		gui.add( parameters, 'add').name("Spawn new planet");
 		
 		var folder1 = gui.addFolder('Planet properties');
-		var sphereRadius = folder1.add( parameters, 'radius',0 ).min(1).max(300).step(1).listen();
+		var sphereRadius = folder1.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
 		var sphereSize = folder1.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
 		var sphereRotation = folder1.add(parameters, 'rotation').min(0.01).max(0.2).step(0.01).listen(); 
 		folder1.open();
@@ -115,13 +115,11 @@
 		});
 		
 		sphereRotation.onChange(function(value) {
-			// loop through planetSpeeds
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				if (planetSpeeds[i][0] == activeSphere) {	//where first element is active planet
 					planetSpeeds[i][1] = value;		//change second element to slider value
 				}
 			}
-
 		});
 
 		/*******************/
@@ -145,7 +143,7 @@
             normandy.scale.y = 0.02;
             normandy.scale.z = 0.02;
 
-            normandy.position.x = 10;
+            normandy.position.x = 20;
             normandy.rotation.x = -Math.PI / 2;
 
 			normandyVisible.onChange(function(value) 
@@ -190,7 +188,7 @@
 
 			activeSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 			activeGroup = new THREE.Object3D;
-			activeGroup.position.x = 30;
+			activeGroup.position.x = 0;
 			// activeGroup.rotation.z = 2 * Math.PI / 3;
 
 			activeRotationSpeed = 0.01;
@@ -204,7 +202,7 @@
 			for (var i = 0; i < planetGroups.length; i++) {
 			    if (planetGroups[i].parent !== sunSphere){
 			    	sunSphere.add(planetGroups[i]);
-			    	console.log("planetGroup tillagd")
+			    	console.log("new planet group added to sun")
 			    }
 			}
 
@@ -212,11 +210,6 @@
 			tempArray = [activeSphere, activeRotationSpeed];
 			planetSpeeds.push(tempArray);
 
-			//debug:
-			for (var i = 0; i < planetSpeeds.length; ++i) {
-				if (planetSpeeds[i][0] == activeSphere)
-					console.log("rotation speed of planet set to" + activeRotationSpeed);
-			}
 		}
 		
 		function updateSphereTexture(textureName){
@@ -266,7 +259,7 @@
 			// activeSphere.visible = parameters.visible;
 		}
 
-		// Klickfunktionalitet
+		// click funcitionality
 		var raycaster = new THREE.Raycaster();
 		var intersects = raycaster.intersectObjects( objects );	
 		var mouse = new THREE.Vector2();
@@ -301,12 +294,13 @@
 			requestAnimationFrame( render );
 			controls.update();
 
-			// add missing planetGroups and update rotation
-			// for (var i = 0; i < planetGroups.length; ++i) 
-			//     planetGroups[i].rotation.x += 0.08
-
+			// sun rotation
 			sunSphere.rotation.y += 0.01;
-			// activeGroup.rotation.z += 0.08;
+
+			// shift spawned planet position from 0 to 30
+			if ((activeSphere) && activeSphere.position.x == 0) {
+				activeSphere.position.x = 30;
+			}
 
 			// rotation of planets
 			for (var i = 0; i < planetSpeeds.length; ++i) {
