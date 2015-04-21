@@ -295,7 +295,7 @@
 			controls.update();
 
 			// sun rotation
-			sunSphere.rotation.y += 0.01;
+			sunSphere.rotation.z += 0.01;
 
 			// shift spawned planet position from 0 to 30
 			if ((activeSphere) && activeSphere.position.x == 0) {
@@ -308,8 +308,8 @@
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
 
-				currentPlanetGroup.rotation.y += currentRotationSpeed;
-				console.log("planet " + currentPlanetGroup + " rotates by " + currentRotationSpeed + " in y");
+				currentPlanetGroup.rotation.z += currentRotationSpeed;
+				console.log("planet " + currentPlanetGroup + " rotates by " + currentRotationSpeed + " in z");
 			}
 			
 
