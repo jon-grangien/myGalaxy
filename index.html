@@ -90,7 +90,7 @@
 		var folder1 = gui.addFolder('Planet properties');
 		var sphereRadius = folder1.add( parameters, 'radius',0 ).min(1).max(300).step(1).listen();
 		var sphereSize = folder1.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
-		var sphereRotation = folder1.add(parameters, 'rotation').min(0.5).max(5).step(0.1).listen(); 
+		var sphereRotation = folder1.add(parameters, 'rotation').min(0.01).max(0.2).step(0.01).listen(); 
 		folder1.open();
 
 		var folder2 = gui.addFolder('Planet textures');
@@ -114,8 +114,15 @@
 			activeSphere.scale.z = value;
 		});
 		
-		sphereRotation.onChange(function(value) 
-		{   activeSphere.rotation.z = value;   });
+		sphereRotation.onChange(function(value) {
+			// loop through planetSpeeds
+			for (var i = 0; i < planetSpeeds.length; ++i) {
+				if (planetSpeeds[i][0] == activeSphere) {	//where first element is active planet
+					planetSpeeds[i][1] = value;		//change second element to slider value
+				}
+			}
+
+		});
 
 		/*******************/
 
@@ -298,7 +305,7 @@
 			// for (var i = 0; i < planetGroups.length; ++i) 
 			//     planetGroups[i].rotation.x += 0.08
 
-			// sunGroup.rotation.z += 0.01;
+			sunSphere.rotation.y += 0.01;
 			// activeGroup.rotation.z += 0.08;
 
 			// rotation of planets
