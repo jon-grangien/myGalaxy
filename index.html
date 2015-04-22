@@ -67,7 +67,6 @@
         var gui = new dat.GUI();
 
 		var parameters = {
-			visible: true,
 			add: function() { addSphere() },
 			radius: 30,
 			size: 1,
@@ -84,7 +83,6 @@
 
 		};
 
-		var normandyVisible = gui.add( parameters, 'visible' ).name('Show normandy').listen();
 		gui.add( parameters, 'add').name("Spawn new planet");
 		
 		var folder1 = gui.addFolder('Planet properties');
@@ -147,10 +145,7 @@
 
             normandy.position.x = 20;
             normandy.rotation.x = -Math.PI / 2;
-
-			normandyVisible.onChange(function(value) 
-			{   normandy.visible = value;  	});
-            
+         
             sunSphere.add(normandy);
         },normandyOnProgress, onError);
         /************************/
