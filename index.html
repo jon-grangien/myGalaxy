@@ -18,13 +18,23 @@
 		<script type="text/javascript" src="js/DAT.GUI.min.js"></script>
 		
 		<script>
+
+		// Global variables
+		var activePlanet;
+		var activeMoon;
+		var customTexture;
+		var activeRotationSpeed;
+
 		var objects = [];
 		var planetGroups = [];
+		var moonGroups = [];
 
 		var planetSpeeds = [];	//multiarray of planet|rotationSpeed
 
-		var currentPlanet;			//render loop
-		var currentRotationSpeed;	//render loop
+		var currentPlanet;					//render loop
+		var currentRotationSpeed;			//render loop
+		var planetNeedsInitialShift = false; //render loop
+		var moonNeedsInitialShift = false;   //render loop
 
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
@@ -57,64 +67,65 @@
 		// sunGroup.add(sunSphere);
 		scene.add(sunSphere);
 
-		// User planet
-		var activeSphere;
-		var customTexture;
-		var activeRotationSpeed;
-
 
 		/******* GUI *******/
         var gui = new dat.GUI();
 
 		var parameters = {
-			add: function() { addSphere() },
+			addPlanet: function() { addPlanet() },
 			radius: 30,
 			size: 1,
 			rotation: 0.01,
-			texture1: function() { updateSphereTexture("Earth") },
-			texture2: function() { updateSphereTexture("Cloudy") },
-			texture3: function() { updateSphereTexture("Steel") },
-			texture4: function() { updateSphereTexture("Terraformed mars") },
-			texture5: function() { updateSphereTexture("Alien") },
-			texture6: function() { updateSphereTexture("Desolate") },
-			texture7: function() { updateSphereTexture("Sandy") },
-			texture8: function() { updateSphereTexture("Klendathu") },
-			texture9: function() { updateSphereTexture() }
+			texture1: function() { updatePlanetTexture("Earth") },
+			texture2: function() { updatePlanetTexture("Cloudy") },
+			texture3: function() { updatePlanetTexture("Steel") },
+			texture4: function() { updatePlanetTexture("Terraformed mars") },
+			texture5: function() { updatePlanetTexture("Alien") },
+			texture6: function() { updatePlanetTexture("Desolate") },
+			texture7: function() { updatePlanetTexture("Sandy") },
+			texture8: function() { updatePlanetTexture("Klendathu") },
+			texture9: function() { updatePlanetTexture() },
+			addMoon: function() { addMoon() }
 
 		};
 
-		gui.add( parameters, 'add').name("Spawn new planet");
+		gui.add( parameters, 'addPlanet').name("Spawn new planet");
 		
-		var folder1 = gui.addFolder('Planet properties');
-		var sphereRadius = folder1.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
-		var sphereSize = folder1.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
-		var sphereRotation = folder1.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
-		folder1.open();
+		// planet properties
+		var PlanetPropertiesFl = gui.addFolder('Planet properties');
+		var sphereRadius = PlanetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
+		var sphereSize = PlanetPropertiesFl.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
+		var sphereRotation = PlanetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
+		PlanetPropertiesFl.open();
 
-		var folder2 = gui.addFolder('Planet textures');
-		
-		folder2.add( parameters, 'texture1' ).name("Earth");
-		folder2.add( parameters, 'texture2' ).name("Cloudy");
-		folder2.add( parameters, 'texture3' ).name("Steel");
-		folder2.add( parameters, 'texture4' ).name("Terraformed mars");
-		folder2.add( parameters, 'texture5' ).name("Alien");
-		folder2.add( parameters, 'texture6' ).name("Desolate");
-		folder2.add( parameters, 'texture7' ).name("Sandy");
-		folder2.add( parameters, 'texture8' ).name("Klendathu");
-		folder2.add( parameters, 'texture9' ).name("Scarl");
+		// planet textures
+		var PlanetTexturesFl = gui.addFolder('Planet textures');
+		PlanetTexturesFl.add( parameters, 'texture1' ).name("Earth");
+		PlanetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
+		PlanetTexturesFl.add( parameters, 'texture3' ).name("Steel");
+		PlanetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
+		PlanetTexturesFl.add( parameters, 'texture5' ).name("Alien");
+		PlanetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
+		PlanetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
+		PlanetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
+		PlanetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
+
+		var MoonPropertiesFl = gui.addFolder('Moons');
+		MoonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
+
 
 		sphereRadius.onChange(function(value) 
-		{   activeSphere.position.x = value;   });
+		{   activePlanet.position.x = value;   });
 		
 		sphereSize.onChange(function(value) {
-			activeSphere.scale.x = value;
-			activeSphere.scale.y = value;
-			activeSphere.scale.z = value;
+			activePlanet.scale.x = value;
+			activePlanet.scale.y = value;
+			activePlanet.scale.z = value;
 		});
 		
 		sphereRotation.onChange(function(value) {
 			for (var i = 0; i < planetSpeeds.length; ++i) {
-				if (planetSpeeds[i][0] == activeSphere) {	//where first element is active planet
+				if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
 					planetSpeeds[i][1] = value;		//change second element to slider value
 				}
 			}
@@ -177,20 +188,19 @@
 			renderer.setSize( window.innerWidth, window.innerHeight );
 		}
 		
-		function addSphere(){
+		function addPlanet(){
 			var sphereGeometry = new THREE.SphereGeometry( 5, 32, 32 );
 			var sphereMaterial = new THREE.MeshLambertMaterial();
 
-			activeSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-			activeGroup = new THREE.Object3D;
+			activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);
+			var activeGroup = new THREE.Object3D;
 			activeGroup.position.x = 0;
-			// activeGroup.rotation.z = 2 * Math.PI / 3;
-
 			activeRotationSpeed = 0.01;
+			planetNeedsInitialShift = true;
 
 			// sunGroup.add(activeGroup);
-			activeGroup.add(activeSphere);
-			objects.push(activeSphere);
+			activeGroup.add(activePlanet);
+			objects.push(activePlanet);
 			planetGroups.push(activeGroup);
 
 			// Add missing planet groups to sungroup
@@ -202,12 +212,12 @@
 			}
 
 			// Push planet object + rotationSpeed
-			tempArray = [activeSphere, activeRotationSpeed];
+			tempArray = [activePlanet, activeRotationSpeed];
 			planetSpeeds.push(tempArray);
 
 		}
 		
-		function updateSphereTexture(textureName){
+		function updatePlanetTexture(textureName){
 			var value = textureName;
 			var newMaterial;
 
@@ -240,18 +250,33 @@
 				console.log('scarl selected');
 			}
 
-			activeSphere.material = newMaterial;
-			activeSphere.material.needsUpdate = true;
-			activeSphere.texture.needsUpdate = true;	//gives error output but works anyway
+			activePlanet.material = newMaterial;
+			activePlanet.material.needsUpdate = true;
+			activePlanet.texture.needsUpdate = true;	//gives error output but works anyway
 			
-			// activeSphere.position.x = parameters.x;
+			// activePlanet.position.x = parameters.x;
 
-			// activeSphere.position.y = parameters.y;
-			// activeSphere.position.z = parameters.z;
-			// activeSphere.material.color.setHex( parameters.color.replace("#", "0x") );
-			// activeSphere.material.opacity = parameters.opacity;  
-			// activeSphere.material.transparent = true;
-			// activeSphere.visible = parameters.visible;
+			// activePlanet.position.y = parameters.y;
+			// activePlanet.position.z = parameters.z;
+			// activePlanet.material.color.setHex( parameters.color.replace("#", "0x") );
+			// activePlanet.material.opacity = parameters.opacity;  
+			// activePlanet.material.transparent = true;
+			// activePlanet.visible = parameters.visible;
+		}
+
+		function addMoon() {
+			var sphereGeometry = new THREE.SphereGeometry( 2, 16, 16 );
+			var sphereMaterial = new THREE.MeshLambertMaterial();
+
+			activeMoon = new THREE.Mesh(sphereGeometry, sphereMaterial);
+			var activeGroup = new THREE.Object3D;
+			activeGroup.position.x = activePlanet.position.x;
+			moonNeedsInitialShift = true;
+
+			objects.push(activeMoon);
+			moonGroups.push(activeMoon);
+			activePlanet.add(activeMoon);
+
 		}
 
 		// click functionality
@@ -280,7 +305,7 @@
 
 			if ( intersects.length > 0 ) {
 				console.log("we have an intersect");
-				activeSphere = intersects[0].object;
+				activePlanet = intersects[0].object;
 			}
 		}
 
@@ -293,8 +318,23 @@
 			sunSphere.rotation.z += 0.01;
 
 			// shift spawned planet position from 0 to 30
-			if ((activeSphere) && activeSphere.position.x == 0) {
-				activeSphere.position.x = 30;
+			// if ((activePlanet) && activePlanet.position.x == 0) {
+			// 	console.log("planet defined");
+			// 	activePlanet.position.x += 30;
+			// }
+			// if ((activeMoon) && activeMoon.position.x == activePlanet.position.x) {
+			// 	console.log("moon defined");
+			// 	activeMoon.position.x += 40;
+			// }
+			if (planetNeedsInitialShift) {
+				console.log("planet shifted");
+				activePlanet.position.x += 30;
+				planetNeedsInitialShift = false;
+			}
+			if (moonNeedsInitialShift) {
+				console.log("moon shifted");
+				activeMoon.position.x += 20;
+				moonNeedsInitialShift = false;
 			}
 
 			// rotation of planets
