@@ -46,30 +46,38 @@
 		
 		<script>
 
-		// Global variables
-
+		// Basic global variables
 		var container, camera, scene, renderer;
 
+		// Meshes for planets
 		var sunSphere;
+		// var planetMesh;
+		// var moonMesh;
+
+		// Variables to be used for current object to be changed
 		var activePlanet;
 		var activeMoon;
 		var customTexture;
 		var activeRotationSpeed;
 
+		// Array of all objects to be clickable
 		var clickableObjects = [];
+
+		// Groups for objects
 		var planetGroups = [];
 		var moonGroups = [];
-		// var moons = [];
 
+		// Multiarrays to keep track of things that correspond to each other 
 		var planets = [];		//multiarray of planet|moons
 		var planetSpeeds = [];	//multiarray of planet|rotationSpeed
 		var moonSpeeds = [];	//multiarray of moon|rotationSpeed
 
-		var currentPlanet;					//render loop
-		var currentMoon;					//render loop
-		var currentRotationSpeed;			//render loop
-		var planetNeedsInitialShift = false; //render loop
-		var moonNeedsInitialShift = false;   //render loop
+		// Variables for render loop
+		var currentPlanet;					
+		var currentMoon;					
+		var currentRotationSpeed;			
+		var planetNeedsInitialShift = false;
+		var moonNeedsInitialShift = false;  
 
 		// click functionality
 		var raycaster = new THREE.Raycaster();		
@@ -83,35 +91,78 @@
 
 		function init() {
 			scene = new THREE.Scene();
-			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
+			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
+			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
+			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 20000 );
 			camera.position.z = 30;
 			scene.add(camera);
 			
-			renderer = new THREE.WebGLRenderer();
+			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+			renderer.setClearColor( scene.fog.color );
+			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-			//Skapar en grupp som ska innehålla hela scengrafen
-			sceneGraph = new THREE.Object3D;		
+			renderer.gammaInput = true;
+			renderer.gammaOutput = true;
 			
-			var A_light = new THREE.AmbientLight( 0x404040 ); // soft white light
-			sceneGraph.add( A_light );
+			var ambientLight = new THREE.AmbientLight( 0xffffff ); // soft white light
+			ambientLight.color.setHSL( 0.1, 0.3, 0.2 );
+			scene.add( ambientLight );
 			
-			var light = new THREE.DirectionalLight( 0xffffff,0.7 );
-			light.position.set( 20, 20, 20 ).normalize();
-			sceneGraph.add(light);
+			var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+			dirLight.position.set( 0, -1, 0 ).normalize();
+			scene.add(dirLight);
 
 			// Sun
-			sunGroup =new THREE.Object3D;
-			var sunGeometry = new THREE.SphereGeometry( 10, 32, 32 );
-			var sunMaterial = new THREE.MeshPhongMaterial();
-			sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-			sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-			sunMaterial.bumpScale = 0.06;
-			sunMaterial.specular  = new THREE.Color('grey');
-			sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
-			// sunGroup.add(sunSphere);
+			// sunGroup =new THREE.Object3D;
+			// var sunGeometry = new THREE.SphereGeometry( 10, 32, 32 );
+			// var sunMaterial = new THREE.MeshPhongMaterial();
+			// sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
+			// sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
+			// sunMaterial.bumpScale = 0.06;
+			// sunMaterial.specular  = new THREE.Color('grey');
+			// sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
+			// // sunGroup.add(sunSphere);
+			// scene.add(sunSphere);
+
+
+			/************* ATMOSPHERE ****************/
+			/* create custom material from the shader code above
+			that is within specially labeled script tags */
+			var customSunMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+				
+			var sunGeometry = new THREE.SphereGeometry( 9, 32, 16 );
+			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
 			scene.add(sunSphere);
+
+			// PLANET ATMOSPHERE
+			// var customPlanetMaterial = new THREE.ShaderMaterial( {
+			//     uniforms: {  },
+			// 	vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+			// 	fragmentShader: document.getElementById( 'fragmentShader2' ).textContent,
+			// 	side: THREE.BackSide,
+			// 	blending: THREE.AdditiveBlending,
+			// 	transparent: true
+			// }   );
+				
+			// var planetGeometry = new THREE.SphereGeometry( 11, 32, 32 );
+			// planetMesh = new THREE.Mesh( planetGeometry, customPlanetMaterial ); // addPlanet()
+
+			// var moonGeometry = new THREE.SphereGeometry( 5, 32, 32 );
+			// moonMesh = new THREE.Mesh( planetGeometry, customPlanetMaterial ); //addMoon()
+			/*********************************************/
+
+			//Origo
+			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
+			addLight( 0.08, 0.8, 0.5, 2, 2, 2 );
 
 
 			/******* GUI *******/
@@ -193,56 +244,30 @@
 			});
 
 			gui.open();
-
 			/*******************/
-
-	        /****** NORMANDY *******/
-			var normandyOnProgress = function ( xhr ) {
-	            if ( xhr.lengthComputable ) {
-	                var percentComplete = xhr.loaded / xhr.total * 100;
-	                console.log( Math.round(percentComplete, 2) + '% of Normandy downloaded' );
-	            }
-	        };
-
-	        var onError = function ( xhr ) {
-				console.log( 'Error loading Normandy' );
-	        };
-
-	        var loader = new THREE.OBJLoader();
-	        var normandy;
-	        loader.load( "normandy/normandy4.obj", function(normandy){ 
-	            normandy.scale.x = 0.02;
-	            normandy.scale.y = 0.02;
-	            normandy.scale.z = 0.02;
-
-	            normandy.position.x = 20;
-	            normandy.rotation.x = -Math.PI / 2;
-	         
-	            sunSphere.add(normandy);
-	        },normandyOnProgress, onError);
-	        /************************/
-
-
-			galaxyGroup = new THREE.Object3D;
-			var galaxyGeometry = new THREE.SphereGeometry( 1500, 32, 32 );
-			var galaxyMaterial = new THREE.MeshPhongMaterial();
-			galaxyMaterial.map = THREE.ImageUtils.loadTexture('textures/Starfield_by_meliad.jpg');
-			galaxyMaterial.side = THREE.DoubleSide;
-			var galaxySphere = new THREE.Mesh( galaxyGeometry, galaxyMaterial );
-			
-			galaxyGroup.add(galaxySphere);			
-			sceneGraph.add(galaxyGroup);
-
-			//Lägger till grupper till scengraf
-			galaxyGroup.add(sunSphere);
-			
-			//Lägger till scengraf till scen
-			scene.add(sceneGraph);
-			sceneGraph.rotation.x += 0.5;
 			
 			controls = new THREE.OrbitControls( camera, renderer.domElement );
 		
 		}	//end init
+
+		function addLight( h, s, l, x, y, z ) {
+			var light = new THREE.PointLight( 0xffffff, 1.5, 0 );
+			light.color.setHSL( h, s, l );
+			light.position.set( x, y, z );
+			scene.add( light );
+
+			var flareColor = new THREE.Color( 0xffffff );
+			flareColor.setHSL( h, s, l + 0.3 );
+
+			var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
+
+			var lensFlare = new THREE.LensFlare( textureFlare0, 900, 0.0, THREE.AdditiveBlending, flareColor );
+
+			lensFlare.customUpdateCallback = lensFlareUpdateCallback;
+			//lensFlare.position.copy( light.position );
+
+			scene.add( lensFlare );
+		}
 
 		window.addEventListener( 'resize', onWindowResize, false );
 		function onWindowResize() {
@@ -253,10 +278,25 @@
 		}
 		
 		function addPlanet(){
-			var sphereGeometry = new THREE.SphereGeometry( 5, 32, 32 );
-			var sphereMaterial = new THREE.MeshLambertMaterial();
+			var atmosphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
 
+			var atmosphereMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShader2' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+
+			var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+			
+			var sphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
+			var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 			activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+			activePlanet.add(atmosphere);
+
 			var activeGroup = new THREE.Object3D;
 			activeGroup.position.x = 0;
 			activeRotationSpeed = 0.01;
@@ -319,24 +359,30 @@
 			}
 
 			activePlanet.material = newMaterial;
-			activePlanet.material.needsUpdate = true;
+			// activePlanet.material.needsUpdate = true;
+			// activePlanet.material.map.needsUpdate = true;
 			activePlanet.texture.needsUpdate = true;	//gives error output but works anyway
-			
-			// activePlanet.position.x = parameters.x;
-
-			// activePlanet.position.y = parameters.y;
-			// activePlanet.position.z = parameters.z;
-			// activePlanet.material.color.setHex( parameters.color.replace("#", "0x") );
-			// activePlanet.material.opacity = parameters.opacity;  
-			// activePlanet.material.transparent = true;
-			// activePlanet.visible = parameters.visible;
 		}
 
 		function addMoon() {
-			var sphereGeometry = new THREE.SphereGeometry( 2, 16, 16 );
-			var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/moontexture.jpg' )} );
+			var atmosphereGeometry = new THREE.SphereGeometry( 4, 32, 32 );
 
+			var atmosphereMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShader2' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+
+			var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+			
+			var sphereGeometry = new THREE.SphereGeometry( 4, 32, 32 );
+			var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/moontexture.jpg' )} );
 			activeMoon = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+			activeMoon.add(atmosphere);
 			var activeGroup = new THREE.Object3D;
 			activeGroup.add(activeMoon);
 
@@ -387,17 +433,39 @@
 				for (var i = 0; i < planetGroups.length; i++) {
 					if (clickedObject.parent == planetGroups[i]) {
 						activePlanet == clickedObject;
-						console.log("object is a planet");
+						console.log("clicked object is a planet");
 					}
 				}
 
 				for (var i = 0; i < moonGroups.length; i++) {
 					if (clickedObject.parent == moonGroups[i]) {
 						activeMoon == clickedObject;
-						console.log("object is a moon");
+						console.log("clicked object is a moon");
 					}
 				}
 			}
+		}
+
+		function lensFlareUpdateCallback( object ) {
+		    var f, fl = this.lensFlares.length;
+		    var flare;
+		    var vecX = -this.positionScreen.x * 2;
+		    var vecY = -this.positionScreen.y * 2;
+		    var camDistance = camera.position.length();
+
+		    for( f = 0; f < fl; f ++ ) {
+
+		        flare = this.lensFlares[ f ];
+
+		        flare.x = this.positionScreen.x + vecX * flare.distance;
+		        flare.y = this.positionScreen.y + vecY * flare.distance;
+
+		        flare.wantedRotation = flare.x * Math.PI * 0.25;
+		        flare.rotation += ( flare.wantedRotation - flare.rotation ) * 0.25;
+
+		        flare.scale = 1 / camDistance * 200;
+		    }
+
 		}
 
 		function animate() {
@@ -414,12 +482,12 @@
 			sunSphere.rotation.z += 0.01;
 
 			if (planetNeedsInitialShift) {
-				activePlanet.position.x += 30;
+				activePlanet.position.x += 60;
 				planetNeedsInitialShift = false;
 				console.log("planet shifted");
 			}
 			if (moonNeedsInitialShift) {	//kolla om nödvändigt när alla rotationer finns
-				activeMoon.position.x += 10;
+				activeMoon.position.x += 20;
 				moonNeedsInitialShift = false;
 				console.log("moon shifted");
 			}
