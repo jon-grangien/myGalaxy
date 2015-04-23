@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 	<head>
-		<title>SOLEN</title>
+		<title>Fancy Sun</title>
 		<meta charset="utf-8">
 		<style type="text/css">
 			body {
@@ -20,7 +20,6 @@
 		
 
 		<script src="js/three.js"></script>
-		<script src="js/Detector.js"></script>
 		<script src="js/TrackballControls.js"></script>
 
 
@@ -38,8 +37,17 @@
 			varying vec3 vNormal;
 			void main() 
 			{
-				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
+				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
 			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			}
+		</script>
+
+		<script id="fragmentShader2" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() 
+			{
+				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
+			    gl_FragColor = vec4( 0.2, 0.4, 0.5, 1.0 ) * intensity;
 			}
 		</script>
 
@@ -75,6 +83,8 @@
 				scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 				scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
 
+
+				//===========JORDEN==========================
 				var earthGeometry = new THREE.SphereGeometry( 10, 32, 32 );
 				var earthMaterial = new THREE.MeshPhongMaterial();
 				
@@ -87,17 +97,9 @@
 				earthSphere.position.x = 50;
 			
 				scene.add( earthSphere);
+				//==================================================
 
-				var sunGeometry = new THREE.SphereGeometry( 3, 32, 32 );
-				var sunMaterial = new THREE.MeshBasicMaterial({wireframe: false, color: 0xffffaa});
 
-				sunMaterial.side = THREE.DoubleSide;
-				
-				var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
-
-				sunSphere.position.x = 00;
-			
-				//scene.add( sunSphere);
 
 
 				//====================ATMOSFEAR========================
@@ -119,6 +121,27 @@
 
 			//================================SLUT========================
 
+
+				//================JORD-ATMOSFEAR========================
+			// create custom material from the shader code above
+			//   that is within specially labeled script tags
+			var customMaterial = new THREE.ShaderMaterial( 
+			{
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShader2' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+				
+			var ballGeometry = new THREE.SphereGeometry( 11, 32, 32 );
+			var ball = new THREE.Mesh( ballGeometry, customMaterial );
+			ball.position.x = 0;
+			earthSphere.add( ball );
+
+			//================================SLUT========================
+
 				// lights
 
 				var ambient = new THREE.AmbientLight( 0xffffff );
@@ -135,12 +158,10 @@
 				// lens flares
 
 				var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
-				var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
-				var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
 
 				//Origo
-				addLight( 0.55, 0.9, 0.5, 0, 0, 0 );
-				addLight( 0.08, 0.8, 0.5,    0, 0, 0 );
+				addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
+				addLight( 0.08, 0.8, 0.5,    2, 2, 2 );
 				
 
 				function addLight( h, s, l, x, y, z ) {
@@ -151,29 +172,18 @@
 					scene.add( light );
 
 					var flareColor = new THREE.Color( 0xffffff );
-					flareColor.setHSL( h, s, l + 0.5 );
+					flareColor.setHSL( h, s, l + 0.3 );
 
-					var lensFlare = new THREE.LensFlare( textureFlare0, 700, 0.0, THREE.AdditiveBlending, flareColor );
-
-					lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
-					lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
-					lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
-
-					//Lensflare
-					lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending );
-					lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending );
-					lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending );
-					lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending );
+					var lensFlare = new THREE.LensFlare( textureFlare0, 900, 0.0, THREE.AdditiveBlending, flareColor );
 
 					lensFlare.customUpdateCallback = lensFlareUpdateCallback;
-					lensFlare.position.copy( light.position );
+					//lensFlare.position.copy( light.position );
 
 					scene.add( lensFlare );
 
 				}
 
 				// renderer
-
 				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 				renderer.setClearColor( scene.fog.color );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -181,45 +191,16 @@
 				container.appendChild( renderer.domElement );
 
 				//
-
 				renderer.gammaInput = true;
 				renderer.gammaOutput = true;
 
 				
 
 				// events
-
 				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
 
-			//
-
-			 function lensFlareUpdateCallback( object ) {
-
-				var f, fl = object.lensFlares.length;
-				var flare;
-				var vecX = -object.positionScreen.x * 2;
-				var vecY = -object.positionScreen.y * 2;
-
-
-				for( f = 0; f < fl; f++ ) {
-
-					   flare = object.lensFlares[ f ];
-
-					   flare.x = object.positionScreen.x + vecX * flare.distance;
-					   flare.y = object.positionScreen.y + vecY * flare.distance;
-
-					   flare.rotation = 0;
-
-				}
-
-				object.lensFlares[ 2 ].y += 0.025;
-				object.lensFlares[ 3 ].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad( 45 );
-
-			}
-
-			//
 
 			function onWindowResize( event ) {
 
@@ -246,7 +227,6 @@
 
 				controls.update( delta );
 				renderer.render( scene, camera );
-				lensFlareUpdateCallback(lensFlare);
 			}
 
 			function lensFlareUpdateCallback( object ) {
