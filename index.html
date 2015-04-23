@@ -16,10 +16,41 @@
 		<script src="js/OBJLoader.js"></script>
 		<script src="js/OrbitControls.js"></script>
 		<script type="text/javascript" src="js/dat.gui.min.js"></script>
+		<script src="js/TrackballControls.js"></script>
+
+
+		<script id="vertexShader" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 0.9 );
+			}
+		</script>
+
+
+		<script id="fragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
+			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			}
+		</script>
+
+		<script id="fragmentShader2" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
+			    gl_FragColor = vec4( 0.2, 0.4, 0.5, 1.0 ) * intensity;
+			}
+		</script>
 		
 		<script>
 
 		// Global variables
+
+		var container, camera, scene, renderer;
+
+		var sunSphere;
 		var activePlanet;
 		var activeMoon;
 		var customTexture;
@@ -40,165 +71,178 @@
 		var planetNeedsInitialShift = false; //render loop
 		var moonNeedsInitialShift = false;   //render loop
 
-		var scene = new THREE.Scene();
-		var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
-		camera.position.z = 30;
-		scene.add(camera);
-		
-		var renderer = new THREE.WebGLRenderer();
-		renderer.setSize( window.innerWidth, window.innerHeight );
-		document.body.appendChild( renderer.domElement );
+		// click functionality
+		var raycaster = new THREE.Raycaster();		
+		var intersects = raycaster.intersectObjects( clickableObjects );	
+		var mouse = new THREE.Vector2();
+		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+		document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 
-		//Skapar en grupp som ska innehålla hela scengrafen
-		sceneGraph = new THREE.Object3D;		
-		
-		var A_light = new THREE.AmbientLight( 0x404040 ); // soft white light
-		sceneGraph.add( A_light );
-		
-		var light = new THREE.DirectionalLight( 0xffffff,0.7 );
-		light.position.set( 20, 20, 20 ).normalize();
-		sceneGraph.add(light);
+		init();
+		animate();
 
-		// Sun
-		sunGroup =new THREE.Object3D;
-		var sunGeometry = new THREE.SphereGeometry( 10, 32, 32 );
-		var sunMaterial = new THREE.MeshPhongMaterial();
-		sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-		sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-		sunMaterial.bumpScale = 0.06;
-		sunMaterial.specular  = new THREE.Color('grey');
-		var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
-		// sunGroup.add(sunSphere);
-		scene.add(sunSphere);
+		function init() {
+			scene = new THREE.Scene();
+			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 4000 );
+			camera.position.z = 30;
+			scene.add(camera);
+			
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			//Skapar en grupp som ska innehålla hela scengrafen
+			sceneGraph = new THREE.Object3D;		
+			
+			var A_light = new THREE.AmbientLight( 0x404040 ); // soft white light
+			sceneGraph.add( A_light );
+			
+			var light = new THREE.DirectionalLight( 0xffffff,0.7 );
+			light.position.set( 20, 20, 20 ).normalize();
+			sceneGraph.add(light);
+
+			// Sun
+			sunGroup =new THREE.Object3D;
+			var sunGeometry = new THREE.SphereGeometry( 10, 32, 32 );
+			var sunMaterial = new THREE.MeshPhongMaterial();
+			sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
+			sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
+			sunMaterial.bumpScale = 0.06;
+			sunMaterial.specular  = new THREE.Color('grey');
+			sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
+			// sunGroup.add(sunSphere);
+			scene.add(sunSphere);
 
 
-		/******* GUI *******/
-        var gui = new dat.GUI();
+			/******* GUI *******/
+	        var gui = new dat.GUI();
 
-		var parameters = {
-			addPlanet: function() { addPlanet() },
-			radius: 30,
-			size: 1,
-			rotation: 0.01,
-			texture1: function() { updatePlanetTexture("Earth") },
-			texture2: function() { updatePlanetTexture("Cloudy") },
-			texture3: function() { updatePlanetTexture("Steel") },
-			texture4: function() { updatePlanetTexture("Terraformed mars") },
-			texture5: function() { updatePlanetTexture("Alien") },
-			texture6: function() { updatePlanetTexture("Desolate") },
-			texture7: function() { updatePlanetTexture("Sandy") },
-			texture8: function() { updatePlanetTexture("Klendathu") },
-			texture9: function() { updatePlanetTexture() },
-			addMoon: function() { addMoon() },
-			moonRotation: 0.01,
-			moonRadius: 10
-		};
+			var parameters = {
+				addPlanet: function() { addPlanet() },
+				radius: 30,
+				size: 1,
+				rotation: 0.01,
+				texture1: function() { updatePlanetTexture("Earth") },
+				texture2: function() { updatePlanetTexture("Cloudy") },
+				texture3: function() { updatePlanetTexture("Steel") },
+				texture4: function() { updatePlanetTexture("Terraformed mars") },
+				texture5: function() { updatePlanetTexture("Alien") },
+				texture6: function() { updatePlanetTexture("Desolate") },
+				texture7: function() { updatePlanetTexture("Sandy") },
+				texture8: function() { updatePlanetTexture("Klendathu") },
+				texture9: function() { updatePlanetTexture() },
+				addMoon: function() { addMoon() },
+				moonRotation: 0.01,
+				moonRadius: 10
+			};
 
-		gui.add( parameters, 'addPlanet').name("Spawn new planet");
-		
-		// planet properties
-		var planetPropertiesFl = gui.addFolder('Planet properties');
-		var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
-		var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
-		var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
-		planetPropertiesFl.open();
+			gui.add( parameters, 'addPlanet').name("Spawn new planet");
+			
+			// planet properties
+			var planetPropertiesFl = gui.addFolder('Planet properties');
+			var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
+			var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
+			var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
+			planetPropertiesFl.open();
 
-		// planet textures
-		var planetTexturesFl = gui.addFolder('Planet textures');
-		planetTexturesFl.add( parameters, 'texture1' ).name("Earth");
-		planetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
-		planetTexturesFl.add( parameters, 'texture3' ).name("Steel");
-		planetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
-		planetTexturesFl.add( parameters, 'texture5' ).name("Alien");
-		planetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
-		planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
-		planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
-		planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
+			// planet textures
+			var planetTexturesFl = gui.addFolder('Planet textures');
+			planetTexturesFl.add( parameters, 'texture1' ).name("Earth");
+			planetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
+			planetTexturesFl.add( parameters, 'texture3' ).name("Steel");
+			planetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
+			planetTexturesFl.add( parameters, 'texture5' ).name("Alien");
+			planetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
+			planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
+			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
+			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
 
-		var moonPropertiesFl = gui.addFolder('Moons');
-		moonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
-		var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.050).step(0.001).listen(); 
-		var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
+			var moonPropertiesFl = gui.addFolder('Moons');
+			moonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
+			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.050).step(0.001).listen(); 
+			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 
-		sphereRadius.onChange(function(value) 
-		{   activePlanet.position.x = value;   });
-		
-		sphereSize.onChange(function(value) {
-			activePlanet.scale.x = value;
-			activePlanet.scale.y = value;
-			activePlanet.scale.z = value;
-		});
-		
-		planetRotation.onChange(function(value) {
-			for (var i = 0; i < planetSpeeds.length; ++i) {
-				if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
-					planetSpeeds[i][1] = value;		//change second element to slider value
-					// console.log("rotation changed to " + value);
+			sphereRadius.onChange(function(value) 
+			{   activePlanet.position.x = value;   });
+			
+			sphereSize.onChange(function(value) {
+				activePlanet.scale.x = value;
+				activePlanet.scale.y = value;
+				activePlanet.scale.z = value;
+			});
+			
+			planetRotation.onChange(function(value) {
+				for (var i = 0; i < planetSpeeds.length; ++i) {
+					if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
+						planetSpeeds[i][1] = value;		//change second element to slider value
+						// console.log("rotation changed to " + value);
+					}
 				}
-			}
-		});
+			});
 
-		moonRadius.onChange(function(value) 
-		{   activeMoon.position.x = value;   });
+			moonRadius.onChange(function(value) 
+			{   activeMoon.position.x = value;   });
 
-		moonRotation.onChange(function(value) {
-			for (var i = 0; i < moonSpeeds.length; ++i) {
-				if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
-					moonSpeeds[i][1] = value;		//change second element to slider value
-					// console.log("rotation changed to " + value);
+			moonRotation.onChange(function(value) {
+				for (var i = 0; i < moonSpeeds.length; ++i) {
+					if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
+						moonSpeeds[i][1] = value;		//change second element to slider value
+						// console.log("rotation changed to " + value);
+					}
 				}
-			}
-		});
+			});
 
-		gui.open();
+			gui.open();
 
-		/*******************/
+			/*******************/
 
-        /****** NORMANDY *******/
-		var normandyOnProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round(percentComplete, 2) + '% of Normandy downloaded' );
-            }
-        };
+	        /****** NORMANDY *******/
+			var normandyOnProgress = function ( xhr ) {
+	            if ( xhr.lengthComputable ) {
+	                var percentComplete = xhr.loaded / xhr.total * 100;
+	                console.log( Math.round(percentComplete, 2) + '% of Normandy downloaded' );
+	            }
+	        };
 
-        var onError = function ( xhr ) {
-			console.log( 'Error loading Normandy' );
-        };
+	        var onError = function ( xhr ) {
+				console.log( 'Error loading Normandy' );
+	        };
 
-        var loader = new THREE.OBJLoader();
-        var normandy;
-        loader.load( "normandy/normandy4.obj", function(normandy){ 
-            normandy.scale.x = 0.02;
-            normandy.scale.y = 0.02;
-            normandy.scale.z = 0.02;
+	        var loader = new THREE.OBJLoader();
+	        var normandy;
+	        loader.load( "normandy/normandy4.obj", function(normandy){ 
+	            normandy.scale.x = 0.02;
+	            normandy.scale.y = 0.02;
+	            normandy.scale.z = 0.02;
 
-            normandy.position.x = 20;
-            normandy.rotation.x = -Math.PI / 2;
-         
-            sunSphere.add(normandy);
-        },normandyOnProgress, onError);
-        /************************/
+	            normandy.position.x = 20;
+	            normandy.rotation.x = -Math.PI / 2;
+	         
+	            sunSphere.add(normandy);
+	        },normandyOnProgress, onError);
+	        /************************/
 
 
-		galaxyGroup = new THREE.Object3D;
-		var galaxyGeometry = new THREE.SphereGeometry( 1500, 32, 32 );
-		var galaxyMaterial = new THREE.MeshPhongMaterial();
-		galaxyMaterial.map = THREE.ImageUtils.loadTexture('textures/Starfield_by_meliad.jpg');
-		galaxyMaterial.side = THREE.DoubleSide;
-		var galaxySphere = new THREE.Mesh( galaxyGeometry, galaxyMaterial );
+			galaxyGroup = new THREE.Object3D;
+			var galaxyGeometry = new THREE.SphereGeometry( 1500, 32, 32 );
+			var galaxyMaterial = new THREE.MeshPhongMaterial();
+			galaxyMaterial.map = THREE.ImageUtils.loadTexture('textures/Starfield_by_meliad.jpg');
+			galaxyMaterial.side = THREE.DoubleSide;
+			var galaxySphere = new THREE.Mesh( galaxyGeometry, galaxyMaterial );
+			
+			galaxyGroup.add(galaxySphere);			
+			sceneGraph.add(galaxyGroup);
+
+			//Lägger till grupper till scengraf
+			galaxyGroup.add(sunSphere);
+			
+			//Lägger till scengraf till scen
+			scene.add(sceneGraph);
+			sceneGraph.rotation.x += 0.5;
+			
+			controls = new THREE.OrbitControls( camera, renderer.domElement );
 		
-		galaxyGroup.add(galaxySphere);			
-		sceneGraph.add(galaxyGroup);
-
-		//Lägger till grupper till scengraf
-		galaxyGroup.add(sunSphere);
-		
-		//Lägger till scengraf till scen
-		scene.add(sceneGraph);
-		sceneGraph.rotation.x += 0.5;
-		
-		controls = new THREE.OrbitControls( camera, renderer.domElement );
+		}	//end init
 
 		window.addEventListener( 'resize', onWindowResize, false );
 		function onWindowResize() {
@@ -320,13 +364,6 @@
 			console.log("moon spawned");
 		}
 
-		// click functionality
-		var raycaster = new THREE.Raycaster();
-		var intersects = raycaster.intersectObjects( clickableObjects );	
-		var mouse = new THREE.Vector2();
-		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-		document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-
 		function onDocumentTouchStart( event ) {	
 			event.preventDefault();
 			event.clientX = event.touches[0].clientX;
@@ -363,10 +400,15 @@
 			}
 		}
 
-		//render loop
-		var render = function () {
-			requestAnimationFrame( render );
+		function animate() {
+			requestAnimationFrame( animate );
 			controls.update();
+
+			render();	
+		}
+
+		function render() {
+			// console.log("render check");
 
 			// sun rotation
 			sunSphere.rotation.z += 0.01;
@@ -404,9 +446,8 @@
 			}
 			
 			renderer.render(scene, camera);
-		};
+		}
 
-		render();
 		</script>
 	</body>
 </html>
