@@ -333,7 +333,7 @@
 		}
 
 		function addMoon() {
-			var atmosphereGeometry = new THREE.SphereGeometry( 4, 32, 32 );
+			var atmosphereGeometry = new THREE.SphereGeometry( 2, 32, 32 );
 
 			var atmosphereMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
@@ -346,7 +346,7 @@
 
 			var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
 			
-			var sphereGeometry = new THREE.SphereGeometry( 4, 32, 32 );
+			var sphereGeometry = new THREE.SphereGeometry( 2, 32, 32 );
 			var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/moontexture.jpg' )} );
 			activeMoon = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
