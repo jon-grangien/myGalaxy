@@ -30,10 +30,12 @@
 		var moonGroups = [];
 		// var moons = [];
 
-		var planets = [];	//multiarray of planet|moons
+		var planets = [];		//multiarray of planet|moons
 		var planetSpeeds = [];	//multiarray of planet|rotationSpeed
+		var moonSpeeds = [];	//multiarray of moon|rotationSpeed
 
 		var currentPlanet;					//render loop
+		var currentMoon;					//render loop
 		var currentRotationSpeed;			//render loop
 		var planetNeedsInitialShift = false; //render loop
 		var moonNeedsInitialShift = false;   //render loop
@@ -87,7 +89,8 @@
 			texture7: function() { updatePlanetTexture("Sandy") },
 			texture8: function() { updatePlanetTexture("Klendathu") },
 			texture9: function() { updatePlanetTexture() },
-			addMoon: function() { addMoon() }
+			addMoon: function() { addMoon() },
+			moonRotation: 0.01
 		};
 
 		gui.add( parameters, 'addPlanet').name("Spawn new planet");
@@ -96,7 +99,7 @@
 		var PlanetPropertiesFl = gui.addFolder('Planet properties');
 		var sphereRadius = PlanetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
 		var sphereSize = PlanetPropertiesFl.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
-		var sphereRotation = PlanetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
+		var planetRotation = PlanetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
 		PlanetPropertiesFl.open();
 
 		// planet textures
@@ -111,8 +114,9 @@
 		PlanetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
 		PlanetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
 
-		var MoonPropertiesFl = gui.addFolder('Moons');
-		MoonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
+		var moonPropertiesFl = gui.addFolder('Moons');
+		moonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
+		var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.050).step(0.001).listen(); 
 
 
 		sphereRadius.onChange(function(value) 
@@ -124,10 +128,19 @@
 			activePlanet.scale.z = value;
 		});
 		
-		sphereRotation.onChange(function(value) {
+		planetRotation.onChange(function(value) {
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
 					planetSpeeds[i][1] = value;		//change second element to slider value
+					// console.log("rotation changed to " + value);
+				}
+			}
+		});
+
+		moonRotation.onChange(function(value) {
+			for (var i = 0; i < moonSpeeds.length; ++i) {
+				if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
+					moonSpeeds[i][1] = value;		//change second element to slider value
 					// console.log("rotation changed to " + value);
 				}
 			}
@@ -275,11 +288,17 @@
 			var sphereMaterial = new THREE.MeshLambertMaterial();
 
 			activeMoon = new THREE.Mesh(sphereGeometry, sphereMaterial);
+			var activeGroup = new THREE.Object3D;
+			activeGroup.add(activeMoon);
+
 			activeMoon.position.x = 0;
+			activeRotationSpeed = 0.01;
 			moonNeedsInitialShift = true;
 
 			clickableObjects.push(activeMoon);
-			activePlanet.add(activeMoon);
+			// activePlanet.add(activeMoon);
+			activePlanet.add(activeGroup);
+			moonGroups.push(activeGroup);
 
 			// put moon to corresponding planet in array
 			for (var i = 0; i < planets.length; ++i) {
@@ -289,10 +308,9 @@
 				}
 			}
 
-			// debug:
-			// for (var i = 0; i < planets.length; i++) {
-			// 	console.log("debug: is " + planets[i][1] + " an abject?");	
-			// }
+			// Push moon object + rotationSpeed
+			tempArray = [activeMoon, activeRotationSpeed];
+			moonSpeeds.push(tempArray);
 
 			console.log("moon spawned");
 		}
@@ -357,6 +375,14 @@
 			// planet rotations about self (ha som variabel?)
 			for (var i = 0; i < planets.length; ++i) {
 				planets[i][0].rotation.z += 0.03;
+			}
+
+			// moon rotation speeds about sun
+			for (var i = 0; i < moonSpeeds.length; ++i) {
+				currentMoonGroup = moonSpeeds[i][0].parent;
+				currentRotationSpeed = moonSpeeds[i][1];
+
+				currentMoonGroup.rotation.z += currentRotationSpeed;
 			}
 			
 			renderer.render(scene, camera);
