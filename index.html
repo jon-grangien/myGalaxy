@@ -51,8 +51,6 @@
 
 		// Meshes for planets
 		var sunSphere;
-		// var planetMesh;
-		// var moonMesh;
 
 		// Variables to be used for current object to be changed
 		var activePlanet;
@@ -142,7 +140,7 @@
 				addPlanet: function() { addPlanet() },
 				radius: 30,
 				size: 1,
-				rotation: 0.01,
+				rotation: 0.001,
 				texture1: function() { updatePlanetTexture("Earth") },
 				texture2: function() { updatePlanetTexture("Cloudy") },
 				texture3: function() { updatePlanetTexture("Steel") },
@@ -153,8 +151,8 @@
 				texture8: function() { updatePlanetTexture("Klendathu") },
 				texture9: function() { updatePlanetTexture() },
 				addMoon: function() { addMoon() },
-				moonRotation: 0.01,
-				moonRadius: 10
+				moonRadius: 10,
+				moonRotation: 0.001
 			};
 
 			gui.add( parameters, 'addPlanet').name("Spawn new planet");
@@ -163,7 +161,7 @@
 			var planetPropertiesFl = gui.addFolder('Planet properties');
 			var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
 			var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
-			var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
+			var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.0100).step(0.001).listen(); 
 			planetPropertiesFl.open();
 
 			// planet textures
@@ -180,8 +178,8 @@
 
 			var moonPropertiesFl = gui.addFolder('Moons');
 			moonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
-			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.050).step(0.001).listen(); 
 			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
+			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
 
 			sphereRadius.onChange(function(value) 
 			{   activePlanet.position.x = value;   });
@@ -269,7 +267,7 @@
 
 			var activeGroup = new THREE.Object3D;
 			activeGroup.position.x = 0;
-			activeRotationSpeed = 0.01;
+			activeRotationSpeed = 0.00001;
 			planetNeedsInitialShift = true;
 
 			// sunGroup.add(activeGroup);
@@ -357,7 +355,7 @@
 			activeGroup.add(activeMoon);
 
 			activeMoon.position.x = 0;
-			activeRotationSpeed = 0.01;
+			activeRotationSpeed = 0.001;
 			moonNeedsInitialShift = true;
 
 			clickableObjects.push(activeMoon);
@@ -449,7 +447,7 @@
 			// console.log("render check");
 
 			// sun rotation
-			sunSphere.rotation.z += 0.01;
+			sunSphere.rotation.z += 0.0001;
 
 			if (planetNeedsInitialShift) {
 				activePlanet.position.x += 60;
@@ -472,7 +470,7 @@
 
 			// planet rotations about self (ha som variabel?)
 			for (var i = 0; i < planets.length; ++i) {
-				planets[i][0].rotation.z += 0.03;
+				planets[i][0].rotation.z += 0.005;
 			}
 
 			// moon rotation speeds about sun
