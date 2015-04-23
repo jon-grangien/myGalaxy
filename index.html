@@ -117,8 +117,8 @@
 
 		var moonPropertiesFl = gui.addFolder('Moons');
 		moonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
-		var moonRotation = moonPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
-		var moonRadius = moonPropertiesFl.add( parameters, 'radius',0 ).min(5).max(50).step(1).listen();
+		var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.050).step(0.001).listen(); 
+		var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 
 		sphereRadius.onChange(function(value) 
 		{   activePlanet.position.x = value;   });
