@@ -90,34 +90,35 @@
 			texture8: function() { updatePlanetTexture("Klendathu") },
 			texture9: function() { updatePlanetTexture() },
 			addMoon: function() { addMoon() },
-			moonRotation: 0.01
+			moonRotation: 0.01,
+			moonRadius: 10
 		};
 
 		gui.add( parameters, 'addPlanet').name("Spawn new planet");
 		
 		// planet properties
-		var PlanetPropertiesFl = gui.addFolder('Planet properties');
-		var sphereRadius = PlanetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
-		var sphereSize = PlanetPropertiesFl.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
-		var planetRotation = PlanetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
-		PlanetPropertiesFl.open();
+		var planetPropertiesFl = gui.addFolder('Planet properties');
+		var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
+		var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(0.5).max(5).step(0.1).listen(); 
+		var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
+		planetPropertiesFl.open();
 
 		// planet textures
-		var PlanetTexturesFl = gui.addFolder('Planet textures');
-		PlanetTexturesFl.add( parameters, 'texture1' ).name("Earth");
-		PlanetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
-		PlanetTexturesFl.add( parameters, 'texture3' ).name("Steel");
-		PlanetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
-		PlanetTexturesFl.add( parameters, 'texture5' ).name("Alien");
-		PlanetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
-		PlanetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
-		PlanetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
-		PlanetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
+		var planetTexturesFl = gui.addFolder('Planet textures');
+		planetTexturesFl.add( parameters, 'texture1' ).name("Earth");
+		planetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
+		planetTexturesFl.add( parameters, 'texture3' ).name("Steel");
+		planetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
+		planetTexturesFl.add( parameters, 'texture5' ).name("Alien");
+		planetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
+		planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
+		planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
+		planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
 
 		var moonPropertiesFl = gui.addFolder('Moons');
 		moonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
-		var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.050).step(0.001).listen(); 
-
+		var moonRotation = moonPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.050).step(0.001).listen(); 
+		var moonRadius = moonPropertiesFl.add( parameters, 'radius',0 ).min(5).max(50).step(1).listen();
 
 		sphereRadius.onChange(function(value) 
 		{   activePlanet.position.x = value;   });
@@ -136,6 +137,9 @@
 				}
 			}
 		});
+
+		moonRadius.onChange(function(value) 
+		{   activeMoon.position.x = value;   });
 
 		moonRotation.onChange(function(value) {
 			for (var i = 0; i < moonSpeeds.length; ++i) {
