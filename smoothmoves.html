@@ -89,7 +89,7 @@
 			var galaxyGeometry = new THREE.SphereGeometry( 300, 32, 32 );
 			var galaxyMaterial = new THREE.MeshPhongMaterial();
 			
-			galaxyMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.png');
+			galaxyMaterial.map    = THREE.ImageUtils.loadTexture('textures/space.png');
 			//galaxyMaterial.specular  = new THREE.Color('grey');
 			galaxyMaterial.side = THREE.DoubleSide;
 			
@@ -148,7 +148,7 @@
 					
 
 					//createHouse();
-					galaxyGroup.add( mesh);
+					intersects[0].object.add( mesh);
 
 					
 
@@ -237,7 +237,7 @@
 			}
 
 
-						
+				
 
 			
 			
@@ -256,7 +256,7 @@
 			controls = new THREE.TrackballControls( camera );
 			controls.zoomSpeed = 0.5;
 			controls.panSpeed = 0;
-			controls.rotateSpeed = 3;
+			controls.rotateSpeed = 0.5;
 			
 			//Renderingsloop
 			var render = function () {
@@ -265,9 +265,9 @@
 				requestAnimationFrame( render );
 				
 				controls.update();
-				//moonGroup.rotation.y += 0.001;
-				//moonSphere.rotation.y += 0.01;
-				//sunSphere.rotation.y -= 0.001;
+				moonGroup.rotation.y += 0.001;
+				moonSphere.rotation.y += 0.01;
+				sunSphere.rotation.y -= 0.001;
 
 				renderer.render(scene, camera);
 			};
