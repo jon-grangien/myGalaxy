@@ -28,9 +28,9 @@
 		var clickableObjects = [];
 		var planetGroups = [];
 		var moonGroups = [];
-		var planets = [];
-		var moons = [];
+		// var moons = [];
 
+		var planets = [];	//multiarray of planet|moons
 		var planetSpeeds = [];	//multiarray of planet|rotationSpeed
 
 		var currentPlanet;					//render loop
@@ -88,7 +88,6 @@
 			texture8: function() { updatePlanetTexture("Klendathu") },
 			texture9: function() { updatePlanetTexture() },
 			addMoon: function() { addMoon() }
-
 		};
 
 		gui.add( parameters, 'addPlanet').name("Spawn new planet");
@@ -129,6 +128,7 @@
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
 					planetSpeeds[i][1] = value;		//change second element to slider value
+					// console.log("rotation changed to " + value);
 				}
 			}
 		});
@@ -205,8 +205,8 @@
 			clickableObjects.push(activePlanet);
 			planetGroups.push(activeGroup);
 
-			// Add missing planet groups to sungroup
-			for (var i = 0; i < planetGroups.length; i++) {
+			// Add planet group (and missing ones if exist) to sungroup
+			for (var i = 0; i < planetGroups.length; ++i) {
 			    if (planetGroups[i].parent !== sunSphere){
 			    	sunSphere.add(planetGroups[i]);
 			    	console.log("new planet group added to sun")
@@ -218,7 +218,8 @@
 			planetSpeeds.push(tempArray);
 
 			//push to planets
-			planets.push(activePlanet);
+			tempArray = [activePlanet];
+			planets.push(tempArray);
 
 		}
 		
@@ -280,6 +281,19 @@
 			clickableObjects.push(activeMoon);
 			activePlanet.add(activeMoon);
 
+			// put moon to corresponding planet in array
+			for (var i = 0; i < planets.length; ++i) {
+				if (planets[i][0] == activePlanet) {
+					planets[i].push(activeMoon)
+					// console.log("current planet received a moon");
+				}
+			}
+
+			// debug:
+			// for (var i = 0; i < planets.length; i++) {
+			// 	console.log("debug: is " + planets[i][1] + " an abject?");	
+			// }
+
 			console.log("moon spawned");
 		}
 
@@ -326,13 +340,13 @@
 				planetNeedsInitialShift = false;
 				console.log("planet shifted");
 			}
-			if (moonNeedsInitialShift) {
+			if (moonNeedsInitialShift) {	//kolla om nödvändigt när alla rotationer finns
 				activeMoon.position.x += 10;
 				moonNeedsInitialShift = false;
 				console.log("moon shifted");
 			}
 
-			// rotation of planets
+			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
@@ -340,8 +354,9 @@
 				currentPlanetGroup.rotation.z += currentRotationSpeed;
 			}
 
+			// planet rotations about self (ha som variabel?)
 			for (var i = 0; i < planets.length; ++i) {
-				planets[i].rotation.z += 0.03;
+				planets[i][0].rotation.z += 0.03;
 			}
 			
 			renderer.render(scene, camera);
