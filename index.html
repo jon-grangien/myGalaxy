@@ -15,7 +15,7 @@
 		<script src="js/OBJMTLLoader.js"></script>
 		<script src="js/OBJLoader.js"></script>
 		<script src="js/OrbitControls.js"></script>
-		<script type="text/javascript" src="js/DAT.GUI.min.js"></script>
+		<script type="text/javascript" src="js/dat.gui.min.js"></script>
 		
 		<script>
 
@@ -25,9 +25,11 @@
 		var customTexture;
 		var activeRotationSpeed;
 
-		var objects = [];
+		var clickableObjects = [];
 		var planetGroups = [];
 		var moonGroups = [];
+		var planets = [];
+		var moons = [];
 
 		var planetSpeeds = [];	//multiarray of planet|rotationSpeed
 
@@ -200,7 +202,7 @@
 
 			// sunGroup.add(activeGroup);
 			activeGroup.add(activePlanet);
-			objects.push(activePlanet);
+			clickableObjects.push(activePlanet);
 			planetGroups.push(activeGroup);
 
 			// Add missing planet groups to sungroup
@@ -214,6 +216,9 @@
 			// Push planet object + rotationSpeed
 			tempArray = [activePlanet, activeRotationSpeed];
 			planetSpeeds.push(tempArray);
+
+			//push to planets
+			planets.push(activePlanet);
 
 		}
 		
@@ -269,19 +274,20 @@
 			var sphereMaterial = new THREE.MeshLambertMaterial();
 
 			activeMoon = new THREE.Mesh(sphereGeometry, sphereMaterial);
-			var activeGroup = new THREE.Object3D;
-			activeGroup.position.x = activePlanet.position.x;
+			activeMoon.position.x = activePlanet.position.x;
+			// activeMoon.position.y = activePlanet.position.y;
+			// activeMoon.position.z = activePlanet.position.z;
 			moonNeedsInitialShift = true;
 
-			objects.push(activeMoon);
-			moonGroups.push(activeMoon);
+			clickableObjects.push(activeMoon);
 			activePlanet.add(activeMoon);
 
+			console.log("moon spawned");
 		}
 
 		// click functionality
 		var raycaster = new THREE.Raycaster();
-		var intersects = raycaster.intersectObjects( objects );	
+		var intersects = raycaster.intersectObjects( clickableObjects );	
 		var mouse = new THREE.Vector2();
 		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 		document.addEventListener( 'touchstart', onDocumentTouchStart, false );
@@ -301,7 +307,7 @@
 			mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 			mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
 			raycaster.setFromCamera( mouse, camera );
-			intersects = raycaster.intersectObjects( objects );
+			intersects = raycaster.intersectObjects( clickableObjects );
 
 			if ( intersects.length > 0 ) {
 				console.log("we have an intersect");
@@ -309,7 +315,7 @@
 			}
 		}
 
-		//Renderingsloop
+		//render loop
 		var render = function () {
 			requestAnimationFrame( render );
 			controls.update();
@@ -317,36 +323,29 @@
 			// sun rotation
 			sunSphere.rotation.z += 0.01;
 
-			// shift spawned planet position from 0 to 30
-			// if ((activePlanet) && activePlanet.position.x == 0) {
-			// 	console.log("planet defined");
-			// 	activePlanet.position.x += 30;
-			// }
-			// if ((activeMoon) && activeMoon.position.x == activePlanet.position.x) {
-			// 	console.log("moon defined");
-			// 	activeMoon.position.x += 40;
-			// }
 			if (planetNeedsInitialShift) {
-				console.log("planet shifted");
 				activePlanet.position.x += 30;
 				planetNeedsInitialShift = false;
+				console.log("planet shifted");
 			}
-			if (moonNeedsInitialShift) {
-				console.log("moon shifted");
-				activeMoon.position.x += 20;
-				moonNeedsInitialShift = false;
-			}
+			// if (moonNeedsInitialShift) {
+			// 	activeMoon.position.x += 10;
+			// 	moonNeedsInitialShift = false;
+			// 	console.log("moon shifted");
+			// }
 
 			// rotation of planets
 			for (var i = 0; i < planetSpeeds.length; ++i) {
-				// planetSpeeds[i][0].rotation.y += planetSpeeds[i][1];
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
 
 				currentPlanetGroup.rotation.z += currentRotationSpeed;
 			}
-			
 
+			for (var i = 0; i < planets.length; ++i) {
+				planets[i].rotation.z += 0.03;
+			}
+			
 			renderer.render(scene, camera);
 		};
 
