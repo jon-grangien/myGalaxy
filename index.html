@@ -114,20 +114,7 @@
 			dirLight.position.set( 0, -1, 0 ).normalize();
 			scene.add(dirLight);
 
-			// Sun
-			// sunGroup =new THREE.Object3D;
-			// var sunGeometry = new THREE.SphereGeometry( 10, 32, 32 );
-			// var sunMaterial = new THREE.MeshPhongMaterial();
-			// sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-			// sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-			// sunMaterial.bumpScale = 0.06;
-			// sunMaterial.specular  = new THREE.Color('grey');
-			// sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
-			// // sunGroup.add(sunSphere);
-			// scene.add(sunSphere);
-
-
-			/************* ATMOSPHERE ****************/
+			/************* SUN ****************/
 			/* create custom material from the shader code above
 			that is within specially labeled script tags */
 			var customSunMaterial = new THREE.ShaderMaterial( {
@@ -142,23 +129,6 @@
 			var sunGeometry = new THREE.SphereGeometry( 9, 32, 16 );
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
 			scene.add(sunSphere);
-
-			// PLANET ATMOSPHERE
-			// var customPlanetMaterial = new THREE.ShaderMaterial( {
-			//     uniforms: {  },
-			// 	vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-			// 	fragmentShader: document.getElementById( 'fragmentShader2' ).textContent,
-			// 	side: THREE.BackSide,
-			// 	blending: THREE.AdditiveBlending,
-			// 	transparent: true
-			// }   );
-				
-			// var planetGeometry = new THREE.SphereGeometry( 11, 32, 32 );
-			// planetMesh = new THREE.Mesh( planetGeometry, customPlanetMaterial ); // addPlanet()
-
-			// var moonGeometry = new THREE.SphereGeometry( 5, 32, 32 );
-			// moonMesh = new THREE.Mesh( planetGeometry, customPlanetMaterial ); //addMoon()
-			/*********************************************/
 
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
