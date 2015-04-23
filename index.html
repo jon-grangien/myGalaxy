@@ -214,7 +214,10 @@
 			gui.open();
 			/*******************/
 			
-			controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls = new THREE.TrackballControls( camera, renderer.domElement );
+			controls.zoomSpeed = 0.5;
+			controls.panSpeed = 0;
+			controls.rotateSpeed = 0.5;
 		
 		}	//end init
 
