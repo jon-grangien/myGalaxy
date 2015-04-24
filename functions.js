@@ -37,24 +37,15 @@ function addPlanet(){
 	}   );
 
 	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-	
-	// orbit path
-	var pathGeometry = new THREE.TorusGeometry( 60, 0.5, 16, 100 );
-	var pathMaterial = new THREE.ShaderMaterial( {
-			    uniforms: {  },
-				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
-				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
-				side: THREE.BackSide,
-				blending: THREE.AdditiveBlending,
-				transparent: true
-			}   );
 
-	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+	// orbit path
+	var path = addOrbitPath(60);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
 
 	// Planet
 	var sphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
+
 	activePlanet.receiveShadow = true;
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
@@ -91,6 +82,22 @@ function addPlanet(){
 	// Push to planetPaths
 	tempArray = [activePlanet, path];
 	planetPaths.push(tempArray);
+}
+
+function addOrbitPath(radius) {
+	var pathGeometry = new THREE.TorusGeometry( radius, 0.5, 16, 100 );
+	var pathMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+
+	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+
+	return path;
 }
 
 function updatePlanetTexture(textureName){

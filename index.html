@@ -207,17 +207,21 @@
 				// Find planet's torus replace
 				for (var i = 0; i < planetPaths.length; ++i) {
 					if (planetPaths[i][0] == activePlanet) {
-						var newGeometry = new THREE.TorusGeometry( value, 0.5, 16, 200 );
-						var newMaterial = new THREE.ShaderMaterial( {
-						    uniforms: {  },
-							vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
-							fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
-							side: THREE.BackSide,
-							blending: THREE.AdditiveBlending,
-							transparent: true
-						}   );
-						var newPath = new THREE.Mesh( newGeometry, newMaterial );
+						// var newGeometry = new THREE.TorusGeometry( value, 0.5, 16, 200 );
+						// var newMaterial = new THREE.ShaderMaterial( {
+						//     uniforms: {  },
+						// 	vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+						// 	fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
+						// 	side: THREE.BackSide,
+						// 	blending: THREE.AdditiveBlending,
+						// 	transparent: true
+						// }   );
+						// var newPath = new THREE.Mesh( newGeometry, newMaterial );
+
 						sunSphere.remove(planetPaths[i][1]); 
+						
+						var newPath = addOrbitPath(value);
+
 						sunSphere.add(newPath);
 						planetPaths[i][1] = newPath;
 					}
