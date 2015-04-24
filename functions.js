@@ -196,14 +196,14 @@ function onDocumentMouseDown( event ) {
 		console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
 
-		for (var i = 0; i < planetGroups.length; i++) {
+		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
 				activePlanet = clickedObject;
 				console.log("clicked object is a planet");
 			}
 		}
 
-		for (var i = 0; i < moonGroups.length; i++) {
+		for (var i = 0; i < moonGroups.length; ++i) {
 			if (clickedObject.parent == moonGroups[i]) {
 				activeMoon = clickedObject;
 				console.log("clicked object is a moon");

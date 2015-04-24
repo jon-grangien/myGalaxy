@@ -102,8 +102,6 @@
 		var raycaster = new THREE.Raycaster();		
 		var intersects = raycaster.intersectObjects( clickableObjects );	
 		var mouse = new THREE.Vector2();
-		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-		document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 
 		init();
 		animate();
@@ -207,17 +205,6 @@
 				// Find planet's torus replace
 				for (var i = 0; i < planetPaths.length; ++i) {
 					if (planetPaths[i][0] == activePlanet) {
-						// var newGeometry = new THREE.TorusGeometry( value, 0.5, 16, 200 );
-						// var newMaterial = new THREE.ShaderMaterial( {
-						//     uniforms: {  },
-						// 	vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
-						// 	fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
-						// 	side: THREE.BackSide,
-						// 	blending: THREE.AdditiveBlending,
-						// 	transparent: true
-						// }   );
-						// var newPath = new THREE.Mesh( newGeometry, newMaterial );
-
 						sunSphere.remove(planetPaths[i][1]); 
 						
 						var newPath = addOrbitPath(value);
@@ -278,13 +265,15 @@
 			requestAnimationFrame( update );
 			/****************************************/
 			
-			// controls = new THREE.TrackballControls( camera, renderer.domElement );
-			// controls.zoomSpeed = 1.5;
-			// controls.panSpeed = 0;
-			// controls.rotateSpeed = 2.5;
-			controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls = new THREE.TrackballControls( camera, renderer.domElement );
+			controls.zoomSpeed = 1.5;
+			controls.panSpeed = 0;
+			controls.rotateSpeed = 2.5;
+			// controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 			window.addEventListener( 'resize', onWindowResize, false );
+			document.addEventListener( 'mousedown', onDocumentMouseDown, true );
+			document.addEventListener( 'touchstart', onDocumentTouchStart, true );
 		
 		}
 
