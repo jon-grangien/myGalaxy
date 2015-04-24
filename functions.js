@@ -72,7 +72,7 @@ function addPlanet(){
 
 	// Add planet group (and missing ones if exist) to sungroup
 	for (var i = 0; i < planetGroups.length; ++i) {
-	    if (planetGroups[i].parent !== sunSphere){
+	    if ((planetGroups[i]) && planetGroups[i].parent !== sunSphere){
 	    	sunSphere.add(planetGroups[i]);
 	    	console.log("new planet group added to sun")
 	    }
@@ -196,7 +196,7 @@ function onDocumentMouseDown( event ) {
 
 	if ( intersects.length > 0 ) {
 		console.log("we have an intersect");
-		var clickedObject = intersects[0].object;
+		clickedObject = intersects[0].object;
 
 		for (var i = 0; i < planetGroups.length; i++) {
 			if (clickedObject.parent == planetGroups[i]) {

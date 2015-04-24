@@ -73,9 +73,13 @@
 
 		// Variables to be used for current object to be changed
 		var activePlanet;
+		var focusedObject;
+		var clickedObject;
 		var activeMoon;
 		var customTexture;
 		var activeRotationSpeed;
+		var timer = 0; //timer används i förflyttnings-loopen.
+		var posx, posz, roty, camzoom; //variabler för att temporärt spara en position.
 
 		// Array of all objects to be clickable
 		var clickableObjects = [];
@@ -83,6 +87,8 @@
 		// Groups for objects
 		var planetGroups = [];
 		var moonGroups = [];
+		var galaxyGroup;
+		var rotationGroup;
 
 		// Multiarrays to keep track of things that correspond to each other 
 		var planets = [];		//multiarray of planet|moons
@@ -114,6 +120,13 @@
 			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 20000 );
 			camera.position.z = 30;
 			scene.add(camera);
+
+			galaxyGroup = new THREE.Object3D;
+			scene.add(rotationGroup);
+			//rotationGroup används för att motverka den markerade planetens rotation.
+			rotationGroup = new THREE.Object3D;
+			rotationGroup.add(galaxyGroup);
+
 			
 			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 			renderer.setClearColor( scene.fog.color );
@@ -146,7 +159,9 @@
 				
 			var sunGeometry = new THREE.SphereGeometry( 9, 32, 16 );
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
-			scene.add(sunSphere);
+			focusedObject = sunSphere;
+			clickedObject = sunSphere;
+			galaxyGroup.add(sunSphere);
 
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
@@ -274,6 +289,9 @@
 		function render() {
 			// console.log("render check");
 
+			//Variabeln time används till timern och även planeternas rotation.
+			var time = Date.now() * 0.0005;
+
 			// sun rotation
 			sunSphere.rotation.z += 0.0001;
 
@@ -293,7 +311,10 @@
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
 
-				currentPlanetGroup.rotation.z += currentRotationSpeed;
+				currentPlanetGroup.position.x = Math.cos( time * 0.5 ) * currentRotationSpeed;
+				currentPlanetGroup.position.y = Math.sin( time * 0.5 ) * currentRotationSpeed;
+
+				//currentPlanetGroup.rotation.z += currentRotationSpeed;
 			}
 
 			// planet rotations about self (ha som variabel?)
@@ -301,13 +322,74 @@
 				planets[i][0].rotation.z += 0.005;
 			}
 
-			// moon rotation speeds about sun
+			// moon rotation speeds about planets
 			for (var i = 0; i < moonSpeeds.length; ++i) {
 				currentMoonGroup = moonSpeeds[i][0].parent;
 				currentRotationSpeed = moonSpeeds[i][1];
 
-				currentMoonGroup.rotation.z += currentRotationSpeed;
+				currentMoonGroup.position.x = Math.cos( time * 0.5 ) * currentRotationSpeed;
+				currentMoonGroup.position.y = Math.sin( time * 0.5 ) * currentRotationSpeed;
+
+				//currentMoonGroup.rotation.z += currentRotationSpeed;
 			}
+
+			//ALBIN TEST =============================================
+
+			//Aktiveras när man klickar på en annan planet.
+				if(focusedObject != clickedObject) {
+					if(timer == 0){
+						//Timern börjar på pi och går ner till 0.
+						timer = Math.PI;
+						//Spara den förra planetens position och rotation.
+						posx = galaxyGroup.position.x;
+						posz = galaxyGroup.position.y;
+						roty = galaxyGroup.rotation.z + rotationGroup.rotation.z;
+						camzoom = camera.position.z;
+						console.log("Paborjar hopp");
+					}
+					//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
+					galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - focusedObject.position.x*(1+Math.cos(timer))/2;
+					galaxyGroup.position.y = posz*(1-Math.cos(timer))/2 - focusedObject.position.y*(1+Math.cos(timer))/2;
+					rotationGroup.rotation.z = roty*(1-Math.cos(timer))/2 - focusedObject.rotation.z*(1+Math.cos(timer))/2;
+					//OBS: raden under är en idé för att klara av sista punkten under planetförflyttning,
+					//	dvs att automatisk skala zoomnivån efter planetens radie. För att den ska gå att implementera måste
+					//	det gå att komma åt en planets radie på ett bra sätt. /Albin
+					//camera.position.z = camzoom + (1-Math.cos(timer))*(1/2)*temp.;
+
+					//Hastigheten med vilken förflyttningen sker.
+					timer -= 0.02;
+						
+					if(timer < 0){
+						timer = 0;
+						//När förflyttningen är klar sätts clickedObject (det klickade objektet) till objektet som nu är i fokus.
+						clickedObject = focusedObject;
+						//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
+						for(var i = 0; i < clickableObjects.length; i++)
+							if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
+								clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
+								console.log("Nollstalld under hopp");
+							}
+						console.log("Fardig med hopp");
+					}
+				} else {
+					//Detta sker när det inte är ett hopp på g.
+					galaxyGroup.position.x = -focusedObject.position.x;
+					galaxyGroup.position.y = -focusedObject.position.y;
+					//Motverkar planeten i fokus's rotation så att den står stilla.
+					rotationGroup.rotation.z = -focusedObject.rotation.z;
+
+					//Denna loop nollställer planetens rotation vid ett helt varv.
+					for(var i = 0; i < clickableObjects.length; i++)
+						if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
+							clickableObjects[i].rotation.z = 0;
+							console.log("Nollstalld utanfor hopp");
+						}
+				}
+
+
+			//ALBIN SLUT PÅ TEST =====================================
+
+
 			
 			renderer.render(scene, camera);
 		}
