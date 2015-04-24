@@ -25,8 +25,8 @@ function onWindowResize() {
 }
 
 function addPlanet(){
+	// Atmosphere
 	var atmosphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
-
 	var atmosphereMaterial = new THREE.ShaderMaterial( {
 	    uniforms: {  },
 		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
@@ -38,15 +38,23 @@ function addPlanet(){
 
 	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
 	
+	// orbit path
+	var pathGeometry = new THREE.TorusGeometry( 60, 3, 16, 100 );
+	var pathMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+
+	// Planet
 	var sphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
-	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);
+	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
+
 
 	activePlanet.add(atmosphere);
+	sunSphere.add(path);
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
-	activeRotationSpeed = 0.00001;
+	activeRotationSpeed = 0.001;
 	planetNeedsInitialShift = true;
 
 	// sunGroup.add(activeGroup);
@@ -62,13 +70,19 @@ function addPlanet(){
 	    }
 	}
 
-	// Push planet object + rotationSpeed
+	var tempArray;
+
+	// Push to planetSpeeds (planets|rotationSpeeds)
 	tempArray = [activePlanet, activeRotationSpeed];
 	planetSpeeds.push(tempArray);
 
-	//push to planets
+	// Push to planets (planets|moons)
 	tempArray = [activePlanet];
 	planets.push(tempArray);
+
+	// Push to planetPaths
+	tempArray = [activePlanet, path];
+	planetPaths.push(tempArray);
 
 }
 
