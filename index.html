@@ -207,7 +207,7 @@
 				// Find planet's torus replace
 				for (var i = 0; i < planetPaths.length; ++i) {
 					if (planetPaths[i][0] == activePlanet) {
-						var newGeometry = new THREE.TorusGeometry( value, 0.05, 16, 200 );
+						var newGeometry = new THREE.TorusGeometry( value, 0.5, 16, 200 );
 						var newMaterial = new THREE.ShaderMaterial( {
 						    uniforms: {  },
 							vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -309,6 +309,22 @@
 				console.log("moon shifted");
 			}
 
+			// Show/hide orbit path at set camera distance
+			// det här kanske är för prestandakrävande att ha i längden?
+			if ((Math.abs(camera.position.x) < 300) && (Math.abs(camera.position.y) < 300) && (Math.abs(camera.position.z) < 300)) {
+				for (var i = 0; i < planetPaths.length; ++i) {
+					planetPaths[i][1].visible = false;
+					// console.log ("camera x:y:z = " + camera.position.x + ":" + camera.position.y + ":" + camera.position.z);
+					// console.log("orbit path disabled");
+				}
+			} else {
+				for (var i = 0; i < planetPaths.length; ++i) {
+					planetPaths[i][1].visible = true;
+					// console.log ("camera x:y:z = " + camera.position.x + ":" + camera.position.y + ":" + camera.position.z);
+					// console.log("orbit path enabled");
+				}
+			}
+
 			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				currentPlanetGroup = planetSpeeds[i][0].parent;
@@ -322,7 +338,7 @@
 				planets[i][0].rotation.z += 0.005;
 			}
 
-			// moon rotation speeds about sun
+			// moon rotation speeds about planet
 			for (var i = 0; i < moonSpeeds.length; ++i) {
 				currentMoonGroup = moonSpeeds[i][0].parent;
 				currentRotationSpeed = moonSpeeds[i][1];

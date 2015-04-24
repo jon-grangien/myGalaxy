@@ -39,7 +39,7 @@ function addPlanet(){
 	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
 	
 	// orbit path
-	var pathGeometry = new THREE.TorusGeometry( 60, 0.05, 16, 100 );
+	var pathGeometry = new THREE.TorusGeometry( 60, 0.5, 16, 100 );
 	var pathMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
