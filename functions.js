@@ -55,8 +55,8 @@ function addPlanet(){
 	var sphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
-
-
+	activePlanet.receiveShadow = true;
+	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
 	sunSphere.add(path);
 
@@ -133,24 +133,12 @@ function updatePlanetTexture(textureName){
 }
 
 function addMoon() {
-	var atmosphereGeometry = new THREE.SphereGeometry( 2, 32, 32 );
 
-	var atmosphereMaterial = new THREE.ShaderMaterial( {
-	    uniforms: {  },
-		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-		fragmentShader: document.getElementById( 'fragmentShader2' ).textContent,
-		side: THREE.BackSide,
-		blending: THREE.AdditiveBlending,
-		transparent: true
-	}   );
-
-	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-	
 	var sphereGeometry = new THREE.SphereGeometry( 2, 32, 32 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/moontexture.jpg' )} );
 	activeMoon = new THREE.Mesh(sphereGeometry, sphereMaterial);
-
-	activeMoon.add(atmosphere);
+	activeMoon.receiveShadow = true;
+	activeMoon.castShadow = true;
 	var activeGroup = new THREE.Object3D;
 	activeGroup.add(activeMoon);
 

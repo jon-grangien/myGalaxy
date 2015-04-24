@@ -113,25 +113,24 @@
 			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
 			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 20000 );
-			camera.position.z = 30;
+			camera.position.z = 200;
 			scene.add(camera);
 			
 			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 			renderer.setClearColor( scene.fog.color );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.shadowMapEnabled = true;
 			document.body.appendChild( renderer.domElement );
 
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
 			
-			var ambientLight = new THREE.AmbientLight( 0xffffff ); // soft white light
-			ambientLight.color.setHSL( 0.1, 0.3, 0.2 );
+			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
+			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
 			scene.add( ambientLight );
 			
-			var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
-			dirLight.position.set( 0, -1, 0 ).normalize();
-			scene.add(dirLight);
+			
 
 			/************* SUN ****************/
 			/* create custom material from the shader code above
@@ -145,7 +144,7 @@
 				transparent: true
 			}   );
 				
-			var sunGeometry = new THREE.SphereGeometry( 9, 32, 16 );
+			var sunGeometry = new THREE.SphereGeometry( 19, 32, 32 );
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
 			scene.add(sunSphere);
 
@@ -208,7 +207,7 @@
 				// Find planet's torus replace
 				for (var i = 0; i < planetPaths.length; ++i) {
 					if (planetPaths[i][0] == activePlanet) {
-						var newGeometry = new THREE.TorusGeometry( value, 0.05, 16, 100 );
+						var newGeometry = new THREE.TorusGeometry( value, 0.05, 16, 200 );
 						var newMaterial = new THREE.ShaderMaterial( {
 						    uniforms: {  },
 							vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
