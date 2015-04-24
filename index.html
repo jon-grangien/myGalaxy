@@ -16,6 +16,7 @@
 		<script src="js/OrbitControls.js"></script>
 		<script type="text/javascript" src="js/dat.gui.min.js"></script>
 		<script src="js/TrackballControls.js"></script>
+		<script src="js/stats.min.js"></script>
 
 		<!-- includes -->
 		<!-- <link rel="import" href="shaders.html"> -->
@@ -66,7 +67,7 @@
 		<script>
 
 		// Basic global variables
-		var container, camera, scene, renderer;
+		var container, camera, scene, renderer, stats;
 
 		// Meshes for planets
 		var sunSphere;
@@ -253,6 +254,26 @@
 
 			gui.open();
 			/*******************/
+
+			/************** FPS counter *************/
+			stats = new Stats();
+			stats.setMode(0); // 0: fps, 1: ms
+
+			// align top-left
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.left = '10px';
+			stats.domElement.style.top = '25px';
+
+			document.body.appendChild( stats.domElement );
+
+			var update = function () {
+			    stats.begin();
+			    stats.end();
+			    requestAnimationFrame( update );
+			};
+
+			requestAnimationFrame( update );
+			/****************************************/
 			
 			// controls = new THREE.TrackballControls( camera, renderer.domElement );
 			// controls.zoomSpeed = 1.5;
@@ -267,6 +288,7 @@
 		function animate() {
 			requestAnimationFrame( animate );
 			controls.update();
+			stats.update();  
 
 			render();	
 		}
