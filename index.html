@@ -184,8 +184,26 @@
 			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
 
-			sphereRadius.onChange(function(value) 
-			{   activePlanet.position.x = value;   });
+			sphereRadius.onChange(function(value) {
+				activePlanet.position.x = value;   
+
+				// Find planet's torus replace
+				for (var i = 0; i < planetPaths.length; ++i) {
+					if (planetPaths[i][0] == activePlanet) {
+						//debug
+						// if (planetPaths[i][1]) {
+						// 	console.log("torus found");
+						// }
+
+						var newGeometry = new THREE.TorusGeometry( value, 0.05, 16, 100 );
+						var newMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+						var newPath = new THREE.Mesh( newGeometry, newMaterial );
+						sunSphere.remove(planetPaths[i][1]); 
+						sunSphere.add(newPath);
+						planetPaths[i][1] = newPath;
+					}
+				}
+			});
 			
 			sphereSize.onChange(function(value) {
 				activePlanet.scale.x = value;

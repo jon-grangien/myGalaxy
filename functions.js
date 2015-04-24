@@ -39,7 +39,7 @@ function addPlanet(){
 	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
 	
 	// orbit path
-	var pathGeometry = new THREE.TorusGeometry( 60, 3, 16, 100 );
+	var pathGeometry = new THREE.TorusGeometry( 60, 0.05, 16, 100 );
 	var pathMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 	var path = new THREE.Mesh( pathGeometry, pathMaterial );
 
@@ -83,7 +83,6 @@ function addPlanet(){
 	// Push to planetPaths
 	tempArray = [activePlanet, path];
 	planetPaths.push(tempArray);
-
 }
 
 function updatePlanetTexture(textureName){
