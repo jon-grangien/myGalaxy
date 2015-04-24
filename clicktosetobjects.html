@@ -21,6 +21,26 @@
 		<script src="js/Projector.js"></script>
 		<script src="js/CanvasRenderer.js"></script>
 
+		<script id="vertexShader" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() 
+			{
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 0.9 );
+			}
+		</script>
+
+
+		<script id="fragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() 
+			{
+				float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.0 ) ), 5.0 ); 
+			   gl_FragColor = vec4( 0.9, 0.9, 0.9, 1.0 ) * intensity;
+			}
+
+		</script>
+
 		
 		<script>
 			//Klickvariabler
@@ -101,7 +121,7 @@
 			}	
 			
 			//houseCount börjar på -1 istället för 0 för annars sparas ett extra hus när man drar in musen över planeten.
-			var houseCount = -1;
+			var houseCount = 0;
 			function onDocumentMouseDown( event ) {
 				event.preventDefault();
 				mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
@@ -111,8 +131,17 @@
 				if ( intersects.length > 0 ) {
 					//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
 					createHouse(intersects[0].object.worldToLocal(intersects[0].point));
+
 					houseCount++;
+
+					//If-satsen löser ser till att rätt hus sätts ut, dvs huset från funktionen createHouse och inte showHouse.
+					if(selectedPlanet.children.length == 1){
+						selectedPlanet.remove(selectedPlanet.children[selectedPlanet.children.length-1]);
+					} else {
+						selectedPlanet.remove(selectedPlanet.children[selectedPlanet.children.length-2]);
+					}
 					console.log(houseCount);
+					
 				}
 			}
 
@@ -127,12 +156,12 @@
 				var intersects = raycaster.intersectObjects( objects );
 
 				//En forloop som ser till att det inte spawnar hus överallt där man har musen.
-				for ( i = selectedPlanet.children.length; i > houseCount; i-- )
+				for ( i = selectedPlanet.children.length; i > houseCount-1; i-- )
 			        selectedPlanet.remove(selectedPlanet.children[i]);
 
 				if ( intersects.length > 0 ) {
 					//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
-					createHouse(intersects[0].object.worldToLocal(intersects[0].point));
+					showHouse(intersects[0].object.worldToLocal(intersects[0].point));
 				}
 				
 
@@ -165,6 +194,47 @@
 		            
 		        }, onProgress, onError);
 			}
+			function showHouse(pos) {
+		        loader.load( "obj/house.obj", "", function(object){ 
+		 			sunSphere.add(object);
+		 			object.position.copy( pos );
+		 			object.scale.x = 0.01;
+		 			object.scale.y = 0.01;
+		 			object.scale.z = 0.01;
+
+		 			object.traverse( function ( child ) {
+
+                    if ( child instanceof THREE.Mesh )
+                    {
+
+                    var  geometry = child.geometry;
+
+                    material = child.material;
+                    mesh = new THREE.Mesh(geometry, material);
+
+                    var customMaterial = new THREE.ShaderMaterial( 
+					{
+					    uniforms: {  },
+						vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+						fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+						side: THREE.BackSide,
+						blending: THREE.AdditiveBlending,
+						transparent: true
+					}   );
+
+                    child.material = customMaterial;
+
+                    }
+
+
+                    });
+		 			
+
+		 			object.lookAt(sunSphere.position);
+		            
+		        }, onProgress, onError);
+			}
+
 			
 	     
 	        //====================================SLUT================================
