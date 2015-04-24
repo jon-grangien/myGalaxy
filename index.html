@@ -29,6 +29,13 @@
 			}
 		</script>
 
+		<script id="torusVertexShader" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
 
 		<script id="fragmentShader" type="x-shader/x-vertex">			 
 			varying vec3 vNormal;
@@ -44,6 +51,16 @@
 				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
 			    gl_FragColor = vec4( 0.2, 0.4, 0.5, 1.0 ) * intensity;
 			}
+		</script>
+
+		<script id="torusFragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() 
+			{
+				float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.0 ) ), 5.0 ); 
+			   gl_FragColor = vec4( 0.9, 0.9, 0.5, 1.0 ) * intensity;
+			}
+
 		</script>
 		
 		<script>
@@ -190,13 +207,15 @@
 				// Find planet's torus replace
 				for (var i = 0; i < planetPaths.length; ++i) {
 					if (planetPaths[i][0] == activePlanet) {
-						//debug
-						// if (planetPaths[i][1]) {
-						// 	console.log("torus found");
-						// }
-
 						var newGeometry = new THREE.TorusGeometry( value, 0.05, 16, 100 );
-						var newMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+						var newMaterial = new THREE.ShaderMaterial( {
+						    uniforms: {  },
+							vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+							fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
+							side: THREE.BackSide,
+							blending: THREE.AdditiveBlending,
+							transparent: true
+						}   );
 						var newPath = new THREE.Mesh( newGeometry, newMaterial );
 						sunSphere.remove(planetPaths[i][1]); 
 						sunSphere.add(newPath);

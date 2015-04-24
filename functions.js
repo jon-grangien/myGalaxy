@@ -40,7 +40,15 @@ function addPlanet(){
 	
 	// orbit path
 	var pathGeometry = new THREE.TorusGeometry( 60, 0.05, 16, 100 );
-	var pathMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+	var pathMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+
 	var path = new THREE.Mesh( pathGeometry, pathMaterial );
 
 	// Planet
