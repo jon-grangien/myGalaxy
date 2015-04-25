@@ -4,7 +4,7 @@ function addLight( h, s, l, x, y, z ) {
 	light.position.set( x, y, z );
 	scene.add( light );
 
-	var flareColor = new THREE.Color( 0xffffff );
+	var flareColor = new THREE.Color( 0xffffaa );
 	flareColor.setHSL( h, s, l + 0.3 );
 
 	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
