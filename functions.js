@@ -103,7 +103,7 @@ function addOrbitPath(radius) {
 }
 
 function addMoonOrbitPath(moonRadius) {
-	var pathGeometry = new THREE.TorusGeometry( moonRadius, 0.3, 16, 100 );
+	var pathGeometry = new THREE.TorusGeometry( moonRadius, 0.2, 16, 100 );
 	var pathMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -169,6 +169,7 @@ function addMoon() {
 	activeGroup.add(activeMoon);
 
 	var path = addMoonOrbitPath(20);
+	activeMoon.parent.add(path);
 
 	activeMoon.position.x = 0;
 	activeRotationSpeed = 0.001;
@@ -178,7 +179,7 @@ function addMoon() {
 	// activePlanet.add(activeMoon);
 	activePlanet.add(activeGroup);
 	moonGroups.push(activeGroup);
-	activeMoon.parent.add(path);
+	
 
 
 	// put moon to corresponding planet in array
@@ -192,6 +193,12 @@ function addMoon() {
 	// Push moon object + rotationSpeed
 	tempArray = [activeMoon, activeRotationSpeed];
 	moonSpeeds.push(tempArray);
+
+	// Push to planetPaths
+	tempArray = [activeMoon, path];
+	moonPaths.push(tempArray);
+
+
 
 	console.log("moon spawned");
 }

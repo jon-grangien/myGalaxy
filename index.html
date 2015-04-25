@@ -249,11 +249,11 @@
 				for (var i = 0; i < moonPaths.length; ++i) {
 					if (moonPaths[i][0] == activeMoon) {
 		
-						activeMoon.remove(moonPaths[i][1]); 
+						activeMoon.parent.remove(moonPaths[i][1]); 
 						
 						var newPath = addMoonOrbitPath(value);
 
-						activeMoon.add(newPath);
+						activeMoon.parent.add(newPath);
 						moonPaths[i][1] = newPath;
 					}
 				}
