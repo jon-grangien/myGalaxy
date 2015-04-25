@@ -100,6 +100,22 @@ function addOrbitPath(radius) {
 	return path;
 }
 
+function addMoonOrbitPath(moonRadius) {
+	var pathGeometry = new THREE.TorusGeometry( moonRadius, 0.3, 16, 100 );
+	var pathMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusMoonFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+
+	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+
+	return path;
+}
+
 function updatePlanetTexture(textureName){
 	var value = textureName;
 	var newMaterial;
@@ -149,6 +165,8 @@ function addMoon() {
 	var activeGroup = new THREE.Object3D;
 	activeGroup.add(activeMoon);
 
+	var path = addMoonOrbitPath(20);
+
 	activeMoon.position.x = 0;
 	activeRotationSpeed = 0.001;
 	moonNeedsInitialShift = true;
@@ -157,6 +175,8 @@ function addMoon() {
 	// activePlanet.add(activeMoon);
 	activePlanet.add(activeGroup);
 	moonGroups.push(activeGroup);
+	activeMoon.parent.add(path);
+
 
 	// put moon to corresponding planet in array
 	for (var i = 0; i < planets.length; ++i) {
