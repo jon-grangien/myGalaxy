@@ -24,6 +24,7 @@ function onWindowResize() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+// Planet spawn (gui)
 function addPlanet(){
 	// Atmosphere
 	var atmosphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
@@ -84,6 +85,7 @@ function addPlanet(){
 	planetPaths.push(tempArray);
 }
 
+// Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
 	var pathGeometry = new THREE.TorusGeometry( radius, 0.5, 16, 100 );
 	var pathMaterial = new THREE.ShaderMaterial( {
@@ -155,6 +157,7 @@ function updatePlanetTexture(textureName){
 	activePlanet.texture.needsUpdate = true;	//gives error output but works anyway
 }
 
+// Add moon to active planet (gui)
 function addMoon() {
 
 	var sphereGeometry = new THREE.SphereGeometry( 2, 32, 32 );
@@ -213,14 +216,14 @@ function onDocumentMouseDown( event ) {
 		console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
 
-		for (var i = 0; i < planetGroups.length; i++) {
+		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
 				activePlanet = clickedObject;
 				console.log("clicked object is a planet");
 			}
 		}
 
-		for (var i = 0; i < moonGroups.length; i++) {
+		for (var i = 0; i < moonGroups.length; ++i) {
 			if (clickedObject.parent == moonGroups[i]) {
 				activeMoon = clickedObject;
 				console.log("clicked object is a moon");
