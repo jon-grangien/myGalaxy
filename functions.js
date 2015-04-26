@@ -205,18 +205,18 @@ function addMoon() {
 
 function playMusic(songFile) {
 	if (currentSong != "") {		//something is being played
-		if (music.ended) {		//it was just the last track that had ended
+		if (music.ended) {		//it was just the last track that had ended,
 			currentSong = "";	//update the variable
 		} 
 
-		else if (currentSong == songFile) {	//song playing is the song clicked in the gui
-			music.pause();
+		else if (currentSong == songFile) {	//song playing is the song clicked in the gui,
+			music.pause();			//pause song,
 			currentSong = "";
-			return;		
+			return;					//do nothing		
 		}
 
-		else {
-			music.pause();
+		else {					//another song is being played than the one clicked in the gui
+			music.pause();		//pause so new song can be played
 		}
 	}
 

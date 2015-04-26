@@ -187,7 +187,9 @@
 				moonRotation: 0.001,
 				playNewWorlds: function() { playMusic("New Worlds.mp3") },
 				playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
-				playTest: function() { playMusic("found.wav") }
+				playPotato: function() { playMusic("Digging My Potato.mp3") },
+				playMemory: function() { playMusic("Memory.mp3") },
+				playAnotherReflection: function() { playMusic("Another Reflection.mp3") }
 			};
 
 			gui.add( parameters, 'addPlanet').name("Spawn new planet");
@@ -219,7 +221,9 @@
 			var musicFl = gui.addFolder('Music');
 			musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
 			musicFl.add( parameters, "playStrangers" ).name("Strangers");
-			musicFl.add( parameters, "playTest" ).name("!");
+			musicFl.add( parameters, "playPotato" ).name("Digging My Potato");
+			musicFl.add( parameters, "playMemory" ).name("Memory");
+			musicFl.add( parameters, "playAnotherReflection" ).name("Another Reflection");
 
 			sphereRadius.onChange(function(value) {
 				activePlanet.position.x = value;   
