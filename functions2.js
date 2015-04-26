@@ -57,6 +57,16 @@ function addPlanet(){
 	activeRotationSpeed = 0.001;
 	planetNeedsInitialShift = true;
 
+	//Hover-background
+	var hoverGeometry = new THREE.SphereGeometry( 12, 32, 32 );
+	var hoverMaterial = new THREE.MeshBasicMaterial();
+	hoverMaterial.side = THREE.BackSide;
+	hoverShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	hoverShells[activePlanet] = hoverShell;
+	
+	visibility(hoverShell, false);
+	activePlanet.add(hoverShell);
+	
 	// sunGroup.add(activeGroup);
 	activeGroup.add(activePlanet);
 	clickableObjects.push(activePlanet);
@@ -271,6 +281,7 @@ function onMouseMove( event ) {
 	}
 
 
+
 	if ( intersects.length > 0 ) {
 		
 		var check = -1; //planet = 1, moon = 0 
@@ -292,24 +303,17 @@ function onMouseMove( event ) {
 			}
 		}
 
-		var sphereGeometry = new THREE.SphereGeometry( 12, 32, 32 );
-		var sphereMaterial = new THREE.MeshBasicMaterial();
-		sphereMaterial.side = THREE.BackSide;
-		hoverShell = new THREE.Mesh(sphereGeometry, sphereMaterial);
+		var object;
 
 		var sphereGeometry = new THREE.SphereGeometry( 2.5, 32, 32 );
 		var sphereMaterial = new THREE.MeshBasicMaterial();
 		sphereMaterial.side = THREE.BackSide;
 		hoverMoonShell = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
-
-
-
-
 		if(check)
 		{
-			hoveredPlanet.add(hoverShell);
-			hoverShells.push(hoverShell);
+			object = hoverShell[hoveredPlanet];
+			visibility(hoveredPlanet,true);
 		}
 		else{
 			hoveredMoon.add(hoverMoonShell);
@@ -317,7 +321,6 @@ function onMouseMove( event ) {
 		}
 		
 	}
-
 
 
 	
@@ -344,4 +347,8 @@ function lensFlareUpdateCallback( object ) {
         flare.scale = 1 / camDistance * 200;
     }
 
+}
+
+function visibility(object, bool){
+	object.traverse(function(child) {child.visible = bool;});
 }
