@@ -346,7 +346,9 @@
 
 			// Show/hide orbit path at set camera distance
 			// det här kanske är för prestandakrävande att ha i längden?
-			if ((Math.abs(camera.position.x) < 300) && (Math.abs(camera.position.y) < 300) && (Math.abs(camera.position.z) < 300)) {
+			if ((Math.abs(camera.position.x) < orbitPathDistanceLimit) 
+				&& (Math.abs(camera.position.y) < orbitPathDistanceLimit) 
+				&& (Math.abs(camera.position.z) < orbitPathDistanceLimit)) {
 				for (var i = 0; i < planetPaths.length; ++i) {
 					planetPaths[i][1].visible = false;
 					//moonPaths[i][1].visible = false;
