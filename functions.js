@@ -67,7 +67,7 @@ function addPlanet(){
 	for (var i = 0; i < planetGroups.length; ++i) {
 	    if (planetGroups[i].parent !== sunSphere){
 	    	sunSphere.add(planetGroups[i]);
-	    	console.log("new planet group added to sun")
+	    	// console.log("new planet group added to sun")
 	    }
 	}
 
@@ -193,10 +193,8 @@ function addMoon() {
 	// Push to planetPaths
 	tempArray = [activeMoon, path];
 	moonPaths.push(tempArray);
-
-
-
-	console.log("moon spawned");
+	
+	// console.log("moon spawned");
 }
 
 function playMusic(songFile) {
@@ -229,7 +227,7 @@ function onDocumentTouchStart( event ) {
 }	
 
 function onDocumentMouseDown( event ) {
-	console.log("mouse is down");
+	// console.log("mouse is down");
 
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
@@ -238,7 +236,7 @@ function onDocumentMouseDown( event ) {
 	intersects = raycaster.intersectObjects( clickableObjects );
 
 	if ( intersects.length > 0 ) {
-		console.log("we have an intersect");
+		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
