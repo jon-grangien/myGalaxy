@@ -181,7 +181,8 @@
 				texture9: function() { updatePlanetTexture() },
 				addMoon: function() { addMoon() },
 				moonRadius: 10,
-				moonRotation: 0.001
+				moonRotation: 0.001,
+				playNewWorlds: function() { playMusic("New Worlds.mp3") }
 			};
 
 			gui.add( parameters, 'addPlanet').name("Spawn new planet");
@@ -209,6 +210,9 @@
 			moonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
 			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
+
+			var musicFl = gui.addFolder('Music');
+			musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
 
 			sphereRadius.onChange(function(value) {
 				activePlanet.position.x = value;   

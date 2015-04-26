@@ -203,6 +203,11 @@ function addMoon() {
 	console.log("moon spawned");
 }
 
+function playMusic(songFile) {
+	var music = new Audio("music/" + songFile);
+	music.play();
+}
+
 function onDocumentTouchStart( event ) {	
 	event.preventDefault();
 	event.clientX = event.touches[0].clientX;
