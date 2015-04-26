@@ -59,12 +59,21 @@ function addPlanet(){
 
 	//Hover-background
 	var hoverGeometry = new THREE.SphereGeometry( 12, 32, 32 );
-	var hoverMaterial = new THREE.MeshBasicMaterial();
+	var hoverMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
 	hoverMaterial.side = THREE.BackSide;
 	hoverShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
 	visibility(hoverShell, false);
 	activePlanet.add(hoverShell);
-	
+	//----------------hoverend------------------
+
+
 	// sunGroup.add(activeGroup);
 	activeGroup.add(activePlanet);
 	clickableObjects.push(activePlanet);
@@ -193,6 +202,22 @@ function addMoon() {
 	activePlanet.add(activeGroup);
 	moonGroups.push(activeGroup);
 
+	//hover on moon shell
+	var hoverGeometry = new THREE.SphereGeometry( 3, 32, 32 );
+	var hoverMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusMoonFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+	hoverMaterial.side = THREE.BackSide;
+	hoverMoonShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	visibility(hoverMoonShell,false);
+	activeMoon.add(hoverMoonShell);
+	//-------hoverend-------------
+	
 
 	// put moon to corresponding planet in array
 	for (var i = 0; i < planets.length; ++i) {
@@ -213,6 +238,10 @@ function addMoon() {
 	//Push moon to planetObjects
 	tempArray = [activePlanet, activeMoon];
 	planetObjects.push(tempArray);
+
+	// Push to hoverShells
+	tempArray = [activeMoon, hoverMoonShell];
+	hoverMoonShells.push(tempArray);
 
 	console.log("moon spawned");
 }
@@ -266,20 +295,23 @@ function onMouseMove( event ) {
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 	intersects = raycaster.intersectObjects( clickableObjects );
-
-
 	
-	
+	//Hides planet hover
 	for (var i = 0; i < hoverShells.length; ++i) {
 		if (hoverShells[i][0] == hoveredPlanet) {
 			
 			mesh = hoverShells[i][0];
 			visibility(mesh.children[1],false);
-			console.log(mesh.children[0]);
 		}
 	}
-
-
+	//Hides moon hover
+	for (var i = 0; i < hoverMoonShells.length; ++i) {
+		if (hoverMoonShells[i][0] == hoveredMoon) {
+			
+			mesh = hoverMoonShells[i][0];
+			visibility(mesh.children[0],false);
+		}
+	}
 
 
 	if ( intersects.length > 0 ) {
@@ -302,29 +334,32 @@ function onMouseMove( event ) {
 			}
 		}
 
-		var sphereGeometry = new THREE.SphereGeometry( 2.5, 32, 32 );
-		var sphereMaterial = new THREE.MeshBasicMaterial();
-		sphereMaterial.side = THREE.BackSide;
-		hoverMoonShell = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
-		if(check)
+		if(check)	// if hovered object is a planet
 		{
 			for (var i = 0; i < hoverShells.length; ++i) {
 				if (hoverShells[i][0] == hoveredPlanet) {
 					
-					mesh = hoverShells[i][0];
-					visibility(mesh,true);
+					mesh = hoverShells[i][0];	//Extraxt hover-mesh from array
+					visibility(mesh.children[1],true); //Show hover background
+
 				}
 			}
 		}
-		else{
-			
+		else	// if hovered object is a moon
+		{
+			for (var i = 0; i < hoverMoonShells.length; ++i) {
+				if (hoverMoonShells[i][0] == hoveredMoon) {
+
+					mesh = hoverMoonShells[i][0];
+					visibility(mesh.children[0],true);
+
+				}
+			}
 		}
 		
 	}
 
-
-	
 
 }
 
