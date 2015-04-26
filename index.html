@@ -114,6 +114,9 @@
 		var intersects = raycaster.intersectObjects( clickableObjects );	
 		var mouse = new THREE.Vector2();
 
+		var music;				//global var for music property, see playMusic()
+		var currentSong = "";	//store name of current music file being played
+
 		init();
 		animate();
 
@@ -182,7 +185,9 @@
 				addMoon: function() { addMoon() },
 				moonRadius: 10,
 				moonRotation: 0.001,
-				playNewWorlds: function() { playMusic("New Worlds.mp3") }
+				playNewWorlds: function() { playMusic("New Worlds.mp3") },
+				playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
+				playTest: function() { playMusic("found.wav") }
 			};
 
 			gui.add( parameters, 'addPlanet').name("Spawn new planet");
@@ -213,6 +218,8 @@
 
 			var musicFl = gui.addFolder('Music');
 			musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
+			musicFl.add( parameters, "playStrangers" ).name("Strangers");
+			musicFl.add( parameters, "playTest" ).name("!");
 
 			sphereRadius.onChange(function(value) {
 				activePlanet.position.x = value;   

@@ -204,8 +204,25 @@ function addMoon() {
 }
 
 function playMusic(songFile) {
-	var music = new Audio("music/" + songFile);
+	if (currentSong != "") {		//something is being played
+		if (music.ended) {		//it was just the last track that had ended
+			currentSong = "";	//update the variable
+		} 
+
+		else if (currentSong == songFile) {	//song playing is the song clicked in the gui
+			music.pause();
+			currentSong = "";
+			return;		
+		}
+
+		else {
+			music.pause();
+		}
+	}
+
+	music = new Audio("music/" + songFile);
 	music.play();
+	currentSong = songFile;
 }
 
 function onDocumentTouchStart( event ) {	
