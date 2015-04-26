@@ -62,8 +62,6 @@ function addPlanet(){
 	var hoverMaterial = new THREE.MeshBasicMaterial();
 	hoverMaterial.side = THREE.BackSide;
 	hoverShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
-	hoverShells[activePlanet] = hoverShell;
-	
 	visibility(hoverShell, false);
 	activePlanet.add(hoverShell);
 	
@@ -93,6 +91,10 @@ function addPlanet(){
 	// Push to planetPaths
 	tempArray = [activePlanet, path];
 	planetPaths.push(tempArray);
+
+	// Push to hoverShells
+	tempArray = [activePlanet, hoverShell];
+	hoverShells.push(tempArray);
 
 }
 
@@ -190,7 +192,6 @@ function addMoon() {
 	// activePlanet.add(activeMoon);
 	activePlanet.add(activeGroup);
 	moonGroups.push(activeGroup);
-	
 
 
 	// put moon to corresponding planet in array
@@ -266,19 +267,18 @@ function onMouseMove( event ) {
 	raycaster.setFromCamera( mouse, camera );
 	intersects = raycaster.intersectObjects( clickableObjects );
 
-	var L = hoverShells.length+planetObjects.length;
 
-	for ( i = L; i > planetObjects.length; i-- ){
-		hoveredPlanet.remove(hoveredPlanet.children[i]);
-		hoverShells.pop();
+	
+	
+	for (var i = 0; i < hoverShells.length; ++i) {
+		if (hoverShells[i][0] == hoveredPlanet) {
+			
+			mesh = hoverShells[i][0];
+			visibility(mesh.children[1],false);
+			console.log(mesh.children[0]);
+		}
 	}
 
-	L = hoverMoonShells.length+moonObjects.length;
-
-	for ( i = L; i > moonObjects.length; i-- ){
-		hoveredMoon.remove(hoveredMoon.children[i]);
-		hoverMoonShells.pop();
-	}
 
 
 
@@ -286,7 +286,6 @@ function onMouseMove( event ) {
 		
 		var check = -1; //planet = 1, moon = 0 
 
-		console.log("hovering on planet");
 		var clickedObject = intersects[0].object;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
@@ -303,8 +302,6 @@ function onMouseMove( event ) {
 			}
 		}
 
-		var object;
-
 		var sphereGeometry = new THREE.SphereGeometry( 2.5, 32, 32 );
 		var sphereMaterial = new THREE.MeshBasicMaterial();
 		sphereMaterial.side = THREE.BackSide;
@@ -312,12 +309,16 @@ function onMouseMove( event ) {
 
 		if(check)
 		{
-			object = hoverShell[hoveredPlanet];
-			visibility(hoveredPlanet,true);
+			for (var i = 0; i < hoverShells.length; ++i) {
+				if (hoverShells[i][0] == hoveredPlanet) {
+					
+					mesh = hoverShells[i][0];
+					visibility(mesh,true);
+				}
+			}
 		}
 		else{
-			hoveredMoon.add(hoverMoonShell);
-			hoverMoonShells.push(hoverMoonShell);
+			
 		}
 		
 	}
