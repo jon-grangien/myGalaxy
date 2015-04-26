@@ -46,6 +46,7 @@ function addPlanet(){
 	var sphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
+	activePlanet.material.map.minFilter = THREE.NearestFilter;
 
 	activePlanet.receiveShadow = true;
 	activePlanet.castShadow = true;
