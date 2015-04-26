@@ -108,6 +108,7 @@
 		var currentRotationSpeed;			
 		var planetNeedsInitialShift = false;
 		var moonNeedsInitialShift = false;  
+		var orbitPathDistanceLimit = 300;	//value for show/hide limit of orbit paths
 
 		// click functionality
 		var raycaster = new THREE.Raycaster();		
@@ -367,6 +368,7 @@
 					// console.log ("camera x:y:z = " + camera.position.x + ":" + camera.position.y + ":" + camera.position.z);
 					// console.log("orbit path enabled");
 				}
+
 				for (var i = 0; i < moonPaths.length; ++i) {
 					moonPaths[i][1].visible = true;
 				}
