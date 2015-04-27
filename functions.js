@@ -74,6 +74,22 @@ function addPlanet(){
 	activePlanet.add(hoverShell);
 	//----------------hoverend------------------
 
+	//Clicked-background
+	var clickedGeometry = new THREE.SphereGeometry( 13, 32, 32 );
+	var clickedMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+	clickedMaterial.side = THREE.BackSide;
+	clickedShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	visibility(clickedShell, false);
+	activePlanet.add(clickedShell);
+	//----------------clickedend------------------
+
 
 	// sunGroup.add(activeGroup);
 	activeGroup.add(activePlanet);
@@ -105,6 +121,10 @@ function addPlanet(){
 	// Push to hoverShells
 	tempArray = [activePlanet, hoverShell];
 	hoverShells.push(tempArray);
+
+	// Push to clickedShells
+	tempArray = [activePlanet, clickedShell];
+	clickedShells.push(tempArray);
 
 }
 
@@ -213,6 +233,22 @@ function addMoon() {
 	visibility(hoverMoonShell,false);
 	activeMoon.add(hoverMoonShell);
 	//-------hoverend-------------
+
+	//click on moon shell
+	var clickedGeometry = new THREE.SphereGeometry( 4, 32, 32 );
+	var clickedMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusMoonFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+	clickedMaterial.side = THREE.BackSide;
+	clickedMoonShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	visibility(clickedMoonShell,false);
+	activeMoon.add(clickedMoonShell);
+	//-------clickedend-------------
 	
 
 	// put moon to corresponding planet in array
@@ -238,6 +274,10 @@ function addMoon() {
 	// Push to hoverShells
 	tempArray = [activeMoon, hoverMoonShell];
 	hoverMoonShells.push(tempArray);
+
+	// Push to clickedShells
+	tempArray = [activeMoon, clickedMoonShell];
+	clickedMoonShells.push(tempArray);
 	
 	// console.log("moon spawned");
 }
