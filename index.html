@@ -98,7 +98,9 @@
 
 		// Groups for objects
 		var planetGroups = [];
+		var planetOrbitRadiuses = [];
 		var moonGroups = [];
+		var moonOrbitRadiuses = [];
 		
 
 		// Multiarrays to keep track of things that correspond to each other 
@@ -202,8 +204,7 @@
 				playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
 				playPotato: function() { playMusic("Digging My Potato.mp3") },
 				playMemory: function() { playMusic("Memory.mp3") },
-				playAnotherReflection: function() { playMusic("Another Reflection.mp3")},
-				visible: true
+				playAnotherReflection: function() { playMusic("Another Reflection.mp3") }
 			};
 
 			gui.add( parameters, 'addPlanet').name("Spawn new planet");
@@ -227,13 +228,13 @@
 			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
 			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
 
-			//Add moon
+
 			gui.add( parameters, 'addMoon' ).name("Spawn moon");
 			var moonPropertiesFl = gui.addFolder('Moons');
+			
 			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
 
-			//Music menu
 			var musicFl = gui.addFolder('Music');
 			musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
 			musicFl.add( parameters, "playStrangers" ).name("Strangers");
@@ -241,29 +242,13 @@
 			musicFl.add( parameters, "playMemory" ).name("Memory");
 			musicFl.add( parameters, "playAnotherReflection" ).name("Another Reflection");
 
-			//Toggle orbit-visibility
-			var normandyVisible = gui.add( parameters, 'visible' ).name('Show orbits').listen();
-			
-			
-			normandyVisible.onChange(function(value) 
-			{
-				for (var i = 0; i < planetPaths.length; ++i) {
-					planetPaths[i][1].visible = value;
-				}
-
-				for (var j = 0; j < moonPaths.length; ++j) {
-					moonPaths[j][1].visible = value;
-				}
-			});
-
-		
-			sphereRadius.onChange(function(value) {
-				activePlanet.position.x = value;   
+			sphereRadius.onChange(function(value) { 
 
 				// Find planet's torus replace
 				for (var i = 0; i < planetPaths.length; ++i) {
 					if (planetPaths[i][0] == activePlanet) {
-						sunSphere.remove(planetPaths[i][1]); 
+						sunSphere.remove(planetPaths[i][1]);
+						planetOrbitRadiuses[i][1] = value; 
 						
 						var newPath = addOrbitPath(value);
 
@@ -291,10 +276,11 @@
 
 
 			moonRadius.onChange(function(value) 
-			{   activeMoon.position.x = value;   
+			{ 
 
 				for (var i = 0; i < moonPaths.length; ++i) {
 					if (moonPaths[i][0] == activeMoon) {
+						moonOrbitRadiuses[i][1] = value; 
 		
 						activeMoon.parent.remove(moonPaths[i][1]); 
 						
@@ -316,7 +302,7 @@
 				}
 			});
 
-			gui.open();
+			gui.close();
 			/*******************/
 
 			/************** FPS counter *************/
@@ -363,6 +349,10 @@
 		function render() {
 			// console.log("render check");
 
+			//Variabeln time används till timern och även planeternas rotation.
+			var time = Date.now() * 0.0005;
+
+
 			// sun rotation
 			sunSphere.rotation.z += 0.0001;
 
@@ -377,10 +367,8 @@
 				// console.log("moon shifted");
 			}
 
-			
 			// Show/hide orbit path at set camera distance
 			// det här kanske är för prestandakrävande att ha i längden?
-			/*
 			if ((Math.abs(camera.position.x) < orbitPathDistanceLimit) 
 				&& (Math.abs(camera.position.y) < orbitPathDistanceLimit) 
 				&& (Math.abs(camera.position.z) < orbitPathDistanceLimit)) {
@@ -400,14 +388,19 @@
 				for (var i = 0; i < moonPaths.length; ++i) {
 					moonPaths[i][1].visible = true;
 				}
-			}*/
+			}
 
 			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
 
-				currentPlanetGroup.rotation.z += currentRotationSpeed;
+				//The following lines makes the planet orbit.
+				var orbit = planetOrbitRadiuses[i][1];
+				//Math.sqrt(currentPlanetGroup.children[0].position.x * currentPlanetGroup.children[0].position.x +
+				//	currentPlanetGroup.children[0].position.y * currentPlanetGroup.children[0].position.y);
+				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 1000) * orbit;
+				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 1000) * orbit;
 			}
 
 			// planet rotations about self (ha som variabel?)
@@ -420,7 +413,12 @@
 				currentMoonGroup = moonSpeeds[i][0].parent;
 				currentRotationSpeed = moonSpeeds[i][1];
 
-				currentMoonGroup.rotation.z += currentRotationSpeed;
+				//The following lines makes the moons orbit.
+				var orbit = moonOrbitRadiuses[i][1];
+				//Math.sqrt(currentMoonGroup.children[0].position.x * currentMoonGroup.children[0].position.x +
+				//	currentMoonGroup.children[0].position.y * currentMoonGroup.children[0].position.y);
+				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 1000) * orbit;
+				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 1000) * orbit;
 			}
 
 			//Turn on planet clicked background

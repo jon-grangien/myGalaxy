@@ -138,6 +138,10 @@ function addPlanet(){
 	tempArray = [activePlanet, clickedShell];
 	clickedShells.push(tempArray);
 
+	// Push to planetOrbitRadiuses
+	tempArray = [activePlanet, 60]; //the value 60 should maybe be replaced by a variable
+	planetOrbitRadiuses.push(tempArray);
+
 }
 
 // Add orbit path torus about sun to planets
@@ -301,6 +305,10 @@ function addMoon() {
 	// Push to clickedShells
 	tempArray = [activeMoon, clickedMoonShell];
 	clickedMoonShells.push(tempArray);
+
+	// Push to planetOrbitRadiuses
+	tempArray = [activePlanet, 20]; //the value 60 should maybe be replaced by a variable
+	moonOrbitRadiuses.push(tempArray);
 	
 	// console.log("moon spawned");
 }
