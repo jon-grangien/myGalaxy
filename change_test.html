@@ -74,20 +74,16 @@
 		<script>
 
 		// Basic global variables
-		var container, camera, scene, renderer, stats, time;
+		var container, camera, scene, renderer, stats;
 
 		// Meshes for planets
 		var sunSphere;
 
 		// Variables to be used for current object to be changed
 		var activePlanet;
-		var previousObject;
 		var activeMoon;
 		var customTexture;
 		var activeRotationSpeed;
-
-		//Temporary movement variables
-		var posx, posz, roty, camzoom, timer = 0;
 
 		//Temporary hover variables
 		var hoveredPlanet;
@@ -96,7 +92,6 @@
 		var clickedMoon;
 		var hoverShell;
 		var clickedShell;
-		var orbit;
 
 		// Array of all objects to be clickable (and hoverable)
 		var clickableObjects = [];
@@ -106,8 +101,6 @@
 		var planetOrbitRadiuses = [];
 		var moonGroups = [];
 		var moonOrbitRadiuses = [];
-		var galaxyGroup;
-		var rotationGroup; //group used when jumping between planets
 		
 
 		// Multiarrays to keep track of things that correspond to each other 
@@ -180,14 +173,7 @@
 				
 			var sunGeometry = new THREE.SphereGeometry( 19, 32, 32 );
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
-			activePlanet = sunSphere;
-			clickedObject = sunSphere;
-			galaxyGroup = new THREE.Object3D;
-			rotationGroup = new THREE.Object3D;
-			galaxyGroup.add(sunSphere);
-			clickableObjects.push(sunSphere);
-			rotationGroup.add(galaxyGroup);
-			scene.add(rotationGroup);
+			scene.add(sunSphere);
 
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
@@ -364,64 +350,8 @@
 			// console.log("render check");
 
 			//Variabeln time används till timern och även planeternas rotation.
-			time = Date.now() * 0.0005;
+			var time = Date.now() * 0.0005;
 
-
-			//ALBINS KOD BÖRJAN==============================================================================================================
-			//Aktiveras när man klickar på en annan planet.
-			if(activePlanet != previousObject) {
-				if(timer == 0){
-					//Timern börjar på pi och går ner till 0.
-					timer = Math.PI;
-					//Spara den förra planetens position och rotation.
-					posx = galaxyGroup.position.x;
-					posz = galaxyGroup.position.y;
-					roty = galaxyGroup.rotation.z + rotationGroup.rotation.z;
-					
-						console.log("posx: " + posx + ", posz " + posz);
-
-					camzoom = camera.position.z;
-					console.log("Paborjar hopp");
-				}
-				//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
-				galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - activePlanet.position.x*(1+Math.cos(timer))/2;
-				galaxyGroup.position.y = posz*(1-Math.cos(timer))/2 - activePlanet.position.y*(1+Math.cos(timer))/2;
-				rotationGroup.rotation.z = roty*(1-Math.cos(timer))/2 - activePlanet.rotation.z*(1+Math.cos(timer))/2;
-				//OBS: raden under är en idé för att klara av sista punkten under planetförflyttning,
-				//	dvs att automatisk skala zoomnivån efter planetens radie. För att den ska gå att implementera måste
-				//	det gå att komma åt en planets radie på ett bra sätt. /Albin
-				//camera.position.z = camzoom + (1-Math.cos(timer))*(1/2)*activePlanet.;
-
-				//Hastigheten med vilken förflyttningen sker.
-				timer -= 0.02;
-					
-				if(timer < 0){
-					timer = 0;
-					//När förflyttningen är klar sätts previousObject (det klickade objektet) till objektet som nu är i fokus.
-					previousObject = activePlanet;
-					//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
-					for(var i = 0; i < clickableObjects.length; i++)
-						if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
-							clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
-							console.log("Nollstalld under hopp");
-						}
-					console.log("Fardig med hopp");
-				}
-			} else {
-				//Detta sker när det inte är ett hopp på g.
-				galaxyGroup.position.x = -activePlanet.position.x;
-				galaxyGroup.position.y = -activePlanet.position.y;
-				//Motverkar planeten i fokus's rotation så att den står stilla.
-				rotationGroup.rotation.z = -activePlanet.rotation.z;
-
-				//Denna loop nollställer planetens rotation vid ett helt varv.
-				for(var i = 0; i < clickableObjects.length; i++)
-					if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
-						clickableObjects[i].rotation.z = 0;
-						console.log("Nollstalld utanfor hopp");
-					}
-			}
-			//ALBINS KOD SLUT===============================================================================================================
 
 			// sun rotation
 			sunSphere.rotation.z += 0.0001;
@@ -465,15 +395,16 @@
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
 
-				//The following lines makes the planets orbit.
-				orbit = planetOrbitRadiuses[i][1];
-				console.log("det funkar");
-				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
-				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
+				//The following lines makes the planet orbit.
+				var orbit = planetOrbitRadiuses[i][1];
+				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 1000) * orbit;
+				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 1000) * orbit;
 			}
 
 			// planet rotations about self (ha som variabel?)
 			for (var i = 0; i < planets.length; ++i) {
+				if(planets[i][0].rotation.z > Math.PI*2)
+					planets[i][0].rotation.z = 0;
 				planets[i][0].rotation.z += 0.005;
 			}
 
@@ -483,9 +414,9 @@
 				currentRotationSpeed = moonSpeeds[i][1];
 
 				//The following lines makes the moons orbit.
-				orbit = moonOrbitRadiuses[i][1];
-				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 100) * orbit;
-				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 100) * orbit;
+				var orbit = moonOrbitRadiuses[i][1];
+				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
+				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
 			}
 
 			//Turn on planet clicked background
@@ -507,7 +438,6 @@
 
 				}
 			}
-
 			
 			renderer.render(scene, camera);
 		}

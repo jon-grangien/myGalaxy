@@ -362,7 +362,7 @@ function onDocumentMouseDown( event ) {
 			visibility(mesh.children[2],false);
 		}
 	}
-		//Hides moon clicked
+	//Hides moon clicked
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
 			
@@ -375,6 +375,7 @@ function onDocumentMouseDown( event ) {
 	if ( intersects.length > 0 ) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
+		previousObject = activePlanet;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
