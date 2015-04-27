@@ -88,12 +88,18 @@
 		var customTexture;
 		var activeRotationSpeed;
 
-		// Array of all objects to be clickable
+		//Temporary hover variables
+		var hoveredPlanet;
+		var hoveredMoon;
+		var hoverShell;
+
+		// Array of all objects to be clickable (and hoverable)
 		var clickableObjects = [];
 
 		// Groups for objects
 		var planetGroups = [];
 		var moonGroups = [];
+		
 
 		// Multiarrays to keep track of things that correspond to each other 
 		var planets = [];		//multiarray of planet|moons
@@ -101,6 +107,10 @@
 		var moonSpeeds = [];	//multiarray of moon|rotationSpeed
 		var planetPaths = [];	//multiarray of planet|orbitPathTorus
 		var moonPaths = [];	//multiarray of moon|orbitPathTorus
+		var planetObjects = [];	//multiarray of planet|Objects+moon
+		var moonObjects = [];	//multiarray of moon|Objects+moon
+		var hoverShells = [];	//multiarray of planet|shell
+		var hoverMoonShells = [];	//multiarray of moon|shell
 
 		// Variables for render loop
 		var currentPlanet;					
@@ -317,6 +327,7 @@
 			window.addEventListener( 'resize', onWindowResize, false );
 			document.addEventListener( 'mousedown', onDocumentMouseDown, true );
 			document.addEventListener( 'touchstart', onDocumentTouchStart, true );
+			document.addEventListener( 'mousemove', onMouseMove, false );
 		
 		}
 
@@ -352,9 +363,6 @@
 				&& (Math.abs(camera.position.z) < orbitPathDistanceLimit)) {
 				for (var i = 0; i < planetPaths.length; ++i) {
 					planetPaths[i][1].visible = false;
-					//moonPaths[i][1].visible = false;
-					// console.log ("camera x:y:z = " + camera.position.x + ":" + camera.position.y + ":" + camera.position.z);
-					// console.log("orbit path disabled");
 				}
 
 				for (var i = 0; i < moonPaths.length; ++i) {
@@ -364,9 +372,6 @@
 			} else {
 				for (var i = 0; i < planetPaths.length; ++i) {
 					planetPaths[i][1].visible = true;
-					//moonPaths[i][1].visible = true;
-					// console.log ("camera x:y:z = " + camera.position.x + ":" + camera.position.y + ":" + camera.position.z);
-					// console.log("orbit path enabled");
 				}
 
 				for (var i = 0; i < moonPaths.length; ++i) {
