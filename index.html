@@ -202,7 +202,8 @@
 				playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
 				playPotato: function() { playMusic("Digging My Potato.mp3") },
 				playMemory: function() { playMusic("Memory.mp3") },
-				playAnotherReflection: function() { playMusic("Another Reflection.mp3") }
+				playAnotherReflection: function() { playMusic("Another Reflection.mp3")},
+				visible: true
 			};
 
 			gui.add( parameters, 'addPlanet').name("Spawn new planet");
@@ -226,13 +227,13 @@
 			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
 			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
 
-
+			//Add moon
 			gui.add( parameters, 'addMoon' ).name("Spawn moon");
 			var moonPropertiesFl = gui.addFolder('Moons');
-			
 			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
 
+			//Music menu
 			var musicFl = gui.addFolder('Music');
 			musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
 			musicFl.add( parameters, "playStrangers" ).name("Strangers");
@@ -240,6 +241,22 @@
 			musicFl.add( parameters, "playMemory" ).name("Memory");
 			musicFl.add( parameters, "playAnotherReflection" ).name("Another Reflection");
 
+			//Toggle orbit-visibility
+			var normandyVisible = gui.add( parameters, 'visible' ).name('Show orbits').listen();
+			
+			
+			normandyVisible.onChange(function(value) 
+			{
+				for (var i = 0; i < planetPaths.length; ++i) {
+					planetPaths[i][1].visible = value;
+				}
+
+				for (var j = 0; j < moonPaths.length; ++j) {
+					moonPaths[j][1].visible = value;
+				}
+			});
+
+		
 			sphereRadius.onChange(function(value) {
 				activePlanet.position.x = value;   
 
@@ -299,7 +316,7 @@
 				}
 			});
 
-			gui.close();
+			gui.open();
 			/*******************/
 
 			/************** FPS counter *************/
@@ -360,8 +377,10 @@
 				// console.log("moon shifted");
 			}
 
+			
 			// Show/hide orbit path at set camera distance
 			// det här kanske är för prestandakrävande att ha i längden?
+			/*
 			if ((Math.abs(camera.position.x) < orbitPathDistanceLimit) 
 				&& (Math.abs(camera.position.y) < orbitPathDistanceLimit) 
 				&& (Math.abs(camera.position.z) < orbitPathDistanceLimit)) {
@@ -381,7 +400,7 @@
 				for (var i = 0; i < moonPaths.length; ++i) {
 					moonPaths[i][1].visible = true;
 				}
-			}
+			}*/
 
 			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
