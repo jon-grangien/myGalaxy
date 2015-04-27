@@ -39,7 +39,7 @@ function addPlanet(){
 	
 
 	// Atmosphere
-	var atmosphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
+	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
 	var atmosphereMaterial = new THREE.ShaderMaterial( {
 	    uniforms: {  },
 		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
@@ -55,7 +55,7 @@ function addPlanet(){
 	var path = addOrbitPath(60);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
 
 	// Planet
-	var sphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
+	var sphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
@@ -71,7 +71,7 @@ function addPlanet(){
 	planetNeedsInitialShift = true;
 
 	//Hover-background
-	var hoverGeometry = new THREE.SphereGeometry( 12, 32, 32 );
+	var hoverGeometry = new THREE.SphereGeometry( 12, 40, 40 );
 	var hoverMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -87,7 +87,7 @@ function addPlanet(){
 	//----------------hoverend------------------
 
 	//Clicked-background
-	var clickedGeometry = new THREE.SphereGeometry( 15, 32, 32 );
+	var clickedGeometry = new THREE.SphereGeometry( 15, 40, 40 );
 	var clickedMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,

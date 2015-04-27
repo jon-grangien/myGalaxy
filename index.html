@@ -226,8 +226,10 @@
 			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
 			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
 
+
+			gui.add( parameters, 'addMoon' ).name("Spawn moon");
 			var moonPropertiesFl = gui.addFolder('Moons');
-			moonPropertiesFl.add( parameters, 'addMoon' ).name("Spawn moon");
+			
 			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
 
@@ -297,7 +299,7 @@
 				}
 			});
 
-			gui.open();
+			gui.close();
 			/*******************/
 
 			/************** FPS counter *************/
