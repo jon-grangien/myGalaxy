@@ -91,6 +91,7 @@
 		//Temporary hover variables
 		var hoveredPlanet;
 		var hoveredMoon;
+		var hoverShell;
 
 		// Array of all objects to be clickable (and hoverable)
 		var clickableObjects = [];
@@ -344,9 +345,6 @@
 			if ((Math.abs(camera.position.x) < 300) && (Math.abs(camera.position.y) < 300) && (Math.abs(camera.position.z) < 300)) {
 				for (var i = 0; i < planetPaths.length; ++i) {
 					planetPaths[i][1].visible = false;
-					//moonPaths[i][1].visible = false;
-					// console.log ("camera x:y:z = " + camera.position.x + ":" + camera.position.y + ":" + camera.position.z);
-					// console.log("orbit path disabled");
 				}
 
 				for (var i = 0; i < moonPaths.length; ++i) {
@@ -356,9 +354,6 @@
 			} else {
 				for (var i = 0; i < planetPaths.length; ++i) {
 					planetPaths[i][1].visible = true;
-					//moonPaths[i][1].visible = true;
-					// console.log ("camera x:y:z = " + camera.position.x + ":" + camera.position.y + ":" + camera.position.z);
-					// console.log("orbit path enabled");
 				}
 				for (var i = 0; i < moonPaths.length; ++i) {
 					moonPaths[i][1].visible = true;
