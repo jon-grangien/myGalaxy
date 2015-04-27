@@ -27,16 +27,30 @@ function onWindowResize() {
 // Planet spawn (gui)
 function addPlanet(){
 
-	//Turn off planet clicked background
-			for (var i = 0; i < clickedShells.length; ++i) {
-				if (clickedShells[i][0] == activePlanet) {
-					
-					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
-					visibility(mesh.children[2],false); //Show clicked background
+	planetPropertiesFl.open();
 
-				}
-			}
+	//Turn off planet clicked background
+	for (var i = 0; i < clickedShells.length; ++i) {
+		if (clickedShells[i][0] == activePlanet) {
+			mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
+			visibility(mesh.children[2],false); //Show clicked background
+		}
+	}
 	
+	//Meteorbelt
+	var meteorStoneGeometry;
+	var meteorStoneMaterial;
+	for(var i = 0; i < 50; i++){
+
+		w = Math.floor((Math.random() * 5) + 1);
+		h = Math.floor((Math.random() * 5) + 1);
+		meteorStoneGeometry = new THREE.SphereGeometry( 11, w, h );
+		meteorStoneMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/meteorbeltstone.png' )} );
+
+
+	}
+	
+
 
 	// Atmosphere
 	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
@@ -209,6 +223,9 @@ function updatePlanetTexture(textureName){
 
 // Add moon to active planet (gui)
 function addMoon() {
+
+	//Open moon property-menusa
+	moonPropertiesFl.open();
 
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {

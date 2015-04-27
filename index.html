@@ -130,6 +130,10 @@
 		var music;				//global var for music property, see playMusic()
 		var currentSong = "";	//store name of current music file being played
 
+		//Menu
+		var planetPropertiesFl;
+		var moonPropertiesFl;
+
 		init();
 		animate();
 
@@ -209,11 +213,11 @@
 			gui.add( parameters, 'addPlanet').name("Spawn new planet");
 			
 			// planet properties
-			var planetPropertiesFl = gui.addFolder('Planet properties');
+			planetPropertiesFl = gui.addFolder('Planet properties');
 			var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
 			var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(1.0).max(5).step(0.1).listen(); 
 			var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.0100).step(0.001).listen(); 
-			planetPropertiesFl.open();
+			planetPropertiesFl.close();
 
 			// planet textures
 			var planetTexturesFl = gui.addFolder('Planet textures');
@@ -227,9 +231,11 @@
 			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
 			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
 
+			//dat.planetTexturesFl.toggleHide();
+
 			//Add moon
 			gui.add( parameters, 'addMoon' ).name("Spawn moon");
-			var moonPropertiesFl = gui.addFolder('Moons');
+			moonPropertiesFl = gui.addFolder('Moon properties');
 			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
 
