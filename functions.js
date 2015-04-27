@@ -36,21 +36,6 @@ function addPlanet(){
 			visibility(mesh.children[2],false); //Show clicked background
 		}
 	}
-	
-	//Meteorbelt
-	var meteorStoneGeometry;
-	var meteorStoneMaterial;
-	for(var i = 0; i < 50; i++){
-
-		w = Math.floor((Math.random() * 5) + 1);
-		h = Math.floor((Math.random() * 5) + 1);
-		meteorStoneGeometry = new THREE.SphereGeometry( 11, w, h );
-		meteorStoneMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/meteorbeltstone.png' )} );
-
-
-	}
-	
-
 
 	// Atmosphere
 	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
@@ -78,6 +63,7 @@ function addPlanet(){
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
 	sunSphere.add(path);
+	
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
@@ -121,6 +107,7 @@ function addPlanet(){
 	activeGroup.add(activePlanet);
 	clickableObjects.push(activePlanet);
 	planetGroups.push(activeGroup);
+	addMeteorbelt();
 
 	// Add planet group (and missing ones if exist) to sungroup
 	for (var i = 0; i < planetGroups.length; ++i) {
@@ -154,6 +141,53 @@ function addPlanet(){
 
 }
 
+function addMeteorbelt(){
+
+	//Meteorbelt
+	var meteorbelt = new THREE.Object3D;
+	var meteorStoneGeometry;
+	var meteorStoneMaterial;
+	for(var i = 0; i < 800; i++){
+
+		w = Math.floor((Math.random() * 1) + 1);
+		h = Math.floor((Math.random() * 1) + 1);
+
+		var rockSize = Math.random()*0.09+0.01
+		meteorStoneGeometry = new THREE.SphereGeometry( rockSize, w, h );
+		meteorStoneMaterial = new THREE.MeshPhongMaterial(  );
+		rock = new THREE.Mesh(meteorStoneGeometry, meteorStoneMaterial);
+
+		sunRadius = 16;
+		sunRadius = Math.random()*9 + sunRadius;
+
+		var xTrans = (Math.random() -0.5)*2*sunRadius;
+		var yTrans;
+		if(Math.random() < 0.5){
+			yTrans = Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
+		}
+		else
+			yTrans = -Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
+
+		var zTrans = 0;
+
+		rock.translateX(xTrans);
+		rock.translateY(yTrans);
+		rock.translateZ(zTrans);
+
+		meteorbelt.add(rock);
+	}
+	visibility(meteorbelt,false);
+
+	activePlanet.add(meteorbelt);
+
+	var tempArray;
+
+	// Push to meteorbelts (planets|meteorbelts)
+	tempArray = [activePlanet, meteorbelt];
+	meteorbelts.push(tempArray);
+
+}
+
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
 	var pathGeometry = new THREE.TorusGeometry( radius, 0.5, 16, 100 );
@@ -170,6 +204,7 @@ function addOrbitPath(radius) {
 
 	return path;
 }
+
 
 function addMoonOrbitPath(moonRadius) {
 	var pathGeometry = new THREE.TorusGeometry( moonRadius, 0.2, 16, 100 );
@@ -230,13 +265,11 @@ function addMoon() {
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
-			
+
 			mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
 			visibility(mesh.children[1],false); //Show clicked background
-
 		}
 	}
-
 
 	var sphereGeometry = new THREE.SphereGeometry( 2, 32, 32 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/moontexture.jpg' )} );
