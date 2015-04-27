@@ -88,6 +88,8 @@
 		//Temporary hover variables
 		var hoveredPlanet;
 		var hoveredMoon;
+		var clickedPlanet;
+		var clickedMoon;
 		var hoverShell;
 		var clickedShell;
 
@@ -398,6 +400,26 @@
 				currentRotationSpeed = moonSpeeds[i][1];
 
 				currentMoonGroup.rotation.z += currentRotationSpeed;
+			}
+
+			//Turn on planet clicked background
+			for (var i = 0; i < clickedShells.length; ++i) {
+				if (clickedShells[i][0] == activePlanet) {
+					
+					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[2],true); //Show clicked background
+
+				}
+			}
+
+			//Turn on moon clicked background
+			for (var i = 0; i < clickedMoonShells.length; ++i) {
+				if (clickedMoonShells[i][0] == activeMoon) {
+					
+					mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[1],true); //Show clicked background
+
+				}
 			}
 			
 			renderer.render(scene, camera);

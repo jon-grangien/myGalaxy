@@ -26,6 +26,18 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
+
+	//Turn off planet clicked background
+			for (var i = 0; i < clickedShells.length; ++i) {
+				if (clickedShells[i][0] == activePlanet) {
+					
+					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[2],false); //Show clicked background
+
+				}
+			}
+	
+
 	// Atmosphere
 	var atmosphereGeometry = new THREE.SphereGeometry( 11, 32, 32 );
 	var atmosphereMaterial = new THREE.ShaderMaterial( {
@@ -75,7 +87,7 @@ function addPlanet(){
 	//----------------hoverend------------------
 
 	//Clicked-background
-	var clickedGeometry = new THREE.SphereGeometry( 13, 32, 32 );
+	var clickedGeometry = new THREE.SphereGeometry( 15, 32, 32 );
 	var clickedMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -198,6 +210,17 @@ function updatePlanetTexture(textureName){
 // Add moon to active planet (gui)
 function addMoon() {
 
+	//Turn off moon clicked background
+	for (var i = 0; i < clickedMoonShells.length; ++i) {
+		if (clickedMoonShells[i][0] == activeMoon) {
+			
+			mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
+			visibility(mesh.children[1],false); //Show clicked background
+
+		}
+	}
+
+
 	var sphereGeometry = new THREE.SphereGeometry( 2, 32, 32 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/moontexture.jpg' )} );
 	activeMoon = new THREE.Mesh(sphereGeometry, sphereMaterial);
@@ -316,15 +339,30 @@ function onDocumentTouchStart( event ) {
 function onDocumentMouseDown( event ) {
 	// console.log("mouse is down");
 
-	console.log(moonObjects.length);
-	console.log(hoverMoonShells.length);
-	console.log(hoverShells.length); //how many hovershells in scene
-
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 	intersects = raycaster.intersectObjects( clickableObjects );
+
+
+	//Hides planet clicked
+	for (var i = 0; i < clickedShells.length; ++i) {
+		if (clickedShells[i][0] == activePlanet) {
+			
+			mesh = clickedShells[i][0];
+			visibility(mesh.children[2],false);
+		}
+	}
+		//Hides moon clicked
+	for (var i = 0; i < clickedMoonShells.length; ++i) {
+		if (clickedMoonShells[i][0] == activeMoon) {
+			
+			mesh = clickedMoonShells[i][0];
+			visibility(mesh.children[1],false);
+		}
+	}
+
 
 	if ( intersects.length > 0 ) {
 		// console.log("we have an intersect");
@@ -343,7 +381,50 @@ function onDocumentMouseDown( event ) {
 				console.log("clicked object is a moon");
 			}
 		}
+
+
+		var check = -1; //planet = 1, moon = 0 
+
+		for (var i = 0; i < planetGroups.length; ++i) {
+			if (clickedObject.parent == planetGroups[i]) {
+				activePlanet = clickedObject;
+				check = 1;
+			}
+		}
+
+		for (var i = 0; i < moonGroups.length; ++i) {
+			if (clickedObject.parent == moonGroups[i]) {
+				activeMoon = clickedObject;
+				check = 0;
+			}
+		}
+
+
+		if(check)	// if clicked object is a planet
+		{
+			for (var i = 0; i < clickedShells.length; ++i) {
+				if (clickedShells[i][0] == activePlanet) {
+					
+					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[2],true); //Show clicked background
+
+				}
+			}
+		}
+		else	// if clicked object is a moon
+		{
+			for (var i = 0; i < clickedMoonShells.length; ++i) {
+				if (clickedMoonShells[i][0] == activeMoon) {
+
+					mesh = clickedMoonShells[i][0];
+					visibility(mesh.children[1],true);
+
+				}
+			}
+		}
 	}
+
+	
 }
 
 
