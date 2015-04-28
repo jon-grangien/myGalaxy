@@ -190,7 +190,7 @@ function addMeteorbelt(){
 
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
-	var pathGeometry = new THREE.TorusGeometry( radius, 0.5, 16, 100 );
+	var pathGeometry = new THREE.TorusGeometry( radius, 0.5, 32, 100 );
 	var pathMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
