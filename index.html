@@ -99,6 +99,8 @@
 		// Groups for objects
 		var planetGroups = [];
 		var moonGroups = [];
+		var materials = []; //stars
+		var materials2 = []; //meteorbelt
 		
 
 		// Multiarrays to keep track of things that correspond to each other 
@@ -159,6 +161,9 @@
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
 			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
 			scene.add( ambientLight );
+
+
+			addStars();
 			
 			
 
@@ -386,6 +391,7 @@
 			// console.log("render check");
 
 			// sun rotation
+
 			sunSphere.rotation.z += 0.0001;
 
 			if (planetNeedsInitialShift) {
@@ -399,30 +405,6 @@
 				// console.log("moon shifted");
 			}
 
-			
-			// Show/hide orbit path at set camera distance
-			// det här kanske är för prestandakrävande att ha i längden?
-			/*
-			if ((Math.abs(camera.position.x) < orbitPathDistanceLimit) 
-				&& (Math.abs(camera.position.y) < orbitPathDistanceLimit) 
-				&& (Math.abs(camera.position.z) < orbitPathDistanceLimit)) {
-				for (var i = 0; i < planetPaths.length; ++i) {
-					planetPaths[i][1].visible = false;
-				}
-
-				for (var i = 0; i < moonPaths.length; ++i) {
-					moonPaths[i][1].visible = false;
-				}
-
-			} else {
-				for (var i = 0; i < planetPaths.length; ++i) {
-					planetPaths[i][1].visible = true;
-				}
-
-				for (var i = 0; i < moonPaths.length; ++i) {
-					moonPaths[i][1].visible = true;
-				}
-			}*/
 
 			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
