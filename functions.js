@@ -49,6 +49,8 @@ function addPlanet(){
 	}   );
 
 	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+	atmosphere.receiveShadow = false;
+	atmosphere.castShadow = false;
 
 	// orbit path
 	var path = addOrbitPath(60);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
