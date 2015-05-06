@@ -26,7 +26,6 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
-
 	planetPropertiesFl.open();
 
 	//Turn off planet clicked background
@@ -140,6 +139,30 @@ function addPlanet(){
 	// Push to clickedShells
 	tempArray = [activePlanet, clickedShell];
 	clickedShells.push(tempArray);
+
+	// Database
+	if(user) {
+		var Planet = Parse.Object.extend("Planet");
+		var dbPlanet = new Planet();
+
+		dbPlanet.set("owner", username);
+		dbPlanet.set("userId", user.id);
+		dbPlanet.set("texture", "earthmap.jpg");
+		dbPlanet.set("radius", 60);		//initial shift in render loop
+		dbPlanet.set("size", 1);		//multiple
+
+		dbPlanet.save(null, {
+		  success: function(dbPlanet) {
+		    // Execute any logic that should take place after the object is saved.
+		    console.log('New object saved with objectId: ' + dbPlanet.id);
+		  },
+		  error: function(dbPlanet, error) {
+		    // Execute any logic that should take place if the save fails.
+		    // error is a Parse.Error with an error code and message.
+		    console.log('Failed to create new object, with error code: ' + error.message);
+		  }
+		});
+	}
 
 }
 
