@@ -7,3 +7,11 @@ canvas {
 	height: 100%; 
 	display: block; 
 }
+
+#account-gui-container {
+	position:absolute;
+	visibility:show;
+	left: 20px;
+	top: 20px;
+	z-index:20; 
+}

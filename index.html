@@ -8,7 +8,7 @@
 		<!-- parse -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
-  		
+
 		<script src="js/three.js"></script>
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
@@ -75,7 +75,7 @@
 		</script>
 	</head>
 	<body>
-		
+		<div id="account-gui-container"></div>
 		<script>
 
 		// Basic global variables
@@ -356,6 +356,15 @@
 			});
 
 			gui.open();
+
+			// Account gui
+			var accountGui = new dat.GUI({ autoPlace: false });
+
+			var customContainer = document.getElementById('account-gui-container');
+			customContainer.appendChild(accountGui.domElement);
+
+			accountGui.open();
+
 			/*******************/
 
 			/************** FPS counter *************/
