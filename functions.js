@@ -479,8 +479,7 @@ function onDocumentMouseDown( event ) {
 
 
 //Hover funktion, visar att planeter är tryckbara
-function onMouseMove( event ) {
-
+function onMouseMove( event ) {	
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
