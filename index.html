@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Torusarrr</title>
+		<title>databassss</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/style.css">
-	</head>
-	<body>
+
+		<!-- parse -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
+
 		<script src="js/three.js"></script>
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
@@ -70,11 +73,14 @@
 			}
 
 		</script>
-		
+	</head>
+	<body>
+		<div id="account-gui-container"></div>
+		<div id="container"></div>
 		<script>
 
 		// Basic global variables
-		var container, camera, scene, renderer, stats;
+		var $container, camera, scene, renderer, stats;
 
 		// Meshes for planets
 		var sunSphere;
@@ -135,10 +141,19 @@
 		var planetPropertiesFl;
 		var moonPropertiesFl;
 
+		// User variables
+		var user;
+		var newUsername;
+		var newUserPassword;
+		var username = "No one";
+		var userPassword;
+
 		init();
 		animate();
 
 		function init() {
+			$container = $('#container');
+
 			scene = new THREE.Scene();
 			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
@@ -147,11 +162,11 @@
 			scene.add(camera);
 			
 			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-			renderer.setClearColor( scene.fog.color );
-			renderer.setPixelRatio( window.devicePixelRatio );
-			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setClearColor(scene.fog.color);
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
 			renderer.shadowMapEnabled = true;
-			document.body.appendChild( renderer.domElement );
+			$container.append(renderer.domElement);
 
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
@@ -159,7 +174,18 @@
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
 			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
 			scene.add( ambientLight );
-			
+
+			// Parse initialization
+			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
+
+			// Parse user cache
+			var currentUser = Parse.User.current();
+			if (currentUser) {
+			    user = currentUser;
+			    username = user.getUsername();
+			} else {
+			    console.log("no user logged in");
+			}
 			
 
 			/************* SUN ****************/
@@ -339,6 +365,47 @@
 			});
 
 			gui.open();
+
+			// Account gui
+			var accountGui = new dat.GUI({ autoPlace: false });
+
+			var customContainer = document.getElementById('account-gui-container');
+			customContainer.appendChild(accountGui.domElement);
+
+			var parameters2 = {
+				currentUser: username,
+				newUserName: "",
+				newPassword: "",
+				createButton: function() { createAccount() },
+				userName: "",
+				password: "",
+				loginButton: function() { login() }
+			};
+
+			accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
+
+			var newUserFl = accountGui.addFolder('New Account');
+			var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
+			var newPassField = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
+			newUserFl.add( parameters2, 'createButton' ).name("Create account");
+
+			var userFl = accountGui.addFolder('log in');
+			var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
+			var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
+			userFl.add( parameters2, 'loginButton' ).name("Log in");
+
+			newNameField.onChange(function(value) 
+			{	newUserName = value; });
+
+			newPassField.onChange(function(value) 
+			{	newUserPassword = value; });
+
+			nameField.onChange(function(value) 
+			{	username = value; });
+
+			passField.onChange(function(value) 
+			{	userPassword = value; });
+
 			/*******************/
 
 			/************** FPS counter *************/
@@ -347,12 +414,12 @@
 
 			// align top-left
 			stats.domElement.style.position = 'absolute';
-			stats.domElement.style.left = '10px';
-			stats.domElement.style.top = '25px';
+			stats.domElement.style.left = '1%';
+			stats.domElement.style.bottom = '1%';
 
-			document.body.appendChild( stats.domElement );
+			$container.append( stats.domElement );
 
-			var update = function () {
+			var update = function() {
 			    stats.begin();
 			    stats.end();
 			    requestAnimationFrame( update );
@@ -368,9 +435,9 @@
 			// controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 			window.addEventListener( 'resize', onWindowResize, false );
-			document.addEventListener( 'mousedown', onDocumentMouseDown, true );
-			document.addEventListener( 'touchstart', onDocumentTouchStart, true );
-			document.addEventListener( 'mousemove', onMouseMove, false );
+			document.getElementById("container").addEventListener( 'mousedown', onDocumentMouseDown, true );
+			document.getElementById("container").addEventListener( 'touchstart', onDocumentTouchStart, true );
+			document.getElementById("container").addEventListener( 'mousemove', onMouseMove, false );
 		
 		}
 

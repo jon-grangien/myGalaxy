@@ -381,6 +381,44 @@ function playMusic(songFile) {
 	currentSong = songFile;
 }
 
+// account functions
+function createAccount() {
+	console.log("creating user account");
+	user = new Parse.User();
+	user.set("username", newUserName);
+	user.set("password", newUserPassword);	
+
+	user.signUp(null, {
+		success: function(user) {
+			// log in
+			username = newUserName;
+			userPassword = newUserPassword;
+			login();
+		},
+		error: function(user, error) {
+			// Show error message and let the user try again
+			alert("Error: " + error.code + " " + error.message);
+		}
+	});
+}
+
+function login() {
+	// console.log("logging in");
+	Parse.User.logIn(username, userPassword, {
+		success: function(loggedinuser) {
+			user = loggedinuser;
+			console.log("logged in!");
+		},
+		error: function(user, error) {
+		// The login failed. Check error to see why.
+		}
+	});
+}
+
+function dummy() {
+	console.log("i am dummy");
+}
+
 function onDocumentTouchStart( event ) {	
 	event.preventDefault();
 	event.clientX = event.touches[0].clientX;
@@ -481,8 +519,7 @@ function onDocumentMouseDown( event ) {
 
 
 //Hover funktion, visar att planeter är tryckbara
-function onMouseMove( event ) {
-
+function onMouseMove( event ) {	
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
