@@ -187,6 +187,15 @@
 		 //        $(".error").show();
 		 //      }
 		 //    });
+
+			var currentUser = Parse.User.current();
+			if (currentUser) {
+			    user = currentUser;
+			    // console.log("logged in: " + user.getUsername());
+			    username = user.getUsername();
+			} else {
+			    console.log("no user logged in");
+			}
 			
 
 			/************* SUN ****************/
@@ -420,7 +429,7 @@
 
 			$container.append( stats.domElement );
 
-			var update = function () {
+			var update = function() {
 			    stats.begin();
 			    stats.end();
 			    requestAnimationFrame( update );
