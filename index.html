@@ -369,19 +369,21 @@
 			var parameters2 = {
 				newUserName: "",
 				newPassword: "",
+				createButton: function() { createAccount() },
 				userName: "",
-				password: ""
+				password: "",
+				loginButton: function() { login() }
 			};
 
 			var newUserFl = accountGui.addFolder('New Account');
-			newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
-			newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
+			var newName = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
+			var newPass = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
+			newUserFl.add( parameters2, 'createButton' ).name("Create account");
 
 			var userFl = accountGui.addFolder('log in');
-			userFl.add( parameters2, 'userName' ).name("User Name").listen();
-			userFl.add( parameters2, 'password' ).name("Password").listen();
-
-			accountGui.open();
+			var name = userFl.add( parameters2, 'userName' ).name("User Name").listen();
+			var pass = userFl.add( parameters2, 'password' ).name("Password").listen();
+			userFl.add( parameters2, 'loginButton' ).name("Log in");
 
 			/*******************/
 
