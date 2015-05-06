@@ -379,6 +379,24 @@ function playMusic(songFile) {
 	currentSong = songFile;
 }
 
+// account functions
+function createAccount() {
+	console.log("creating user account");
+	user = new Parse.User();
+	user.set("username", newUserName);
+	user.set("password", newUserPassword);	
+
+	user.signUp(null, {
+		success: function(user) {
+			// Hooray! Let them use the app now.
+		},
+		error: function(user, error) {
+			// Show the error message somewhere and let the user try again.
+			alert("Error: " + error.code + " " + error.message);
+		}
+	});
+}
+
 function onDocumentTouchStart( event ) {	
 	event.preventDefault();
 	event.clientX = event.touches[0].clientX;

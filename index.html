@@ -142,6 +142,7 @@
 		var moonPropertiesFl;
 
 		// User variables
+		var user;
 		var newUsername;
 		var newUserPassword;
 		var username;
@@ -175,7 +176,7 @@
 			scene.add( ambientLight );
 
 			//parse test
-			// Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
+			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
 		 //    var TestObject = Parse.Object.extend("TestObject");
 		 //    var testObject = new TestObject();
 		 //      testObject.save({foo: "bar"}, {
@@ -391,25 +392,17 @@
 			var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
 			userFl.add( parameters2, 'loginButton' ).name("Log in");
 
-			newNameField.onChange(function(value) {
-				newUserName = value;
-				console.log("new user name: " + newUserName);
-			});
+			newNameField.onChange(function(value) 
+			{	newUserName = value; });
 
-			newPassField.onChange(function(value) {
-				newUserPassword = value;
-				console.log("new pass: " + newUserPassword);
-			});
+			newPassField.onChange(function(value) 
+			{	newUserPassword = value; });
 
-			nameField.onChange(function(value) {
-				username = value;
-				console.log("user name: " + username);
-			});
+			nameField.onChange(function(value) 
+			{	username = value; });
 
-			passField.onChange(function(value) {
-				userPassword = value;
-				console.log("user password : " + userPassword);
-			});
+			passField.onChange(function(value) 
+			{	userPassword = value; });
 
 			/*******************/
 
