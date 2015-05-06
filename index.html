@@ -106,6 +106,15 @@
 		var planetGroups = [];
 		var moonGroups = [];
 		
+		// User variables
+		var user;
+		var newUsername;
+		var newUserPassword;
+		var username = "No one";
+		var userPassword;
+
+		// Database variables
+		var dbPlanet;
 
 		// Multiarrays to keep track of things that correspond to each other 
 		var planets = [];		//multiarray of planet|moons
@@ -120,6 +129,7 @@
 		var clickedShells = [];	//multiarray of planet|shell
 		var clickedMoonShells = [];	//multiarray of moon|shell
 		var meteorbelts = [];	//multiarray of planet|meteorbelt
+		var userPlanets = [];	//multiarray of planet|planetId (only logged in userid from db)
 
 		// Variables for render loop
 		var currentPlanet;					
@@ -142,16 +152,6 @@
 		var moonPropertiesFl;
 		var parameters2;
 		var loggedInUserField; //display current logged in user
-
-		// User variables
-		var user;
-		var newUsername;
-		var newUserPassword;
-		var username = "No one";
-		var userPassword;
-
-		// Database variables
-		// var dbPlanet;
 
 		init();
 		animate();

@@ -143,7 +143,7 @@ function addPlanet(){
 	// Database
 	if(user) {
 		var Planet = Parse.Object.extend("Planet");
-		var dbPlanet = new Planet();
+		dbPlanet = new Planet();
 
 		dbPlanet.set("owner", username);
 		dbPlanet.set("userId", user.id);
@@ -430,7 +430,6 @@ function login() {
 	Parse.User.logIn(username, userPassword, {
 		success: function(loggedinuser) {
 			user = loggedinuser;
-
 			console.log("logged in as " + user.getUsername());
 			loggedInUserField.name("Logged in:  " + user.getUsername());
 		},
