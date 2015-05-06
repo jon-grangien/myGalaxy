@@ -70,6 +70,22 @@
 			}
 
 		</script>
+
+		<script id="vertexShaderSun" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1 );
+			}
+		</script>
+
+		<script id="fragmentShaderSun" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 9.0 ); 
+			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			}
+		</script>
 		
 		<script>
 
@@ -78,6 +94,7 @@
 
 		// Meshes for planets
 		var sunSphere;
+		var sunCore;
 
 		// Variables to be used for current object to be changed
 		var activePlanet;
@@ -159,7 +176,7 @@
 			renderer.gammaOutput = true;
 			
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
-			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
+			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );
 			scene.add( ambientLight );
 
 
@@ -179,9 +196,16 @@
 				transparent: true
 			}   );
 				
-			var sunGeometry = new THREE.SphereGeometry( 19, 32, 32 );
+			var sunGeometry = new THREE.SphereGeometry( 19, 54, 54 );
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
 			scene.add(sunSphere);
+
+			// Core
+			var sunCoreGeometry = new THREE.SphereGeometry( 3, 40, 40 );
+			var sunCoreMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
+			sunCore = new THREE.Mesh(sunCoreGeometry, sunCoreMaterial);	//activePlanet is a global var
+			sunCore.material.map.minFilter = THREE.NearestFilter;
+			//scene.add(sunCore);
 
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );

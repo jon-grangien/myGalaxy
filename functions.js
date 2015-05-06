@@ -1,16 +1,14 @@
 function addLight( h, s, l, x, y, z ) {
-	var light = new THREE.PointLight( 0xffffff, 1.5, 0 );
+	var light = new THREE.PointLight( 0xaaffff, 1.5, 0 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
 	scene.add( light );
 
-	var flareColor = new THREE.Color( 0xffffaa );
+	var flareColor = new THREE.Color( 0x00ffff );
 	flareColor.setHSL( h, s, l + 0.3 );
 
-	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
-
+	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare01.png" );
 	var lensFlare = new THREE.LensFlare( textureFlare0, 900, 0.0, THREE.AdditiveBlending, flareColor );
-
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
 	//lensFlare.position.copy( light.position );
 
@@ -64,7 +62,9 @@ function addPlanet(){
 	activePlanet.receiveShadow = true;
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
+
 	sunSphere.add(path);
+
 	
 
 	var activeGroup = new THREE.Object3D;
@@ -148,8 +148,8 @@ function addMeteorbelt(){
 	var meteorbelt = new THREE.Object3D;
 	geometry = new THREE.Geometry();
 
-	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor1.png" );
-	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor2.png" );
+	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor11.png" );
+	//sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor2.png" );
 
 
 	for ( i = 0; i < 50000; i ++ ) {
@@ -177,8 +177,7 @@ function addMeteorbelt(){
 
 	}
 
-	parameters = [ [ [0.0, 0.2, 0.0], sprite1, 0.05 ],
-				   [ [0.0, 0.1, 0.0], sprite2, 0.02 ] ];
+	parameters = [ [ [0.0, 0.0, 0.0], sprite1, 0.05 ] ];
 
 
 	for ( i = 0; i < parameters.length; i ++ ) {
@@ -188,10 +187,7 @@ function addMeteorbelt(){
 		size   = parameters[i][2];
 
 		materials2[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : true} );
-		//materials2[i].color.setHSL( color[0], color[1], color[2] );
-
 		particles = new THREE.PointCloud( geometry, materials2[i] );
-
 
 		meteorbelt.add( particles );
 	}
@@ -259,7 +255,7 @@ function addMeteorbelt2(){
 
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
-	var pathGeometry = new THREE.TorusGeometry( radius, 0.5, 32, 100 );
+	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
 	var pathMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -666,7 +662,6 @@ function addStars(){
 		vertex.z = Math.random() * 20000 - 10000;
 
 		geometry.vertices.push( vertex );
-
 	}
 
 	parameters = [ [ [1.0, 0.2, 0.5], sprite2, 13 ],
