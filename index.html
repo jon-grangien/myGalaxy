@@ -367,11 +367,19 @@
 			customContainer.appendChild(accountGui.domElement);
 
 			var parameters2 = {
-				newUserName: "name"
+				newUserName: "",
+				newPassword: "",
+				userName: "",
+				password: ""
 			};
 
 			var newUserFl = accountGui.addFolder('New Account');
 			newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
+			newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
+
+			var userFl = accountGui.addFolder('log in');
+			userFl.add( parameters2, 'userName' ).name("User Name").listen();
+			userFl.add( parameters2, 'password' ).name("Password").listen();
 
 			accountGui.open();
 
@@ -384,7 +392,7 @@
 			// align top-left
 			stats.domElement.style.position = 'absolute';
 			stats.domElement.style.left = '1%';
-			stats.domElement.style.bottom = '25px';
+			stats.domElement.style.bottom = '1%';
 
 			$container.append( stats.domElement );
 

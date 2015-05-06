@@ -11,6 +11,5 @@ canvas {
 #account-gui-container {
 	position:absolute;
 	visibility:show;
-	left: 20px;
-	top: 20px;
+	left: 1%;
 }
