@@ -141,6 +141,12 @@
 		var planetPropertiesFl;
 		var moonPropertiesFl;
 
+		// User variables
+		var newUsername;
+		var newUserPassword;
+		var username;
+		var userPassword;
+
 		init();
 		animate();
 
@@ -376,14 +382,34 @@
 			};
 
 			var newUserFl = accountGui.addFolder('New Account');
-			var newName = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
-			var newPass = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
+			var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
+			var newPassField = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
 			newUserFl.add( parameters2, 'createButton' ).name("Create account");
 
 			var userFl = accountGui.addFolder('log in');
-			var name = userFl.add( parameters2, 'userName' ).name("User Name").listen();
-			var pass = userFl.add( parameters2, 'password' ).name("Password").listen();
+			var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
+			var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
 			userFl.add( parameters2, 'loginButton' ).name("Log in");
+
+			newNameField.onChange(function(value) {
+				newUserName = value;
+				console.log("new user name: " + newUserName);
+			});
+
+			newPassField.onChange(function(value) {
+				newUserPassword = value;
+				console.log("new pass: " + newUserPassword);
+			});
+
+			nameField.onChange(function(value) {
+				username = value;
+				console.log("user name: " + username);
+			});
+
+			passField.onChange(function(value) {
+				userPassword = value;
+				console.log("user password : " + userPassword);
+			});
 
 			/*******************/
 
