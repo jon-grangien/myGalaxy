@@ -175,23 +175,13 @@
 			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
 			scene.add( ambientLight );
 
-			//parse test
+			// Parse initialization
 			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
-		 //    var TestObject = Parse.Object.extend("TestObject");
-		 //    var testObject = new TestObject();
-		 //      testObject.save({foo: "bar"}, {
-		 //      success: function(object) {
-		 //        $(".success").show();
-		 //      },
-		 //      error: function(model, error) {
-		 //        $(".error").show();
-		 //      }
-		 //    });
 
+			// Parse user cache
 			var currentUser = Parse.User.current();
 			if (currentUser) {
 			    user = currentUser;
-			    // console.log("logged in: " + user.getUsername());
 			    username = user.getUsername();
 			} else {
 			    console.log("no user logged in");
