@@ -388,13 +388,33 @@ function createAccount() {
 
 	user.signUp(null, {
 		success: function(user) {
-			// Hooray! Let them use the app now.
+			// log in
+			username = newUserName;
+			userPassword = newUserPassword;
+			login();
 		},
 		error: function(user, error) {
-			// Show the error message somewhere and let the user try again.
+			// Show error message and let the user try again
 			alert("Error: " + error.code + " " + error.message);
 		}
 	});
+}
+
+function login() {
+	// console.log("logging in");
+	Parse.User.logIn(username, userPassword, {
+		success: function(loggedinuser) {
+			user = loggedinuser;
+			console.log("logged in!");
+		},
+		error: function(user, error) {
+		// The login failed. Check error to see why.
+		}
+	});
+}
+
+function dummy() {
+	console.log("i am dummy");
 }
 
 function onDocumentTouchStart( event ) {	

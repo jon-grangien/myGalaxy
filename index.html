@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Torusarrr</title>
+		<title>databassss</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/style.css">
 
@@ -145,7 +145,7 @@
 		var user;
 		var newUsername;
 		var newUserPassword;
-		var username;
+		var username = "No one";
 		var userPassword;
 
 		init();
@@ -374,6 +374,7 @@
 			customContainer.appendChild(accountGui.domElement);
 
 			var parameters2 = {
+				currentUser: username,
 				newUserName: "",
 				newPassword: "",
 				createButton: function() { createAccount() },
@@ -381,6 +382,8 @@
 				password: "",
 				loginButton: function() { login() }
 			};
+
+			accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
 
 			var newUserFl = accountGui.addFolder('New Account');
 			var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
