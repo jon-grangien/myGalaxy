@@ -430,12 +430,23 @@ function login() {
 	Parse.User.logIn(username, userPassword, {
 		success: function(loggedinuser) {
 			user = loggedinuser;
-			console.log("logged in!");
+
+			console.log("logged in as " + user.getUsername());
+			loggedInUserField.name("Logged in:  " + user.getUsername());
 		},
 		error: function(user, error) {
-		// The login failed. Check error to see why.
+			console.log("log in failed");
 		}
 	});
+}
+
+function logout() {
+	Parse.User.logOut();
+	username = "No one";
+	// parameters2[logout] = username;
+	// parameters2.currentUser = username;
+	loggedInUserField.name("Logged in:  " + username);
+	console.log("logged out");
 }
 
 function dummy() {

@@ -140,6 +140,8 @@
 		//Menu
 		var planetPropertiesFl;
 		var moonPropertiesFl;
+		var parameters2;
+		var loggedInUserField; //display current logged in user
 
 		// User variables
 		var user;
@@ -373,17 +375,18 @@
 			var customContainer = document.getElementById('account-gui-container');
 			customContainer.appendChild(accountGui.domElement);
 
-			var parameters2 = {
-				currentUser: username,
+			parameters2 = {
+				currentUser: function() { dummy() },
 				newUserName: "",
 				newPassword: "",
 				createButton: function() { createAccount() },
 				userName: "",
 				password: "",
-				loginButton: function() { login() }
+				loginButton: function() { login() },
+				logout: function() { logout() }
 			};
 
-			accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
+			loggedInUserField = accountGui.add( parameters2, 'currentUser' ).name("Logged in:  " + username);
 
 			var newUserFl = accountGui.addFolder('New Account');
 			var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
@@ -394,6 +397,8 @@
 			var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
 			var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
 			userFl.add( parameters2, 'loginButton' ).name("Log in");
+
+			accountGui.add( parameters2, 'logout' ).name("Log out");
 
 			newNameField.onChange(function(value) 
 			{	newUserName = value; });
