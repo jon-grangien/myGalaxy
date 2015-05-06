@@ -8,8 +8,7 @@
 		<!-- parse -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
-	</head>
-	<body>
+  		
 		<script src="js/three.js"></script>
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
@@ -74,6 +73,8 @@
 			}
 
 		</script>
+	</head>
+	<body>
 		
 		<script>
 
@@ -164,19 +165,18 @@
 			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
 			scene.add( ambientLight );
 
-			//parse
-			console.log("parse");
-			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
-		    var TestObject = Parse.Object.extend("TestObject");
-		    var testObject = new TestObject();
-		      testObject.save({foo: "bar"}, {
-		      success: function(object) {
-		        $(".success").show();
-		      },
-		      error: function(model, error) {
-		        $(".error").show();
-		      }
-		    });
+			//parse test
+			// Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
+		 //    var TestObject = Parse.Object.extend("TestObject");
+		 //    var testObject = new TestObject();
+		 //      testObject.save({foo: "bar"}, {
+		 //      success: function(object) {
+		 //        $(".success").show();
+		 //      },
+		 //      error: function(model, error) {
+		 //        $(".error").show();
+		 //      }
+		 //    });
 			
 
 			/************* SUN ****************/
