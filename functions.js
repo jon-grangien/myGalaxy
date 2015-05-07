@@ -84,7 +84,7 @@ function addPlanet(){
 				transparent: true
 			}   );
 	hoverMaterial.side = THREE.BackSide;
-	hoverShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	hoverShell = new THREE.Mesh(hoverGeometry, planetHoverMaterial);
 	visibility(hoverShell, false);
 	activePlanet.add(hoverShell);
 	//----------------hoverend------------------
@@ -100,7 +100,7 @@ function addPlanet(){
 				transparent: true
 			}   );
 	clickedMaterial.side = THREE.BackSide;
-	clickedShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	clickedShell = new THREE.Mesh(clickedGeometry, planetHoverMaterial);
 	visibility(clickedShell, false);
 	activePlanet.add(clickedShell);
 	//----------------clickedend------------------
@@ -261,6 +261,7 @@ function addMeteorbelt2(){
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
 	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
+<<<<<<< HEAD
 	var pathMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -274,6 +275,9 @@ function addOrbitPath(radius) {
 	material.opacity = 0.1;
 
 	var path = new THREE.Mesh( pathGeometry, material );
+=======
+	var path = new THREE.Mesh( pathGeometry, planetOrbitMaterial );
+>>>>>>> origin/merge-test
 
 	return path;
 }
@@ -290,7 +294,7 @@ function addMoonOrbitPath(moonRadius) {
 				transparent: true
 			}   );
 
-	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+	var path = new THREE.Mesh( pathGeometry, moonOrbitMaterial );
 
 	return path;
 }
@@ -375,7 +379,7 @@ function addMoon() {
 				transparent: true
 			}   );
 	hoverMaterial.side = THREE.BackSide;
-	hoverMoonShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	hoverMoonShell = new THREE.Mesh(hoverGeometry, moonHoverMaterial);
 	visibility(hoverMoonShell,false);
 	activeMoon.add(hoverMoonShell);
 	//-------hoverend-------------
@@ -391,7 +395,7 @@ function addMoon() {
 				transparent: true
 			}   );
 	clickedMaterial.side = THREE.BackSide;
-	clickedMoonShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	clickedMoonShell = new THREE.Mesh(clickedGeometry, moonHoverMaterial);
 	visibility(clickedMoonShell,false);
 	activeMoon.add(clickedMoonShell);
 	//-------clickedend-------------
@@ -533,7 +537,8 @@ function onDocumentMouseDown( event ) {
 	if ( intersects.length > 0 ) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
-		previousObject = activePlanet;
+		if(jumpOk)
+			previousObject = activePlanet;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
