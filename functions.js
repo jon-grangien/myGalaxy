@@ -14,7 +14,7 @@ function addLight( h, s, l, x, y, z ) {
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
 	//lensFlare.position.copy( light.position );
 
-	scene.add( lensFlare );
+	//scene.add( lensFlare );
 }
 
 function onWindowResize() {
@@ -352,6 +352,7 @@ function onDocumentMouseDown( event ) {
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 	intersects = raycaster.intersectObjects( clickableObjects );
+	
 
 
 	//Hides planet clicked

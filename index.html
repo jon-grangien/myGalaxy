@@ -403,7 +403,7 @@
 					for(var i = 0; i < clickableObjects.length; i++)
 						if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
 							clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
-							console.log("Nollstalld under hopp");
+							console.log("Planet-rotation nollstalld under hopp");
 						}
 					console.log("Fardig med hopp");
 				}
@@ -418,13 +418,11 @@
 				for(var i = 0; i < clickableObjects.length; i++)
 					if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
 						clickableObjects[i].rotation.z = 0;
-						console.log("Nollstalld utanfor hopp");
+						console.log("Planet-rotation nollstalld utanfor hopp");
 					}
 			}
 			//ALBINS KOD SLUT===============================================================================================================
 
-			// sun rotation
-			sunSphere.rotation.z += 0.0001;
 
 			if (planetNeedsInitialShift) {
 				activePlanet.position.x += 60;
@@ -467,7 +465,6 @@
 
 				//The following lines makes the planets orbit.
 				orbit = planetOrbitRadiuses[i][1];
-				console.log("det funkar");
 				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
 				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
 			}
