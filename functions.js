@@ -1,16 +1,14 @@
 function addLight( h, s, l, x, y, z ) {
-	var light = new THREE.PointLight( 0xffffff, 1.5, 0 );
+	var light = new THREE.PointLight( 0xaaffff, 1.5, 0 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
 	scene.add( light );
 
-	var flareColor = new THREE.Color( 0xffffaa );
+	var flareColor = new THREE.Color( 0x00ffff );
 	flareColor.setHSL( h, s, l + 0.3 );
 
-	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
-
+	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare01.png" );
 	var lensFlare = new THREE.LensFlare( textureFlare0, 900, 0.0, THREE.AdditiveBlending, flareColor );
-
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
 	//lensFlare.position.copy( light.position );
 
@@ -64,7 +62,9 @@ function addPlanet(){
 	activePlanet.receiveShadow = true;
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
+
 	sunSphere.add(path);
+
 	
 
 	var activeGroup = new THREE.Object3D;
@@ -149,6 +149,68 @@ function addPlanet(){
 
 function addMeteorbelt(){
 
+	var meteorbelt = new THREE.Object3D;
+	geometry = new THREE.Geometry();
+
+	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor11.png" );
+	//sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor2.png" );
+
+
+	for ( i = 0; i < 10000; i ++ ) {
+
+		var vertex = new THREE.Vector3();
+
+		sunRadius = 16;
+		sunRadius = Math.random()*9 + sunRadius;
+
+		var xTrans = (Math.random() -0.5)*2*sunRadius;
+		var yTrans;
+		if(Math.random() < 0.5){
+			yTrans = Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
+		}
+		else
+			yTrans = -Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
+
+		var zTrans = 0;
+
+		vertex.x = xTrans;
+		vertex.y = yTrans;
+		vertex.z = zTrans;
+
+		geometry.vertices.push( vertex );
+
+	}
+
+	parameters = [ [ [0.0, 0.0, 0.0], sprite1, 0.05 ] ];
+
+
+	for ( i = 0; i < parameters.length; i ++ ) {
+
+		color  = parameters[i][0];
+		sprite = parameters[i][1];
+		size   = parameters[i][2];
+
+		materials2[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : true} );
+		particles = new THREE.PointCloud( geometry, materials2[i] );
+
+		meteorbelt.add( particles );
+	}
+
+	visibility(meteorbelt,false);
+	activePlanet.add(meteorbelt);
+
+		var tempArray;
+		// Push to meteorbelts (planets|meteorbelts)
+		tempArray = [activePlanet, meteorbelt];
+		meteorbelts.push(tempArray);
+
+}
+
+
+function addMeteorbelt2(){
+
+	
+
 	//Meteorbelt
 	var meteorbelt = new THREE.Object3D;
 	var meteorStoneGeometry;
@@ -194,9 +256,10 @@ function addMeteorbelt(){
 
 }
 
+
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
-	var pathGeometry = new THREE.TorusGeometry( radius, 0.5, 32, 100 );
+	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
 	var pathMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -523,8 +586,6 @@ function onDocumentMouseDown( event ) {
 			}
 		}
 	}
-
-	
 }
 
 
@@ -600,7 +661,6 @@ function onMouseMove( event ) {
 		
 	}
 
-
 }
 
 function lensFlareUpdateCallback( object ) {
@@ -627,4 +687,51 @@ function lensFlareUpdateCallback( object ) {
 
 function visibility(object, bool){
 	object.traverse(function(child) {child.visible = bool;});
+}
+
+function addStars(){
+
+	geometry = new THREE.Geometry();
+
+	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake12.png" );
+	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star1.png" );
+	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star2.png" );
+	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star3.png" );
+	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake5.png" );
+
+	for ( i = 0; i < 10000; i ++ ) {
+
+		var vertex = new THREE.Vector3();
+		vertex.x = Math.random()* 20000 - 10000;
+		vertex.y = Math.random() * 20000 - 10000;
+		vertex.z = Math.random() * 20000 - 10000;
+
+		geometry.vertices.push( vertex );
+	}
+
+	parameters = [ [ [1.0, 0.2, 0.5], sprite2, 18 ],
+				   [ [0.95, 0.1, 0.5], sprite3, 15 ],
+				   [ [0.90, 0.05, 0.5], sprite1, 10 ],
+				   [ [0.85, 0, 0.5], sprite5, 20 ],
+				   [ [0.80, 0, 0.5], sprite4, 5 ],
+				   ];
+
+	for ( i = 0; i < parameters.length; i ++ ) {
+
+		color  = parameters[i][0];
+		sprite = parameters[i][1];
+		size   = parameters[i][2];
+
+		materials[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : false} );
+		//materials[i].color.setHSL( color[0], color[1], color[2] );
+
+		particles = new THREE.PointCloud( geometry, materials[i] );
+
+		particles.rotation.x = Math.random() * 6;
+		particles.rotation.y = Math.random() * 6;
+		particles.rotation.z = Math.random() * 6;
+
+		scene.add( particles );
+
+	}
 }
