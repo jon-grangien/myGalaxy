@@ -111,6 +111,7 @@
 		var activePlanet;
 		var previousObject;
 		var activeMoon;
+		var orbitsMother = [];
 		var customTexture;
 		var activeRotationSpeed;
 		var jumpOk;
@@ -254,7 +255,9 @@
 			var sunCoreMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 			sunCore = new THREE.Mesh(sunCoreGeometry, sunCoreMaterial);	//activePlanet is a global var
 			sunCore.material.map.minFilter = THREE.NearestFilter;
-			//scene.add(sunCore);
+			//orbitsMother.add(sunCore);
+
+			
 
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
@@ -313,7 +316,6 @@
 			planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
 			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
 			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
-		
 
 			//Add moon
 			gui.add( parameters, 'addMoon' ).name("Spawn moon");
