@@ -649,9 +649,9 @@ function addStars(){
 	geometry = new THREE.Geometry();
 
 	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake12.png" );
-	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake2.png" );
-	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake3.png" );
-	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake4.png" );
+	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star1.png" );
+	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star2.png" );
+	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star3.png" );
 	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake5.png" );
 
 	for ( i = 0; i < 10000; i ++ ) {
@@ -664,10 +664,10 @@ function addStars(){
 		geometry.vertices.push( vertex );
 	}
 
-	parameters = [ [ [1.0, 0.2, 0.5], sprite2, 13 ],
-				   [ [0.95, 0.1, 0.5], sprite3, 10 ],
-				   [ [0.90, 0.05, 0.5], sprite1, 9 ],
-				   [ [0.85, 0, 0.5], sprite5, 9 ],
+	parameters = [ [ [1.0, 0.2, 0.5], sprite2, 18 ],
+				   [ [0.95, 0.1, 0.5], sprite3, 15 ],
+				   [ [0.90, 0.05, 0.5], sprite1, 10 ],
+				   [ [0.85, 0, 0.5], sprite5, 20 ],
 				   [ [0.80, 0, 0.5], sprite4, 5 ],
 				   ];
 
