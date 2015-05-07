@@ -91,7 +91,9 @@
 
 		<script id="fragmentShaderSun" type="x-shader/x-vertex">			 
 			varying vec3 vNormal;
+			
 			void main() {
+
 				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 9.0 ); 
 			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
 			}
@@ -246,7 +248,7 @@
 			var customSunMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-				fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShaderSun' ).textContent,
 				side: THREE.BackSide,
 				blending: THREE.AdditiveBlending,
 				transparent: true
