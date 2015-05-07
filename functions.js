@@ -35,7 +35,7 @@ function addPlanet(){
 	}
 
 	// Atmosphere
-	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var atmosphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
 	var atmosphereMaterial = new THREE.ShaderMaterial( {
 	    uniforms: {  },
 		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
@@ -53,7 +53,7 @@ function addPlanet(){
 	var path = addOrbitPath(60);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
 
 	// Planet
-	var sphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
@@ -62,8 +62,11 @@ function addPlanet(){
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
 
-	sunSphere.add(path);
-	
+	orbitsMother.push(path);
+	for(var i = 0; i < orbitsMother.length; ++i)
+			{
+				sunSphere.add(orbitsMother[i]);
+			}
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
@@ -71,7 +74,7 @@ function addPlanet(){
 	planetNeedsInitialShift = true;
 
 	//Hover-background
-	var hoverGeometry = new THREE.SphereGeometry( 12, 40, 40 );
+	var hoverGeometry = new THREE.SphereGeometry( 12, 60, 60 );
 	var hoverMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -87,7 +90,7 @@ function addPlanet(){
 	//----------------hoverend------------------
 
 	//Clicked-background
-	var clickedGeometry = new THREE.SphereGeometry( 15, 40, 40 );
+	var clickedGeometry = new THREE.SphereGeometry( 15, 60, 60 );
 	var clickedMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -267,7 +270,10 @@ function addOrbitPath(radius) {
 				transparent: true
 			}   );
 
-	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+	var material = new THREE.MeshPhongMaterial ({ color: 0xe6cc7f, opacity: 0.9, transparent: true });
+	material.opacity = 0.1;
+
+	var path = new THREE.Mesh( pathGeometry, material );
 
 	return path;
 }
@@ -691,7 +697,7 @@ function addStars(){
 
 	geometry = new THREE.Geometry();
 
-	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake12.png" );
+	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake1.png" );
 	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star1.png" );
 	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star2.png" );
 	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star3.png" );
@@ -709,9 +715,9 @@ function addStars(){
 
 	parameters = [ [ [0.0, 0.0, 0.0], sprite2, 38 ],
 				   [ [0.0, 0.0, 0.0], sprite3, 45 ],
-				   [ [0.0, 0.0, 0.0], sprite1, 30 ],
-				   [ [0.0, 0.0, 0.0], sprite5, 30 ],
-				   [ [0.0, 0.0, 0.0], sprite4, 30 ],
+				   [ [0.0, 0.0, 0.0], sprite1, 50 ],
+				   [ [0.0, 0.0, 0.0], sprite5, 50 ],
+				   [ [0.0, 0.0, 0.0], sprite4, 50 ],
 				   ];
 
 	for ( i = 0; i < parameters.length; i ++ ) {
