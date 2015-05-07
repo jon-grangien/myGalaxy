@@ -28,24 +28,71 @@ function loadPlanets() {
 	var query = new Parse.Query(Planet);
 	// query.equalTo("playerName", "Dan Stemkoski");
 	query.find({
-	  success: function(results) {
-	    console.log("Successfully retrieved " + results.length + " planets.");
-	    // Do something with the returned Parse.Object values
-	    for (var i = 0; i < results.length; i++) { 
-	      var object = results[i];
-	      console.log(object.id + ' - ' + object.get('playerName'));
-	    }
-	  },
-	  error: function(error) {
-	    console.log("Error: " + error.code + " " + error.message);
-	  }
+		success: function(results) {
+			console.log("Successfully retrieved " + results.length + " planets.");
+			// Do something with the returned Parse.Object values
+			for (var i = 0; i < results.length; i++) { 
+				var object = results[i];
+				console.log(object.get('owner') + ' - ' + object.id + ' - ' + object.get('texture'));
+	    		spawnLoadedPlanet(object.get('texture'), object.get('radius'), object.get('size'));
+	    	}
+
+		},
+	  	error: function(error) {
+	    	console.log("Error: " + error.code + " " + error.message);
+		}
 	});
+}
+
+function spawnLoadedPlanet(texture, radius, size) {
+	var planetToSpawn;
+
+	// Atmosphere
+	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var atmosphereMaterial = new THREE.ShaderMaterial( {
+	    uniforms: {  },
+		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShader2' ).textContent,
+		side: THREE.BackSide,
+		blending: THREE.AdditiveBlending,
+		transparent: true
+	}   );
+
+	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+	atmosphere.receiveShadow = false;
+	atmosphere.castShadow = false;
+
+	// orbit path
+	var path = addOrbitPath(radius);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
+	sunSphere.add(path);
+
+	// Planet
+	var sphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/' + texture ) } );
+	var planetToSpawn = new THREE.Mesh(sphereGeometry, sphereMaterial);
+	planetToSpawn.material.map.minFilter = THREE.NearestFilter;
+
+	planetToSpawn.receiveShadow = true;
+	planetToSpawn.castShadow = true;
+	planetToSpawn.add(atmosphere);
+
+	var activeGroup = new THREE.Object3D;
+	activeGroup.add(planetToSpawn);
+	planetGroups.push(activeGroup);
+
+	// Add planet group (and missing ones if exist) to sungroup
+	for (var i = 0; i < planetGroups.length; ++i) {
+	    if (planetGroups[i].parent !== sunSphere){
+	    	sunSphere.add(planetGroups[i]);
+	    	// console.log("new planet group added to sun")
+	    }
+	}
+
 }
 
 
 // Planet spawn (gui)
 function addPlanet(){
-
 	planetPropertiesFl.open();
 
 	//Turn off planet clicked background

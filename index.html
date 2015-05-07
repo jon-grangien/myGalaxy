@@ -181,18 +181,6 @@
 			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
 			scene.add( ambientLight );
 
-			// Parse initialization
-			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
-
-			// Parse user cache
-			var currentUser = Parse.User.current();
-			if (currentUser) {
-			    user = currentUser;
-			    username = user.getUsername();
-			    console.log("logged in: " + user.getUsername())
-			} else {
-			    console.log("no user logged in");
-			}
 			
 
 			/************* SUN ****************/
@@ -206,7 +194,22 @@
 				blending: THREE.AdditiveBlending,
 				transparent: true
 			}   );
+
+			// Parse initialization
+			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
+
+			// Parse user cache
+			var currentUser = Parse.User.current();
+			if (currentUser) {
+			    user = currentUser;
+			    username = user.getUsername();
+			    console.log("logged in: " + user.getUsername())
+			} else {
+			    console.log("no user logged in");
+			}
 				
+			loadPlanets();
+
 			var sunGeometry = new THREE.SphereGeometry( 19, 32, 32 );
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
 			scene.add(sunSphere);
