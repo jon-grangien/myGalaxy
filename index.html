@@ -192,7 +192,7 @@
 			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
 			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 20000 );
-			camera.position.z = 200;
+			camera.position.z = 0;
 			scene.add(camera);
 			
 			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
