@@ -60,7 +60,7 @@
 			void main() 
 			{
 				float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.0 ) ), 5.0 ); 
-			   gl_FragColor = vec4( 0.9, 0.9, 0.5, 1.0 ) * intensity;
+			   gl_FragColor = vec4( 0.9, 0.8, 0.5, 1.0 ) * intensity;
 			}
 
 		</script>
@@ -74,10 +74,30 @@
 			}
 
 		</script>
+
 	</head>
 	<body>
 		<div id="account-gui-container"></div>
 		<div id="container"></div>
+
+
+		<script id="vertexShaderSun" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1 );
+			}
+		</script>
+
+		<script id="fragmentShaderSun" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 9.0 ); 
+			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			}
+		</script>
+		
+
 		<script>
 
 		// Basic global variables
@@ -85,6 +105,7 @@
 
 		// Meshes for planets
 		var sunSphere;
+		var sunCore;
 
 		// Variables to be used for current object to be changed
 		var activePlanet;
@@ -116,6 +137,8 @@
 		var moonOrbitRadiuses = [];
 		var galaxyGroup;
 		var rotationGroup; //group used when jumping between planets
+		var materials = []; //stars
+		var materials2 = []; //meteorbelt
 		
 
 		// Multiarrays to keep track of things that correspond to each other 
@@ -183,8 +206,9 @@
 			renderer.gammaOutput = true;
 			
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
-			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
+			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );
 			scene.add( ambientLight );
+
 
 			// Parse initialization
 			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
@@ -197,6 +221,10 @@
 			} else {
 			    console.log("no user logged in");
 			}
+
+
+			addStars();
+			
 			
 
 			/************* SUN ****************/
@@ -211,7 +239,7 @@
 				transparent: true
 			}   );
 				
-			var sunGeometry = new THREE.SphereGeometry( 19, 32, 32 );
+			var sunGeometry = new THREE.SphereGeometry( 19, 54, 54 );
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
 			activePlanet = sunSphere;
 			clickedObject = sunSphere;
@@ -221,6 +249,13 @@
 			clickableObjects.push(sunSphere);
 			rotationGroup.add(galaxyGroup);
 			scene.add(rotationGroup);
+
+			// Core
+			var sunCoreGeometry = new THREE.SphereGeometry( 3, 40, 40 );
+			var sunCoreMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
+			sunCore = new THREE.Mesh(sunCoreGeometry, sunCoreMaterial);	//activePlanet is a global var
+			sunCore.material.map.minFilter = THREE.NearestFilter;
+			//scene.add(sunCore);
 
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
@@ -476,12 +511,14 @@
 		function render() {
 			// console.log("render check");
 
+
 			//Variabeln time används till timern och även planeternas rotation.
 			time = Date.now() * 0.0005;
 
 			if(jumpOk){
 				planetJump();
 			}
+
 
 			if (planetNeedsInitialShift) {
 				activePlanet.position.x += 60;
@@ -493,6 +530,7 @@
 				moonNeedsInitialShift = false;
 				// console.log("moon shifted");
 			}
+
 
 			// Show/hide orbit path at set camera distance
 			// det här kanske är för prestandakrävande att ha i längden?
@@ -516,6 +554,7 @@
 					moonPaths[i][1].visible = true;
 				}
 			}*/
+
 
 			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
