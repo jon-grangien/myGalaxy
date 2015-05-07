@@ -261,23 +261,9 @@ function addMeteorbelt2(){
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
 	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
-<<<<<<< HEAD
-	var pathMaterial = new THREE.ShaderMaterial( {
-			    uniforms: {  },
-				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
-				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
-				side: THREE.BackSide,
-				blending: THREE.AdditiveBlending,
-				transparent: true
-			}   );
 
-	var material = new THREE.MeshPhongMaterial ({ color: 0xe6cc7f, opacity: 0.9, transparent: true });
-	material.opacity = 0.1;
-
-	var path = new THREE.Mesh( pathGeometry, material );
-=======
 	var path = new THREE.Mesh( pathGeometry, planetOrbitMaterial );
->>>>>>> origin/merge-test
+
 
 	return path;
 }
