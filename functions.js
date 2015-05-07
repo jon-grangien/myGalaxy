@@ -45,10 +45,8 @@ function loadPlanets() {
 }
 
 function spawnLoadedPlanet(texture, radius, size) {
-	var planetToSpawn;
-
 	// Atmosphere
-	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );	//size
 	var atmosphereMaterial = new THREE.ShaderMaterial( {
 	    uniforms: {  },
 		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
@@ -63,13 +61,13 @@ function spawnLoadedPlanet(texture, radius, size) {
 	atmosphere.castShadow = false;
 
 	// orbit path
-	var path = addOrbitPath(radius);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
+	var path = addOrbitPath(radius);
 	sunSphere.add(path);
 
 	// Planet
-	var sphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var sphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );		//size
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/' + texture ) } );
-	var planetToSpawn = new THREE.Mesh(sphereGeometry, sphereMaterial);
+	planetToSpawn = new THREE.Mesh(sphereGeometry, sphereMaterial);
 	planetToSpawn.material.map.minFilter = THREE.NearestFilter;
 
 	planetToSpawn.receiveShadow = true;
@@ -88,8 +86,11 @@ function spawnLoadedPlanet(texture, radius, size) {
 	    }
 	}
 
-}
+	var tempBool = true;
+	var tempArray = [planetToSpawn, radius, tempBool];
+	userPlanetsInitialShifts.push(tempArray);
 
+}
 
 // Planet spawn (gui)
 function addPlanet(){

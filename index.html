@@ -116,6 +116,8 @@
 
 		// Database variables
 		var dbPlanet;
+		var planetToSpawn;
+		// var planetToSpawnInitialShiftRadius;
 
 		// Multiarrays to keep track of things that correspond to each other 
 		var planets = [];		//multiarray of planet|moons
@@ -131,6 +133,7 @@
 		var clickedMoonShells = [];	//multiarray of moon|shell
 		var meteorbelts = [];	//multiarray of planet|meteorbelt
 		var userPlanets = [];	//multiarray of planet|planetId (only logged in userid from db)
+		var userPlanetsInitialShifts = [];  //multiarray of planets|radiuses|bool for spawned planets initial shift
 
 		// Variables for render loop
 		var currentPlanet;					
@@ -465,6 +468,17 @@
 
 			// sun rotation
 			sunSphere.rotation.z += 0.0001;
+
+			// Initial shift spawned planets
+			for (var i = 0; i < userPlanetsInitialShifts.length; ++i) {
+				// [ planet | radius | bool ]
+				//     0         1       2
+
+				if (userPlanetsInitialShifts[i][2] == true) {
+					userPlanetsInitialShifts[i][0].position.x = userPlanetsInitialShifts[i][1];
+					userPlanetsInitialShifts[i][2] == false;
+				}
+			};
 
 			if (planetNeedsInitialShift) {
 				activePlanet.position.x += 60;
