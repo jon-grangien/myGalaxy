@@ -221,9 +221,6 @@
 			} else {
 			    console.log("no user logged in");
 			}
-
-
-			addStars();
 			
 			
 
@@ -246,9 +243,11 @@
 			galaxyGroup = new THREE.Object3D;
 			rotationGroup = new THREE.Object3D;
 			galaxyGroup.add(sunSphere);
-			clickableObjects.push(sunSphere);
+			//clickableObjects.push(sunSphere);
 			rotationGroup.add(galaxyGroup);
+			rotationGroup.add(addStars());
 			scene.add(rotationGroup);
+
 
 			// Core
 			var sunCoreGeometry = new THREE.SphereGeometry( 3, 40, 40 );
@@ -571,7 +570,7 @@
 
 			// planet rotations about self (ha som variabel?)
 			for (var i = 0; i < planets.length; ++i) {
-				planets[i][0].rotation.z += 0.005;
+				planets[i][0].rotation.z += 0.001;
 			}
 
 			// moon rotation speeds about planet
