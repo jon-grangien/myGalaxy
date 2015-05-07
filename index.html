@@ -124,7 +124,7 @@
 		var hoveredMoon;
 		var planetOrbitMaterial;
 		var planetHoverMaterial;
-		var moonOrbitMaterial;
+		var hoverOpacity;
 		var moonHoverMaterial;
 		var clickedPlanet;
 		var clickedMoon;
@@ -212,16 +212,14 @@
 			renderer.gammaOutput = true;
 			
 			//Create a material for the planet toruses
-			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0xe6cc7f,opacity:1,transparent:false,side:THREE.BackSide});
+			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0x27241c,opacity:1,transparent:false,side:THREE.BackSide});
 			
+			hoverOpacity = 0.3;
 			//Create a material for hovering over planets
-			planetHoverMaterial = new THREE.MeshBasicMaterial({color:0xe6cc7f,opacity:0.3,transparent:true,side:THREE.BackSide});
-
-			//Create a material for the moon toruses
-			moonOrbitMaterial = new THREE.MeshBasicMaterial({color:0x0000FF,opacity:1,transparent:false,side:THREE.BackSide});
+			planetHoverMaterial = new THREE.MeshBasicMaterial({color:0xe6cc7f,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
 			
 			//Create a meterial for hovering over moons
-			moonHoverMaterial = new THREE.MeshBasicMaterial({color:0x0000FF,opacity:0.3,transparent:true,side:THREE.BackSide});
+			moonHoverMaterial = new THREE.MeshBasicMaterial({color:0x00FF00,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
 			
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
 			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );

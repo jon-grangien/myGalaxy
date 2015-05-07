@@ -275,7 +275,7 @@ function addMoonOrbitPath(moonRadius) {
 				transparent: true
 			}   );
 
-	var path = new THREE.Mesh( pathGeometry, moonOrbitMaterial );
+	var path = new THREE.Mesh( pathGeometry, moonHoverMaterial );
 
 	return path;
 }
