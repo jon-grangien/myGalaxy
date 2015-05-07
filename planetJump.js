@@ -1,4 +1,4 @@
-var cameraPosX, cameraPosY, cameraPosZ, controlsRotSpeed;
+var cameraPosX, cameraPosY, cameraPosZ, controlsRotSpeed, zoomLevel;
 
 function planetJump(){
 	//Aktiveras när man klickar på en annan planet.
@@ -11,10 +11,17 @@ function planetJump(){
 			posz = galaxyGroup.position.y;
 			roty = galaxyGroup.rotation.z + rotationGroup.rotation.z;
 			
+			//Spara kamerans förra position
 			cameraPosX = camera.position.x;
 			cameraPosY = camera.position.y;
 			cameraPosZ = camera.position.z;
+			//Spara kamerans rotations-hastighet
 			controlsRotSpeed = controls.rotateSpeed;
+			//Beräkna zoom-nivå beroende på planetens radie och storlek
+			for (var i = 0; i < planetOrbitRadiuses.length; ++i) {
+					if (planetOrbitRadiuses[i][0] == activePlanet)
+						zoomLevel = activePlanet.scale.x*0.5/(planetOrbitRadiuses[i][1]/60);
+			}
 
 			console.log("Paborjar hopp");
 		}
@@ -23,9 +30,9 @@ function planetJump(){
 		galaxyGroup.position.y = posz*(1-Math.cos(timer))/2 - activePlanet.position.y*(1+Math.cos(timer))/2;
 		rotationGroup.rotation.z = roty*(1-Math.cos(timer))/2 - activePlanet.rotation.z*(1+Math.cos(timer))/2;
 		//Zooma kameran till rätt nivå beroende på planetens storlek, med en mjuk övergång.
-		camera.position.x = cameraPosX*(1+Math.cos(Math.PI - timer))/2 - activePlanet.position.x*(1+Math.cos(timer))/2;
-		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2 - activePlanet.position.y*(1+Math.cos(timer))/2;
-		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - activePlanet.position.z*(1+Math.cos(timer))/2;
+		camera.position.x = cameraPosX*(1+Math.cos(Math.PI - timer))/2 - (activePlanet.position.x*(1+Math.cos(timer))/2)*zoomLevel;
+		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2 - (activePlanet.position.y*(1+Math.cos(timer))/2)*zoomLevel;
+		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - (activePlanet.position.z*(1+Math.cos(timer))/2)*zoomLevel;
 
 		controls.rotateSpeed = 0;
 		//Hastigheten med vilken förflyttningen sker.
