@@ -1,20 +1,18 @@
 function addLight( h, s, l, x, y, z ) {
-	var light = new THREE.PointLight( 0xffffff, 1.5, 0 );
+	var light = new THREE.PointLight( 0xaaffff, 1.5, 0 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
 	scene.add( light );
 
-	var flareColor = new THREE.Color( 0xffffaa );
+	var flareColor = new THREE.Color( 0x00ffff );
 	flareColor.setHSL( h, s, l + 0.3 );
 
-	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
-
+	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare01.png" );
 	var lensFlare = new THREE.LensFlare( textureFlare0, 900, 0.0, THREE.AdditiveBlending, flareColor );
-
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
 	//lensFlare.position.copy( light.position );
 
-	scene.add( lensFlare );
+	//scene.add( lensFlare );
 }
 
 function onWindowResize() {
@@ -24,8 +22,30 @@ function onWindowResize() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+// Load planets from db
+function loadPlanets() {
+	var Planet = Parse.Object.extend("Planet");		//make global
+	var query = new Parse.Query(Planet);
+	// query.equalTo("playerName", "Dan Stemkoski");
+	query.find({
+	  success: function(results) {
+	    console.log("Successfully retrieved " + results.length + " planets.");
+	    // Do something with the returned Parse.Object values
+	    for (var i = 0; i < results.length; i++) { 
+	      var object = results[i];
+	      console.log(object.id + ' - ' + object.get('playerName'));
+	    }
+	  },
+	  error: function(error) {
+	    console.log("Error: " + error.code + " " + error.message);
+	  }
+	});
+}
+
+
 // Planet spawn (gui)
 function addPlanet(){
+
 	planetPropertiesFl.open();
 
 	//Turn off planet clicked background
@@ -63,8 +83,8 @@ function addPlanet(){
 	activePlanet.receiveShadow = true;
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
+
 	sunSphere.add(path);
-	
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
@@ -108,7 +128,7 @@ function addPlanet(){
 	activeGroup.add(activePlanet);
 	clickableObjects.push(activePlanet);
 	planetGroups.push(activeGroup);
-	addMeteorbelt();
+	// addMeteorbelt();
 
 	// Add planet group (and missing ones if exist) to sungroup
 	for (var i = 0; i < planetGroups.length; ++i) {
@@ -140,10 +160,14 @@ function addPlanet(){
 	tempArray = [activePlanet, clickedShell];
 	clickedShells.push(tempArray);
 
+	// Push to planetOrbitRadiuses
+	tempArray = [activePlanet, 60]; //the value 60 should maybe be replaced by a variable
+	planetOrbitRadiuses.push(tempArray);
+
 	// Database
 	if(user) {
 		var Planet = Parse.Object.extend("Planet");
-		dbPlanet = new Planet();
+		var dbPlanet = new Planet();
 
 		dbPlanet.set("owner", username);
 		dbPlanet.set("userId", user.id);
@@ -164,11 +188,71 @@ function addPlanet(){
 		});
 	}
 
+	else {
+		console.log("no user logged in, planet not saved")
+	}
+
 }
 
-function addMeteorbelt(){
+// function addMeteorbelt(){
+// 	var meteorbelt = new THREE.Object3D;
+// 	geometry = new THREE.Geometry();
 
-	//Meteorbelt
+// 	// sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor11.png" );
+// 	//sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor2.png" );
+
+
+// 	for ( i = 0; i < 10000; i ++ ) {
+
+// 		var vertex = new THREE.Vector3();
+
+// 		sunRadius = 16;
+// 		sunRadius = Math.random()*9 + sunRadius;
+
+// 		var xTrans = (Math.random() -0.5)*2*sunRadius;
+// 		var yTrans;
+// 		if(Math.random() < 0.5){
+// 			yTrans = Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
+// 		}
+// 		else
+// 			yTrans = -Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
+
+// 		var zTrans = 0;
+
+// 		vertex.x = xTrans;
+// 		vertex.y = yTrans;
+// 		vertex.z = zTrans;
+
+// 		geometry.vertices.push( vertex );
+// 	}
+
+// 	parameters = [ [ [0.0, 0.0, 0.0], sprite1, 0.05 ] ];
+
+
+// 	for ( i = 0; i < parameters.length; i ++ ) {
+
+// 		color  = parameters[i][0];
+// 		sprite = parameters[i][1];
+// 		size   = parameters[i][2];
+
+// 		// materials2[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : true} );
+// 		// particles = new THREE.PointCloud( geometry, materials2[i] );
+
+// 		// meteorbelt.add( particles );
+// 	}
+
+// 	visibility(meteorbelt,false);
+// 	activePlanet.add(meteorbelt);
+
+// 		var tempArray;
+// 		// Push to meteorbelts (planets|meteorbelts)
+// 		tempArray = [activePlanet, meteorbelt];
+// 		meteorbelts.push(tempArray);
+
+// }
+
+
+function addMeteorbelt2(){
 	var meteorbelt = new THREE.Object3D;
 	var meteorStoneGeometry;
 	var meteorStoneMaterial;
@@ -213,9 +297,10 @@ function addMeteorbelt(){
 
 }
 
+
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
-	var pathGeometry = new THREE.TorusGeometry( radius, 0.5, 32, 100 );
+	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
 	var pathMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -229,7 +314,6 @@ function addOrbitPath(radius) {
 
 	return path;
 }
-
 
 function addMoonOrbitPath(moonRadius) {
 	var pathGeometry = new THREE.TorusGeometry( moonRadius, 0.2, 16, 100 );
@@ -376,6 +460,10 @@ function addMoon() {
 	// Push to clickedShells
 	tempArray = [activeMoon, clickedMoonShell];
 	clickedMoonShells.push(tempArray);
+
+	// Push to planetOrbitRadiuses
+	tempArray = [activePlanet, 20]; //the value 60 should maybe be replaced by a variable
+	moonOrbitRadiuses.push(tempArray);
 	
 	// console.log("moon spawned");
 }
@@ -430,14 +518,20 @@ function login() {
 	Parse.User.logIn(username, userPassword, {
 		success: function(loggedinuser) {
 			user = loggedinuser;
-			console.log("logged in as " + user.getUsername());
+			username = user.getUsername();
 			loggedInUserField.name("Logged in:  " + user.getUsername());
+			console.log("logged in!");
 		},
 		error: function(user, error) {
-			console.log("log in failed");
+			console.log("The login failed");
 		}
 	});
 }
+
+function dummy() {
+	console.log("i am dummy");
+}
+
 
 function logout() {
 	Parse.User.logOut();
@@ -448,9 +542,6 @@ function logout() {
 	console.log("logged out");
 }
 
-function dummy() {
-	console.log("i am dummy");
-}
 
 function onDocumentTouchStart( event ) {	
 	event.preventDefault();
@@ -467,6 +558,7 @@ function onDocumentMouseDown( event ) {
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 	intersects = raycaster.intersectObjects( clickableObjects );
+	
 
 
 	//Hides planet clicked
@@ -477,7 +569,7 @@ function onDocumentMouseDown( event ) {
 			visibility(mesh.children[2],false);
 		}
 	}
-		//Hides moon clicked
+	//Hides moon clicked
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
 			
@@ -490,6 +582,7 @@ function onDocumentMouseDown( event ) {
 	if ( intersects.length > 0 ) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
+		previousObject = activePlanet;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
@@ -546,8 +639,6 @@ function onDocumentMouseDown( event ) {
 			}
 		}
 	}
-
-	
 }
 
 
@@ -623,7 +714,6 @@ function onMouseMove( event ) {
 		
 	}
 
-
 }
 
 function lensFlareUpdateCallback( object ) {
@@ -650,4 +740,51 @@ function lensFlareUpdateCallback( object ) {
 
 function visibility(object, bool){
 	object.traverse(function(child) {child.visible = bool;});
+}
+
+function addStars(){
+
+	geometry = new THREE.Geometry();
+
+	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake12.png" );
+	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star1.png" );
+	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star2.png" );
+	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star3.png" );
+	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake5.png" );
+
+	for ( i = 0; i < 10000; i ++ ) {
+
+		var vertex = new THREE.Vector3();
+		vertex.x = Math.random()* 20000 - 10000;
+		vertex.y = Math.random() * 20000 - 10000;
+		vertex.z = Math.random() * 20000 - 10000;
+
+		geometry.vertices.push( vertex );
+	}
+
+	parameters = [ [ [1.0, 0.2, 0.5], sprite2, 18 ],
+				   [ [0.95, 0.1, 0.5], sprite3, 15 ],
+				   [ [0.90, 0.05, 0.5], sprite1, 10 ],
+				   [ [0.85, 0, 0.5], sprite5, 20 ],
+				   [ [0.80, 0, 0.5], sprite4, 5 ],
+				   ];
+
+	for ( i = 0; i < parameters.length; i ++ ) {
+
+		color  = parameters[i][0];
+		sprite = parameters[i][1];
+		size   = parameters[i][2];
+
+		materials[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : false} );
+		//materials[i].color.setHSL( color[0], color[1], color[2] );
+
+		particles = new THREE.PointCloud( geometry, materials[i] );
+
+		particles.rotation.x = Math.random() * 6;
+		particles.rotation.y = Math.random() * 6;
+		particles.rotation.z = Math.random() * 6;
+
+		scene.add( particles );
+
+	}
 }

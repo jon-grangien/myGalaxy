@@ -105,6 +105,7 @@
 		// Groups for objects
 		var planetGroups = [];
 		var moonGroups = [];
+		var planetOrbitRadiuses = [];
 		
 		// User variables
 		var user;
@@ -188,6 +189,7 @@
 			if (currentUser) {
 			    user = currentUser;
 			    username = user.getUsername();
+			    console.log("logged in: " + user.getUsername())
 			} else {
 			    console.log("no user logged in");
 			}
