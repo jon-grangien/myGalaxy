@@ -122,6 +122,10 @@
 		//Temporary hover variables
 		var hoveredPlanet;
 		var hoveredMoon;
+		var planetOrbitMaterial;
+		var planetHoverMaterial;
+		var moonOrbitMaterial;
+		var moonHoverMaterial;
 		var clickedPlanet;
 		var clickedMoon;
 		var hoverShell;
@@ -206,6 +210,18 @@
 
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
+			
+			//Create a material for the planet toruses
+			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0xe6cc7f,opacity:1,transparent:false,side:THREE.BackSide});
+			
+			//Create a material for hovering over planets
+			planetHoverMaterial = new THREE.MeshBasicMaterial({color:0xe6cc7f,opacity:0.3,transparent:true,side:THREE.BackSide});
+
+			//Create a material for the moon toruses
+			moonOrbitMaterial = new THREE.MeshBasicMaterial({color:0x0000FF,opacity:1,transparent:false,side:THREE.BackSide});
+			
+			//Create a meterial for hovering over moons
+			moonHoverMaterial = new THREE.MeshBasicMaterial({color:0x0000FF,opacity:0.3,transparent:true,side:THREE.BackSide});
 			
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
 			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );
@@ -517,6 +533,7 @@
 			//Variabeln time används till timern och även planeternas rotation.
 			time = Date.now() * 0.0005;
 
+			//Handles the jumps between planets.
 			if(jumpOk){
 				planetJump();
 			} else {
