@@ -538,8 +538,6 @@ function onDocumentMouseDown( event ) {
 			}
 		}
 	}
-
-	
 }
 
 
