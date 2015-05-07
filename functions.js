@@ -65,8 +65,6 @@ function addPlanet(){
 
 	sunSphere.add(path);
 
-	
-
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
 	activeRotationSpeed = 0.001;
@@ -148,7 +146,6 @@ function addPlanet(){
 }
 
 function addMeteorbelt(){
-
 	var meteorbelt = new THREE.Object3D;
 	geometry = new THREE.Geometry();
 
@@ -178,7 +175,6 @@ function addMeteorbelt(){
 		vertex.z = zTrans;
 
 		geometry.vertices.push( vertex );
-
 	}
 
 	parameters = [ [ [0.0, 0.0, 0.0], sprite1, 0.05 ] ];
@@ -203,15 +199,10 @@ function addMeteorbelt(){
 		// Push to meteorbelts (planets|meteorbelts)
 		tempArray = [activePlanet, meteorbelt];
 		meteorbelts.push(tempArray);
-
 }
 
 
 function addMeteorbelt2(){
-
-	
-
-	//Meteorbelt
 	var meteorbelt = new THREE.Object3D;
 	var meteorStoneGeometry;
 	var meteorStoneMaterial;

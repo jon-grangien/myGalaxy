@@ -393,7 +393,6 @@
 				}
 			});
 
-
 			moonRadius.onChange(function(value) 
 			{ 
 
@@ -509,16 +508,12 @@
 		}
 
 		function render() {
-			// console.log("render check");
-
-
 			//Variabeln time används till timern och även planeternas rotation.
 			time = Date.now() * 0.0005;
 
 			if(jumpOk){
 				planetJump();
 			}
-
 
 			if (planetNeedsInitialShift) {
 				activePlanet.position.x += 60;
@@ -530,31 +525,6 @@
 				moonNeedsInitialShift = false;
 				// console.log("moon shifted");
 			}
-
-
-			// Show/hide orbit path at set camera distance
-			// det här kanske är för prestandakrävande att ha i längden?
-			/*if ((Math.abs(camera.position.x) < orbitPathDistanceLimit) 
-				&& (Math.abs(camera.position.y) < orbitPathDistanceLimit) 
-				&& (Math.abs(camera.position.z) < orbitPathDistanceLimit)) {
-				for (var i = 0; i < planetPaths.length; ++i) {
-					planetPaths[i][1].visible = false;
-				}
-
-				for (var i = 0; i < moonPaths.length; ++i) {
-					moonPaths[i][1].visible = false;
-				}
-
-			} else {
-				for (var i = 0; i < planetPaths.length; ++i) {
-					planetPaths[i][1].visible = true;
-				}
-
-				for (var i = 0; i < moonPaths.length; ++i) {
-					moonPaths[i][1].visible = true;
-				}
-			}*/
-
 
 			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
@@ -602,9 +572,7 @@
 
 				}
 			}
-
-			
-			
+		
 			renderer.render(scene, camera);
 		}
 		
