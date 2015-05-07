@@ -2,7 +2,7 @@ function addLight( h, s, l, x, y, z ) {
 	var light = new THREE.PointLight( 0xaaffff, 1.5, 0 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
-	scene.add( light );
+	sunSphere.add( light );
 
 	var flareColor = new THREE.Color( 0x00ffff );
 	flareColor.setHSL( h, s, l + 0.3 );
@@ -12,13 +12,12 @@ function addLight( h, s, l, x, y, z ) {
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
 	//lensFlare.position.copy( light.position );
 
-	//scene.add( lensFlare );
+	sunSphere.add( lensFlare );
 }
 
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
-
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
@@ -64,7 +63,6 @@ function addPlanet(){
 	activePlanet.add(atmosphere);
 
 	sunSphere.add(path);
-
 	
 
 	var activeGroup = new THREE.Object3D;
@@ -697,7 +695,7 @@ function addStars(){
 	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star1.png" );
 	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star2.png" );
 	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star3.png" );
-	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake5.png" );
+	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/spark1.png" );
 
 	for ( i = 0; i < 10000; i ++ ) {
 
@@ -709,11 +707,11 @@ function addStars(){
 		geometry.vertices.push( vertex );
 	}
 
-	parameters = [ [ [1.0, 0.2, 0.5], sprite2, 18 ],
-				   [ [0.95, 0.1, 0.5], sprite3, 15 ],
-				   [ [0.90, 0.05, 0.5], sprite1, 10 ],
-				   [ [0.85, 0, 0.5], sprite5, 20 ],
-				   [ [0.80, 0, 0.5], sprite4, 5 ],
+	parameters = [ [ [0.0, 0.0, 0.0], sprite2, 38 ],
+				   [ [0.0, 0.0, 0.0], sprite3, 45 ],
+				   [ [0.0, 0.0, 0.0], sprite1, 30 ],
+				   [ [0.0, 0.0, 0.0], sprite5, 30 ],
+				   [ [0.0, 0.0, 0.0], sprite4, 30 ],
 				   ];
 
 	for ( i = 0; i < parameters.length; i ++ ) {
@@ -722,7 +720,7 @@ function addStars(){
 		sprite = parameters[i][1];
 		size   = parameters[i][2];
 
-		materials[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : false} );
+		materials[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : true} );
 		//materials[i].color.setHSL( color[0], color[1], color[2] );
 
 		particles = new THREE.PointCloud( geometry, materials[i] );
@@ -731,7 +729,7 @@ function addStars(){
 		particles.rotation.y = Math.random() * 6;
 		particles.rotation.z = Math.random() * 6;
 
-		scene.add( particles );
+		return particles;
 
 	}
 }
