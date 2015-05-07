@@ -1,1 +1,582 @@
-hello world
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>databassss</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/style.css">
+
+		<!-- parse -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
+
+		<script src="js/three.js"></script>
+		<script src="js/MTLLoader.js"></script>
+		<script src="js/OBJMTLLoader.js"></script>
+		<script src="js/OBJLoader.js"></script>
+		<script src="js/OrbitControls.js"></script>
+		<script type="text/javascript" src="js/dat.gui.min.js"></script>
+		<script src="js/TrackballControls.js"></script>
+		<script src="js/stats.min.js"></script>
+		<script src="planetJump.js"></script>
+
+		<!-- includes -->
+		<!-- <link rel="import" href="shaders.html"> -->
+		<script src="functions.js"></script>
+
+		<script id="vertexShader" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 0.9 );
+			}
+		</script>
+
+		<script id="torusVertexShader" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
+
+		<script id="fragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
+			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			}
+		</script>
+
+		<script id="fragmentShader2" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
+			    gl_FragColor = vec4( 0.2, 0.4, 0.5, 1.0 ) * intensity;
+			}
+		</script>
+
+		<script id="torusFragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() 
+			{
+				float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.0 ) ), 5.0 ); 
+			   gl_FragColor = vec4( 0.9, 0.8, 0.5, 1.0 ) * intensity;
+			}
+
+		</script>
+
+		<script id="torusMoonFragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() 
+			{
+				float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.0 ) ), 5.0 ); 
+			   gl_FragColor = vec4( 0.5, 0.5, 0.9, 1.0 ) * intensity;
+			}
+
+		</script>
+
+	</head>
+	<body>
+		<div id="account-gui-container"></div>
+		<div id="container"></div>
+
+
+		<script id="vertexShaderSun" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1 );
+			}
+		</script>
+
+		<script id="fragmentShaderSun" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 9.0 ); 
+			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			}
+		</script>
+		
+
+		<script>
+
+		// Basic global variables
+		var $container, camera, scene, renderer, stats, time;
+
+		// Meshes for planets
+		var sunSphere;
+		var sunCore;
+
+		// Variables to be used for current object to be changed
+		var activePlanet;
+		var previousObject;
+		var activeMoon;
+		var customTexture;
+		var activeRotationSpeed;
+		var jumpOk;
+
+		//Temporary movement variables
+		var posx, posz, roty, camzoom, timer = 0;
+
+		//Temporary hover variables
+		var hoveredPlanet;
+		var hoveredMoon;
+		var clickedPlanet;
+		var clickedMoon;
+		var hoverShell;
+		var clickedShell;
+		var orbit;
+
+		// Array of all objects to be clickable (and hoverable)
+		var clickableObjects = [];
+
+		// Groups for objects
+		var planetGroups = [];
+		var planetOrbitRadiuses = [];
+		var moonGroups = [];
+		var moonOrbitRadiuses = [];
+		var galaxyGroup;
+		var rotationGroup; //group used when jumping between planets
+		var materials = []; //stars
+		var materials2 = []; //meteorbelt
+		
+
+		// Multiarrays to keep track of things that correspond to each other 
+		var planets = [];		//multiarray of planet|moons
+		var planetSpeeds = [];	//multiarray of planet|rotationSpeed
+		var moonSpeeds = [];	//multiarray of moon|rotationSpeed
+		var planetPaths = [];	//multiarray of planet|orbitPathTorus
+		var moonPaths = [];	//multiarray of moon|orbitPathTorus
+		var planetObjects = [];	//multiarray of planet|Objects+moon
+		var moonObjects = [];	//multiarray of moon|Objects+moon
+		var hoverShells = [];	//multiarray of planet|shell
+		var hoverMoonShells = [];	//multiarray of moon|shell
+		var clickedShells = [];	//multiarray of planet|shell
+		var clickedMoonShells = [];	//multiarray of moon|shell
+		var meteorbelts = [];	//multiarray of planet|meteorbelt
+
+		// Variables for render loop
+		var currentPlanet;					
+		var currentMoon;					
+		var currentRotationSpeed;			
+		var planetNeedsInitialShift = false;
+		var moonNeedsInitialShift = false;  
+		var orbitPathDistanceLimit = 300;	//value for show/hide limit of orbit paths
+
+		// click functionality
+		var raycaster = new THREE.Raycaster();		
+		var intersects = raycaster.intersectObjects( clickableObjects );	
+		var mouse = new THREE.Vector2();
+
+		var music;				//global var for music property, see playMusic()
+		var currentSong = "";	//store name of current music file being played
+
+		//Menu
+		var planetPropertiesFl;
+		var moonPropertiesFl;
+
+		// User variables
+		var user;
+		var newUsername;
+		var newUserPassword;
+		var username = "No one";
+		var userPassword;
+
+		init();
+		animate();
+
+		function init() {
+			$container = $('#container');
+
+			scene = new THREE.Scene();
+			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
+			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
+			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 20000 );
+			camera.position.z = 200;
+			scene.add(camera);
+			
+			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+			renderer.setClearColor(scene.fog.color);
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.shadowMapEnabled = true;
+			$container.append(renderer.domElement);
+
+			renderer.gammaInput = true;
+			renderer.gammaOutput = true;
+			
+			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
+			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );
+			scene.add( ambientLight );
+
+
+			// Parse initialization
+			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
+
+			// Parse user cache
+			var currentUser = Parse.User.current();
+			if (currentUser) {
+			    user = currentUser;
+			    username = user.getUsername();
+			} else {
+			    console.log("no user logged in");
+			}
+
+
+			addStars();
+			
+			
+
+			/************* SUN ****************/
+			/* create custom material from the shader code above
+			that is within specially labeled script tags */
+			var customSunMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+				
+			var sunGeometry = new THREE.SphereGeometry( 19, 54, 54 );
+			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
+			activePlanet = sunSphere;
+			clickedObject = sunSphere;
+			galaxyGroup = new THREE.Object3D;
+			rotationGroup = new THREE.Object3D;
+			galaxyGroup.add(sunSphere);
+			clickableObjects.push(sunSphere);
+			rotationGroup.add(galaxyGroup);
+			scene.add(rotationGroup);
+
+			// Core
+			var sunCoreGeometry = new THREE.SphereGeometry( 3, 40, 40 );
+			var sunCoreMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
+			sunCore = new THREE.Mesh(sunCoreGeometry, sunCoreMaterial);	//activePlanet is a global var
+			sunCore.material.map.minFilter = THREE.NearestFilter;
+			//scene.add(sunCore);
+
+			//Origo
+			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
+			addLight( 0.08, 0.8, 0.5, 2, 2, 2 );
+
+
+			/******* GUI *******/
+	        var gui = new dat.GUI();
+
+			var parameters = {
+				addPlanet: function() { addPlanet() },
+				radius: 30,
+				size: 1,
+				rotation: 0.001,
+				jump: false,
+				texture1: function() { updatePlanetTexture("Earth") },
+				texture2: function() { updatePlanetTexture("Cloudy") },
+				texture3: function() { updatePlanetTexture("Steel") },
+				texture4: function() { updatePlanetTexture("Terraformed mars") },
+				texture5: function() { updatePlanetTexture("Alien") },
+				texture6: function() { updatePlanetTexture("Desolate") },
+				texture7: function() { updatePlanetTexture("Sandy") },
+				texture8: function() { updatePlanetTexture("Klendathu") },
+				texture9: function() { updatePlanetTexture() },
+				addMoon: function() { addMoon() },
+				moonRadius: 10,
+				moonRotation: 0.001,
+				playNewWorlds: function() { playMusic("New Worlds.mp3") },
+				playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
+				playPotato: function() { playMusic("Digging My Potato.mp3") },
+				playMemory: function() { playMusic("Memory.mp3") },
+				playAnotherReflection: function() { playMusic("Another Reflection.mp3")},
+				visible: true,
+				meteorbeltVisible: false
+			};
+
+			gui.add( parameters, 'addPlanet').name("Spawn new planet");
+			
+			// planet properties
+			planetPropertiesFl = gui.addFolder('Planet properties');
+			var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
+			var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(1.0).max(5).step(0.1).listen(); 
+			var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.0100).step(0.001).listen(); 
+			var meteorbeltVisibility = planetPropertiesFl.add( parameters, 'meteorbeltVisible' ).name('Spawn meteorbelt').listen();
+
+			planetPropertiesFl.close();
+
+			// planet textures
+			var planetTexturesFl = gui.addFolder('Planet textures');
+			planetTexturesFl.add( parameters, 'texture1' ).name("Earth");
+			planetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
+			planetTexturesFl.add( parameters, 'texture3' ).name("Steel");
+			planetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
+			planetTexturesFl.add( parameters, 'texture5' ).name("Alien");
+			planetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
+			planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
+			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
+			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
+		
+
+			//Add moon
+			gui.add( parameters, 'addMoon' ).name("Spawn moon");
+			moonPropertiesFl = gui.addFolder('Moon properties');
+
+			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
+			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
+
+			var musicFl = gui.addFolder('Music');
+			musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
+			musicFl.add( parameters, "playStrangers" ).name("Strangers");
+			musicFl.add( parameters, "playPotato" ).name("Digging My Potato");
+			musicFl.add( parameters, "playMemory" ).name("Memory");
+			musicFl.add( parameters, "playAnotherReflection" ).name("Another Reflection");
+
+			//Toggle orbit-visibility
+			var orbitVisibility = gui.add( parameters, 'visible' ).name('Show orbits').listen();
+			var jumpToActivePlanet = gui.add( parameters, 'jump' ).name('Jump to active planet').listen();
+		
+			orbitVisibility.onChange(function(value) 
+			{
+				for (var i = 0; i < planetPaths.length; ++i) {
+					planetPaths[i][1].visible = value;
+				}
+
+				for (var j = 0; j < moonPaths.length; ++j) {
+					moonPaths[j][1].visible = value;
+				}
+			});
+
+
+			meteorbeltVisibility.onChange(function(value) 
+			{
+				for (var i = 0; i < meteorbelts.length; ++i) {
+					if (meteorbelts[i][0] == activePlanet) {
+
+					mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[3],value); //Show clicked background
+					}
+				}
+			});
+			
+			jumpToActivePlanet.onChange(function(value) 
+			{	jumpOk = value });
+
+			sphereRadius.onChange(function(value) {
+				activePlanet.position.x = value;   
+
+				// Find planet's torus replace
+				for (var i = 0; i < planetPaths.length; ++i) {
+					if (planetPaths[i][0] == activePlanet) {
+						sunSphere.remove(planetPaths[i][1]);
+						planetOrbitRadiuses[i][1] = value; 
+						
+						var newPath = addOrbitPath(value);
+
+
+						sunSphere.add(newPath);
+						planetPaths[i][1] = newPath;
+					}
+				}
+			});
+			
+			sphereSize.onChange(function(value) {
+				activePlanet.scale.x = value;
+				activePlanet.scale.y = value;
+				activePlanet.scale.z = value;
+			});
+			
+			planetRotation.onChange(function(value) {
+				for (var i = 0; i < planetSpeeds.length; ++i) {
+					if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
+						planetSpeeds[i][1] = value;		//change second element to slider value
+						// console.log("rotation changed to " + value);
+					}
+				}
+			});
+
+			moonRadius.onChange(function(value) 
+			{ 
+
+				for (var i = 0; i < moonPaths.length; ++i) {
+					if (moonPaths[i][0] == activeMoon) {
+						moonOrbitRadiuses[i][1] = value; 
+		
+						activeMoon.parent.remove(moonPaths[i][1]); 
+						
+						var newPath = addMoonOrbitPath(value);
+
+						activeMoon.parent.add(newPath);
+						moonPaths[i][1] = newPath;
+					}
+				}
+
+			});
+
+			moonRotation.onChange(function(value) {
+				for (var i = 0; i < moonSpeeds.length; ++i) {
+					if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
+						moonSpeeds[i][1] = value;		//change second element to slider value
+						// console.log("rotation changed to " + value);
+					}
+				}
+			});
+
+			gui.open();
+
+			// Account gui
+			var accountGui = new dat.GUI({ autoPlace: false });
+
+			var customContainer = document.getElementById('account-gui-container');
+			customContainer.appendChild(accountGui.domElement);
+
+			var parameters2 = {
+				currentUser: username,
+				newUserName: "",
+				newPassword: "",
+				createButton: function() { createAccount() },
+				userName: "",
+				password: "",
+				loginButton: function() { login() }
+			};
+
+			accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
+
+			var newUserFl = accountGui.addFolder('New Account');
+			var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
+			var newPassField = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
+			newUserFl.add( parameters2, 'createButton' ).name("Create account");
+
+			var userFl = accountGui.addFolder('log in');
+			var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
+			var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
+			userFl.add( parameters2, 'loginButton' ).name("Log in");
+
+			newNameField.onChange(function(value) 
+			{	newUserName = value; });
+
+			newPassField.onChange(function(value) 
+			{	newUserPassword = value; });
+
+			nameField.onChange(function(value) 
+			{	username = value; });
+
+			passField.onChange(function(value) 
+			{	userPassword = value; });
+
+			gui.open();
+			
+			/*******************/
+
+			/************** FPS counter *************/
+			stats = new Stats();
+			stats.setMode(0); // 0: fps, 1: ms
+
+			// align top-left
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.left = '1%';
+			stats.domElement.style.bottom = '1%';
+
+			$container.append( stats.domElement );
+
+			var update = function() {
+			    stats.begin();
+			    stats.end();
+			    requestAnimationFrame( update );
+			};
+
+			requestAnimationFrame( update );
+			/****************************************/
+			
+			controls = new THREE.TrackballControls( camera, renderer.domElement );
+			controls.zoomSpeed = 1.5;
+			controls.panSpeed = 0;
+			controls.rotateSpeed = 0.5;
+			// controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+			window.addEventListener( 'resize', onWindowResize, false );
+			document.getElementById("container").addEventListener( 'mousedown', onDocumentMouseDown, true );
+			document.getElementById("container").addEventListener( 'touchstart', onDocumentTouchStart, true );
+			document.getElementById("container").addEventListener( 'mousemove', onMouseMove, false );
+		
+		}
+
+		function animate() {
+			requestAnimationFrame( animate );
+			controls.update();
+			stats.update();  
+
+			render();	
+		}
+
+		function render() {
+			//Variabeln time används till timern och även planeternas rotation.
+			time = Date.now() * 0.0005;
+
+			if(jumpOk){
+				planetJump();
+			}
+
+			if (planetNeedsInitialShift) {
+				activePlanet.position.x += 60;
+				planetNeedsInitialShift = false;
+				// console.log("planet shifted");
+			}
+			if (moonNeedsInitialShift) {	//kolla om nödvändigt när alla rotationer finns
+				activeMoon.position.x += 20;
+				moonNeedsInitialShift = false;
+				// console.log("moon shifted");
+			}
+
+			// planet rotation speeds about sun
+			for (var i = 0; i < planetSpeeds.length; ++i) {
+				currentPlanetGroup = planetSpeeds[i][0].parent;
+				currentRotationSpeed = planetSpeeds[i][1];
+
+				//The following lines makes the planets orbit.
+				orbit = planetOrbitRadiuses[i][1];
+				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
+				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
+			}
+
+			// planet rotations about self (ha som variabel?)
+			for (var i = 0; i < planets.length; ++i) {
+				planets[i][0].rotation.z += 0.005;
+			}
+
+			// moon rotation speeds about planet
+			for (var i = 0; i < moonSpeeds.length; ++i) {
+				currentMoonGroup = moonSpeeds[i][0].parent;
+				currentRotationSpeed = moonSpeeds[i][1];
+
+				//The following lines makes the moons orbit.
+				orbit = moonOrbitRadiuses[i][1];
+				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 100) * orbit;
+				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 100) * orbit;
+			}
+
+			//Turn on planet clicked background
+			for (var i = 0; i < clickedShells.length; ++i) {
+				if (clickedShells[i][0] == activePlanet) {
+					
+					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[2],true); //Show clicked background
+
+				}
+			}
+
+			//Turn on moon clicked background
+			for (var i = 0; i < clickedMoonShells.length; ++i) {
+				if (clickedMoonShells[i][0] == activeMoon) {
+					
+					mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[1],true); //Show clicked background
+
+				}
+			}
+		
+			renderer.render(scene, camera);
+		}
+		
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,51 @@
+<script id="vertexShader" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 0.9 );
+			}
+		</script>
+
+		<script id="torusVertexShader" type="x-shader/x-vertex">	
+			varying vec3 vNormal;
+			void main() {
+			    vNormal = normalize( normalMatrix * normal );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
+
+		<script id="fragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
+			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			}
+		</script>
+
+		<script id="fragmentShader2" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
+			    gl_FragColor = vec4( 0.2, 0.4, 0.5, 1.0 ) * intensity;
+			}
+		</script>
+
+		<script id="torusFragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() 
+			{
+				float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.0 ) ), 5.0 ); 
+			   gl_FragColor = vec4( 0.9, 0.9, 0.5, 1.0 ) * intensity;
+			}
+
+		</script>
+
+		<script id="torusMoonFragmentShader" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() 
+			{
+				float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.0 ) ), 5.0 ); 
+			   gl_FragColor = vec4( 0.5, 0.5, 0.9, 1.0 ) * intensity;
+			}
+
+		</script>
