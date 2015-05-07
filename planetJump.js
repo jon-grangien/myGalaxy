@@ -1,3 +1,4 @@
+var cameraPosX, cameraPosY, cameraPosZ;
 
 function planetJump(){
 	//Aktiveras när man klickar på en annan planet.
@@ -10,9 +11,10 @@ function planetJump(){
 			posz = galaxyGroup.position.y;
 			roty = galaxyGroup.rotation.z + rotationGroup.rotation.z;
 			
-				console.log("posx: " + posx + ", posz " + posz);
+			cameraPosX = camera.position.x;
+			cameraPosY = camera.position.y;
+			cameraPosZ = camera.position.z;
 
-			camzoom = camera.position.z;
 			console.log("Paborjar hopp");
 		}
 		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
@@ -66,9 +68,13 @@ function jumpToSun(){
 			posz = galaxyGroup.position.y;
 			roty = galaxyGroup.rotation.z + rotationGroup.rotation.z;
 			
-				console.log("posx: " + posx + ", posz " + posz);
+			cameraPosX = camera.position.x;
+			cameraPosY = camera.position.y;
+			cameraPosZ = camera.position.z;
+			console.log(cameraPosX);
+			console.log(cameraPosY);
+			console.log(cameraPosZ);
 
-			camzoom = camera.position.z;
 			console.log("Paborjar hopp");
 		}
 		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
@@ -77,6 +83,11 @@ function jumpToSun(){
 		//OBS: raden under är en idé för att klara av sista punkten under planetförflyttning,
 		//	dvs att automatisk skala zoomnivån efter planetens radie. För att den ska gå att implementera måste
 		//	det gå att komma åt en planets radie på ett bra sätt. /Albin
+		camera.position.x = cameraPosX*(1+Math.cos(timer + Math.PI))/2;
+		camera.position.y = cameraPosY*(1+Math.cos(timer + Math.PI))/2;
+		camera.position.z = cameraPosZ*(1+Math.cos(timer))/2 - 60*(1+Math.cos(timer))/2;
+		
+		//camera.position.z = camzoom + (1-Math.cos(timer))*(1/2)*activePlanet.scale.x;
 		//camera.position.z = camzoom + (1-Math.cos(timer))*(1/2)*activePlanet.;
 
 		//Hastigheten med vilken förflyttningen sker.
