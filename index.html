@@ -317,7 +317,7 @@
 			});
 
 			sphereRadius.onChange(function(value) {
-				activePlanet.position.x = value;   
+				activePlanet.position.x = value;
 
 				// Find planet's torus replace
 				for (var i = 0; i < planetPaths.length; ++i) {
@@ -347,7 +347,6 @@
 					}
 				}
 			});
-
 
 			moonRadius.onChange(function(value) 
 			{   activeMoon.position.x = value;   
@@ -476,9 +475,10 @@
 
 				if (userPlanetsInitialShifts[i][2] == true) {
 					userPlanetsInitialShifts[i][0].position.x = userPlanetsInitialShifts[i][1];
-					userPlanetsInitialShifts[i][2] == false;
+					userPlanetsInitialShifts[i][2] = false;
+					// console.log("spawned planet shifted to " + userPlanetsInitialShifts[i][1]);
 				}
-			};
+			}
 
 			if (planetNeedsInitialShift) {
 				activePlanet.position.x += 60;

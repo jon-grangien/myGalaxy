@@ -75,8 +75,43 @@ function spawnLoadedPlanet(texture, radius, size) {
 	planetToSpawn.add(atmosphere);
 
 	var activeGroup = new THREE.Object3D;
+	activeGroup.position.x = 0;
+	activeRotationSpeed = 0.001;
 	activeGroup.add(planetToSpawn);
 	planetGroups.push(activeGroup);
+	clickableObjects.push(planetToSpawn);
+
+	//Hover-background
+	var hoverGeometry = new THREE.SphereGeometry( 12, 40, 40 );
+	var hoverMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+	hoverMaterial.side = THREE.BackSide;
+	hoverShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	visibility(hoverShell, false);
+	planetToSpawn.add(hoverShell);
+	//----------------hoverend------------------
+
+	//Clicked-background
+	var clickedGeometry = new THREE.SphereGeometry( 15, 40, 40 );
+	var clickedMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {  },
+				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
+				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+	clickedMaterial.side = THREE.BackSide;
+	clickedShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	visibility(clickedShell, false);
+	planetToSpawn.add(clickedShell);
+	//----------------clickedend------------------
 
 	// Add planet group (and missing ones if exist) to sungroup
 	for (var i = 0; i < planetGroups.length; ++i) {
@@ -86,9 +121,35 @@ function spawnLoadedPlanet(texture, radius, size) {
 	    }
 	}
 
+	var tempArray;
+
 	var tempBool = true;
-	var tempArray = [planetToSpawn, radius, tempBool];
+	tempArray = [planetToSpawn, radius, tempBool];
 	userPlanetsInitialShifts.push(tempArray);
+
+	// Push to planetSpeeds (planets|rotationSpeeds)
+	tempArray = [planetToSpawn, activeRotationSpeed];
+	planetSpeeds.push(tempArray);
+
+	// Push to planets (planets|moons)
+	tempArray = [planetToSpawn];
+	planets.push(tempArray);
+
+	// Push to planetPaths
+	tempArray = [planetToSpawn, path];
+	planetPaths.push(tempArray);
+
+	// Push to hoverShells
+	tempArray = [planetToSpawn, hoverShell];
+	hoverShells.push(tempArray);
+
+	// Push to clickedShells
+	tempArray = [planetToSpawn, clickedShell];
+	clickedShells.push(tempArray);
+
+	// Push to planetOrbitRadiuses
+	tempArray = [planetToSpawn, radius]; //the value 60 should maybe be replaced by a variable
+	planetOrbitRadiuses.push(tempArray);
 
 }
 
