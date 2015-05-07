@@ -152,7 +152,7 @@ function addMeteorbelt(){
 	//sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor2.png" );
 
 
-	for ( i = 0; i < 50000; i ++ ) {
+	for ( i = 0; i < 10000; i ++ ) {
 
 		var vertex = new THREE.Vector3();
 
@@ -648,7 +648,7 @@ function addStars(){
 
 	geometry = new THREE.Geometry();
 
-	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake1.png" );
+	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake12.png" );
 	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake2.png" );
 	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake3.png" );
 	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake4.png" );
