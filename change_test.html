@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>databassss</title>
+		<title>Torusarrr</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/style.css">
-
-		<!-- parse -->
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
-
+	</head>
+	<body>
 		<script src="js/three.js"></script>
 		<script src="js/MTLLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
@@ -73,27 +70,20 @@
 			}
 
 		</script>
-	</head>
-	<body>
-		<div id="account-gui-container"></div>
-		<div id="container"></div>
+		
 		<script>
 
 		// Basic global variables
-		var $container, camera, scene, renderer, stats, time;
+		var container, camera, scene, renderer, stats;
 
 		// Meshes for planets
 		var sunSphere;
 
 		// Variables to be used for current object to be changed
 		var activePlanet;
-		var previousObject;
 		var activeMoon;
 		var customTexture;
 		var activeRotationSpeed;
-
-		//Temporary movement variables
-		var posx, posz, roty, camzoom, timer = 0;
 
 		//Temporary hover variables
 		var hoveredPlanet;
@@ -102,7 +92,6 @@
 		var clickedMoon;
 		var hoverShell;
 		var clickedShell;
-		var orbit;
 
 		// Array of all objects to be clickable (and hoverable)
 		var clickableObjects = [];
@@ -112,8 +101,6 @@
 		var planetOrbitRadiuses = [];
 		var moonGroups = [];
 		var moonOrbitRadiuses = [];
-		var galaxyGroup;
-		var rotationGroup; //group used when jumping between planets
 		
 
 		// Multiarrays to keep track of things that correspond to each other 
@@ -128,7 +115,6 @@
 		var hoverMoonShells = [];	//multiarray of moon|shell
 		var clickedShells = [];	//multiarray of planet|shell
 		var clickedMoonShells = [];	//multiarray of moon|shell
-		var meteorbelts = [];	//multiarray of planet|meteorbelt
 
 		// Variables for render loop
 		var currentPlanet;					
@@ -146,23 +132,10 @@
 		var music;				//global var for music property, see playMusic()
 		var currentSong = "";	//store name of current music file being played
 
-		//Menu
-		var planetPropertiesFl;
-		var moonPropertiesFl;
-
-		// User variables
-		var user;
-		var newUsername;
-		var newUserPassword;
-		var username = "No one";
-		var userPassword;
-
 		init();
 		animate();
 
 		function init() {
-			$container = $('#container');
-
 			scene = new THREE.Scene();
 			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
@@ -171,11 +144,11 @@
 			scene.add(camera);
 			
 			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-			renderer.setClearColor(scene.fog.color);
-			renderer.setPixelRatio(window.devicePixelRatio);
-			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.setClearColor( scene.fog.color );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.shadowMapEnabled = true;
-			$container.append(renderer.domElement);
+			document.body.appendChild( renderer.domElement );
 
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
@@ -183,18 +156,7 @@
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
 			ambientLight.color.setHSL( 0.01, 0.03, 0.02 );
 			scene.add( ambientLight );
-
-			// Parse initialization
-			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
-
-			// Parse user cache
-			var currentUser = Parse.User.current();
-			if (currentUser) {
-			    user = currentUser;
-			    username = user.getUsername();
-			} else {
-			    console.log("no user logged in");
-			}
+			
 			
 
 			/************* SUN ****************/
@@ -211,14 +173,7 @@
 				
 			var sunGeometry = new THREE.SphereGeometry( 19, 32, 32 );
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
-			activePlanet = sunSphere;
-			clickedObject = sunSphere;
-			galaxyGroup = new THREE.Object3D;
-			rotationGroup = new THREE.Object3D;
-			galaxyGroup.add(sunSphere);
-			clickableObjects.push(sunSphere);
-			rotationGroup.add(galaxyGroup);
-			scene.add(rotationGroup);
+			scene.add(sunSphere);
 
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
@@ -249,21 +204,17 @@
 				playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
 				playPotato: function() { playMusic("Digging My Potato.mp3") },
 				playMemory: function() { playMusic("Memory.mp3") },
-				playAnotherReflection: function() { playMusic("Another Reflection.mp3")},
-				visible: true,
-				meteorbeltVisible: false
+				playAnotherReflection: function() { playMusic("Another Reflection.mp3") }
 			};
 
 			gui.add( parameters, 'addPlanet').name("Spawn new planet");
 			
 			// planet properties
-			planetPropertiesFl = gui.addFolder('Planet properties');
+			var planetPropertiesFl = gui.addFolder('Planet properties');
 			var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
 			var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(1.0).max(5).step(0.1).listen(); 
 			var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.0100).step(0.001).listen(); 
-			var meteorbeltVisibility = planetPropertiesFl.add( parameters, 'meteorbeltVisible' ).name('Spawn meteorbelt').listen();
-
-			planetPropertiesFl.close();
+			planetPropertiesFl.open();
 
 			// planet textures
 			var planetTexturesFl = gui.addFolder('Planet textures');
@@ -276,12 +227,11 @@
 			planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
 			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
 			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
-		
 
-			//Add moon
+
 			gui.add( parameters, 'addMoon' ).name("Spawn moon");
-			moonPropertiesFl = gui.addFolder('Moon properties');
-
+			var moonPropertiesFl = gui.addFolder('Moons');
+			
 			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
 			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
 
@@ -292,34 +242,7 @@
 			musicFl.add( parameters, "playMemory" ).name("Memory");
 			musicFl.add( parameters, "playAnotherReflection" ).name("Another Reflection");
 
-			//Toggle orbit-visibility
-			var orbitVisibility = gui.add( parameters, 'visible' ).name('Show orbits').listen();
-		
-			orbitVisibility.onChange(function(value) 
-			{
-				for (var i = 0; i < planetPaths.length; ++i) {
-					planetPaths[i][1].visible = value;
-				}
-
-				for (var j = 0; j < moonPaths.length; ++j) {
-					moonPaths[j][1].visible = value;
-				}
-			});
-
-
-			meteorbeltVisibility.onChange(function(value) 
-			{
-				for (var i = 0; i < meteorbelts.length; ++i) {
-					if (meteorbelts[i][0] == activePlanet) {
-
-					mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
-					visibility(mesh.children[3],value); //Show clicked background
-					}
-				}
-			});
-
-			sphereRadius.onChange(function(value) {
-				activePlanet.position.x = value;   
+			sphereRadius.onChange(function(value) { 
 
 				// Find planet's torus replace
 				for (var i = 0; i < planetPaths.length; ++i) {
@@ -328,7 +251,6 @@
 						planetOrbitRadiuses[i][1] = value; 
 						
 						var newPath = addOrbitPath(value);
-
 
 						sunSphere.add(newPath);
 						planetPaths[i][1] = newPath;
@@ -350,6 +272,7 @@
 					}
 				}
 			});
+
 
 
 			moonRadius.onChange(function(value) 
@@ -379,50 +302,7 @@
 				}
 			});
 
-			gui.open();
-
-			// Account gui
-			var accountGui = new dat.GUI({ autoPlace: false });
-
-			var customContainer = document.getElementById('account-gui-container');
-			customContainer.appendChild(accountGui.domElement);
-
-			var parameters2 = {
-				currentUser: username,
-				newUserName: "",
-				newPassword: "",
-				createButton: function() { createAccount() },
-				userName: "",
-				password: "",
-				loginButton: function() { login() }
-			};
-
-			accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
-
-			var newUserFl = accountGui.addFolder('New Account');
-			var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
-			var newPassField = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
-			newUserFl.add( parameters2, 'createButton' ).name("Create account");
-
-			var userFl = accountGui.addFolder('log in');
-			var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
-			var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
-			userFl.add( parameters2, 'loginButton' ).name("Log in");
-
-			newNameField.onChange(function(value) 
-			{	newUserName = value; });
-
-			newPassField.onChange(function(value) 
-			{	newUserPassword = value; });
-
-			nameField.onChange(function(value) 
-			{	username = value; });
-
-			passField.onChange(function(value) 
-			{	userPassword = value; });
-
 			gui.close();
-			
 			/*******************/
 
 			/************** FPS counter *************/
@@ -431,12 +311,12 @@
 
 			// align top-left
 			stats.domElement.style.position = 'absolute';
-			stats.domElement.style.left = '1%';
-			stats.domElement.style.bottom = '1%';
+			stats.domElement.style.left = '10px';
+			stats.domElement.style.top = '25px';
 
-			$container.append( stats.domElement );
+			document.body.appendChild( stats.domElement );
 
-			var update = function() {
+			var update = function () {
 			    stats.begin();
 			    stats.end();
 			    requestAnimationFrame( update );
@@ -452,9 +332,9 @@
 			// controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 			window.addEventListener( 'resize', onWindowResize, false );
-			document.getElementById("container").addEventListener( 'mousedown', onDocumentMouseDown, true );
-			document.getElementById("container").addEventListener( 'touchstart', onDocumentTouchStart, true );
-			document.getElementById("container").addEventListener( 'mousemove', onMouseMove, false );
+			document.addEventListener( 'mousedown', onDocumentMouseDown, true );
+			document.addEventListener( 'touchstart', onDocumentTouchStart, true );
+			document.addEventListener( 'mousemove', onMouseMove, false );
 		
 		}
 
@@ -470,65 +350,11 @@
 			// console.log("render check");
 
 			//Variabeln time används till timern och även planeternas rotation.
-			time = Date.now() * 0.0005;
+			var time = Date.now() * 0.0005;
 
 
-			//ALBINS KOD BÖRJAN==============================================================================================================
-			//Aktiveras när man klickar på en annan planet.
-			if(activePlanet != previousObject) {
-				if(timer == 0){
-					//Timern börjar på pi och går ner till 0.
-					timer = Math.PI;
-					//Spara den förra planetens position och rotation.
-					posx = galaxyGroup.position.x;
-					posz = galaxyGroup.position.y;
-					roty = galaxyGroup.rotation.z + rotationGroup.rotation.z;
-					
-						console.log("posx: " + posx + ", posz " + posz);
-
-					camzoom = camera.position.z;
-					console.log("Paborjar hopp");
-				}
-				//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
-				galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - activePlanet.position.x*(1+Math.cos(timer))/2;
-				galaxyGroup.position.y = posz*(1-Math.cos(timer))/2 - activePlanet.position.y*(1+Math.cos(timer))/2;
-				rotationGroup.rotation.z = roty*(1-Math.cos(timer))/2 - activePlanet.rotation.z*(1+Math.cos(timer))/2;
-				//OBS: raden under är en idé för att klara av sista punkten under planetförflyttning,
-				//	dvs att automatisk skala zoomnivån efter planetens radie. För att den ska gå att implementera måste
-				//	det gå att komma åt en planets radie på ett bra sätt. /Albin
-				//camera.position.z = camzoom + (1-Math.cos(timer))*(1/2)*activePlanet.;
-
-				//Hastigheten med vilken förflyttningen sker.
-				timer -= 0.02;
-					
-				if(timer < 0){
-					timer = 0;
-					//När förflyttningen är klar sätts previousObject (det klickade objektet) till objektet som nu är i fokus.
-					previousObject = activePlanet;
-					//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
-					for(var i = 0; i < clickableObjects.length; i++)
-						if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
-							clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
-							console.log("Planet-rotation nollstalld under hopp");
-						}
-					console.log("Fardig med hopp");
-				}
-			} else {
-				//Detta sker när det inte är ett hopp på g.
-				galaxyGroup.position.x = -activePlanet.position.x;
-				galaxyGroup.position.y = -activePlanet.position.y;
-				//Motverkar planeten i fokus's rotation så att den står stilla.
-				rotationGroup.rotation.z = -activePlanet.rotation.z;
-
-				//Denna loop nollställer planetens rotation vid ett helt varv.
-				for(var i = 0; i < clickableObjects.length; i++)
-					if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
-						clickableObjects[i].rotation.z = 0;
-						console.log("Planet-rotation nollstalld utanfor hopp");
-					}
-			}
-			//ALBINS KOD SLUT===============================================================================================================
-
+			// sun rotation
+			sunSphere.rotation.z += 0.0001;
 
 			if (planetNeedsInitialShift) {
 				activePlanet.position.x += 60;
@@ -543,7 +369,7 @@
 
 			// Show/hide orbit path at set camera distance
 			// det här kanske är för prestandakrävande att ha i längden?
-			/*if ((Math.abs(camera.position.x) < orbitPathDistanceLimit) 
+			if ((Math.abs(camera.position.x) < orbitPathDistanceLimit) 
 				&& (Math.abs(camera.position.y) < orbitPathDistanceLimit) 
 				&& (Math.abs(camera.position.z) < orbitPathDistanceLimit)) {
 				for (var i = 0; i < planetPaths.length; ++i) {
@@ -562,21 +388,23 @@
 				for (var i = 0; i < moonPaths.length; ++i) {
 					moonPaths[i][1].visible = true;
 				}
-			}*/
+			}
 
 			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
 
-				//The following lines makes the planets orbit.
-				orbit = planetOrbitRadiuses[i][1];
-				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
-				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
+				//The following lines makes the planet orbit.
+				var orbit = planetOrbitRadiuses[i][1];
+				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 1000) * orbit;
+				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 1000) * orbit;
 			}
 
 			// planet rotations about self (ha som variabel?)
 			for (var i = 0; i < planets.length; ++i) {
+				if(planets[i][0].rotation.z > Math.PI*2)
+					planets[i][0].rotation.z = 0;
 				planets[i][0].rotation.z += 0.005;
 			}
 
@@ -586,9 +414,9 @@
 				currentRotationSpeed = moonSpeeds[i][1];
 
 				//The following lines makes the moons orbit.
-				orbit = moonOrbitRadiuses[i][1];
-				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 100) * orbit;
-				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 100) * orbit;
+				var orbit = moonOrbitRadiuses[i][1];
+				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
+				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
 			}
 
 			//Turn on planet clicked background
@@ -610,7 +438,6 @@
 
 				}
 			}
-
 			
 			renderer.render(scene, camera);
 		}

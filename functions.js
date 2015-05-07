@@ -14,7 +14,7 @@ function addLight( h, s, l, x, y, z ) {
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
 	//lensFlare.position.copy( light.position );
 
-	scene.add( lensFlare );
+	//scene.add( lensFlare );
 }
 
 function onWindowResize() {
@@ -140,6 +140,10 @@ function addPlanet(){
 	// Push to clickedShells
 	tempArray = [activePlanet, clickedShell];
 	clickedShells.push(tempArray);
+
+	// Push to planetOrbitRadiuses
+	tempArray = [activePlanet, 60]; //the value 60 should maybe be replaced by a variable
+	planetOrbitRadiuses.push(tempArray);
 
 }
 
@@ -353,6 +357,10 @@ function addMoon() {
 	// Push to clickedShells
 	tempArray = [activeMoon, clickedMoonShell];
 	clickedMoonShells.push(tempArray);
+
+	// Push to planetOrbitRadiuses
+	tempArray = [activePlanet, 20]; //the value 60 should maybe be replaced by a variable
+	moonOrbitRadiuses.push(tempArray);
 	
 	// console.log("moon spawned");
 }
@@ -434,6 +442,7 @@ function onDocumentMouseDown( event ) {
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 	intersects = raycaster.intersectObjects( clickableObjects );
+	
 
 
 	//Hides planet clicked
@@ -444,7 +453,7 @@ function onDocumentMouseDown( event ) {
 			visibility(mesh.children[2],false);
 		}
 	}
-		//Hides moon clicked
+	//Hides moon clicked
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
 			
@@ -457,6 +466,7 @@ function onDocumentMouseDown( event ) {
 	if ( intersects.length > 0 ) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
+		previousObject = activePlanet;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
