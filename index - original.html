@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Procedural sun</title>
+        <title>Perlin noise | Fireball explosion</title>
         <meta charset="utf-8">
     </head>
 
@@ -9,9 +9,8 @@
         <div id="container"></div>
     </body>
 
-    <script src="js/Three.js"></script>
     <script src="js/TrackballControls.js"></script>
-    
+    <script src="js/Three.js"></script>
 
     <!--NEW SHADERS-->
     <script type="x-shader/x-vertex" id="vertexShader">
@@ -185,9 +184,8 @@
 		varying float noise;
 		uniform float time;
 
-
 		float turbulence( vec3 p ) {
-		    float w = 50.0;
+		    float w = 100.0;
 		    float t = -.5;
 		    for (float f = 1.0 ; f <= 10.0 ; f++ ){
 		        float power = pow( 2.0, f );
@@ -202,8 +200,8 @@
 
 		    // add time to the noise parameters so it's animated
 		    noise = 10.0 *  -.10 * turbulence( .5 * normal + time );
-		    float b = 1.0 * pnoise( 0.05 * position + vec3( 1.0 * time ), vec3( 100.0 ) );
-		    float displacement = - noise*0.4 + b*0.2;
+		    float b = 5.0 * pnoise( 0.05 * position + vec3( 2.0 * time ), vec3( 100.0 ) );
+		    float displacement = - noise + b;
 		    
 		    vec3 newPosition = position + normal * displacement;
 		    gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
@@ -214,25 +212,25 @@
     <script type="x-shader/x-vertex" id="fragmentShader">
 
 		varying vec2 vUv;
-		varying float noise;
-		uniform sampler2D tExplosion;
+			varying float noise;
+			uniform sampler2D tExplosion;
 
-		float random( vec3 scale, float seed ){
-		    return fract( sin( dot( gl_FragCoord.xyz + seed, scale ) ) * 43758.5453 + seed ) ;
-		}
+			float random( vec3 scale, float seed ){
+			    return fract( sin( dot( gl_FragCoord.xyz + seed, scale ) ) * 43758.5453 + seed ) ;
+			}
 
-		void main() {
+void main() {
 
-		    // get a random offset
-		    float r = .01 * random( vec3( 12.9898, 78.233, 151.7182 ), 0.0 );
-		    // lookup vertically in the texture, using noise and offset
-		    // to get the right RGB colour
-		    vec2 tPos = vec2( 0, 1.0 - 1.3 * noise + r );
-		    vec4 color = texture2D( tExplosion, tPos );
+    // get a random offset
+    float r = .01 * random( vec3( 12.9898, 78.233, 151.7182 ), 0.0 );
+    // lookup vertically in the texture, using noise and offset
+    // to get the right RGB colour
+    vec2 tPos = vec2( 0, 1.0 - 1.3 * noise + r );
+    vec4 color = texture2D( tExplosion, tPos );
 
-		    gl_FragColor = vec4( color.rgb, 1.0 );
+    gl_FragColor = vec4( color.rgb, 1.0 );
 
-		}
+}
     </script>
 
     <script type="text/javascript" id="mainCode">
@@ -254,13 +252,23 @@
 
 		    // create a camera the size of the browser window
 		    // and place it 100 units away, looking towards the center of the scene
-		    camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 1, 10000 );
+		    camera = new THREE.PerspectiveCamera( 
+		        fov, 
+		        window.innerWidth / window.innerHeight, 
+		        1, 
+		        10000 );
 		    camera.position.z = 100;
 		    camera.target = new THREE.Vector3( 0, 0, 0 );
 
+		    /*
+		    controls = new THREE.TrackballControls( camera );
+			controls.zoomSpeed = 0.5;
+			controls.panSpeed = 0;
+			controls.rotateSpeed = 1.5;
+			*/
+
 		    scene.add( camera );
 
-		    
 		    // create a wireframe material		
 		    material = new THREE.ShaderMaterial( {
 
@@ -278,16 +286,12 @@
 			    fragmentShader: document.getElementById( 'fragmentShader' ).textContent
 			    
 			} );
-		
-
-			//material = new THREE.MeshPhongMaterial();
 		    
 		    // create a sphere and assign the material
 		    mesh = new THREE.Mesh( 
-		        new THREE.IcosahedronGeometry( 20, 5 ), 
+		        new THREE.IcosahedronGeometry( 20, 4 ), 
 		        material 
 		    );
-		    //mesh.position.x = 20;
 		    scene.add( mesh );
 		    
 		    // create the renderer and attach it to the DOM
@@ -296,20 +300,17 @@
 		    
 		    container.appendChild( renderer.domElement );
 
-		    controls = new THREE.TrackballControls( camera );
-			controls.zoomSpeed = 0.5;
-			controls.panSpeed = 0;
-			controls.rotateSpeed = 1.5;
+		    
 
 		    render();
 
 		} );
-			
+
 		function render() {
 
-			controls.update();
+			//controls.update();
 		    // let there be light
-		    material.uniforms[ 'time' ].value = .000025 * ( Date.now() - start );
+		    material.uniforms[ 'time' ].value = .00025 * ( Date.now() - start );
 		    renderer.render( scene, camera );
 		    requestAnimationFrame( render );
 		    
