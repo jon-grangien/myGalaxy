@@ -1,6 +1,7 @@
 body { 
 	margin: 0; 
 	overflow: hidden;
+	z-index: -1;
 }
 canvas { 
 	width: 100%; 
@@ -12,4 +13,11 @@ canvas {
 	position:absolute;
 	visibility:show;
 	left: 1%;
+}
+
+#guitest {
+	position: absolute;
+	left: 1%;
+	top: 30%;
+	z-index: 1;
 }
