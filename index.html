@@ -122,6 +122,7 @@
 		// Meshes for planets
 		var sunSphere;
 		var sunCore;
+		var stars = []; //star particle system
 
 		// Variables to be used for current object to be changed
 		var activePlanet;
@@ -236,9 +237,8 @@
 			    username = user.getUsername();
 			} else {
 			    console.log("no user logged in");
-			}
-
-			addStars();
+			}			
+			
 
 			/************* SUN ****************/
 			/* create custom material from the shader code above
@@ -256,11 +256,19 @@
 			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
 			activePlanet = sunSphere;
 			clickedObject = sunSphere;
+			clickableObjects.push(sunSphere);
+			
 			galaxyGroup = new THREE.Object3D;
 			rotationGroup = new THREE.Object3D;
+
 			galaxyGroup.add(sunSphere);
-			clickableObjects.push(sunSphere);
 			rotationGroup.add(galaxyGroup);
+
+			loadStars();
+			for (var i = 0; i < stars.length; ++i){
+				rotationGroup.add(stars[i]);
+			}
+
 			scene.add(rotationGroup);
 
 			// Core
@@ -518,6 +526,21 @@
 			requestAnimationFrame( animate );
 			controls.update();
 			stats.update();  
+
+			for(var i = 0; i < stars.length; ++i) { 
+				stars[i].material.opacity += 0.08*Math.random() - 0.04;
+				
+				if(Math.sqrt((Math.pow(camera.position.z - stars[i].position.z, 2) + Math.pow(camera.position.y - stars[i].position.y, 2) + Math.pow(camera.position.x - stars[i].position.x, 2)) < 10000 )) {
+					stars[i].material.opacity = 1;
+				} else {
+					if(stars[i].material.opacity < 0.2) {
+						stars[i].material.opacity = 0.4
+					} else if(stars[i].material.opacity > 1.1) {
+						stars[i].material.opacity = 0.9
+					}
+				}
+				
+			}
 
 			render();	
 		}
