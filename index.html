@@ -38,21 +38,62 @@
 			
 			sunGroup =new THREE.Object3D;
 			//***********************************
+
+			//PROCEDURAL TEXTURE
+			// Generate random noise texture
+
+			var noiseSize;
+			var size;
+			var data;
+			var dt;
+
 			var sunGeometry = new THREE.SphereGeometry( 5, 50, 50 );
 			var sunMaterial = new THREE.MeshPhongMaterial({wireframe: false});
-			
-			sunMaterial.map    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
-			sunMaterial.bumpMap    = THREE.ImageUtils.loadTexture('textures/suntexture.jpg');
+
 			sunMaterial.bumpScale = 0.06;
 			sunMaterial.specular  = new THREE.Color('grey');
-			
+		
 			var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
+			
+
+
 			sunGroup.add( sunSphere);
-			//***********************************
+
+			//dt = new THREE.DataTexture( data, noiseSize, noiseSize, THREE.RGBAFormat );
+			function proceduralTexture(time)
+			{
+				
+				noiseSize = 100;
+				size = noiseSize * noiseSize;
+				data = new Uint8Array( 8 * size );
+
+				for ( var i = 0; i < size * 8; i ++ ) {
+					
+					//data[ i ] = ((Math.sin(time)+1)*120) + 100) | 100;
+					//data[ i ] = ((15*0.9*(Math.sin(time)+1)+100) + 100) | 0;
+					//data[ i ] = Math.random() * 255 | 0; //original
+					data[ i ] = (Math.random()*0.5+0.5)*(Math.sin(time*5)+1)*(i/1000)*0.5 * 255 | 0; //original
+					//data[ i ] = 255 | 100;
+
+				}
+
+				dt = new THREE.DataTexture( data, noiseSize, noiseSize, THREE.RGBAFormat );
+				dt.wrapS = THREE.RepeatWrapping;
+				dt.wrapT = THREE.RepeatWrapping;
+				dt.needsUpdate = true;
+				sunSphere.material.map = dt;
+			}
+			proceduralTexture();
+
+
+			sunSphere.material.map = dt;
+			sunSphere.material.map.minFilter = THREE.NearestFilter;
+			sunSphere.material.needsUpdate = true;
+			
 
 			
-			
-			
+			//***********************************
+
 			galaxyGroup = new THREE.Object3D;
 			//**********************************
 			var galaxyGeometry = new THREE.SphereGeometry( 300, 32, 32 );
@@ -67,18 +108,9 @@
 			galaxyGroup.add( galaxySphere);
 			//*********************************
 			
-			
-	
-			
-			
-			
-			
-			
-			
 			sceneGraph.add(galaxyGroup);
 			//Lägger till grupper till scengraf
 			galaxyGroup.add(sunGroup);
-			
 			
 			//Lägger till scengraf till scen
 			scene.add(sceneGraph);
@@ -89,11 +121,19 @@
 			controls = new THREE.TrackballControls( camera );
 			controls.zoomSpeed = 0.5;
 			controls.panSpeed = 0;
-			controls.rotateSpeed = 0.5;
+			controls.rotateSpeed = 1.5;
 			
-
+			var time;
 			//Renderingsloop
 			var render = function () {
+
+				time = Date.now()*0.0005;
+
+				if(time % 10){
+					proceduralTexture(time);	
+				}
+				
+				
 				requestAnimationFrame( render );
 				controls.update();
 
