@@ -523,8 +523,10 @@ function onDocumentMouseDown( event ) {
 	if ( intersects.length > 0 ) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
-		if(jumpOk)
+		if(jumpPlanetOk)
 			previousObject = activePlanet;
+		if(jumpMoonOk)
+			previousObject = activeMoon;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {

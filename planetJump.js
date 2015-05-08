@@ -1,4 +1,4 @@
-var cameraPosX, cameraPosY, cameraPosZ, controlsRotSpeed, zoomLevel;
+var cameraPosX, cameraPosY, cameraPosZ, controlsRotSpeed, zoomLevel, moonPosX, moonPosY;
 
 function planetJump(){
 	//Aktiveras när man klickar på en annan planet.
@@ -51,10 +51,9 @@ function planetJump(){
 			previousObject = activePlanet;
 			//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
 			for(var i = 0; i < clickableObjects.length; i++)
-				if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
+				if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2)
 					clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
-					console.log("Planet-rotation nollstalld under hopp");
-				}
+				
 			console.log("Fardig med hopp");
 			controls.rotateSpeed = controlsRotSpeed;
 		}
@@ -67,10 +66,83 @@ function planetJump(){
 
 		//Denna loop nollställer planetens rotation vid ett helt varv.
 		for(var i = 0; i < clickableObjects.length; i++)
-			if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
+			if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2)
 				clickableObjects[i].rotation.z = 0;
-				console.log("Planet-rotation nollstalld utanfor hopp");
-			}
+	}
+}
+
+function moonJump(){
+	//Aktiveras när man klickar på en annan planet.
+	if(activeMoon != previousObject) {
+		if(timer == 0){
+			//Timern börjar på pi och går ner till 0.
+			timer = Math.PI;
+			//Spara den förra planetens position och rotation.
+			posx = galaxyGroup.position.x;
+			posz = galaxyGroup.position.y;
+			roty = galaxyGroup.rotation.z + rotationGroup.rotation.z;
+			
+			//Spara kamerans förra position
+			cameraPosX = camera.position.x;
+			cameraPosY = camera.position.y;
+			cameraPosZ = camera.position.z;
+			//Spara kamerans rotations-hastighet
+			controlsRotSpeed = controls.rotateSpeed;
+			//Beräkna zoom-nivå beroende på planetens radie och storlek
+			zoomLevel = activeMoon.scale.x*0.1;
+			//Möjliggör ändring av transparens
+			planetOrbitMaterial.transparent = true;
+
+			console.log("Paborjar hopp");
+		}
+		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
+		moonPosX = activeMoon.position.x+activePlanet.position.x;
+		moonPosY = activeMoon.position.y+activePlanet.position.y;
+		
+		galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - moonPosX*(1+Math.cos(timer))/2;
+		galaxyGroup.position.y = posz*(1-Math.cos(timer))/2 - moonPosY*(1+Math.cos(timer))/2;
+		rotationGroup.rotation.z = roty*(1-Math.cos(timer))/2 - activeMoon.rotation.z*(1+Math.cos(timer))/2;
+		//Zooma kameran till rätt nivå beroende på planetens storlek, med en mjuk övergång.
+		camera.position.x = cameraPosX*(1+Math.cos(Math.PI - timer))/2 - (moonPosX*(1+Math.cos(timer))/2)*zoomLevel;
+		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2 - (moonPosY*(1+Math.cos(timer))/2)*zoomLevel;
+		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - ((activeMoon.position.z+activePlanet.position.z)*(1+Math.cos(timer))/2)*zoomLevel;
+		//Dimma ut omloppsbanor och hover-sfärer
+		planetOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2);
+		planetHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+		moonHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+
+
+		controls.rotateSpeed = 0;
+		//Hastigheten med vilken förflyttningen sker.
+		timer -= 0.02;
+			
+		if(timer < 0){
+			timer = 0;
+			//När förflyttningen är klar sätts previousObject (det klickade objektet) till objektet som nu är i fokus.
+			previousObject = activeMoon;
+			//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
+			for(var i = 0; i < clickableObjects.length; i++)
+				if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2)
+					clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
+				
+			console.log("Fardig med hopp");
+			controls.rotateSpeed = controlsRotSpeed;
+		}
+	} else {
+		
+		moonPosX = activeMoon.position.x+activePlanet.position.x;
+		moonPosY = activeMoon.position.y+activePlanet.position.y;
+		
+		//Detta sker när det inte är ett hopp på g.
+		galaxyGroup.position.x = -moonPosX;
+		galaxyGroup.position.y = -moonPosY;
+		//Motverkar planeten i fokus's rotation så att den står stilla.
+		rotationGroup.rotation.z = -activeMoon.rotation.z;
+
+		//Denna loop nollställer planetens rotation vid ett helt varv.
+		for(var i = 0; i < clickableObjects.length; i++)
+			if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2)
+				clickableObjects[i].rotation.z = 0;
 	}
 }
 
@@ -116,10 +188,9 @@ function jumpToSun(){
 			previousObject = sunSphere;
 			//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
 			for(var i = 0; i < clickableObjects.length; i++)
-				if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
+				if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2)
 					clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
-					console.log("Planet-rotation nollstalld under hopp");
-				}
+					
 			//Möjliggör ändring av transparens
 			planetOrbitMaterial.transparent = false;
 			
@@ -133,10 +204,8 @@ function jumpToSun(){
 
 		//Denna loop nollställer planetens rotation vid ett helt varv.
 		for(var i = 0; i < clickableObjects.length; i++)
-			if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2) {
+			if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2)
 				clickableObjects[i].rotation.z = 0;
-				console.log("Planet-rotation nollstalld utanfor hopp");
-			}
 	}
 	
 }

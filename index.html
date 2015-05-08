@@ -116,7 +116,9 @@
 		var orbitsMother = [];
 		var customTexture;
 		var activeRotationSpeed;
-		var jumpOk;
+		var jumpPlanetOk;
+		var jumpMoonOk;
+		var jumpSolarOk;
 
 		//Temporary movement variables
 		var posx, posz, roty, timer = 0;
@@ -289,7 +291,6 @@
 				radius: 30,
 				size: 1,
 				rotation: 0.001,
-				jump: false,
 				texture1: function() { updatePlanetTexture("Earth") },
 				texture2: function() { updatePlanetTexture("Cloudy") },
 				texture3: function() { updatePlanetTexture("Steel") },
@@ -300,6 +301,9 @@
 				texture8: function() { updatePlanetTexture("Klendathu") },
 				texture9: function() { updatePlanetTexture() },
 				addMoon: function() { addMoon() },
+				jumpPlanet: function (){ jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;},
+			    jumpMoon: function (){ jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;},
+				jumpSolar: function (){ jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;},
 				moonRadius: 10,
 				moonRotation: 0.001,
 				playNewWorlds: function() { playMusic("New Worlds.mp3") },
@@ -350,7 +354,12 @@
 
 			//Toggle orbit-visibility
 			var orbitVisibility = gui.add( parameters, 'visible' ).name('Show orbits').listen();
-			var jumpToActivePlanet = gui.add( parameters, 'jump' ).name('Jump to active planet').listen();
+			
+			//Buttons for jumping between planets/moon/solarsystem
+			jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;
+			var jumpToActivePlanet = gui.add( parameters, 'jumpPlanet' ).name('Jump to planet');
+			var jumpToActiveMoon = gui.add( parameters, 'jumpMoon' ).name('Jump to moon');
+			var jumpToSolarsystem = gui.add( parameters, 'jumpSolar' ).name('Jump to system');
 		
 			orbitVisibility.onChange(function(value) 
 			{
@@ -374,9 +383,6 @@
 					}
 				}
 			});
-			
-			jumpToActivePlanet.onChange(function(value) 
-			{	jumpOk = value });
 
 			sphereRadius.onChange(function(value) {
 				activePlanet.position.x = value;   
@@ -533,9 +539,11 @@
 			//Variabeln time används till timern och även planeternas rotation.
 			time = Date.now() * 0.0005;
 
-			//Handles the jumps between planets.
-			if(jumpOk){
+			//Handles the jumps between planets.	
+			if(jumpPlanetOk){
 				planetJump();
+			} else if(jumpMoonOk) {
+				moonJump();
 			} else {
 				jumpToSun();
 			}
@@ -602,6 +610,8 @@
 				orbit = moonOrbitRadiuses[i][1];
 				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 100) * orbit;
 				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 100) * orbit;
+				//The following line is needed to be able to jump to moons.
+				currentMoonGroup.rotation.z = -planetSpeeds[i][0].rotation.z;
 			}
 
 			//Turn on planet clicked background
