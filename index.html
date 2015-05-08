@@ -218,12 +218,12 @@
 			//Create a material for the planet toruses
 			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0x27241c,opacity:1,transparent:false,side:THREE.BackSide});
 			
-			hoverOpacity = 0.3;
+			hoverOpacity = 0.2;
 			//Create a material for hovering over planets
-			planetHoverMaterial = new THREE.MeshBasicMaterial({color:0xe6cc7f,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
+			planetHoverMaterial = new THREE.MeshBasicMaterial({color:0xA7FF85,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
 			
 			//Create a meterial for hovering over moons
-			moonHoverMaterial = new THREE.MeshBasicMaterial({color:0x00FF00,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
+			moonHoverMaterial = new THREE.MeshBasicMaterial({color:0x7A86D6,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
 			
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
 			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );
@@ -301,8 +301,8 @@
 				texture8: function() { updatePlanetTexture("Klendathu") },
 				texture9: function() { updatePlanetTexture() },
 				addMoon: function() { addMoon() },
-				jumpPlanet: function (){ jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;},
-			    jumpMoon: function (){ jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;},
+				jumpPlanet: function (){ if(activePlanet){jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;}},
+			    jumpMoon: function (){ if(activeMoon){jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;}},
 				jumpSolar: function (){ jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;},
 				moonRadius: 10,
 				moonRotation: 0.001,
@@ -540,9 +540,9 @@
 			time = Date.now() * 0.0005;
 
 			//Handles the jumps between planets.	
-			if(jumpPlanetOk){
+			if(jumpPlanetOk && activePlanet){
 				planetJump();
-			} else if(jumpMoonOk) {
+			} else if(jumpMoonOk && activeMoon) {
 				moonJump();
 			} else {
 				jumpToSun();
@@ -611,7 +611,7 @@
 				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 100) * orbit;
 				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 100) * orbit;
 				//The following line is needed to be able to jump to moons.
-				currentMoonGroup.rotation.z = -planetSpeeds[i][0].rotation.z;
+				currentMoonGroup.rotation.z = -currentMoonGroup.parent.rotation.z;
 			}
 
 			//Turn on planet clicked background
