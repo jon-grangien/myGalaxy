@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>databassss</title>
+		<title>logga in!</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/style.css">
 
@@ -75,16 +75,6 @@
 
 		</script>
 
-	</head>
-	<body>
-		<div id="account-gui-container"></div>
-		<div id="container"></div>
-
-		<div id="guitest">
-			<input type="text" id="testfield" name="field1">
-		</div>
-
-
 		<script id="vertexShaderSun" type="x-shader/x-vertex">	
 			varying vec3 vNormal;
 			void main() {
@@ -100,7 +90,28 @@
 			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
 			}
 		</script>
-	
+
+	</head>
+	<body>
+		<div id="container"></div>
+
+		<!-- <div id="guitest">
+			<input type="text" id="testfield" name="field1">
+		</div> -->
+
+		<!-- Account GUI -->
+		<div id="account-gui-container">
+			<form id="account_form" action="">
+				<input type="text" id="username_field" name="username_field">
+				<br>
+				<input type="password" id="password_field" name="password_field">
+				<br>
+				<input type="submit" value="Log in" name="submit_login">
+				<input type="submit" value="Create account" name="submit_create">
+			</form>
+		</div>
+
+
 
 		<script>
 
@@ -424,46 +435,48 @@
 			gui.open();
 
 			// Account gui
-			var accountGui = new dat.GUI({ autoPlace: false });
+			// var accountGui = new dat.GUI({ autoPlace: false });
 
-			var customContainer = document.getElementById('account-gui-container');
-			customContainer.appendChild(accountGui.domElement);
+			// var customContainer = document.getElementById('account-gui-container');
+			// customContainer.appendChild(accountGui.domElement);
 
-			var parameters2 = {
-				currentUser: username,
-				newUserName: "",
-				newPassword: "",
-				createButton: function() { createAccount() },
-				userName: "",
-				password: "",
-				loginButton: function() { login() }
-			};
+			// var parameters2 = {
+			// 	currentUser: username,
+			// 	newUserName: "",
+			// 	newPassword: "",
+			// 	createButton: function() { createAccount() },
+			// 	userName: "",
+			// 	password: "",
+			// 	loginButton: function() { login() }
+			// };
 
-			accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
+			// accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
 
-			var newUserFl = accountGui.addFolder('New Account');
-			var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
-			var newPassField = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
-			newUserFl.add( parameters2, 'createButton' ).name("Create account");
+			// var newUserFl = accountGui.addFolder('New Account');
+			// var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
+			// var newPassField = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
+			// newUserFl.add( parameters2, 'createButton' ).name("Create account");
 
-			var userFl = accountGui.addFolder('log in');
-			var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
-			var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
-			userFl.add( parameters2, 'loginButton' ).name("Log in");
+			// var userFl = accountGui.addFolder('log in');
+			// var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
+			// var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
+			// userFl.add( parameters2, 'loginButton' ).name("Log in");
 
-			newNameField.onChange(function(value) 
-			{	newUserName = value; });
+			// newNameField.onChange(function(value) 
+			// {	newUserName = value; });
 
-			newPassField.onChange(function(value) 
-			{	newUserPassword = value; });
+			// newPassField.onChange(function(value) 
+			// {	newUserPassword = value; });
 
-			nameField.onChange(function(value) 
-			{	username = value; });
+			// nameField.onChange(function(value) 
+			// {	username = value; });
 
-			passField.onChange(function(value) 
-			{	userPassword = value; });
+			// passField.onChange(function(value) 
+			// {	userPassword = value; });
 
-			gui.open();
+			// gui.open();
+
+
 			
 			/*******************/
 
@@ -510,10 +523,10 @@
 
 		function render() {
 			//jquery test
-			$( document ).ready(function() {
-			    var test = $('#testfield').val();
-			    console.log( "test: " + test );
-			});
+			// $( document ).ready(function() {
+			//     var test = $('#testfield').val();
+			//     console.log( "test: " + test );
+			// });
 
 			//Variabeln time används till timern och även planeternas rotation.
 			time = Date.now() * 0.0005;

@@ -13,6 +13,8 @@ canvas {
 	position:absolute;
 	visibility:show;
 	left: 1%;
+	top: 1%;
+	z-index: 1;
 }
 
 #guitest {
