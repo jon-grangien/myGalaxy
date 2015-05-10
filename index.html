@@ -120,7 +120,7 @@
 				</div>
 
 				<div id="register" class="animate form" >
-					<form method="post" name="register_form" action="" autocomplete="on">
+					<form id="register_form" action="javascript:void(0);" method="POST" autocomplete="on">
 						<label for="uname_register_field" class="uname_label" >Username</label> <br>
 						<input type="text" id="uname_register_field" name="uname_register_field" required="required"> <br>
 						<label for="password_register_field" class="pass_label" >Password</label> <br>
@@ -517,17 +517,14 @@
 			$('#login_form').submit(function() {
 			    username = jQuery("#uname_field").val();
 			    userPassword = jQuery("#password_field").val();
-			    // console.log("login: " + name + " : " + pass);
 			    login();
 			});
 
-			// $( "login_form" ).on( "submit", function( event ) {
-			//   event.preventDefault();
-			//   console.log( $( this ).serialize() );
-			// });
-
-
-
+			$('#register_form').submit(function() {
+			    newUsername = jQuery("#uname_register_field").val();
+			    newUserPassword = jQuery("#password_register_field").val();
+			    createAccount();
+			});
 
 			
 			/*******************/

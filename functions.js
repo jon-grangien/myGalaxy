@@ -447,13 +447,13 @@ function playMusic(songFile) {
 function createAccount() {
 	console.log("creating user account");
 	user = new Parse.User();
-	user.set("username", newUserName);
+	user.set("username", newUsername);
 	user.set("password", newUserPassword);	
 
 	user.signUp(null, {
 		success: function(user) {
 			// log in
-			username = newUserName;
+			username = newUsername;
 			userPassword = newUserPassword;
 			login();
 		},
