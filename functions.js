@@ -470,12 +470,28 @@ function login() {
 		success: function(loggedinuser) {
 			user = loggedinuser;
 			console.log("logged in!");
+
+			// Rearrange menus
+		    document.getElementById("login").style.display = 'none';
+		    document.getElementById("register").style.display = 'none';
+		    document.getElementById("user_menu").style.display = 'initial';
+		    document.getElementById("user_menu").style.opacity = 1;
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
 		console.log("login failed: " + error);
 		}
 	});
+}
+
+function logout() {
+	Parse.User.logOut();
+	console.log("logged out");
+
+	// Rearrange menus
+    document.getElementById("user_menu").style.display = "none";
+    document.getElementById("login").style.display = 'initial';
+    document.getElementById("register").style.display = 'initial';
 }
 
 function dummy() {

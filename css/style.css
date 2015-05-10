@@ -160,9 +160,9 @@ input {
 
 /*logged in user menu*/
 #user_menu {
+	opacity: 0;
 	position: absolute;
 	top: 0px;
-	left: 400px;
 	min-height: 50px;
 	max-height: 70px;
 	min-width: 140px;
@@ -176,7 +176,7 @@ input {
 		0pt 2px 5px rgba(10, 10, 30,  0.7),	
 		0px 0px 8px 5px rgba(100, 100, 100, 0.3) inset;
 	border-radius: 5px;
-	z-index: 22;
+	z-index: 21;
 }
 p.user_info {
 	color: rgb(255, 255, 255);

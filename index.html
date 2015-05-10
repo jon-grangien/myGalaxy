@@ -137,9 +137,9 @@
 
 				<div id="user_menu" class="animate form">
 					<p class="user_info">
-						Logged in: <script>user.getUsername()</script>
+						Logged in:
 					</p>
-						<button>Log out</button>
+						<button onClick="logout()">Log out</button>
 				</div>
 			</div>
 		</div>
@@ -268,6 +268,14 @@
 			    user = currentUser;
 			    username = user.getUsername();
 			    console.log("logged in: " + username);
+
+			    // Rearrange menus
+			    document.getElementById("login").style.display = 'none';
+			    document.getElementById("register").style.display = 'none';
+			    document.getElementById("user_menu").style.display = 'initial';
+			    document.getElementById("user_menu").style.opacity = 1;
+
+
 			} else {
 			    console.log("no user logged in");
 			}
