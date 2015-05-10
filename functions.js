@@ -476,6 +476,8 @@ function login() {
 		    document.getElementById("register").style.display = 'none';
 		    document.getElementById("user_menu").style.display = 'initial';
 		    document.getElementById("user_menu").style.opacity = 1;
+
+   		    $(".user_info").text("Logged in: " + user.getUsername());
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
