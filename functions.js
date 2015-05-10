@@ -681,7 +681,6 @@ function visibility(object, bool){
 }
 
 function loadStars(){
-
 	geometry = new THREE.Geometry();
 	
 	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png" );
@@ -691,14 +690,13 @@ function loadStars(){
 	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/star15.png" );
 	
 	for ( i = 0; i < 20000; i ++ ) {
-
 		var vertex = new THREE.Vector3();
 		vertex.x = Math.random()* 20000 - 10000;
 		vertex.y = Math.random() * 20000 - 10000;
 		vertex.z = Math.random() * 20000 - 10000;
 
-		if(Math.abs(vertex.x) > 1000 || Math.abs(vertex.y) > 1000 || Math.abs(vertex.z) > 1000){
-		geometry.vertices.push( vertex );
+		if(Math.abs(vertex.x) > 1000 || Math.abs(vertex.y) > 1000 || Math.abs(vertex.z) > 1000) {
+			geometry.vertices.push( vertex );
 		}
 	}
 
@@ -707,14 +705,10 @@ function loadStars(){
 					 [ [0.0, 0.0, 0.0], sprite3, 100 ],
 					 [ [0.0, 0.0, 0.0], sprite4, 70 ],
 					 [ [0.0, 0.0, 0.0], sprite5, 60 ]];
-					 
-					 
+					 		 
 	var particles = [];
 	
-	for ( i = 0; i < 5; ++i ) {
-
-	
-		console.log(i);
+	for ( i = 0; i < 5; ++i ) {	
 		//color  = parameters[i][0];
 		sprite = parameters[i][1];
 		size   = parameters[i][2];
