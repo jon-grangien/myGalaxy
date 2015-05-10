@@ -185,7 +185,8 @@ p.user_info {
 	text-align: left;
 }
 #user_menu button {
-	width: 90%;
+	width: 60%;
+	margin: 0 0 0 40px;
 	cursor: pointer;	
 	background: rgb(255, 214, 92);
 	padding: 4px 2px;
