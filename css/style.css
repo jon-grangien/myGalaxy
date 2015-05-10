@@ -14,12 +14,17 @@ canvas {
 	top: 0%;
 	height: 17%;
 	width: 14%;
+	max-height: 150px;
+	max-width: 210px;
+	min-height: 120px;
+	min-width: 160px;
 	z-index: 3;
 }
 
-/* all the input except submit and checkbox */
+/* all the account-gui input except submit and checkbox */
 #account-gui-wrapper input:not([type="checkbox"]) {
 	width: 80%;
+	background: rgba(150, 150, 150, 0.9);	
 	margin-top: 5px;
 	margin-left: 10px;
 	padding: 5px 2px 5px 16px;
@@ -44,15 +49,14 @@ canvas {
 	padding: 4px 2px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(99, 54, 54);
-	font-size: 15px;	
+	font-size: 13px;	
 	border: 1px solid rgb(0, 0, 0);	
-	margin-bottom: 3px;	
-	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-	border-radius: 10px;	
-	box-shadow:
+	margin-bottom: 3px;
+	border-radius: 7px;	
+	/*box-shadow:
 		0px 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
 		0px 0px 0px 2px rgb(254, 254, 254),
-		0px 1px 1px 3px rgb(210, 210, 210);
+		0px 1px 1px 3px rgb(210, 210, 210);*/
 	transition: all 0.2s linear;
 }
 #account-gui-wrapper p.button input:hover {
@@ -75,12 +79,12 @@ p.register.button {
 #register,
 #login {
 	position: absolute;
-	top: 0%;
-	left: 10px;
+	/*top: 0%;*/
+	left: 5%;
 	height: 100%;
 	width: 100%;	
 	padding: 18px 6% 60px 6%;
-	/*margin: 0 0 30px 0;*/
+	/*margin: 0 0 0 0;*/
 	background: rgb(10, 10, 10);
 	border: 1px solid rgba(100, 100, 100,0.6);
 	box-shadow:	
@@ -95,43 +99,33 @@ p.register.button {
 
 #register {
 	z-index: 21;
-	opacity: 1;
+	opacity: 0;
 }
 
 .uname_label,
 .pass_label {
 	color: white;
 	margin-left: 10px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 13px;
 }
 
 p.change_link{
-	/*position: absolute;*/
 	color: rgb(255, 255, 255);
-	/*left: 0px;*/
-	/*height: 20px;*/
-	/*width: 440px;*/
-	/*padding: 17px 30px 20px 30px;*/
+	padding: 0px 5px 0px 0px;
 	font-size: 13px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	text-align: right;
-/*	border-top: 1px solid rgb(219, 229, 232);
-	border-radius: 0 0  5px 5px;
-	background: rgb(225, 234, 235);
-	background: repeating-linear-gradient(-45deg, 
-	rgb(247, 247, 247) , 
-	rgb(247, 247, 247) 15px, 
-	rgb(225, 234, 235) 15px, 
-	rgb(225, 234, 235) 30px, 
-	rgb(247, 247, 247) 30px
-	);*/
 }
 
 #account-gui-wrapper p.change_link a {
 	display: inline-block;
 	font-weight: bold;
-	background: rgb(247, 248, 241);
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	background: rgb(255, 214, 92);
 	padding: 2px 6px;
-	color: rgb(29, 162, 193);
-	margin-left: 10px;
+	color: rgb(99, 54, 54);
+	margin-left: 5px;
 	text-decoration: none;
 	border-radius: 4px;
 	border: 1px solid rgb(203, 213, 214);
@@ -139,7 +133,7 @@ p.change_link{
 }
 #account-gui-wrapper p.change_link a:hover {
 	color: rgb(57, 191, 215);
-	background: rgb(247, 247, 247);
+	background: rgb(235, 255, 212);
 	border: 1px solid rgb(74, 179, 198);
 }
 #account-gui-wrapper p.change_link a:active{
@@ -165,41 +159,45 @@ input {
 #toregister:target ~ #account-gui-wrapper #register,
 #tologin:target ~ #account-gui-wrapper #login {
 	z-index: 22;
+	-webkit-animation-name: fadeInLeft;
+	-moz-animation-name: fadeInLeft;
+	-ms-animation-name: fadeInLeft;
+	-o-animation-name: fadeInLeft;
 	animation-name: fadeInLeft;
+	-webkit-animation-delay: .1s;
+	-moz-animation-delay: .1s;
+	-o-animation-delay: .1s;
+	-ms-animation-delay: .1s;
 	animation-delay: .1s;
 }
 
 .animate{
-	animation-duration: 0.5s;
+	-webkit-animation-duration: 0.4s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-fill-mode: both;
+	
+	-moz-animation-duration: 0.4s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-fill-mode: both;
+	
+	-o-animation-duration: 0.4s;
+	-o-animation-timing-function: ease;
+	-o-animation-fill-mode: both;
+	
+	-ms-animation-duration: 0.4s;
+	-ms-animation-timing-function: ease;
+	-ms-animation-fill-mode: both;
+	
+	animation-duration: 0.4s;
 	animation-timing-function: ease;
 	animation-fill-mode: both;
 }
 
-@keyframes fadeInLeft {
-	0% {
-		opacity: 0;
-		transform: translateX(-20px);
-	}
-	
-	100% {
-		opacity: 1;
-		transform: translateX(0);
-	}
-}
-
 #toregister:target ~ #account-gui-wrapper #login,
 #tologin:target ~ #account-gui-wrapper #register{
-	animation-name: fadeOutLeftBig;
-}
-
-@keyframes fadeOutLeft {
-	0% {
-		opacity: 1;
-		transform: translateX(0);
-	}
-	
-	100% {
-		opacity: 0;
-		transform: translateX(-20px);
-	}
+	-webkit-animation-name: fadeOutLeft;
+	-moz-animation-name: fadeOutLeft;
+	-ms-animation-name: fadeOutLeft;
+	-o-animation-name: fadeOutLeft;
+	animation-name: fadeOutLeft;
 }
