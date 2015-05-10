@@ -134,6 +134,13 @@
 						</p>
 					</form>
 				</div>
+
+				<div id="user_menu" class="animate form">
+					<p class="user_info">
+						Logged in:
+					</p>
+						<button>Log out</button>
+				</div>
 			</div>
 		</div>
 
@@ -263,7 +270,20 @@
 			    console.log("logged in: " + username);
 			} else {
 			    console.log("no user logged in");
-			}			
+			}
+
+			// LOGIN/REGISTER
+			$('#login_form').submit(function() {
+			    username = jQuery("#uname_field").val();
+			    userPassword = jQuery("#password_field").val();
+			    login();
+			});
+
+			$('#register_form').submit(function() {
+			    newUsername = jQuery("#uname_register_field").val();
+			    newUserPassword = jQuery("#password_register_field").val();
+			    createAccount();
+			});
 			
 
 			/************* SUN ****************/
@@ -468,64 +488,6 @@
 			});
 
 			gui.open();
-
-			// Account gui
-			// var accountGui = new dat.GUI({ autoPlace: false });
-
-			// var customContainer = document.getElementById('account-gui-container');
-			// customContainer.appendChild(accountGui.domElement);
-
-			// var parameters2 = {
-			// 	currentUser: username,
-			// 	newUserName: "",
-			// 	newPassword: "",
-			// 	createButton: function() { createAccount() },
-			// 	userName: "",
-			// 	password: "",
-			// 	loginButton: function() { login() }
-			// };
-
-			// accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
-
-			// var newUserFl = accountGui.addFolder('New Account');
-			// var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
-			// var newPassField = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
-			// newUserFl.add( parameters2, 'createButton' ).name("Create account");
-
-			// var userFl = accountGui.addFolder('log in');
-			// var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
-			// var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
-			// userFl.add( parameters2, 'loginButton' ).name("Log in");
-
-			// newNameField.onChange(function(value) 
-			// {	newUserName = value; });
-
-			// newPassField.onChange(function(value) 
-			// {	newUserPassword = value; });
-
-			// nameField.onChange(function(value) 
-			// {	username = value; });
-
-			// passField.onChange(function(value) 
-			// {	userPassword = value; });
-
-			// gui.open();
-
-
-
-
-			$('#login_form').submit(function() {
-			    username = jQuery("#uname_field").val();
-			    userPassword = jQuery("#password_field").val();
-			    login();
-			});
-
-			$('#register_form').submit(function() {
-			    newUsername = jQuery("#uname_register_field").val();
-			    newUserPassword = jQuery("#password_register_field").val();
-			    createAccount();
-			});
-
 			
 			/*******************/
 
@@ -586,12 +548,6 @@
 		}
 
 		function render() {
-			//jquery test
-			// $( document ).ready(function() {
-			//     var test = $('#testfield').val();
-			//     console.log( "test: " + test );
-			// });
-
 			//Variabeln time används till timern och även planeternas rotation.
 			time = Date.now() * 0.0005;
 

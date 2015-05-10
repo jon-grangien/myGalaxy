@@ -158,6 +158,57 @@ input {
   outline: none;
 }
 
+/*logged in user menu*/
+#user_menu {
+	position: absolute;
+	top: 0px;
+	left: 400px;
+	min-height: 50px;
+	max-height: 70px;
+	min-width: 140px;
+	max-width: 150px;
+	/*color: white;*/
+
+	padding: 0px 0% 15px 6%;
+	background: rgb(10, 10, 10);
+	border: 1px solid rgba(100, 100, 100,0.6);
+	box-shadow:	
+		0pt 2px 5px rgba(10, 10, 30,  0.7),	
+		0px 0px 8px 5px rgba(100, 100, 100, 0.3) inset;
+	border-radius: 5px;
+	z-index: 22;
+}
+p.user_info {
+	color: rgb(255, 255, 255);
+	font-size: 13px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	text-align: left;
+}
+#user_menu button {
+	width: 90%;
+	cursor: pointer;	
+	background: rgb(255, 214, 92);
+	padding: 4px 2px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	color: rgb(99, 54, 54);
+	font-size: 13px;	
+	border: 1px solid rgb(0, 0, 0);	
+	border-radius: 7px;	
+	transition: all 0.2s linear;
+}
+#user_menu button:hover {
+	background: rgb(235, 255, 212);
+}
+#user_menu button:active,
+#user_menu button:focus {
+	background: rgb(40, 137, 154);
+	position: relative;
+	top: 1px;
+	border: 1px solid rgb(12, 76, 87);	
+	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
+
+/*animations*/
 #toregister:target ~ #account-gui-wrapper #register,
 #tologin:target ~ #account-gui-wrapper #login {
 	z-index: 22;
