@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>stjärnor</title>
+		<title>logga in!</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/animate.css">
 
 		<!-- parse -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -21,6 +22,7 @@
 
 		<!-- includes -->
 		<!-- <link rel="import" href="shaders.html"> -->
+
 		<script src="functions.js"></script>
 
 		<script id="vertexShader" type="x-shader/x-vertex">	
@@ -75,12 +77,6 @@
 
 		</script>
 
-	</head>
-	<body>
-		<div id="account-gui-container"></div>
-		<div id="container"></div>
-
-
 		<script id="vertexShaderSun" type="x-shader/x-vertex">	
 			varying vec3 vNormal;
 			void main() {
@@ -96,7 +92,59 @@
 			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
 			}
 		</script>
-		
+
+	</head>
+	<body>
+		<div id="container"></div>
+
+		<!-- Account GUI -->
+		<div id="account-gui-container">
+			<!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
+			<a class="hiddenanchor" id="toregister"></a>
+			<a class="hiddenanchor" id="tologin"></a>
+			<div id="account-gui-wrapper">
+				<div id="login" class="animate form" >
+					<form id="login_form" action="javascript:void(0);" method="POST" autocomplete="on">
+						<label for="uname_field" class="uname_label" >Username</label> <br>
+						<input type="text" id="uname_field" name="uname_field" required="required"> <br>
+						<label for="password_field" class="pass_label" >Password</label> <br>
+						<input type="password" id="password_field" name="password_field" required="required"><br>
+						<p class="login button">
+							<input type="submit" name="submit "value="Log in"> 
+						</p>
+						<p class="change_link">
+							No account? 
+							<a href="#toregister" class="to_register">Create one</a>
+						</p>
+					</form>
+				</div>
+
+				<div id="register" class="animate form" >
+					<form id="register_form" action="javascript:void(0);" method="POST" autocomplete="on">
+						<label for="uname_register_field" class="uname_label" >Username</label> <br>
+						<input type="text" id="uname_register_field" name="uname_register_field" required="required"> <br>
+						<label for="password_register_field" class="pass_label" >Password</label> <br>
+						<input type="password" id="password_register_field" name="password_register_field" required="required"><br>
+						<p class="register button">
+							<input type="submit" value="Create account" > 
+						</p>
+						<p class="change_link">
+							Have an account?
+							<a href="#tologin" class="to_login">Log in</a>
+						</p>
+					</form>
+				</div>
+
+				<div id="user_menu" class="animate form">
+					<p class="user_info">
+						Logged in:
+					</p>
+					<button onClick="logout()">Log out</button>
+				</div>
+			</div>
+		</div>
+
+
 
 		<script>
 
@@ -219,9 +267,31 @@
 			if (currentUser) {
 			    user = currentUser;
 			    username = user.getUsername();
+			    console.log("logged in: " + username);
+
+			    // Rearrange menus
+			    document.getElementById("login").style.display = 'none';
+			    document.getElementById("register").style.display = 'none';
+			    document.getElementById("user_menu").style.display = 'initial';		//opacity 0
+			    document.getElementById("user_menu").style.opacity = 1;
+
+    		    $(".user_info").text("Logged in: " + user.getUsername());
 			} else {
 			    console.log("no user logged in");
-			}			
+			}
+
+			// LOGIN/REGISTER
+			$('#login_form').submit(function() {
+			    username = jQuery("#uname_field").val();
+			    userPassword = jQuery("#password_field").val();
+			    login();	//username, userPassword global
+			});
+
+			$('#register_form').submit(function() {
+			    newUsername = jQuery("#uname_register_field").val();
+			    newUserPassword = jQuery("#password_register_field").val();
+			    createAccount();	//newUsername, newUserPassword global
+			});
 			
 
 			/************* SUN ****************/
@@ -424,48 +494,6 @@
 					}
 				}
 			});
-
-			gui.open();
-
-			// Account gui
-			var accountGui = new dat.GUI({ autoPlace: false });
-
-			var customContainer = document.getElementById('account-gui-container');
-			customContainer.appendChild(accountGui.domElement);
-
-			var parameters2 = {
-				currentUser: username,
-				newUserName: "",
-				newPassword: "",
-				createButton: function() { createAccount() },
-				userName: "",
-				password: "",
-				loginButton: function() { login() }
-			};
-
-			accountGui.add( parameters2, 'currentUser' ).name("Logged in: ");
-
-			var newUserFl = accountGui.addFolder('New Account');
-			var newNameField = newUserFl.add( parameters2, 'newUserName' ).name("User Name").listen();
-			var newPassField = newUserFl.add( parameters2, 'newPassword' ).name("Password").listen();
-			newUserFl.add( parameters2, 'createButton' ).name("Create account");
-
-			var userFl = accountGui.addFolder('log in');
-			var nameField = userFl.add( parameters2, 'userName' ).name("User Name").listen();
-			var passField = userFl.add( parameters2, 'password' ).name("Password").listen();
-			userFl.add( parameters2, 'loginButton' ).name("Log in");
-
-			newNameField.onChange(function(value) 
-			{	newUserName = value; });
-
-			newPassField.onChange(function(value) 
-			{	newUserPassword = value; });
-
-			nameField.onChange(function(value) 
-			{	username = value; });
-
-			passField.onChange(function(value) 
-			{	userPassword = value; });
 
 			gui.open();
 			

@@ -425,7 +425,6 @@ function playMusic(songFile) {
 			currentSong = "";	//update the variable
 		} 
 
-
 		else if (currentSong == songFile) {	//song playing is the song clicked in the gui,
 			music.pause();			//pause song,
 			currentSong = "";
@@ -445,15 +444,15 @@ function playMusic(songFile) {
 
 // account functions
 function createAccount() {
-	console.log("creating user account");
+	// console.log("creating user account");
 	user = new Parse.User();
-	user.set("username", newUserName);
+	user.set("username", newUsername);
 	user.set("password", newUserPassword);	
 
 	user.signUp(null, {
 		success: function(user) {
 			// log in
-			username = newUserName;
+			username = newUsername;
 			userPassword = newUserPassword;
 			login();
 		},
@@ -465,20 +464,34 @@ function createAccount() {
 }
 
 function login() {
-	// console.log("logging in");
 	Parse.User.logIn(username, userPassword, {
 		success: function(loggedinuser) {
 			user = loggedinuser;
-			console.log("logged in!");
+			// console.log("logged in!");
+
+			// Rearrange menus
+		    document.getElementById("login").style.display = 'none';
+		    document.getElementById("register").style.display = 'none';
+		    document.getElementById("user_menu").style.display = 'initial';
+		    document.getElementById("user_menu").style.opacity = 1;
+
+   		    $(".user_info").text("Logged in: " + user.getUsername());
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
+		console.log("login failed: " + error);
 		}
 	});
 }
 
-function dummy() {
-	console.log("i am dummy");
+function logout() {
+	Parse.User.logOut();
+	// console.log("logged out");
+
+	// Rearrange menus
+    document.getElementById("user_menu").style.display = "none";
+    document.getElementById("login").style.display = 'initial';
+    document.getElementById("register").style.display = 'initial';
 }
 
 function onDocumentTouchStart( event ) {	
@@ -681,7 +694,6 @@ function visibility(object, bool){
 }
 
 function loadStars(){
-
 	geometry = new THREE.Geometry();
 	
 	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png" );
@@ -691,14 +703,13 @@ function loadStars(){
 	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/star15.png" );
 	
 	for ( i = 0; i < 20000; i ++ ) {
-
 		var vertex = new THREE.Vector3();
 		vertex.x = Math.random()* 20000 - 10000;
 		vertex.y = Math.random() * 20000 - 10000;
 		vertex.z = Math.random() * 20000 - 10000;
 
-		if(Math.abs(vertex.x) > 1000 || Math.abs(vertex.y) > 1000 || Math.abs(vertex.z) > 1000){
-		geometry.vertices.push( vertex );
+		if(Math.abs(vertex.x) > 1000 || Math.abs(vertex.y) > 1000 || Math.abs(vertex.z) > 1000) {
+			geometry.vertices.push( vertex );
 		}
 	}
 
@@ -707,14 +718,10 @@ function loadStars(){
 					 [ [0.0, 0.0, 0.0], sprite3, 100 ],
 					 [ [0.0, 0.0, 0.0], sprite4, 70 ],
 					 [ [0.0, 0.0, 0.0], sprite5, 60 ]];
-					 
-					 
+					 		 
 	var particles = [];
 	
-	for ( i = 0; i < 5; ++i ) {
-
-	
-		console.log(i);
+	for ( i = 0; i < 5; ++i ) {	
 		//color  = parameters[i][0];
 		sprite = parameters[i][1];
 		size   = parameters[i][2];
