@@ -139,7 +139,7 @@
 					<p class="user_info">
 						Logged in:
 					</p>
-						<button onClick="logout()">Log out</button>
+					<button onClick="logout()">Log out</button>
 				</div>
 			</div>
 		</div>
@@ -272,7 +272,7 @@
 			    // Rearrange menus
 			    document.getElementById("login").style.display = 'none';
 			    document.getElementById("register").style.display = 'none';
-			    document.getElementById("user_menu").style.display = 'initial';
+			    document.getElementById("user_menu").style.display = 'initial';		//opacity 0
 			    document.getElementById("user_menu").style.opacity = 1;
 
     		    $(".user_info").text("Logged in: " + user.getUsername());
@@ -284,13 +284,13 @@
 			$('#login_form').submit(function() {
 			    username = jQuery("#uname_field").val();
 			    userPassword = jQuery("#password_field").val();
-			    login();
+			    login();	//username, userPassword global
 			});
 
 			$('#register_form').submit(function() {
 			    newUsername = jQuery("#uname_register_field").val();
 			    newUserPassword = jQuery("#password_register_field").val();
-			    createAccount();
+			    createAccount();	//newUsername, newUserPassword global
 			});
 			
 

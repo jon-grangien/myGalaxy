@@ -425,7 +425,6 @@ function playMusic(songFile) {
 			currentSong = "";	//update the variable
 		} 
 
-
 		else if (currentSong == songFile) {	//song playing is the song clicked in the gui,
 			music.pause();			//pause song,
 			currentSong = "";
@@ -445,7 +444,7 @@ function playMusic(songFile) {
 
 // account functions
 function createAccount() {
-	console.log("creating user account");
+	// console.log("creating user account");
 	user = new Parse.User();
 	user.set("username", newUsername);
 	user.set("password", newUserPassword);	
@@ -465,11 +464,10 @@ function createAccount() {
 }
 
 function login() {
-	// console.log("logging in");
 	Parse.User.logIn(username, userPassword, {
 		success: function(loggedinuser) {
 			user = loggedinuser;
-			console.log("logged in!");
+			// console.log("logged in!");
 
 			// Rearrange menus
 		    document.getElementById("login").style.display = 'none';
@@ -488,16 +486,12 @@ function login() {
 
 function logout() {
 	Parse.User.logOut();
-	console.log("logged out");
+	// console.log("logged out");
 
 	// Rearrange menus
     document.getElementById("user_menu").style.display = "none";
     document.getElementById("login").style.display = 'initial';
     document.getElementById("register").style.display = 'initial';
-}
-
-function dummy() {
-	console.log("i am dummy");
 }
 
 function onDocumentTouchStart( event ) {	

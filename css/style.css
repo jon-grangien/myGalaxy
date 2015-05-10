@@ -163,6 +163,7 @@ input {
 	opacity: 0;
 	position: absolute;
 	top: 0px;
+	left: 10px;
 	min-height: 50px;
 	max-height: 70px;
 	min-width: 140px;
