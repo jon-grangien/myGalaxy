@@ -9,9 +9,73 @@ canvas {
 	display: block; 
 }
 
-#login{
+#account-gui-wrapper {
+	position:absolute;
+	/*left: 1%;*/
+	top: 0%;
+}
+
+/* all the input except submit and checkbox */
+#account-gui-wrapper input:not([type="checkbox"]){
+	width: 89%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 5px 2px 5px 16px;	
+	border: 1px solid rgb(178, 178, 178);
+	box-sizing: content-box;
+	border-radius: 2px;
+	box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6) inset;
+	transition: all 0.2s linear;
+}
+#account-gui-wrapper input:not([type="checkbox"]):active,
+#account-gui-wrapper input:not([type="checkbox"]):focus{
+	border: 1px solid rgba(91, 90, 90, 0.7);
+	background: rgba(255, 255, 255, 0.85);	
+	box-shadow: 1px 1px 4px 0px rgba(150, 150, 230, 0.9) inset;
+}
+
+/*styling both submit buttons */
+#account-gui-wrapper p.button input{
+	width: 50%;
+	cursor: pointer;	
+	background: rgb(255, 214, 92);
+	padding: 4px 2px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	color: rgb(99, 54, 54);
+	font-size: 18px;	
+	border: 1px solid rgb(0, 0, 0);	
+	margin-bottom: 3px;	
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	border-radius: 10px;	
+	box-shadow:
+		0px 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
+		0px 0px 0px 2px rgb(254, 254, 254),
+		0px 1px 1px 3px rgb(210, 210, 210);
+	transition: all 0.2s linear;
+}
+#account-gui-wrapper p.button input:hover{
+	/*background: rgb(74, 179, 198);*/
+	background: rgb(235, 255, 212);
+}
+#account-gui-wrapper p.button input:active,
+#account-gui-wrapper p.button input:focus{
+	background: rgb(40, 137, 154);
+	position: relative;
+	top: 1px;
+	border: 1px solid rgb(12, 76, 87);	
+	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
+p.login.button,
+p.register.button{
+	text-align: center;
+	margin: 5px 0;
+}
+
+/*#register,*/
+#login {
 	position: absolute;
 	top: 0%;
+	left: 3%;
 	width: 100%;	
 	padding: 18px 5% 10px 5%;
 	margin: 0 0 30px 0;
@@ -21,7 +85,30 @@ canvas {
 		0pt 2px 5px rgba(10, 10, 30,  0.7),	
 		0px 0px 8px 5px rgba(100, 100, 100, 0.3) inset;
 	border-radius: 5px;
+}
+
+#login {
 	z-index: 5;
+}
+
+#register {
+	/*position: absolute;*/
+	top: 0%;
+	left: 3%;
+	width: 100%;	
+	padding: 18px 5% 10px 5%;
+	margin: 0 0 30px 0;
+	background: rgb(10, 10, 10);
+	border: 1px solid rgba(100, 100, 100,0.6);
+	box-shadow:	
+		0pt 2px 5px rgba(10, 10, 30,  0.7),	
+		0px 0px 8px 5px rgba(100, 100, 100, 0.3) inset;
+	border-radius: 5px;
+}
+
+#register {
+	z-index: 4;
+	opacity: 0;
 }
 
 .uname_label {
@@ -51,29 +138,3 @@ input {
   outline: none;
 }
 
-#account-gui-wrapper {
-	position:absolute;
-	visibility:show;
-	left: 1%;
-	top: 0%;
-	z-index: 1;
-}
-
-/* all the input except submit and checkbox */
-#account-gui-wrapper input:not([type="checkbox"]){
-	width: 89%;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	padding: 5px 2px 5px 16px;	
-	border: 1px solid rgb(178, 178, 178);
-	box-sizing: content-box;
-	border-radius: 2px;
-	box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6) inset;
-	transition: all 0.2s linear;
-}
-#account-gui-wrapper input:not([type="checkbox"]):active,
-#account-gui-wrapper input:not([type="checkbox"]):focus{
-	border: 1px solid rgba(91, 90, 90, 0.7);
-	background: rgba(255, 255, 255, 0.85);	
-	box-shadow: 1px 1px 4px 0px rgba(150, 150, 230, 0.9) inset;
-} 
