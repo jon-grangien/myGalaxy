@@ -108,7 +108,7 @@
 			<a class="hiddenanchor" id="tologin"></a>
 			<div id="account-gui-wrapper">
 				<div id="login" class="animate form">
-					<form action=""  autocomplete="on">
+					<form method="post" action=""  autocomplete="on">
 						<label for="uname_field" class="uname_label" >Username</label> <br>
 						<input type="text" id="uname_field" name="uname_field" required="required"> <br>
 						<label for="password_field" class="pass_label" >Password</label> <br>
@@ -117,13 +117,14 @@
 							<input type="submit" value="Log in"> 
 						</p>
 						<p class="change_link">
-							<a href="#toregister" class="to_register">No account? Create</a>
+							No account? 
+							<a href="#toregister" class="to_register">Create one</a>
 						</p>
 					</form>
 				</div>
 
 				<div id="register" class="animate form">
-					<form action="" autocomplete="on">
+					<form method="post" action="" autocomplete="on">
 						<label for="uname_register_field" class="uname_label" >Username</label> <br>
 						<input type="text" id="uname_register_field" name="uname_register_field" required="required"> <br>
 						<label for="password_register_field" class="pass_label" >Password</label> <br>
@@ -132,7 +133,8 @@
 							<input type="submit" value="Create account" > 
 						</p>
 						<p class="change_link">
-							<a href="#tologin" class="to_login">Have an account? Log in</a>
+							Have an account?
+							<a href="#tologin" class="to_login">Log in</a>
 						</p>
 					</form>
 				</div>

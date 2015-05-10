@@ -38,13 +38,13 @@ canvas {
 
 /*styling both submit buttons */
 #account-gui-wrapper p.button input {
-	width: 50%;
+	width: 60%;
 	cursor: pointer;	
 	background: rgb(255, 214, 92);
 	padding: 4px 2px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(99, 54, 54);
-	font-size: 18px;	
+	font-size: 15px;	
 	border: 1px solid rgb(0, 0, 0);	
 	margin-bottom: 3px;	
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
@@ -102,6 +102,27 @@ p.register.button {
 .pass_label {
 	color: white;
 	margin-left: 10px;
+}
+
+p.change_link{
+	/*position: absolute;*/
+	color: rgb(255, 255, 255);
+	/*left: 0px;*/
+	/*height: 20px;*/
+	/*width: 440px;*/
+	/*padding: 17px 30px 20px 30px;*/
+	font-size: 13px;
+	text-align: right;
+/*	border-top: 1px solid rgb(219, 229, 232);
+	border-radius: 0 0  5px 5px;
+	background: rgb(225, 234, 235);
+	background: repeating-linear-gradient(-45deg, 
+	rgb(247, 247, 247) , 
+	rgb(247, 247, 247) 15px, 
+	rgb(225, 234, 235) 15px, 
+	rgb(225, 234, 235) 30px, 
+	rgb(247, 247, 247) 30px
+	);*/
 }
 
 #account-gui-wrapper p.change_link a {
