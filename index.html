@@ -258,9 +258,11 @@
 			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );
 			scene.add( ambientLight );
 
-
 			// Parse initialization
 			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
+
+			// hide user menu initially
+		    $('#user_menu').hide();
 
 			// Parse user cache
 			var currentUser = Parse.User.current();
@@ -270,12 +272,11 @@
 			    console.log("logged in: " + username);
 
 			    // Rearrange menus
-			    document.getElementById("login").style.display = 'none';
-			    document.getElementById("register").style.display = 'none';
-			    document.getElementById("user_menu").style.display = 'initial';		//opacity 0
-			    document.getElementById("user_menu").style.opacity = 1;
-
+			    $('#login').hide("slow");
+			    $('#register').hide("slow");
+			    $('#user_menu').show("slow");
     		    $(".user_info").text("Logged in: " + user.getUsername());
+    		    
 			} else {
 			    console.log("no user logged in");
 			}

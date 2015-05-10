@@ -470,11 +470,9 @@ function login() {
 			// console.log("logged in!");
 
 			// Rearrange menus
-		    document.getElementById("login").style.display = 'none';
-		    document.getElementById("register").style.display = 'none';
-		    document.getElementById("user_menu").style.display = 'initial';
-		    document.getElementById("user_menu").style.opacity = 1;
-
+		    $('#login').hide("fast");
+		    $('#register').hide("fast");
+		    $('#user_menu').show("fast");
    		    $(".user_info").text("Logged in: " + user.getUsername());
 		},
 		error: function(user, error) {
@@ -489,9 +487,10 @@ function logout() {
 	// console.log("logged out");
 
 	// Rearrange menus
-    document.getElementById("user_menu").style.display = "none";
-    document.getElementById("login").style.display = 'initial';
-    document.getElementById("register").style.display = 'initial';
+    $('#user_menu').hide("fast");
+    $('#login').show("fast");
+    $('#register').show("fast");
+
 }
 
 function onDocumentTouchStart( event ) {	
