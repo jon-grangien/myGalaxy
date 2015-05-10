@@ -97,24 +97,20 @@
 	<body>
 		<div id="container"></div>
 
-		<!-- <div id="guitest">
-			<input type="text" id="testfield" name="field1">
-		</div> -->
-
 		<!-- Account GUI -->
 		<div id="account-gui-container">
 			<!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
 			<a class="hiddenanchor" id="toregister"></a>
 			<a class="hiddenanchor" id="tologin"></a>
 			<div id="account-gui-wrapper">
-				<div id="login" class="animate form">
-					<form method="post" action=""  autocomplete="on">
+				<div id="login" class="animate form" >
+					<form id="login_form" action="javascript:void(0);" method="POST" autocomplete="on">
 						<label for="uname_field" class="uname_label" >Username</label> <br>
 						<input type="text" id="uname_field" name="uname_field" required="required"> <br>
 						<label for="password_field" class="pass_label" >Password</label> <br>
 						<input type="password" id="password_field" name="password_field" required="required"><br>
 						<p class="login button">
-							<input type="submit" value="Log in"> 
+							<input type="submit" name="submit "value="Log in"> 
 						</p>
 						<p class="change_link">
 							No account? 
@@ -123,8 +119,8 @@
 					</form>
 				</div>
 
-				<div id="register" class="animate form">
-					<form method="post" action="" autocomplete="on">
+				<div id="register" class="animate form" >
+					<form method="post" name="register_form" action="" autocomplete="on">
 						<label for="uname_register_field" class="uname_label" >Username</label> <br>
 						<input type="text" id="uname_register_field" name="uname_register_field" required="required"> <br>
 						<label for="password_register_field" class="pass_label" >Password</label> <br>
@@ -264,6 +260,7 @@
 			if (currentUser) {
 			    user = currentUser;
 			    username = user.getUsername();
+			    console.log("logged in: " + username);
 			} else {
 			    console.log("no user logged in");
 			}			
@@ -513,6 +510,23 @@
 			// {	userPassword = value; });
 
 			// gui.open();
+
+
+
+
+			$('#login_form').submit(function() {
+			    username = jQuery("#uname_field").val();
+			    userPassword = jQuery("#password_field").val();
+			    // console.log("login: " + name + " : " + pass);
+			    login();
+			});
+
+			// $( "login_form" ).on( "submit", function( event ) {
+			//   event.preventDefault();
+			//   console.log( $( this ).serialize() );
+			// });
+
+
 
 
 			

@@ -473,6 +473,7 @@ function login() {
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
+		console.log("login failed: " + error);
 		}
 	});
 }
