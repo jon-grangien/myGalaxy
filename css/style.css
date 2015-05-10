@@ -9,28 +9,31 @@ canvas {
 	display: block; 
 }
 
+
+/************* LOGIN/REGISTER GUI **************/
 #account-gui-container {
 	position:absolute;
 	top: 0%;
 	height: 17%;
 	width: 14%;
-	max-height: 150px;
-	max-width: 210px;
-	min-height: 120px;
+	max-height: 110px;
+	max-width: 190px;
+	min-height: 90px;
 	min-width: 160px;
-	z-index: 3;
+	z-index: 1;
 }
 
-/* all the account-gui input except submit and checkbox */
+/* all input except submit and checkbox */
 #account-gui-wrapper input:not([type="checkbox"]) {
 	width: 80%;
 	background: rgba(150, 150, 150, 0.9);	
-	margin-top: 5px;
+	margin-top: 1px;
+	margin-bottom: 4px;
 	margin-left: 10px;
-	padding: 5px 2px 5px 16px;
+	padding: 0px 0px 3px 16px;
 	border: 1px solid rgb(178, 178, 178);
 	box-sizing: content-box;
-	border-radius: 2px;
+	border-radius: 1px;
 	box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6) inset;
 	transition: all 0.2s linear;
 }
@@ -51,7 +54,6 @@ canvas {
 	color: rgb(99, 54, 54);
 	font-size: 13px;	
 	border: 1px solid rgb(0, 0, 0);	
-	margin-bottom: 3px;
 	border-radius: 7px;	
 	/*box-shadow:
 		0px 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
@@ -73,13 +75,12 @@ canvas {
 p.login.button,
 p.register.button {
 	text-align: center;
-	margin: 3px 0;
+	margin: 2px 0;
 }
 
 #register,
 #login {
 	position: absolute;
-	/*top: 0%;*/
 	left: 5%;
 	height: 100%;
 	width: 100%;	
@@ -113,6 +114,7 @@ p.register.button {
 p.change_link{
 	color: rgb(255, 255, 255);
 	padding: 0px 5px 0px 0px;
+	margin-top: 1px;
 	font-size: 13px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	text-align: right;
