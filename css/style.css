@@ -117,7 +117,7 @@ p.change_link{
 	margin-top: 1px;
 	font-size: 13px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	text-align: right;
+	text-align: center;
 }
 
 #account-gui-wrapper p.change_link a {
