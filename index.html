@@ -7,9 +7,11 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/animate.css">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/ui-darkness/jquery-ui.css">
 
-		<!-- parse -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<!-- parse -->
   		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
 
 
@@ -30,6 +32,28 @@
 		<script src="functions.js"></script>
 		<script src="accordion.js"></script>
 		<script src="arrange-gui-functions.js"></script>
+
+		<!-- planet_radius_slider -->
+		<script>
+			$(function() {
+				$( "#planet_radius_slider" ).slider();
+			});
+		</script>
+
+		<!-- planet_size_slider -->
+		<script>
+			$(function() {
+				$( "#planet_size_slider" ).slider();
+			});
+		</script>
+
+		<!-- planet_rotation_slider -->
+		<script>
+			$(function() {
+				$( "#planet_rotation_slider" ).slider();
+			});
+		</script>
+
 
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
 			vec3 mod289(vec3 x)
@@ -502,6 +526,9 @@
 			<!-- <button id="add_moon_button" onClick="addMoon()">Add moon</button> -->
 		</div>
 		<div id="edit-planet-container">
+			<div id="planet_radius_slider"></div>
+			<div id="planet_size_slider"></div>
+			<div id="planet_rotation_slider"></div>
 			<div id="save-planet-container">
 				<button id="save_planet_button">Save</button>
 			</div>
