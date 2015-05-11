@@ -12,7 +12,7 @@ function menusOnLogin() {
 
     // Show user menu with username
     $('#user_menu').show("fast");
-    $(".user_info").text("Logged in: " + user.getUsername());
+    $(".user_info").text(user.getUsername());
 }
 
 function menusOnLogout() {

@@ -248,10 +248,10 @@ input {
 	/*top: 0px;*/
 	bottom: 0px;
 	right: 10px;
-	min-height: 70px;
-	max-height: 80px;
-	min-width: 140px;
-	max-width: 160px;
+	min-height: 40px;
+	max-height: 40px;
+	min-width: 170px;
+	max-width: 185px;
 	/*color: white;*/
 
 	padding: 0% 1% 0px 0%;
@@ -263,15 +263,33 @@ input {
 	border-radius: 5px;
 	z-index: 21;
 }
+#user-text-container {
+	position: absolute;
+	width: 50%;
+	height: 100%;
+}
+#user-button-container {
+	position: absolute;
+	right: 0px;
+	width: 50%;
+	height: 100%;
+}
 p.user_info {
+	/*max-width: 60px;*/
+	height: 100%;
+	width: 100%;
+	/*padding: 10px 10px 0px 0;*/
+	margin: 10px 0px 0px 20px;
 	color: rgb(255, 255, 255);
-	font-size: 13px;
+	font-size: 15px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	text-align: right;
+	text-align: left;
 }
 #user_menu button {
-	width: 60%;
-	margin: 0 0 0 60px;
+	position: aboslute;
+	width: 75%;
+	max-heigth: 70%;
+	margin: 7px 0px 0px 20px;
 	cursor: pointer;	
 	background: rgb(119, 189, 163);
 	padding: 4px 2px;

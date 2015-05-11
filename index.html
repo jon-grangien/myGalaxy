@@ -392,10 +392,13 @@
 		</div>
 		
 		<div id="user_menu">
-			<p class="user_info">
-				Logged in:
-			</p>
-			<button onClick="logout()">Log out</button>
+			<div id="user-text-container">
+				<p class="user_info">
+				</p>
+			</div>
+			<div id="user-button-container">
+				<button onClick="logout()">Log out</button>
+			</div>
 		</div>
 
 		<!-- planet build GUI -->
@@ -662,13 +665,9 @@
 			if (currentUser) {
 			    user = currentUser;
 			    username = user.getUsername();
-			    console.log("logged in: " + username);
+			    // console.log("logged in: " + username);
 
-			    // Rearrange menus
-			    $('#login').hide("slow");
-			    $('#register').hide("slow");
-			    $('#user_menu').show("slow");
-    		    $(".user_info").text("Logged in: " + user.getUsername());
+			    menusOnLogin();
     		    
 			} else {
 			    console.log("no user logged in");
