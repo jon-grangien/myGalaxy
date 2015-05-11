@@ -302,20 +302,18 @@ input {
 	height: 100%;
 }
 p.user_info {
-	/*max-width: 60px;*/
 	height: 100%;
 	width: 100%;
-	/*padding: 10px 10px 0px 0;*/
 	margin: 10px 0px 0px 20px;
 	color: rgb(255, 255, 255);
 	font-size: 15px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	text-align: left;
 }
-#user_menu button {
-	position: aboslute;
-	width: 75%;
-	max-heigth: 70%;
+#user_menu button {		/*logout button*/
+	position: absolute;
+	width: 65%;
+	max-height: 70%;
 	margin: 7px 0px 0px 20px;
 	cursor: pointer;	
 	background: rgb(119, 189, 163);
