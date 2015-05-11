@@ -464,12 +464,7 @@ function login() {
 		success: function(loggedinuser) {
 			user = loggedinuser;
 			// console.log("logged in!");
-
-			// Rearrange menus
-		    $('#login').hide("fast");
-		    $('#register').hide("fast");
-		    $('#user_menu').show("fast");
-   		    $(".user_info").text("Logged in: " + user.getUsername());
+			menusOnLogin();
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
