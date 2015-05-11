@@ -104,6 +104,8 @@ function addPlanet(){
 	visibility(clickedShell, false);
 	activePlanet.add(clickedShell);
 	//----------------clickedend------------------
+	
+
 
 
 	// sunGroup.add(activeGroup);
@@ -145,6 +147,10 @@ function addPlanet(){
 	// Push to planetOrbitRadiuses
 	tempArray = [activePlanet, 60]; //the value 60 should maybe be replaced by a variable
 	planetOrbitRadiuses.push(tempArray);
+	
+	//A group containing all houses on the planet, this is the 5:th child of a new planet.
+	var houseGroup = new THREE.Object3D;
+	activePlanet.add(houseGroup);
 
 }
 
@@ -207,57 +213,6 @@ function addMeteorbelt(){
 
 }
 
-
-function addMeteorbelt2(){
-
-	
-
-	//Meteorbelt
-	var meteorbelt = new THREE.Object3D;
-	var meteorStoneGeometry;
-	var meteorStoneMaterial;
-	for(var i = 0; i < 800; i++){
-
-		w = Math.floor((Math.random() * 1) + 1);
-		h = Math.floor((Math.random() * 1) + 1);
-
-		var rockSize = Math.random()*0.09+0.01
-		meteorStoneGeometry = new THREE.SphereGeometry( rockSize, w, h );
-		meteorStoneMaterial = new THREE.MeshPhongMaterial(  );
-		rock = new THREE.Mesh(meteorStoneGeometry, meteorStoneMaterial);
-
-		sunRadius = 16;
-		sunRadius = Math.random()*9 + sunRadius;
-
-		var xTrans = (Math.random() -0.5)*2*sunRadius;
-		var yTrans;
-		if(Math.random() < 0.5){
-			yTrans = Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
-		}
-		else
-			yTrans = -Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
-
-		var zTrans = 0;
-
-		rock.translateX(xTrans);
-		rock.translateY(yTrans);
-		rock.translateZ(zTrans);
-
-		meteorbelt.add(rock);
-	}
-	visibility(meteorbelt,false);
-
-	activePlanet.add(meteorbelt);
-
-	var tempArray;
-
-	// Push to meteorbelts (planets|meteorbelts)
-	tempArray = [activePlanet, meteorbelt];
-	meteorbelts.push(tempArray);
-
-}
-
-
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
 	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
@@ -267,7 +222,6 @@ function addOrbitPath(radius) {
 
 	return path;
 }
-
 
 function addMoonOrbitPath(moonRadius) {
 	var pathGeometry = new THREE.TorusGeometry( moonRadius, 0.2, 16, 100 );
@@ -583,6 +537,20 @@ function onDocumentMouseDown( event ) {
 			}
 		}
 	}
+	
+	if ( intersects.length > 0 && buildHouseOk) {
+		//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
+		createHouse(intersects[0].object.worldToLocal(intersects[0].point));
+
+		houseCount++;
+		buildHouseOk = false;
+
+		//If-satsen löser ser till att rätt hus sätts ut, dvs huset från funktionen createHouse och inte showHouse.
+		if(activePlanet.children[4].children.length > 1)
+			activePlanet.children[4].remove(activePlanet.children[4].children[activePlanet.children[4].children.length-2]);
+		if(activeMoon.children.length > 1)
+			activeMoon.children.remove(activeMoon.children[activeMoon.children.length-2]);
+	}
 }
 
 
@@ -657,7 +625,25 @@ function onMouseMove( event ) {
 		}
 		
 	}
+	
+	//If-satsen gör att man kan hovra med ett hus över en planet.
+	if(buildHouseOk) {
+		//En forloop som ser till att det inte spawnar hus överallt där man har musen.
+		for ( i = activePlanet.children[4].children.length; i > houseCount-1; i-- )
+			activePlanet.children[4].remove(activePlanet.children[4].children[i]);
 
+		if ( intersects.length > 0 && intersects[0].object == activePlanet) {
+			//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
+			showHouse(intersects[0].object.worldToLocal(intersects[0].point));
+		}
+		for ( i = activeMoon.children.length; i > houseCount-1; i-- )
+			activeMoon.children.remove(activeMoon.children[i]);
+
+		if ( intersects.length > 0 && intersects[0].object == activeMoon) {
+			//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
+			showHouse(intersects[0].object.worldToLocal(intersects[0].point));
+		}
+	}
 }
 
 function lensFlareUpdateCallback( object ) {

@@ -11,6 +11,7 @@
 
 		<script src="js/three.js"></script>
 		<script src="js/MTLLoader.js"></script>
+		<script src="js/DDSLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
 		<script src="js/OBJLoader.js"></script>
 		<script src="js/OrbitControls.js"></script>
@@ -18,6 +19,7 @@
 		<script src="js/TrackballControls.js"></script>
 		<script src="js/stats.min.js"></script>
 		<script src="planetJump.js"></script>
+		<script src="placeHouse.js"></script>
 
 		<!-- includes -->
 		<!-- <link rel="import" href="shaders.html"> -->
@@ -119,6 +121,13 @@
 		var jumpPlanetOk;
 		var jumpMoonOk;
 		var jumpSolarOk;
+		
+		// Variables for building on planets/moons
+		var buildHouseOk;
+		var houseCount;
+		var onProgress;
+		var onError;
+		var loader;
 
 		//Temporary movement variables
 		var posx, posz, roty, timer = 0;
@@ -163,6 +172,7 @@
 		var clickedShells = [];	//multiarray of planet|shell
 		var clickedMoonShells = [];	//multiarray of moon|shell
 		var meteorbelts = [];	//multiarray of planet|meteorbelt
+		var houses = []; //multiarray of planet/moon|house
 
 		// Variables for render loop
 		var currentPlanet;					
@@ -304,6 +314,7 @@
 				jumpPlanet: function (){ if(activePlanet){jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;}},
 			    jumpMoon: function (){ if(activeMoon){jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;}},
 				jumpSolar: function (){ jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;},
+				buildHouse: function (){ if(!buildHouseOk) {buildHouseOk = true;} else {buildHouseOk = false;}},
 				moonRadius: 10,
 				moonRotation: 0.001,
 				playNewWorlds: function() { playMusic("New Worlds.mp3") },
@@ -360,6 +371,24 @@
 			var jumpToActivePlanet = gui.add( parameters, 'jumpPlanet' ).name('Jump to planet');
 			var jumpToActiveMoon = gui.add( parameters, 'jumpMoon' ).name('Jump to moon');
 			var jumpToSolarsystem = gui.add( parameters, 'jumpSolar' ).name('Jump to system');
+			
+			//Variables for building houses
+			var buildHouseOnActive = gui.add( parameters, 'buildHouse' ).name('Place house');
+			buildHouseOk = false;
+			houseCount = 0;
+			onProgress = function ( xhr ) {
+				if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round(percentComplete, 2) + '% downloaded' );
+				}
+	        };
+	        onError = function ( xhr ) {};
+	        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+			lock = new THREE.Object3D();
+			scene.add( lock );
+	        // Loader
+	        loader = new THREE.OBJMTLLoader();
+
 		
 			orbitVisibility.onChange(function(value) 
 			{
