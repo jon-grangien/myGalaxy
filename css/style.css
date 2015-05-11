@@ -37,7 +37,7 @@ canvas {
 #save_planet_button {
 	width:100%;
 	height: 100%;
-	background: rgb(255, 214, 92);
+	background: rgb(119, 189, 163);
 }
 #save_planet_button:hover {
 	background: rgb(235, 255, 212);
@@ -60,7 +60,7 @@ canvas {
 	min-width: 100px;
 	max-width: 110px;
 	cursor: pointer;	
-	background: rgb(255, 214, 92);
+	background: rgb(119, 189, 163);
 }
 
 #add-button-container button {
@@ -69,7 +69,7 @@ canvas {
 	min-heigth: 100px;
 	max-heigth: 100px;
 	cursor: pointer;	
-	background: rgb(255, 214, 92);
+	background: rgb(119, 189, 163);
 	padding: 20px 5px;
 	/*margin: 10px 0px 0px 10px;*/
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
@@ -133,7 +133,7 @@ canvas {
 #account-gui-wrapper p.button input {
 	width: 60%;
 	cursor: pointer;	
-	background: rgb(255, 214, 92);
+	background: rgb(119, 189, 163);
 	padding: 4px 2px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(99, 54, 54);
@@ -207,9 +207,8 @@ p.change_link{
 
 #account-gui-wrapper p.change_link a {
 	display: inline-block;
-	font-weight: bold;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	background: rgb(255, 214, 92);
+	background: rgb(119, 189, 163);
 	padding: 2px 6px;
 	color: rgb(99, 54, 54);
 	margin-left: 5px;
@@ -274,7 +273,7 @@ p.user_info {
 	width: 60%;
 	margin: 0 0 0 60px;
 	cursor: pointer;	
-	background: rgb(255, 214, 92);
+	background: rgb(119, 189, 163);
 	padding: 4px 2px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(99, 54, 54);
