@@ -108,18 +108,21 @@ canvas {
 #planet_radius_slider,
 #planet_size_slider,
 #planet_rotation_slider {
-	position: absolute;
+	position: relative;
 	width: 80%;
 	left: 20px;
 }
-#planet_radius_slider {
-	top: 10px;
+
+#planet_radius_container p,
+#planet_size_container p,
+#planet_rotation_container p{
+	position: relative;
 }
-#planet_size_slider {
-	top: 40px;
-}
-#planet_rotation_slider {
-	top: 70px;
+
+.slider-text {
+	color: white;
+	margin-left: 20px;
+	margin-bottom: 10px;
 }
 
 /************* LOGIN/REGISTER GUI **************/
@@ -279,7 +282,6 @@ input {
 	max-height: 40px;
 	min-width: 170px;
 	max-width: 185px;
-	/*color: white;*/
 
 	padding: 0% 1% 0px 0%;
 	background: rgb(10, 10, 10);
