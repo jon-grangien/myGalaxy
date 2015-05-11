@@ -257,13 +257,13 @@ p.user_info {
 	animation-name: fadeOutLeft;
 }
 
-.main {
+.bygg-main {
 	width:300px;
 	height:100px;
 	position:absolute;
-	top:0px;
-	left:0px;
-	z-index:-1;
+	top:25%;
+	left:1%;
+	z-index:22;
 }
 
 .site-header-wrap {
@@ -320,12 +320,12 @@ p.user_info {
 }
 
 
-img {
+#insideBygg img {
     opacity: 0.4;
     filter: alpha(opacity=40);
 }
 
-img:hover {
+#insideBygg img:hover {
     opacity: 1.0;
     filter: alpha(opacity=100);
 }
