@@ -36,7 +36,18 @@
 		<!-- planet_radius_slider -->
 		<script>
 			$(function() {
-				$( "#planet_radius_slider" ).slider();
+				$( "#planet_radius_slider" ).slider({
+					min: 30,
+					max: 300,
+					value: 30,
+					slide: function(event, ui) {
+						// $( 'activePlanet.position.x' ).val( ui.value );
+						// $(document).ready(function() {
+							activePlanet.position.x = ui.value;
+							console.log("actiplanet pos: " + activePlanet.position.x);
+						// });
+					}
+				});
 			});
 		</script>
 
@@ -787,6 +798,8 @@
 		}
 
 		function render() {
+
+			console.log("activePlanet current pos: " + activePlanet.position.x);
 
 			//Procedural sun
 			proceduralSunMaterial.uniforms[ 'time' ].value = .000025 * ( Date.now() - start );
