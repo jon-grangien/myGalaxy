@@ -59,6 +59,17 @@ canvas {
 		0px 1px 1px 3px rgb(210, 210, 210);*/
 	transition: all 0.2s linear;
 }
+#account-gui-add-button-container button:hover {
+	background: rgb(235, 255, 212);
+}
+#add-button-container button:active,
+#add-button-container button:focus {
+	background: rgb(40, 137, 154);
+	position: relative;
+	top: 1px;
+	border: 1px solid rgb(12, 76, 87);	
+	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
 
 /************* LOGIN/REGISTER GUI **************/
 #account-gui-container {
