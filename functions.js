@@ -59,21 +59,10 @@ function addPlanet(){
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
 
-<<<<<<< HEAD
 	orbitsMother.push(path);
-
 	for(var i = 0; i < orbitsMother.length; ++i) {
 		sunSphere.add(orbitsMother[i]);
 	}
-=======
-
-	orbitsMother.push(path);
-	for(var i = 0; i < orbitsMother.length; ++i)
-			{
-				sunSphere.add(orbitsMother[i]);
-			}
-
->>>>>>> master
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
