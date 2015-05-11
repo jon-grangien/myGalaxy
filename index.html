@@ -47,7 +47,20 @@
 							for (var i = 0; i < planetRadiuses.length; ++i) {	//det här är ju sämst
 								if (activePlanet == planetRadiuses[i][0]) {
 									planetRadiuses[i][1] = ui.value;
-									console.log("activePlanet radius is now " + planetRadiuses[i][1]);
+									// console.log("activePlanet radius is now " + planetRadiuses[i][1]);
+									// Find planet's torus replace
+									for (var i = 0; i < planetPaths.length; ++i) {
+										if (planetPaths[i][0] == activePlanet) {
+											sunSphere.remove(planetPaths[i][1]);
+											planetOrbitRadiuses[i][1] = ui.value; 
+											
+											var newPath = addOrbitPath(ui.value);
+
+
+											sunSphere.add(newPath);
+											planetPaths[i][1] = newPath;
+										}
+									}
 								}
 							}
 							// console.log("actiplanet pos: " + activePlanet.position.x);
