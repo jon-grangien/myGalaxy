@@ -531,6 +531,8 @@ function onDocumentMouseDown( event ) {
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
 				activePlanet = clickedObject;
+				if(activePlanet.children.length > 4)
+					activeMoon = activePlanet.children[4].children[0];
 				console.log("clicked object is a planet");
 			}
 		}
@@ -539,6 +541,7 @@ function onDocumentMouseDown( event ) {
 			if (clickedObject.parent == moonGroups[i]) {
 				activeMoon = clickedObject;
 				console.log("clicked object is a moon");
+				activePlanet = activeMoon.parent.parent;
 			}
 		}
 
@@ -560,16 +563,24 @@ function onDocumentMouseDown( event ) {
 		}
 
 
-		if(check)	// if clicked object is a planet
+		/*if(check)	// if clicked object is a planet
 		{
 			for (var i = 0; i < clickedShells.length; ++i) {
 				if (clickedShells[i][0] == activePlanet) {
 					
 					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
 					visibility(mesh.children[2],true); //Show clicked background
-
 				}
 			}
+			if(activePlanet.children.length > 0)
+				console.log("hej2");
+				for(var i = 0; i < clickedMoonShells.length; i++) {
+					if (clickedMoonShells[i][0] == activePlanet.children[0]) {
+						mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
+						visibility(mesh.children[1],true); //Show clicked background
+						console.log("hej3");
+					}
+				}
 		}
 		else	// if clicked object is a moon
 		{
@@ -581,7 +592,7 @@ function onDocumentMouseDown( event ) {
 
 				}
 			}
-		}
+		}*/
 	}
 }
 
