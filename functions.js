@@ -476,12 +476,7 @@ function login() {
 function logout() {
 	Parse.User.logOut();
 	// console.log("logged out");
-
-	// Rearrange menus
-    $('#user_menu').hide("fast");
-    $('#login').show("fast");
-    $('#register').show("fast");
-
+	menusOnLogout();
 }
 
 function onDocumentTouchStart( event ) {	
