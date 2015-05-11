@@ -105,6 +105,23 @@ canvas {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
+#planet_radius_slider,
+#planet_size_slider,
+#planet_rotation_slider {
+	position: absolute;
+	width: 80%;
+	left: 20px;
+}
+#planet_radius_slider {
+	top: 10px;
+}
+#planet_size_slider {
+	top: 40px;
+}
+#planet_rotation_slider {
+	top: 70px;
+}
+
 /************* LOGIN/REGISTER GUI **************/
 #account-gui-container {
 	position:absolute;
