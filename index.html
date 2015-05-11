@@ -26,7 +26,7 @@
 		<script src="functions.js"></script>
 		<script src="accordion.js"></script>
 
-		<script id="vertexShader" type="x-shader/x-vertex">	
+		<script id="vertexShader" type="x-shader/x-vertex">
 			varying vec3 vNormal;
 			void main() {
 			    vNormal = normalize( normalMatrix * normal );
@@ -34,7 +34,7 @@
 			}
 		</script>
 
-		<script id="torusVertexShader" type="x-shader/x-vertex">	
+		<script id="torusVertexShader" type="x-shader/x-vertex">
 			varying vec3 vNormal;
 			void main() {
 			    vNormal = normalize( normalMatrix * normal );
@@ -42,7 +42,7 @@
 			}
 		</script>
 
-		<script id="fragmentShader" type="x-shader/x-vertex">			 
+		<script id="fragmentShader" type="x-shader/x-vertex">
 			varying vec3 vNormal;
 			void main() {
 				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
@@ -50,7 +50,7 @@
 			}
 		</script>
 
-		<script id="fragmentShader2" type="x-shader/x-vertex">			 
+		<script id="fragmentShader2" type="x-shader/x-vertex">
 			varying vec3 vNormal;
 			void main() {
 				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
@@ -58,7 +58,7 @@
 			}
 		</script>
 
-		<script id="torusFragmentShader" type="x-shader/x-vertex">			 
+		<script id="torusFragmentShader" type="x-shader/x-vertex">
 			varying vec3 vNormal;
 			void main() 
 			{
@@ -68,7 +68,7 @@
 
 		</script>
 
-		<script id="torusMoonFragmentShader" type="x-shader/x-vertex">			 
+		<script id="torusMoonFragmentShader" type="x-shader/x-vertex">
 			varying vec3 vNormal;
 			void main() 
 			{
@@ -78,7 +78,7 @@
 
 		</script>
 
-		<script id="vertexShaderSun" type="x-shader/x-vertex">	
+		<script id="vertexShaderSun" type="x-shader/x-vertex">
 			varying vec3 vNormal;
 			void main() {
 			    vNormal = normalize( normalMatrix * normal );
@@ -86,7 +86,7 @@
 			}
 		</script>
 
-		<script id="fragmentShaderSun" type="x-shader/x-vertex">			 
+		<script id="fragmentShaderSun" type="x-shader/x-vertex">
 			varying vec3 vNormal;
 			
 			void main() {
@@ -257,11 +257,11 @@
 		<!-- ************************************** -->
 
 		<!-- general GUI -->
+		<div id="add-button-container">
+			<button id="add_planet_button" onClick="addPlanet()">Create planet</button>
+			<!-- <button id="add_moon_button" onClick="addMoon()">Add moon</button> -->
+		</div>
 		<div id="general-container">
-			<div id="add-button-container">
-				<button id="add_planet_button" onClick="addPlanet()">Create planet</button>
-				<button id="add_moon_button" onClick="addMoon()">Add moon</button>
-			</div>
 		</div>
 
 
