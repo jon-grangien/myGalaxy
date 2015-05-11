@@ -259,8 +259,8 @@
 		<!-- general GUI -->
 		<div id="general-container">
 			<div id="add-button-container">
-				<button onClick="addPlanet()">Create planet</button>
-				<button onClick="addMoon()">Add moon</button>
+				<button id="add_planet_button" onClick="addPlanet()">Create planet</button>
+				<button id="add_moon_button" onClick="addMoon()">Add moon</button>
 			</div>
 		</div>
 
@@ -479,167 +479,167 @@
 
 
 			/******* GUI *******/
-	        var gui = new dat.GUI();
+	  //       var gui = new dat.GUI();
 
-			var parameters = {
-				addPlanet: function() { addPlanet() },
-				radius: 30,
-				size: 1,
-				rotation: 0.001,
-				texture1: function() { updatePlanetTexture("Earth") },
-				texture2: function() { updatePlanetTexture("Cloudy") },
-				texture3: function() { updatePlanetTexture("Steel") },
-				texture4: function() { updatePlanetTexture("Terraformed mars") },
-				texture5: function() { updatePlanetTexture("Alien") },
-				texture6: function() { updatePlanetTexture("Desolate") },
-				texture7: function() { updatePlanetTexture("Sandy") },
-				texture8: function() { updatePlanetTexture("Klendathu") },
-				texture9: function() { updatePlanetTexture() },
-				addMoon: function() { addMoon() },
-				jumpPlanet: function (){ if(activePlanet){jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;}},
-			    jumpMoon: function (){ if(activeMoon){jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;}},
-				jumpSolar: function (){ jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;},
-				moonRadius: 10,
-				moonRotation: 0.001,
-				playNewWorlds: function() { playMusic("New Worlds.mp3") },
-				playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
-				playPotato: function() { playMusic("Digging My Potato.mp3") },
-				playMemory: function() { playMusic("Memory.mp3") },
-				playAnotherReflection: function() { playMusic("Another Reflection.mp3")},
-				visible: true,
-				meteorbeltVisible: false
-			};
+			// var parameters = {
+			// 	addPlanet: function() { addPlanet() },
+			// 	radius: 30,
+			// 	size: 1,
+			// 	rotation: 0.001,
+			// 	texture1: function() { updatePlanetTexture("Earth") },
+			// 	texture2: function() { updatePlanetTexture("Cloudy") },
+			// 	texture3: function() { updatePlanetTexture("Steel") },
+			// 	texture4: function() { updatePlanetTexture("Terraformed mars") },
+			// 	texture5: function() { updatePlanetTexture("Alien") },
+			// 	texture6: function() { updatePlanetTexture("Desolate") },
+			// 	texture7: function() { updatePlanetTexture("Sandy") },
+			// 	texture8: function() { updatePlanetTexture("Klendathu") },
+			// 	texture9: function() { updatePlanetTexture() },
+			// 	addMoon: function() { addMoon() },
+			// 	jumpPlanet: function (){ if(activePlanet){jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;}},
+			//     jumpMoon: function (){ if(activeMoon){jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;}},
+			// 	jumpSolar: function (){ jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;},
+			// 	moonRadius: 10,
+			// 	moonRotation: 0.001,
+			// 	playNewWorlds: function() { playMusic("New Worlds.mp3") },
+			// 	playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
+			// 	playPotato: function() { playMusic("Digging My Potato.mp3") },
+			// 	playMemory: function() { playMusic("Memory.mp3") },
+			// 	playAnotherReflection: function() { playMusic("Another Reflection.mp3")},
+			// 	visible: true,
+			// 	meteorbeltVisible: false
+			// };
 
-			gui.add( parameters, 'addPlanet').name("Spawn new planet");
+			// gui.add( parameters, 'addPlanet').name("Spawn new planet");
 			
-			// planet properties
-			planetPropertiesFl = gui.addFolder('Planet properties');
-			var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
-			var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(1.0).max(5).step(0.1).listen(); 
-			var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.0100).step(0.001).listen(); 
-			var meteorbeltVisibility = planetPropertiesFl.add( parameters, 'meteorbeltVisible' ).name('Spawn meteorbelt').listen();
+			// // planet properties
+			// planetPropertiesFl = gui.addFolder('Planet properties');
+			// var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
+			// var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(1.0).max(5).step(0.1).listen(); 
+			// var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.0100).step(0.001).listen(); 
+			// var meteorbeltVisibility = planetPropertiesFl.add( parameters, 'meteorbeltVisible' ).name('Spawn meteorbelt').listen();
 
-			planetPropertiesFl.close();
+			// planetPropertiesFl.close();
 
-			// planet textures
-			var planetTexturesFl = gui.addFolder('Planet textures');
-			planetTexturesFl.add( parameters, 'texture1' ).name("Earth");
-			planetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
-			planetTexturesFl.add( parameters, 'texture3' ).name("Steel");
-			planetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
-			planetTexturesFl.add( parameters, 'texture5' ).name("Alien");
-			planetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
-			planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
-			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
-			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
+			// // planet textures
+			// var planetTexturesFl = gui.addFolder('Planet textures');
+			// planetTexturesFl.add( parameters, 'texture1' ).name("Earth");
+			// planetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
+			// planetTexturesFl.add( parameters, 'texture3' ).name("Steel");
+			// planetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
+			// planetTexturesFl.add( parameters, 'texture5' ).name("Alien");
+			// planetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
+			// planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
+			// planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
+			// planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
 
-			//Add moon
-			gui.add( parameters, 'addMoon' ).name("Spawn moon");
-			moonPropertiesFl = gui.addFolder('Moon properties');
+			// //Add moon
+			// gui.add( parameters, 'addMoon' ).name("Spawn moon");
+			// moonPropertiesFl = gui.addFolder('Moon properties');
 
-			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
-			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
+			// var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
+			// var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
 
-			var musicFl = gui.addFolder('Music');
-			musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
-			musicFl.add( parameters, "playStrangers" ).name("Strangers");
-			musicFl.add( parameters, "playPotato" ).name("Digging My Potato");
-			musicFl.add( parameters, "playMemory" ).name("Memory");
-			musicFl.add( parameters, "playAnotherReflection" ).name("Another Reflection");
+			// var musicFl = gui.addFolder('Music');
+			// musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
+			// musicFl.add( parameters, "playStrangers" ).name("Strangers");
+			// musicFl.add( parameters, "playPotato" ).name("Digging My Potato");
+			// musicFl.add( parameters, "playMemory" ).name("Memory");
+			// musicFl.add( parameters, "playAnotherReflection" ).name("Another Reflection");
 
-			//Toggle orbit-visibility
-			var orbitVisibility = gui.add( parameters, 'visible' ).name('Show orbits').listen();
+			// //Toggle orbit-visibility
+			// var orbitVisibility = gui.add( parameters, 'visible' ).name('Show orbits').listen();
 			
-			//Buttons for jumping between planets/moon/solarsystem
-			jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;
-			var jumpToActivePlanet = gui.add( parameters, 'jumpPlanet' ).name('Jump to planet');
-			var jumpToActiveMoon = gui.add( parameters, 'jumpMoon' ).name('Jump to moon');
-			var jumpToSolarsystem = gui.add( parameters, 'jumpSolar' ).name('Jump to system');
+			// //Buttons for jumping between planets/moon/solarsystem
+			// jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;
+			// var jumpToActivePlanet = gui.add( parameters, 'jumpPlanet' ).name('Jump to planet');
+			// var jumpToActiveMoon = gui.add( parameters, 'jumpMoon' ).name('Jump to moon');
+			// var jumpToSolarsystem = gui.add( parameters, 'jumpSolar' ).name('Jump to system');
 		
-			orbitVisibility.onChange(function(value) 
-			{
-				for (var i = 0; i < planetPaths.length; ++i) {
-					planetPaths[i][1].visible = value;
-				}
+			// orbitVisibility.onChange(function(value) 
+			// {
+			// 	for (var i = 0; i < planetPaths.length; ++i) {
+			// 		planetPaths[i][1].visible = value;
+			// 	}
 
-				for (var j = 0; j < moonPaths.length; ++j) {
-					moonPaths[j][1].visible = value;
-				}
-			});
+			// 	for (var j = 0; j < moonPaths.length; ++j) {
+			// 		moonPaths[j][1].visible = value;
+			// 	}
+			// });
 
 
-			meteorbeltVisibility.onChange(function(value) 
-			{
-				for (var i = 0; i < meteorbelts.length; ++i) {
-					if (meteorbelts[i][0] == activePlanet) {
+			// meteorbeltVisibility.onChange(function(value) 
+			// {
+			// 	for (var i = 0; i < meteorbelts.length; ++i) {
+			// 		if (meteorbelts[i][0] == activePlanet) {
 
-					mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
-					visibility(mesh.children[3],value); //Show clicked background
-					}
-				}
-			});
+			// 		mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+			// 		visibility(mesh.children[3],value); //Show clicked background
+			// 		}
+			// 	}
+			// });
 
-			sphereRadius.onChange(function(value) {
-				activePlanet.position.x = value;   
+			// sphereRadius.onChange(function(value) {
+			// 	activePlanet.position.x = value;   
 
-				// Find planet's torus replace
-				for (var i = 0; i < planetPaths.length; ++i) {
-					if (planetPaths[i][0] == activePlanet) {
-						sunSphere.remove(planetPaths[i][1]);
-						planetOrbitRadiuses[i][1] = value; 
+			// 	// Find planet's torus replace
+			// 	for (var i = 0; i < planetPaths.length; ++i) {
+			// 		if (planetPaths[i][0] == activePlanet) {
+			// 			sunSphere.remove(planetPaths[i][1]);
+			// 			planetOrbitRadiuses[i][1] = value; 
 						
-						var newPath = addOrbitPath(value);
+			// 			var newPath = addOrbitPath(value);
 
 
-						sunSphere.add(newPath);
-						planetPaths[i][1] = newPath;
-					}
-				}
-			});
+			// 			sunSphere.add(newPath);
+			// 			planetPaths[i][1] = newPath;
+			// 		}
+			// 	}
+			// });
 			
-			sphereSize.onChange(function(value) {
-				activePlanet.scale.x = value;
-				activePlanet.scale.y = value;
-				activePlanet.scale.z = value;
-			});
+			// sphereSize.onChange(function(value) {
+			// 	activePlanet.scale.x = value;
+			// 	activePlanet.scale.y = value;
+			// 	activePlanet.scale.z = value;
+			// });
 			
-			planetRotation.onChange(function(value) {
-				for (var i = 0; i < planetSpeeds.length; ++i) {
-					if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
-						planetSpeeds[i][1] = value;		//change second element to slider value
-						// console.log("rotation changed to " + value);
-					}
-				}
-			});
+			// planetRotation.onChange(function(value) {
+			// 	for (var i = 0; i < planetSpeeds.length; ++i) {
+			// 		if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
+			// 			planetSpeeds[i][1] = value;		//change second element to slider value
+			// 			// console.log("rotation changed to " + value);
+			// 		}
+			// 	}
+			// });
 
-			moonRadius.onChange(function(value) 
-			{ 
+			// moonRadius.onChange(function(value) 
+			// { 
 
-				for (var i = 0; i < moonPaths.length; ++i) {
-					if (moonPaths[i][0] == activeMoon) {
-						moonOrbitRadiuses[i][1] = value; 
+			// 	for (var i = 0; i < moonPaths.length; ++i) {
+			// 		if (moonPaths[i][0] == activeMoon) {
+			// 			moonOrbitRadiuses[i][1] = value; 
 		
-						activeMoon.parent.remove(moonPaths[i][1]); 
+			// 			activeMoon.parent.remove(moonPaths[i][1]); 
 						
-						var newPath = addMoonOrbitPath(value);
+			// 			var newPath = addMoonOrbitPath(value);
 
-						activeMoon.parent.add(newPath);
-						moonPaths[i][1] = newPath;
-					}
-				}
+			// 			activeMoon.parent.add(newPath);
+			// 			moonPaths[i][1] = newPath;
+			// 		}
+			// 	}
 
-			});
+			// });
 
-			moonRotation.onChange(function(value) {
-				for (var i = 0; i < moonSpeeds.length; ++i) {
-					if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
-						moonSpeeds[i][1] = value;		//change second element to slider value
-						// console.log("rotation changed to " + value);
-					}
-				}
-			});
+			// moonRotation.onChange(function(value) {
+			// 	for (var i = 0; i < moonSpeeds.length; ++i) {
+			// 		if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
+			// 			moonSpeeds[i][1] = value;		//change second element to slider value
+			// 			// console.log("rotation changed to " + value);
+			// 		}
+			// 	}
+			// });
 
-			gui.open();
+			// gui.open();
 			
 			/*******************/
 

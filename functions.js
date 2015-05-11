@@ -24,7 +24,7 @@ function onWindowResize() {
 // Planet spawn (gui)
 function addPlanet(){
 
-	planetPropertiesFl.open();
+	// planetPropertiesFl.open();
 
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
@@ -316,7 +316,7 @@ function updatePlanetTexture(textureName){
 function addMoon() {
 
 	//Open moon property-menusa
-	moonPropertiesFl.open();
+	// moonPropertiesFl.open();
 
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
