@@ -12,7 +12,7 @@ function addLight( h, s, l, x, y, z ) {
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
 	//lensFlare.position.copy( light.position );
 
-	sunSphere.add( lensFlare );
+	//sunSphere.add( lensFlare );
 }
 
 function onWindowResize() {
@@ -731,4 +731,68 @@ function addStars(){
 		return particles;
 
 	}
+}
+
+
+function addSun(){
+	/************* SUN ****************/
+			/* create custom material from the shader code above
+			that is within specially labeled script tags */
+			customSunMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {
+					//cameraPos: { type: "v3", value: new THREE.Vector3() }
+				},
+				vertexShader:   document.getElementById( 'vertexShaderSun'   ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShaderSun' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+
+
+				
+			sunGeometry = new THREE.SphereGeometry( 19, 54, 54 );
+			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
+			activePlanet = sunSphere;
+			clickedObject = sunSphere;
+
+
+			//Procedural Sun	
+		    proceduralSunMaterial = new THREE.ShaderMaterial( {
+
+			    uniforms: { 
+			        tExplosion: {
+			            type: "t", 
+			            value: THREE.ImageUtils.loadTexture( 'explosion.png' )
+			        },
+			        time: { // float initialized to 0
+			            type: "f", 
+			            value: 0.0 
+			        }
+			    },
+			    vertexShader: document.getElementById( 'vertexShaderProcedural' ).textContent,
+			    fragmentShader: document.getElementById( 'fragmentShaderProcedural' ).textContent
+			    
+			} );
+
+		
+		    // create a sphere and assign the material
+		    proceduralSun = new THREE.Mesh( 
+		        new THREE.IcosahedronGeometry( 12, 5 ), 
+		        proceduralSunMaterial 
+		    );
+		    sunSphere.add(proceduralSun);
+
+			galaxyGroup = new THREE.Object3D;
+			rotationGroup = new THREE.Object3D;
+			galaxyGroup.add(sunSphere);
+			//clickableObjects.push(sunSphere);
+			rotationGroup.add(galaxyGroup);
+			rotationGroup.add(addStars());
+			scene.add(rotationGroup);
+
+			//Origo
+			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
+			addLight( 0.08, 0.8, 0.5, 2, 2, 2 );
+
 }
