@@ -1,3 +1,7 @@
+function initiallyHideMenus() {
+	// Menus that aren't supposed to 
+}
+
 function menusOnLogin() {
 	// Hide login/create menus
     $('#login').hide("fast");
@@ -15,3 +19,6 @@ function menusOnLogout() {
     $('#register').show("fast");
 }
 
+function menusOnCreatePlanet() {
+	$('#add_planet_button').hide("fast");
+}

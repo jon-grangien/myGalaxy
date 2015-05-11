@@ -23,9 +23,6 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
-
-	// planetPropertiesFl.open();
-
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
 		if (clickedShells[i][0] == activePlanet) {
@@ -145,6 +142,8 @@ function addPlanet(){
 	// Push to planetOrbitRadiuses
 	tempArray = [activePlanet, 60]; //the value 60 should maybe be replaced by a variable
 	planetOrbitRadiuses.push(tempArray);
+
+	menusOnCreatePlanet();
 
 }
 
