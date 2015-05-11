@@ -20,7 +20,7 @@ function planetJump(){
 			//Beräkna zoom-nivå beroende på planetens radie och storlek
 			for (var i = 0; i < planetOrbitRadiuses.length; ++i) {
 					if (planetOrbitRadiuses[i][0] == activePlanet)
-						zoomLevel = activePlanet.scale.x*0.5/(planetOrbitRadiuses[i][1]/60);
+						zoomLevel = 2*activePlanet.scale.x/(planetOrbitRadiuses[i][1]/60);
 			}
 			//Möjliggör ändring av transparens
 			planetOrbitMaterial.transparent = true;
@@ -89,7 +89,7 @@ function moonJump(){
 			//Spara kamerans rotations-hastighet
 			controlsRotSpeed = controls.rotateSpeed;
 			//Beräkna zoom-nivå beroende på planetens radie och storlek
-			zoomLevel = activeMoon.scale.x*0.1;
+			zoomLevel = activeMoon.scale.x*0.55;
 			//Möjliggör ändring av transparens
 			planetOrbitMaterial.transparent = true;
 
@@ -172,7 +172,7 @@ function jumpToSun(){
 		//Zooma kameran till rätt nivå beroende på planetens storlek, med en mjuk övergång.
 		camera.position.x = cameraPosX*(1+Math.cos(Math.PI - timer))/2;
 		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2;
-		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - 200*(1+Math.cos(timer))/2;
+		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - 800*(1+Math.cos(timer))/2;
 		//Dimma ut omloppsbanor och hover-sfärer
 		planetOrbitMaterial.opacity = Math.cos(timer/2);
 		planetHoverMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
