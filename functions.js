@@ -35,7 +35,7 @@ function addPlanet(){
 	}
 
 	// Atmosphere
-	var atmosphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
+	var atmosphereGeometry = new THREE.SphereGeometry( 12.5, 60, 60 );
 	var atmosphereMaterial = new THREE.ShaderMaterial( {
 	    uniforms: {  },
 		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
@@ -215,7 +215,7 @@ function addMeteorbelt(){
 
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
-	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
+	var pathGeometry = new THREE.TorusGeometry( radius, 0.3, 16, 100 );
 
 	var path = new THREE.Mesh( pathGeometry, planetOrbitMaterial );
 
