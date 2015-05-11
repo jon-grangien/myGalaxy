@@ -148,9 +148,15 @@ function addPlanet(){
 	tempArray = [activePlanet, 60]; //the value 60 should maybe be replaced by a variable
 	planetOrbitRadiuses.push(tempArray);
 	
+	//tempArray = [activePlanet, 0];
+	//planetHouses.push(tempArray);
+	
 	//A group containing all houses on the planet, this is the 5:th child of a new planet.
 	var houseGroup = new THREE.Object3D;
 	activePlanet.add(houseGroup);
+	//A group containing all temporary houses (hovering houses) on the planet.
+	var houseHoverGroup = new THREE.Object3D;
+	activePlanet.add(houseHoverGroup);
 
 }
 
@@ -370,8 +376,15 @@ function addMoon() {
 	clickedMoonShells.push(tempArray);
 
 	// Push to planetOrbitRadiuses
-	tempArray = [activePlanet, 20]; //the value 60 should maybe be replaced by a variable
+	tempArray = [activePlanet, 20]; //the value 20 should maybe be replaced by a variable
 	moonOrbitRadiuses.push(tempArray);
+	
+	//A group containing all houses on the moon, this is the 3:th child of a moon.
+	var houseGroup = new THREE.Object3D;
+	activeMoon.add(houseGroup);
+	//A group containing all temporary houses (hovering houses) on the moon.
+	var houseHoverGroup = new THREE.Object3D;
+	activeMoon.add(houseHoverGroup);
 	
 	// console.log("moon spawned");
 }
@@ -550,17 +563,11 @@ function onDocumentMouseDown( event ) {
 	}
 	
 	if ( intersects.length > 0 && buildHouseOk) {
+		
 		//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
 		createHouse(intersects[0].object.worldToLocal(intersects[0].point));
 
-		houseCount++;
 		buildHouseOk = false;
-
-		//If-satsen löser ser till att rätt hus sätts ut, dvs huset från funktionen createHouse och inte showHouse.
-		if(activePlanet.children[4].children.length > 1)
-			activePlanet.children[4].remove(activePlanet.children[4].children[activePlanet.children[4].children.length-2]);
-		if(activeMoon.children.length > 1)
-			activeMoon.children.remove(activeMoon.children[activeMoon.children.length-2]);
 	}
 }
 
@@ -639,20 +646,25 @@ function onMouseMove( event ) {
 	
 	//If-satsen gör att man kan hovra med ett hus över en planet.
 	if(buildHouseOk) {
-		//En forloop som ser till att det inte spawnar hus överallt där man har musen.
-		for ( i = activePlanet.children[4].children.length; i > houseCount-1; i-- )
-			activePlanet.children[4].remove(activePlanet.children[4].children[i]);
-
-		if ( intersects.length > 0 && intersects[0].object == activePlanet) {
-			//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
-			showHouse(intersects[0].object.worldToLocal(intersects[0].point));
+		
+		if(jumpPlanetOk) {
+			//En forloop som ser till att det inte spawnar hus överallt där man har musen.
+			for ( i = activePlanet.children[5].children.length; i >= 0; i-- )
+				activePlanet.children[5].remove(activePlanet.children[5].children[i]);
+			if ( intersects.length > 0 && intersects[0].object == activePlanet) {
+				//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
+				showHouse(intersects[0].object.worldToLocal(intersects[0].point));
+			}
 		}
-		for ( i = activeMoon.children.length; i > houseCount-1; i-- )
-			activeMoon.children.remove(activeMoon.children[i]);
-
-		if ( intersects.length > 0 && intersects[0].object == activeMoon) {
-			//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
-			showHouse(intersects[0].object.worldToLocal(intersects[0].point));
+		
+		if(jumpMoonOk) {
+			//En forloop som ser till att det inte spawnar hus överallt där man har musen.
+			for ( i = activeMoon.children[3].children.length; i >= 0; i-- )
+				activeMoon.children[3].remove(activeMoon.children[3].children[i]); 
+			if ( intersects.length > 0 && intersects[0].object == activeMoon) {
+				//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
+				showHouse(intersects[0].object.worldToLocal(intersects[0].point));
+			}
 		}
 	}
 }
