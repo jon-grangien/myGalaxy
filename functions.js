@@ -148,6 +148,9 @@ function addPlanet(){
 	var houseGroup = new THREE.Object3D;
 	activePlanet.add(houseGroup);
 
+	tempArray = [activePlanet, 60];	//intial radius
+	planetRadiuses.push(tempArray);
+
 	menusOnCreatePlanet();
 
 }
