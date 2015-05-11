@@ -88,7 +88,9 @@
 
 		<script id="fragmentShaderSun" type="x-shader/x-vertex">			 
 			varying vec3 vNormal;
+			
 			void main() {
+
 				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 9.0 ); 
 			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
 			}
@@ -272,16 +274,23 @@
 		var activePlanet;
 		var previousObject;
 		var activeMoon;
+		var orbitsMother = [];
 		var customTexture;
 		var activeRotationSpeed;
-		var jumpOk;
+		var jumpPlanetOk;
+		var jumpMoonOk;
+		var jumpSolarOk;
 
 		//Temporary movement variables
-		var posx, posz, roty, camzoom, timer = 0;
+		var posx, posz, roty, timer = 0;
 
 		//Temporary hover variables
 		var hoveredPlanet;
 		var hoveredMoon;
+		var planetOrbitMaterial;
+		var planetHoverMaterial;
+		var hoverOpacity;
+		var moonHoverMaterial;
 		var clickedPlanet;
 		var clickedMoon;
 		var hoverShell;
@@ -353,7 +362,7 @@
 			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
 			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 20000 );
-			camera.position.z = 200;
+			camera.position.z = 0;
 			scene.add(camera);
 			
 			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
@@ -362,9 +371,20 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			renderer.shadowMapEnabled = true;
 			$container.append(renderer.domElement);
+			
 
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
+			
+			//Create a material for the planet toruses
+			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0x27241c,opacity:1,transparent:false,side:THREE.BackSide});
+			
+			hoverOpacity = 0.2;
+			//Create a material for hovering over planets
+			planetHoverMaterial = new THREE.MeshBasicMaterial({color:0xA7FF85,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
+			
+			//Create a meterial for hovering over moons
+			moonHoverMaterial = new THREE.MeshBasicMaterial({color:0x7A86D6,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
 			
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
 			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );
@@ -404,8 +424,7 @@
 			    newUsername = jQuery("#uname_register_field").val();
 			    newUserPassword = jQuery("#password_register_field").val();
 			    createAccount();	//newUsername, newUserPassword global
-			});
-			
+			});			
 
 			/************* SUN ****************/
 			/* create custom material from the shader code above
@@ -413,7 +432,7 @@
 			var customSunMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-				fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShaderSun' ).textContent,
 				side: THREE.BackSide,
 				blending: THREE.AdditiveBlending,
 				transparent: true
@@ -438,12 +457,15 @@
 
 			scene.add(rotationGroup);
 
+
 			// Core
 			var sunCoreGeometry = new THREE.SphereGeometry( 3, 40, 40 );
 			var sunCoreMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 			sunCore = new THREE.Mesh(sunCoreGeometry, sunCoreMaterial);	//activePlanet is a global var
 			sunCore.material.map.minFilter = THREE.NearestFilter;
-			//scene.add(sunCore);
+			//orbitsMother.add(sunCore);
+
+			
 
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
@@ -458,7 +480,6 @@
 				radius: 30,
 				size: 1,
 				rotation: 0.001,
-				jump: false,
 				texture1: function() { updatePlanetTexture("Earth") },
 				texture2: function() { updatePlanetTexture("Cloudy") },
 				texture3: function() { updatePlanetTexture("Steel") },
@@ -469,6 +490,9 @@
 				texture8: function() { updatePlanetTexture("Klendathu") },
 				texture9: function() { updatePlanetTexture() },
 				addMoon: function() { addMoon() },
+				jumpPlanet: function (){ if(activePlanet){jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;}},
+			    jumpMoon: function (){ if(activeMoon){jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;}},
+				jumpSolar: function (){ jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;},
 				moonRadius: 10,
 				moonRotation: 0.001,
 				playNewWorlds: function() { playMusic("New Worlds.mp3") },
@@ -502,7 +526,6 @@
 			planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
 			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
 			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
-		
 
 			//Add moon
 			gui.add( parameters, 'addMoon' ).name("Spawn moon");
@@ -520,7 +543,12 @@
 
 			//Toggle orbit-visibility
 			var orbitVisibility = gui.add( parameters, 'visible' ).name('Show orbits').listen();
-			var jumpToActivePlanet = gui.add( parameters, 'jump' ).name('Jump to active planet').listen();
+			
+			//Buttons for jumping between planets/moon/solarsystem
+			jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;
+			var jumpToActivePlanet = gui.add( parameters, 'jumpPlanet' ).name('Jump to planet');
+			var jumpToActiveMoon = gui.add( parameters, 'jumpMoon' ).name('Jump to moon');
+			var jumpToSolarsystem = gui.add( parameters, 'jumpSolar' ).name('Jump to system');
 		
 			orbitVisibility.onChange(function(value) 
 			{
@@ -544,9 +572,6 @@
 					}
 				}
 			});
-			
-			jumpToActivePlanet.onChange(function(value) 
-			{	jumpOk = value });
 
 			sphereRadius.onChange(function(value) {
 				activePlanet.position.x = value;   
@@ -672,8 +697,13 @@
 			//Variabeln time används till timern och även planeternas rotation.
 			time = Date.now() * 0.0005;
 
-			if(jumpOk){
+			//Handles the jumps between planets.	
+			if(jumpPlanetOk && activePlanet){
 				planetJump();
+			} else if(jumpMoonOk && activeMoon) {
+				moonJump();
+			} else {
+				jumpToSun();
 			}
 
 			if (planetNeedsInitialShift) {
@@ -700,7 +730,7 @@
 
 			// planet rotations about self (ha som variabel?)
 			for (var i = 0; i < planets.length; ++i) {
-				planets[i][0].rotation.z += 0.005;
+				planets[i][0].rotation.z += 0.001;
 			}
 
 			// moon rotation speeds about planet
@@ -712,6 +742,8 @@
 				orbit = moonOrbitRadiuses[i][1];
 				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 100) * orbit;
 				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 100) * orbit;
+				//The following line is needed to be able to jump to moons.
+				currentMoonGroup.rotation.z = -currentMoonGroup.parent.rotation.z;
 			}
 
 			//Turn on planet clicked background

@@ -2,7 +2,7 @@ function addLight( h, s, l, x, y, z ) {
 	var light = new THREE.PointLight( 0xaaffff, 1.5, 0 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
-	scene.add( light );
+	sunSphere.add( light );
 
 	var flareColor = new THREE.Color( 0x00ffff );
 	flareColor.setHSL( h, s, l + 0.3 );
@@ -12,13 +12,12 @@ function addLight( h, s, l, x, y, z ) {
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
 	//lensFlare.position.copy( light.position );
 
-	//scene.add( lensFlare );
+	sunSphere.add( lensFlare );
 }
 
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
-
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
@@ -36,7 +35,7 @@ function addPlanet(){
 	}
 
 	// Atmosphere
-	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var atmosphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
 	var atmosphereMaterial = new THREE.ShaderMaterial( {
 	    uniforms: {  },
 		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
@@ -54,7 +53,7 @@ function addPlanet(){
 	var path = addOrbitPath(60);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
 
 	// Planet
-	var sphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
@@ -63,7 +62,11 @@ function addPlanet(){
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
 
-	sunSphere.add(path);
+	orbitsMother.push(path);
+
+	for(var i = 0; i < orbitsMother.length; ++i) {
+		sunSphere.add(orbitsMother[i]);
+	}
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
@@ -71,7 +74,7 @@ function addPlanet(){
 	planetNeedsInitialShift = true;
 
 	//Hover-background
-	var hoverGeometry = new THREE.SphereGeometry( 12, 40, 40 );
+	var hoverGeometry = new THREE.SphereGeometry( 12, 60, 60 );
 	var hoverMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -81,13 +84,13 @@ function addPlanet(){
 				transparent: true
 			}   );
 	hoverMaterial.side = THREE.BackSide;
-	hoverShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	hoverShell = new THREE.Mesh(hoverGeometry, planetHoverMaterial);
 	visibility(hoverShell, false);
 	activePlanet.add(hoverShell);
 	//----------------hoverend------------------
 
 	//Clicked-background
-	var clickedGeometry = new THREE.SphereGeometry( 15, 40, 40 );
+	var clickedGeometry = new THREE.SphereGeometry( 15, 60, 60 );
 	var clickedMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -97,7 +100,7 @@ function addPlanet(){
 				transparent: true
 			}   );
 	clickedMaterial.side = THREE.BackSide;
-	clickedShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	clickedShell = new THREE.Mesh(clickedGeometry, planetHoverMaterial);
 	visibility(clickedShell, false);
 	activePlanet.add(clickedShell);
 	//----------------clickedend------------------
@@ -251,16 +254,9 @@ function addMeteorbelt2(){
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
 	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
-	var pathMaterial = new THREE.ShaderMaterial( {
-			    uniforms: {  },
-				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
-				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
-				side: THREE.BackSide,
-				blending: THREE.AdditiveBlending,
-				transparent: true
-			}   );
 
-	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+	var path = new THREE.Mesh( pathGeometry, planetOrbitMaterial );
+
 
 	return path;
 }
@@ -277,7 +273,7 @@ function addMoonOrbitPath(moonRadius) {
 				transparent: true
 			}   );
 
-	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+	var path = new THREE.Mesh( pathGeometry, moonHoverMaterial );
 
 	return path;
 }
@@ -362,7 +358,7 @@ function addMoon() {
 				transparent: true
 			}   );
 	hoverMaterial.side = THREE.BackSide;
-	hoverMoonShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	hoverMoonShell = new THREE.Mesh(hoverGeometry, moonHoverMaterial);
 	visibility(hoverMoonShell,false);
 	activeMoon.add(hoverMoonShell);
 	//-------hoverend-------------
@@ -378,7 +374,7 @@ function addMoon() {
 				transparent: true
 			}   );
 	clickedMaterial.side = THREE.BackSide;
-	clickedMoonShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	clickedMoonShell = new THREE.Mesh(clickedGeometry, moonHoverMaterial);
 	visibility(clickedMoonShell,false);
 	activeMoon.add(clickedMoonShell);
 	//-------clickedend-------------
@@ -532,11 +528,16 @@ function onDocumentMouseDown( event ) {
 	if ( intersects.length > 0 ) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
-		previousObject = activePlanet;
+		if(jumpPlanetOk)
+			previousObject = activePlanet;
+		if(jumpMoonOk)
+			previousObject = activeMoon;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
 				activePlanet = clickedObject;
+				if(activePlanet.children.length > 4)
+					activeMoon = activePlanet.children[4].children[0];
 				console.log("clicked object is a planet");
 			}
 		}
@@ -545,6 +546,7 @@ function onDocumentMouseDown( event ) {
 			if (clickedObject.parent == moonGroups[i]) {
 				activeMoon = clickedObject;
 				console.log("clicked object is a moon");
+				activePlanet = activeMoon.parent.parent;
 			}
 		}
 
@@ -566,16 +568,24 @@ function onDocumentMouseDown( event ) {
 		}
 
 
-		if(check)	// if clicked object is a planet
+		/*if(check)	// if clicked object is a planet
 		{
 			for (var i = 0; i < clickedShells.length; ++i) {
 				if (clickedShells[i][0] == activePlanet) {
 					
 					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
 					visibility(mesh.children[2],true); //Show clicked background
-
 				}
 			}
+			if(activePlanet.children.length > 0)
+				console.log("hej2");
+				for(var i = 0; i < clickedMoonShells.length; i++) {
+					if (clickedMoonShells[i][0] == activePlanet.children[0]) {
+						mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
+						visibility(mesh.children[1],true); //Show clicked background
+						console.log("hej3");
+					}
+				}
 		}
 		else	// if clicked object is a moon
 		{
@@ -587,7 +597,7 @@ function onDocumentMouseDown( event ) {
 
 				}
 			}
-		}
+		}*/
 	}
 }
 
@@ -694,7 +704,7 @@ function visibility(object, bool){
 
 function loadStars(){
 	geometry = new THREE.Geometry();
-	
+
 	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png" );
 	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png" );
 	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star13.png" );
