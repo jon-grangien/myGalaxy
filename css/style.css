@@ -27,6 +27,30 @@ canvas {
 	z-index: 22;
 }
 
+#save-planet-container {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	height: 15%;
+}
+
+#save_planet_button {
+	width:100%;
+	height: 100%;
+	background: rgb(255, 214, 92);
+}
+#save_planet_button:hover {
+	background: rgb(235, 255, 212);
+}
+#save_planet_button:active,
+#save_planet_button:focus {
+	background: rgb(40, 137, 154);
+	position: relative;
+	top: 1px;
+	border: 1px solid rgb(12, 76, 87);	
+	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
+
 #add-button-container {
 	position:absolute;
 	top: 10px;
@@ -35,7 +59,8 @@ canvas {
 	max-height: 60px;
 	min-width: 100px;
 	max-width: 110px;
-
+	cursor: pointer;	
+	background: rgb(255, 214, 92);
 }
 
 #add-button-container button {
@@ -58,7 +83,7 @@ canvas {
 		0px 1px 1px 3px rgb(210, 210, 210);*/
 	transition: all 0.2s linear;
 }
-#account-gui-add-button-container button:hover {
+#add-button-container button:hover {
 	background: rgb(235, 255, 212);
 }
 #add-button-container button:active,
