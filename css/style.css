@@ -262,7 +262,7 @@ p.user_info {
 	height:100px;
 	position:absolute;
 	top:25%;
-	left:1%;
+	left:10px;
 	z-index:22;
 }
 
