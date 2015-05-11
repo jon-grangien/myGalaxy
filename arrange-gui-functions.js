@@ -1,5 +1,8 @@
 function initiallyHideMenus() {
-	// Menus that aren't supposed to 
+	// Menus that aren't supposed to show initially (prestanda?)
+    $('#user_menu').hide();
+    $('#edit-planet-container').hide();
+    $('.bygg-main').hide();
 }
 
 function menusOnLogin() {
@@ -20,5 +23,6 @@ function menusOnLogout() {
 }
 
 function menusOnCreatePlanet() {
-	$('#add_planet_button').hide("fast");
+	$('#add_planet_button').hide();
+    $('#edit-planet-container').show("fast");
 }

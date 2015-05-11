@@ -431,14 +431,6 @@
 									</td>
 									</div>
 								</td><br>
-								<td>
-									<div id="bigbenDiv">
-										<img src="images/bigben.png" style="width:60px;height:60px;">
-									<td>
-									<p>Big ben</p>
-									</td>
-									</div>
-								</td>
 							</tr>
 						</div>
 					</div><!--end .accordion-section-content-->
@@ -459,9 +451,6 @@
 										</td>
 										<td>
 											<img src="images/satellite.png" style="width:50px;height:50px;">
-										</td>
-										<td>
-											<img src="images/bigben.png" style="width:50px;height:50px;">
 										</td>
 									</div>
 								</td>
@@ -490,9 +479,6 @@
 										</td>
 										<td>
 											<img src="images/satellite.png" style="width:50px;height:50px;">
-										</td>
-										<td>
-											<img src="images/bigben.png" style="width:50px;height:50px;">
 										</td>
 									</div>
 								</td>
@@ -666,7 +652,7 @@
 			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
 
 			// hide user menu initially
-		    $('#user_menu').hide();
+		    initiallyHideMenus();
 
 			// Parse user cache
 			var currentUser = Parse.User.current();
