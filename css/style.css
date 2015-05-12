@@ -129,11 +129,11 @@ canvas {
 	position: relative;
 	margin-top: 8%;
 	left: 20px;
-	/*left: 10%;*/
 }
 #meteor-check-label {
 	color: white;
 	margin-left: 10px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 }
 
 /************* LOGIN/REGISTER GUI **************/

@@ -74,12 +74,9 @@
 					value: 1,
 					step: 0.01,
 					slide: function(event, ui) {
-						// $( 'activePlanet.position.x' ).val( ui.value );
-						// $(document).ready(function() {
-							activePlanet.scale.x = ui.value;
-							activePlanet.scale.y = ui.value;
-							activePlanet.scale.z = ui.value;
-						// });
+						activePlanet.scale.x = ui.value;
+						activePlanet.scale.y = ui.value;
+						activePlanet.scale.z = ui.value;
 					}
 				});
 			});
@@ -106,16 +103,29 @@
 		</script>
 
 		<script>
-			// $(function() {
-			// 	$( "#meteor-check" ).button();
-			// });
-
 			$(document).ready(function(){
-			  $('#meteor-check').iCheck({
-			    checkboxClass: 'icheckbox_square-green',
-			    increaseArea: '20%' // optional
-			  });
+				$('#meteor-check').iCheck({
+					checkboxClass: 'icheckbox_square-green',
+					increaseArea: '20%' // optional
+				});
+				$('#meteor-check').on('ifChecked', function(event){
+					for (var i = 0; i < meteorbelts.length; ++i) {
+						if (meteorbelts[i][0] == activePlanet) {
+						mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+						visibility(mesh.children[3],true); //Show clicked background
+						}
+					}
+				});
+				$('#meteor-check').on('ifUnchecked', function(event){
+					for (var i = 0; i < meteorbelts.length; ++i) {
+						if (meteorbelts[i][0] == activePlanet) {
+						mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+						visibility(mesh.children[3],false); //Show clicked background
+						}
+					}
+				});
 			});
+
 		</script>
 
 
