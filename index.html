@@ -38,33 +38,25 @@
 			$(function() {
 				$( "#planet_radius_slider" ).slider({
 					min: 30,
-					max: 300,
+					max: 600,
 					value: 30,
 					step: 1,
 					slide: function(event, ui) {
-						// $(document).ready(function() {
-							// activePlanet.position.x = ui.value;				//går inte med rotation about sun i renderingsloopen
-							for (var i = 0; i < planetRadiuses.length; ++i) {	//det här är ju sämst
-								if (activePlanet == planetRadiuses[i][0]) {
-									planetRadiuses[i][1] = ui.value;
-									// console.log("activePlanet radius is now " + planetRadiuses[i][1]);
-									// Find planet's torus replace
-									for (var i = 0; i < planetPaths.length; ++i) {
-										if (planetPaths[i][0] == activePlanet) {
-											sunSphere.remove(planetPaths[i][1]);
-											planetOrbitRadiuses[i][1] = ui.value; 
-											
-											var newPath = addOrbitPath(ui.value);
+							activePlanet.position.x = ui.value;
+
+							// Find planet's torus replace
+							for (var i = 0; i < planetPaths.length; ++i) {
+								if (planetPaths[i][0] == activePlanet) {
+									sunSphere.remove(planetPaths[i][1]);
+									planetOrbitRadiuses[i][1] = ui.value; 
+									
+									var newPath = addOrbitPath(ui.value);
 
 
-											sunSphere.add(newPath);
-											planetPaths[i][1] = newPath;
-										}
-									}
+									sunSphere.add(newPath);
+									planetPaths[i][1] = newPath;
 								}
 							}
-							// console.log("actiplanet pos: " + activePlanet.position.x);
-
 					}
 				});
 			});
@@ -95,7 +87,7 @@
 			$(function() {
 				$( "#planet_rotation_slider" ).slider({
 					min: 0.001,
-					max: 0.1,
+					max: 0.05,
 					value: 0.001,
 					step: 0.001,
 					slide: function(event, ui) {
@@ -669,7 +661,6 @@
 		// Multiarrays to keep track of things that correspond to each other 
 		var planets = [];			//planet|moons
 		var planetSpeeds = [];		//planet|rotationSpeed
-		var planetRadiuses = [];	//planet|radius from slider
 		var moonSpeeds = [];		//moon|rotationSpeed
 		var planetPaths = [];		//planet|orbitPathTorus
 		var moonPaths = [];			//moon|orbitPathTorus
@@ -874,34 +865,16 @@
 				// console.log("moon shifted");
 			}
 
-			//planet radius
-			// for (var i = 0; i < planetRadiuses.length; i++) {
-			// 	planetRadiuses[i][0].position.x = planetRadiuses[i][1];
-			// 	console.log(planetRadiuses[i][0] + "'s radius is " + planetRadiuses[i][0].position.x);
-			// }
-
 			// planet rotation speeds about sun
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				var currentPlanetGroup = planetSpeeds[i][0].parent;
 				var currentRotationSpeed = planetSpeeds[i][1];
 				var currentPlanet = planetSpeeds[i][0];
 
-				// planet radius
-				for (var j = 0; j < planetRadiuses.length; j++) {
-					// planetRadiuses[i][0].position.x = planetRadiuses[i][1];
-					// console.log(planetRadiuses[i][0] + "'s radius is " + planetRadiuses[i][0].position.x);
-					var currentRadius = 0;
-					if (planetRadiuses[i][0] == currentPlanet) {
-						currentRadius = planetRadiuses[i][1];
-					}
-
-					// currentPlanetGroup.children[0].position.x = currentRadius;
-
-					//The following lines make the planets orbit.
-					orbit = planetOrbitRadiuses[i][1];
-					currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
-					currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
-				}
+				//The following lines make the planets orbit.
+				orbit = planetOrbitRadiuses[i][1];
+				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
+				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
 			}
 
 			// planet rotations about self (ha som variabel?)
