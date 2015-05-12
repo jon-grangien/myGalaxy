@@ -8,9 +8,12 @@
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/animate.css">
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/ui-darkness/jquery-ui.css">
+		<link href="css/square/green.css" rel="stylesheet">
 
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="js/icheck.js"></script>
+
 		<!-- parse -->
   		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
 
@@ -99,6 +102,19 @@
 						}
 					}
 				});
+			});
+		</script>
+
+		<script>
+			// $(function() {
+			// 	$( "#meteor-check" ).button();
+			// });
+
+			$(document).ready(function(){
+			  $('#meteor-check').iCheck({
+			    checkboxClass: 'icheckbox_square-green',
+			    increaseArea: '20%' // optional
+			  });
 			});
 		</script>
 
@@ -579,12 +595,16 @@
 				<div id="planet_radius_slider"></div>
 			</div>
 			<div id="planet-size-container">
-			<p class="slider-text">Size</p>
-			<div id="planet_size_slider"></div>
+				<p class="slider-text">Size</p>
+				<div id="planet_size_slider"></div>
 			</div>
 			<div id="planet-rotation-container">
-			<p class="slider-text">Rotation speed</p>
-			<div id="planet_rotation_slider"></div>
+				<p class="slider-text">Rotation speed</p>
+				<div id="planet_rotation_slider"></div>
+			</div>
+			<div id="meteor-check-container">
+				<!-- <input type="checkbox" id="meteor-check"><label for="meteor-check">Meteor belt</label> -->
+				<input type="checkbox" id="meteor-check"><label for="meteor-check" id="meteor-check-label">Meteor belt</label>
 			</div>
 			<div id="save-planet-container">
 				<button id="save_planet_button">Save</button>

@@ -15,8 +15,8 @@ canvas {
 	right: 10px;
 	max-width: 230px;
 	min-width: 210px;
-	min-height: 40%;
-	max-heigth: 50%;
+	min-height: 32%;
+	max-height: 40%;
 
 	background: rgb(10, 10, 10);
 	border: 1px solid rgba(100, 100, 100,0.6);
@@ -123,6 +123,17 @@ canvas {
 	color: white;
 	margin-left: 20px;
 	margin-bottom: 10px;
+}
+
+#meteor-check-container {
+	position: relative;
+	margin-top: 8%;
+	left: 20px;
+	/*left: 10%;*/
+}
+#meteor-check-label {
+	color: white;
+	margin-left: 10px;
 }
 
 /************* LOGIN/REGISTER GUI **************/
