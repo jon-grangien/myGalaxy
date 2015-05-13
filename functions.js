@@ -128,7 +128,7 @@ function addPlanet(){
 	var tempArray;
 
 	// Push to planetSpeeds (planets|rotationSpeeds)
-	tempArray = [activePlanet, activeRotationSpeed];
+	tempArray = [activePlanet, activeRotationSpeed, activeRotationSpeed];
 	planetSpeeds.push(tempArray);
 
 	// Push to planets (planets|moons)
@@ -378,7 +378,7 @@ function addMoon() {
 	}
 
 	// Push moon object + rotationSpeed
-	tempArray = [activeMoon, activeRotationSpeed];
+	tempArray = [activeMoon, activeRotationSpeed, activeRotationSpeed];
 	moonSpeeds.push(tempArray);
 
 	// Push to planetPaths

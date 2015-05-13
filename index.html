@@ -493,7 +493,9 @@
 		// Variables for render loop
 		var currentPlanet;					
 		var currentMoon;					
-		var currentRotationSpeed;			
+		var currentRotationSpeed;	
+		var previousRotationSpeed;
+		var rotationNormalizer;
 		var planetNeedsInitialShift = false;
 		var moonNeedsInitialShift = false;  
 		var orbitPathDistanceLimit = 300;	//value for show/hide limit of orbit paths
@@ -751,7 +753,17 @@
 			planetRotation.onChange(function(value) {
 				for (var i = 0; i < planetSpeeds.length; ++i) {
 					if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
+		console.log(planetSpeeds[i][1]);
+		console.log(planetSpeeds[i][2]);
+						if(planetSpeeds[i][1] != value)
+							planetSpeeds[i][2] = planetSpeeds[i][1];
+
+						
+						planetSpeeds[i][3] = time;
+		console.log(planetSpeeds[i][2]);
+		console.log(planetSpeeds[i][3]);
 						planetSpeeds[i][1] = value;		//change second element to slider value
+		console.log(planetSpeeds[i][1]);
 						// console.log("rotation changed to " + value);
 					}
 				}
@@ -851,7 +863,7 @@
 			//customSunMaterial.uniforms[ 'cameraPos' ].value = camera.position;
 
 			//Variabeln time används till timern och även planeternas rotation.
-			time = Date.now() * 0.0005;
+			time = (Date.now() * 0.000005 - Math.floor((Date.now() * 0.000005)))*100;
 
 			//Handles the jumps between planets.	
 			if(jumpPlanetOk && activePlanet){
@@ -877,11 +889,24 @@
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
+				previousRotationSpeed = planetSpeeds[i][2];
+				
+				rotationNormalizer = previousRotationSpeed * planetSpeeds[i][3] * 10;
+				//console.log(planetSpeeds[i][1]);
+				//console.log(planetSpeeds[i][2]);
 
 				//The following lines makes the planets orbit.
 				orbit = planetOrbitRadiuses[i][1];
-				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
-				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
+				if(currentRotationSpeed == previousRotationSpeed){
+					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10) * orbit;
+					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10) * orbit;
+					console.log(time*currentRotationSpeed*10);
+					//console.log(time*currentRotationSpeed*10);
+				} else {
+					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
+					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
+					//console.log(time*currentRotationSpeed*10 - rotationNormalizer);
+				}
 			}
 
 			// planet rotations about self (ha som variabel?)
@@ -893,11 +918,13 @@
 			for (var i = 0; i < moonSpeeds.length; ++i) {
 				currentMoonGroup = moonSpeeds[i][0].parent;
 				currentRotationSpeed = moonSpeeds[i][1];
+				
+				orbit = moonOrbitRadiuses[i][1];
 
 				//The following lines makes the moons orbit.
-				orbit = moonOrbitRadiuses[i][1];
-				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 100) * orbit;
-				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 100) * orbit;
+				currentMoonGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*100) * orbit;
+				currentMoonGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*100) * orbit;
+
 				//The following line is needed to be able to jump to moons.
 				currentMoonGroup.rotation.z = -currentMoonGroup.parent.rotation.z;
 			}
