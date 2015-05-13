@@ -70,7 +70,6 @@ canvas {
 	min-width: 100px;
 	max-width: 110px;
 	cursor: pointer;	
-	background: rgb(119, 189, 163);
 }
 
 #add-button-container button {
