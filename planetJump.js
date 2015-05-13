@@ -46,8 +46,8 @@ function planetJump(){
 		//Dimma ut omloppsbanor och hover-sfärer
 		planetOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2);
 		planetHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
-		moonHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
-
+		moonOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+		moonHoverMaterial.opacity = hoverOpacity;
 
 		controls.rotateSpeed = 0;
 		//Hastigheten med vilken förflyttningen sker.
@@ -125,6 +125,7 @@ function moonJump(){
 		planetOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2);
 		planetHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
 		moonHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+		moonOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
 
 
 		controls.rotateSpeed = 0;
@@ -197,10 +198,11 @@ function jumpToSun(){
 		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2;
 		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - zoomLevel*(1+Math.cos(timer))/2;
 
-		//Dimma ut omloppsbanor och hover-sfärer
+		//Dimma tillbaka omloppsbanor och hover-sfärer
 		planetOrbitMaterial.opacity = Math.cos(timer/2);
 		planetHoverMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
 		moonHoverMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
+		moonOrbitMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
 
 		controls.rotateSpeed = 0;
 		//Hastigheten med vilken förflyttningen sker.
