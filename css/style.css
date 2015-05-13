@@ -87,12 +87,21 @@ canvas {
 	heigth:90px;
 	cursor: pointer;
 }
-.img-container:hover {
-	background: rgba(255,255,255,0.4);
-	z-index:5;
-}
-.tex-img {
+.img-container img {
 	width: 100%;
+	opacity: 0.8;
+	/*border-style: solid;
+	border-opacity: 0;*/
+
+}
+#texture-container img:hover {
+	background: rgba(255,255,255,0.4);
+	opacity: 1;
+	/*border-style: solid;
+	border-width: 1px;
+	border-color: white;*/
+	/*width:99%;*/
+
 }
 .tex-img-label {
 	position: absolute;
