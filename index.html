@@ -476,7 +476,8 @@
 		var clickedShells = [];	//multiarray of planet|shell
 		var clickedMoonShells = [];	//multiarray of moon|shell
 		var meteorbelts = [];	//multiarray of planet|meteorbelt
-		var houses = []; //multiarray of planet/moon|house
+		//var planetHouses = []; //multiarray of planet|houses
+		//var moonHouses = []; //multiarray of moon|houses
 
 		// Variables for render loop
 		var currentPlanet;					
@@ -672,7 +673,6 @@
 			//Variables for building houses
 			var buildHouseOnActive = gui.add( parameters, 'buildHouse' ).name('Place house');
 			buildHouseOk = false;
-			houseCount = 0;
 			onProgress = function ( xhr ) {
 				if ( xhr.lengthComputable ) {
 					var percentComplete = xhr.loaded / xhr.total * 100;
@@ -907,7 +907,7 @@
 
 				}
 			}
-		
+
 			renderer.render(scene, camera);
 		}
 		

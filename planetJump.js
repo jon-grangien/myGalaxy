@@ -1,9 +1,9 @@
-var cameraPosX, cameraPosY, cameraPosZ, controlsRotSpeed, zoomLevel, moonPosX, moonPosY;
+var cameraPosX, cameraPosY, cameraPosZ, controlsRotSpeed, zoomLevel, moonPosX, moonPosY, maxRadius;
 
 //Bigger number, further away from object
 var planetZoom = 1.1;
 var moonZoom = 0.4;
-var galaxyZoom = 600;
+var galaxyZoom = 500;
 
 
 function planetJump(){
@@ -95,7 +95,12 @@ function moonJump(){
 			//Spara kamerans rotations-hastighet
 			controlsRotSpeed = controls.rotateSpeed;
 			//Beräkna zoom-nivå beroende på planetens radie och storlek
-			zoomLevel = activeMoon.scale.x*moonZoom;
+			for(i = 0; i < planetOrbitRadiuses.length; i++)
+				if(planetOrbitRadiuses[i][0] == activeMoon.parent.parent)
+					var radiusFactor = 1/(planetOrbitRadiuses[i][1]/50);
+				console.log(radiusFactor);
+			zoomLevel = activeMoon.scale.x*moonZoom*radiusFactor;
+
 			//Möjliggör ändring av transparens
 			planetOrbitMaterial.transparent = true;
 
@@ -172,13 +177,20 @@ function jumpToSun(){
 
 			console.log("Paborjar hopp");
 		}
+		maxRadius = 0;
+		for(i = 0; i < planetOrbitRadiuses.length; i++)
+			if(planetOrbitRadiuses[i][1] > maxRadius)
+				maxRadius = planetOrbitRadiuses[i][1];
+		zoomLevel = galaxyZoom + maxRadius*maxRadius*0.02;
+		
 		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
 		galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - sunSphere.position.x*(1+Math.cos(timer))/2;
 		galaxyGroup.position.y = posz*(1-Math.cos(timer))/2 - sunSphere.position.y*(1+Math.cos(timer))/2;
 		//Zooma kameran till rätt nivå beroende på planetens storlek, med en mjuk övergång.
 		camera.position.x = cameraPosX*(1+Math.cos(Math.PI - timer))/2;
 		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2;
-		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - galaxyZoom*(1+Math.cos(timer))/2;
+		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - zoomLevel*(1+Math.cos(timer))/2;
+
 		//Dimma ut omloppsbanor och hover-sfärer
 		planetOrbitMaterial.opacity = Math.cos(timer/2);
 		planetHoverMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
