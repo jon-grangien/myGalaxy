@@ -23,9 +23,6 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
-
-	planetPropertiesFl.open();
-
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
 		if (clickedShells[i][0] == activePlanet) {
@@ -63,10 +60,9 @@ function addPlanet(){
 	activePlanet.add(atmosphere);
 
 	orbitsMother.push(path);
-	for(var i = 0; i < orbitsMother.length; ++i)
-			{
-				sunSphere.add(orbitsMother[i]);
-			}
+	for(var i = 0; i < orbitsMother.length; ++i) {
+		sunSphere.add(orbitsMother[i]);
+	}
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
@@ -158,10 +154,11 @@ function addPlanet(){
 	var houseHoverGroup = new THREE.Object3D;
 	activePlanet.add(houseHoverGroup);
 
+	menusOnCreatePlanet();
+
 }
 
 function addMeteorbelt(){
-
 	var meteorbelt = new THREE.Object3D;
 	geometry = new THREE.Geometry();
 
@@ -191,7 +188,6 @@ function addMeteorbelt(){
 		vertex.z = zTrans;
 
 		geometry.vertices.push( vertex );
-
 	}
 
 	parameters = [ [ [0.0, 0.0, 0.0], sprite1, 0.05 ] ];
@@ -216,8 +212,8 @@ function addMeteorbelt(){
 		// Push to meteorbelts (planets|meteorbelts)
 		tempArray = [activePlanet, meteorbelt];
 		meteorbelts.push(tempArray);
-
 }
+
 
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
@@ -283,7 +279,7 @@ function updatePlanetTexture(textureName){
 function addMoon() {
 
 	//Open moon property-menusa
-	moonPropertiesFl.open();
+	// moonPropertiesFl.open();
 
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
@@ -395,7 +391,6 @@ function playMusic(songFile) {
 			currentSong = "";	//update the variable
 		} 
 
-
 		else if (currentSong == songFile) {	//song playing is the song clicked in the gui,
 			music.pause();			//pause song,
 			currentSong = "";
@@ -415,15 +410,15 @@ function playMusic(songFile) {
 
 // account functions
 function createAccount() {
-	console.log("creating user account");
+	// console.log("creating user account");
 	user = new Parse.User();
-	user.set("username", newUserName);
+	user.set("username", newUsername);
 	user.set("password", newUserPassword);	
 
 	user.signUp(null, {
 		success: function(user) {
 			// log in
-			username = newUserName;
+			username = newUsername;
 			userPassword = newUserPassword;
 			login();
 		},
@@ -435,20 +430,23 @@ function createAccount() {
 }
 
 function login() {
-	// console.log("logging in");
 	Parse.User.logIn(username, userPassword, {
 		success: function(loggedinuser) {
 			user = loggedinuser;
-			console.log("logged in!");
+			// console.log("logged in!");
+			menusOnLogin();
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
+		console.log("login failed: " + error);
 		}
 	});
 }
 
-function dummy() {
-	console.log("i am dummy");
+function logout() {
+	Parse.User.logOut();
+	// console.log("logged out");
+	menusOnLogout();
 }
 
 function onDocumentTouchStart( event ) {	
@@ -695,40 +693,39 @@ function visibility(object, bool){
 	object.traverse(function(child) {child.visible = bool;});
 }
 
-function addStars(){
-
+function loadStars(){
 	geometry = new THREE.Geometry();
-
-	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake1.png" );
-	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star1.png" );
-	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star2.png" );
-	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star3.png" );
-	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/spark1.png" );
-
-	for ( i = 0; i < 10000; i ++ ) {
-
+	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png" );
+	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png" );
+	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star13.png" );
+	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star14.png" );
+	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/star15.png" );
+	
+	for ( i = 0; i < 20000; i ++ ) {
 		var vertex = new THREE.Vector3();
 		vertex.x = Math.random()* 20000 - 10000;
 		vertex.y = Math.random() * 20000 - 10000;
 		vertex.z = Math.random() * 20000 - 10000;
 
-		geometry.vertices.push( vertex );
+		if(Math.abs(vertex.x) > 1000 || Math.abs(vertex.y) > 1000 || Math.abs(vertex.z) > 1000) {
+			geometry.vertices.push( vertex );
+		}
 	}
 
-	parameters = [ [ [0.0, 0.0, 0.0], sprite2, 38 ],
-				   [ [0.0, 0.0, 0.0], sprite3, 45 ],
-				   [ [0.0, 0.0, 0.0], sprite1, 50 ],
-				   [ [0.0, 0.0, 0.0], sprite5, 50 ],
-				   [ [0.0, 0.0, 0.0], sprite4, 50 ],
-				   ];
-
-	for ( i = 0; i < parameters.length; i ++ ) {
-
-		color  = parameters[i][0];
+	parameters = [ [ [0.0, 0.0, 0.0], sprite1, 90 ],
+					 [ [0.0, 0.0, 0.0], sprite2, 80 ],
+					 [ [0.0, 0.0, 0.0], sprite3, 100 ],
+					 [ [0.0, 0.0, 0.0], sprite4, 70 ],
+					 [ [0.0, 0.0, 0.0], sprite5, 60 ]];
+					 		 
+	var particles = [];
+	
+	for ( i = 0; i < 5; ++i ) {	
+		//color  = parameters[i][0];
 		sprite = parameters[i][1];
 		size   = parameters[i][2];
 
-		materials[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : true} );
+		materials[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : true, alphaTest: 0.015, opacity: 0.85, fog: 0.8} );
 		//materials[i].color.setHSL( color[0], color[1], color[2] );
 
 		particles = new THREE.PointCloud( geometry, materials[i] );
@@ -736,9 +733,8 @@ function addStars(){
 		particles.rotation.x = Math.random() * 6;
 		particles.rotation.y = Math.random() * 6;
 		particles.rotation.z = Math.random() * 6;
-
-		return particles;
-
+		
+		stars.push(particles);
 	}
 }
 
@@ -796,8 +792,10 @@ function addSun(){
 			rotationGroup = new THREE.Object3D;
 			galaxyGroup.add(sunSphere);
 			//clickableObjects.push(sunSphere);
+
+
 			rotationGroup.add(galaxyGroup);
-			rotationGroup.add(addStars());
+
 			scene.add(rotationGroup);
 
 			//Origo
