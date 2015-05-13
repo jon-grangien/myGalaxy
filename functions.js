@@ -149,7 +149,10 @@ function addPlanet(){
 	activePlanet.add(houseGroup);
 
 	menusOnCreatePlanet();
+}
 
+function saveCreatedPlanet() {
+	menusOnSave();
 }
 
 function addMeteorbelt(){

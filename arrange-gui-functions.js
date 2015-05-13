@@ -26,3 +26,8 @@ function menusOnCreatePlanet() {
 	$('#add_planet_button').hide();
     $('#edit-planet-container').show("fast");
 }
+
+function menusOnSave() {
+    $('#add_planet_button').show("fast");
+    $('#edit-planet-container').hide("fast");
+}
