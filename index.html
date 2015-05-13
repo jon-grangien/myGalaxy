@@ -282,6 +282,14 @@
 			}
 		</script>
 
+		<script id="fragmentShaderMoonAtmos" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 15.0 ); 
+			    gl_FragColor = vec4( 0.2, 0.4, 0.5, 0.0 ) * intensity;
+			}
+		</script>
+
 		<script id="torusFragmentShader" type="x-shader/x-vertex">			 
 			varying vec3 vNormal;
 			void main() 
@@ -903,7 +911,7 @@
 				if (clickedMoonShells[i][0] == activeMoon) {
 					
 					mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
-					visibility(mesh.children[1],true); //Show clicked background
+					visibility(mesh.children[2],true); //Show clicked background
 
 				}
 			}

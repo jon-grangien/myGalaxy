@@ -290,7 +290,7 @@ function addMoon() {
 		if (clickedMoonShells[i][0] == activeMoon) {
 
 			mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
-			visibility(mesh.children[1],false); //Show clicked background
+			visibility(mesh.children[2],false); //Show clicked background
 		}
 	}
 
@@ -301,6 +301,9 @@ function addMoon() {
 	activeMoon.castShadow = true;
 	var activeGroup = new THREE.Object3D;
 	activeGroup.add(activeMoon);
+
+	
+
 
 	var path = addMoonOrbitPath(20);
 	activeMoon.parent.add(path);
@@ -314,8 +317,25 @@ function addMoon() {
 	activePlanet.add(activeGroup);
 	moonGroups.push(activeGroup);
 
+	// Atmosphere
+	var atmosphereGeometry = new THREE.SphereGeometry( 3, 32, 32 );
+	var atmosphereMaterial = new THREE.ShaderMaterial( {
+	    uniforms: {  },
+		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShaderMoonAtmos' ).textContent,
+		side: THREE.BackSide,
+		blending: THREE.AdditiveBlending,
+		transparent: true
+	}   );
+
+	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+	atmosphere.receiveShadow = false;
+	atmosphere.castShadow = false;
+	
+	activeMoon.add(atmosphere);
+
 	//hover on moon shell
-	var hoverGeometry = new THREE.SphereGeometry( 3, 32, 32 );
+	var hoverGeometry = new THREE.SphereGeometry( 2.8, 32, 32 );
 	var hoverMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -345,6 +365,7 @@ function addMoon() {
 	visibility(clickedMoonShell,false);
 	activeMoon.add(clickedMoonShell);
 	//-------clickedend-------------
+
 	
 
 	// put moon to corresponding planet in array
@@ -489,12 +510,13 @@ function onDocumentMouseDown( event ) {
 			visibility(mesh.children[2],false);
 		}
 	}
+
 	//Hides moon clicked
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
 			
 			mesh = clickedMoonShells[i][0];
-			visibility(mesh.children[1],false);
+			visibility(mesh.children[2],false);
 		}
 	}
 
@@ -605,7 +627,7 @@ function onMouseMove( event ) {
 		if (hoverMoonShells[i][0] == hoveredMoon) {
 			
 			mesh = hoverMoonShells[i][0];
-			visibility(mesh.children[0],false);
+			visibility(mesh.children[1],false);
 		}
 	}
 
@@ -648,7 +670,7 @@ function onMouseMove( event ) {
 				if (hoverMoonShells[i][0] == hoveredMoon) {
 
 					mesh = hoverMoonShells[i][0];
-					visibility(mesh.children[0],true);
+					visibility(mesh.children[1],true);
 
 				}
 			}
