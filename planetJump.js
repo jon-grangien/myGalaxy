@@ -5,6 +5,44 @@ var planetZoom = 1.6;
 var moonZoom = 0.5;
 var galaxyZoom = 650;
 jumpInAction = false;
+smallJump = false;
+
+function planetBools(){
+	if(jumpMoonOk){
+		smallJump = true;		
+	} else {
+		smallJump = false;
+	}
+	if(!jumpInAction)
+		if(activePlanet){
+			jumpPlanetOk = true;
+			jumpMoonOk = false;
+			jumpSolarOk = false;
+		}
+}
+function moonBools(){
+	if(jumpPlanetOk){
+		smallJump = true;
+	} else {
+		smallJump = false;
+	}
+	if(!jumpInAction)
+		if(activeMoon){
+			jumpPlanetOk = false; 
+			jumpMoonOk = true; 
+			jumpSolarOk = false;
+		}
+}
+function solarBools(){
+	if(jumpSolarOk)
+		resetSolarView = true; 
+	if(!jumpInAction){
+		jumpPlanetOk = false; 
+		jumpMoonOk = false; 
+		jumpSolarOk = true;
+	}
+}
+
 
 
 function planetJump(){
@@ -43,11 +81,15 @@ function planetJump(){
 		camera.position.x = cameraPosX*(1+Math.cos(Math.PI - timer))/2 - (activePlanet.position.x*(1+Math.cos(timer))/2)*zoomLevel;
 		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2 - (activePlanet.position.y*(1+Math.cos(timer))/2)*zoomLevel;
 		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - (activePlanet.position.z*(1+Math.cos(timer))/2)*zoomLevel;
-		//Dimma ut omloppsbanor och hover-sfärer
-		planetOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2);
-		planetHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
-		moonOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
-		moonHoverMaterial.opacity = hoverOpacity;
+		
+		if(!smallJump){
+			//Dimma ut omloppsbanor och hover-sfärer
+			planetOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2);
+			planetHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+			moonOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+		} else {
+			moonHoverMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
+		}
 
 		controls.rotateSpeed = 0;
 		//Hastigheten med vilken förflyttningen sker.
@@ -121,12 +163,14 @@ function moonJump(){
 		camera.position.x = cameraPosX*(1+Math.cos(Math.PI - timer))/2 - (moonPosX*(1+Math.cos(timer))/2)*zoomLevel;
 		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2 - (moonPosY*(1+Math.cos(timer))/2)*zoomLevel;
 		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - ((activeMoon.position.z+activePlanet.position.z)*(1+Math.cos(timer))/2)*zoomLevel;
-		//Dimma ut omloppsbanor och hover-sfärer
-		planetOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2);
-		planetHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+		
+		if(!smallJump){
+			//Dimma ut omloppsbanor och hover-sfärer
+			planetOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2);
+			planetHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+			moonOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
+		}
 		moonHoverMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
-		moonOrbitMaterial.opacity = Math.cos(Math.PI/2 - timer/2)*hoverOpacity;
-
 
 		controls.rotateSpeed = 0;
 		//Hastigheten med vilken förflyttningen sker.
@@ -165,7 +209,7 @@ function moonJump(){
 
 function jumpToSun(){
 	//Aktiveras när man vill gå tillbaka till att ha solen centrerad.
-	if(sunSphere != previousObject) {
+	if(sunSphere != previousObject || resetSolarView) {
 		if(timer == 0){
 			//Timern börjar på pi och går ner till 0.
 			timer = Math.PI;
@@ -198,11 +242,12 @@ function jumpToSun(){
 		camera.position.y = cameraPosY*(1+Math.cos(Math.PI - timer))/2;
 		camera.position.z = cameraPosZ*(1+Math.cos(Math.PI - timer))/2 - zoomLevel*(1+Math.cos(timer))/2;
 
-		//Dimma tillbaka omloppsbanor och hover-sfärer
-		planetOrbitMaterial.opacity = Math.cos(timer/2);
-		planetHoverMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
-		moonHoverMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
-		moonOrbitMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
+		if(!resetSolarView) {
+			//Dimma tillbaka omloppsbanor och hover-sfärer
+			planetOrbitMaterial.opacity = Math.cos(timer/2);
+			planetHoverMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
+			moonOrbitMaterial.opacity = Math.cos(timer/2)*hoverOpacity;
+		}
 
 		controls.rotateSpeed = 0;
 		//Hastigheten med vilken förflyttningen sker.
@@ -211,6 +256,7 @@ function jumpToSun(){
 		if(timer < 0){
 			timer = 0;
 			jumpInAction = false;
+			resetSolarView = false;
 			//När förflyttningen är klar sätts previousObject (det klickade objektet) till objektet som nu är i fokus.
 			previousObject = sunSphere;
 			//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.

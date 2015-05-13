@@ -427,6 +427,8 @@
 		var activePlanet;
 		var previousObject;
 		var activeMoon;
+		var resetSolarView;
+		var smallJump;
 		var orbitsMother = [];
 		var customTexture;
 		var activeRotationSpeed;
@@ -621,9 +623,9 @@
 				texture8: function() { updatePlanetTexture("Klendathu") },
 				texture9: function() { updatePlanetTexture() },
 				addMoon: function() { addMoon() },
-				jumpPlanet: function (){ if(!jumpInAction)if(activePlanet){jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;}},
-			    jumpMoon: function (){ if(!jumpInAction)if(activeMoon){jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;}},
-				jumpSolar: function (){ if(!jumpInAction){jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true; previousObject = activePlanet;}},
+				jumpPlanet: function (){ planetBools(); },
+			    jumpMoon: function (){ moonBools(); },
+				jumpSolar: function (){ solarBools(); },
 				buildHouse: function (){ if(!jumpInAction)if(!buildHouseOk) {buildHouseOk = true;} else {buildHouseOk = false;}},
 				moonRadius: 10,
 				moonRotation: 0.001,
@@ -677,7 +679,7 @@
 			var orbitVisibility = gui.add( parameters, 'visible' ).name('Show orbits').listen();
 			
 			//Buttons for jumping between planets/moon/solarsystem
-			jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;
+			jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true; resetSolarView = false;
 			var jumpToActivePlanet = gui.add( parameters, 'jumpPlanet' ).name('Jump to planet');
 			var jumpToActiveMoon = gui.add( parameters, 'jumpMoon' ).name('Jump to moon');
 			var jumpToSolarsystem = gui.add( parameters, 'jumpSolar' ).name('Jump to system');
