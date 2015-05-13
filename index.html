@@ -814,8 +814,9 @@
 
 		// click functionality
 		var raycaster = new THREE.Raycaster();		
-		var intersects = raycaster.intersectObjects( clickableObjects );	
+		var intersects = raycaster.intersectObjects( clickableObjects );
 		var mouse = new THREE.Vector2();
+		var selectPlanetsOk = true;
 
 		var music;				//global var for music property, see playMusic()
 		var currentSong = "";	//store name of current music file being played

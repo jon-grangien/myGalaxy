@@ -23,6 +23,8 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
+	selectPlanetsOk = false;
+
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
 		if (clickedShells[i][0] == activePlanet) {
@@ -152,6 +154,7 @@ function addPlanet(){
 }
 
 function saveCreatedPlanet() {
+	selectPlanetsOk = true;
 	menusOnSave();
 }
 
@@ -421,6 +424,10 @@ function onDocumentTouchStart( event ) {
 function onDocumentMouseDown( event ) {
 	// console.log("mouse is down");
 
+	if (!selectPlanetsOk) {
+		return;		//do nothing (disable functionality)
+	}
+
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
@@ -540,6 +547,10 @@ function onDocumentMouseDown( event ) {
 
 //Hover funktion, visar att planeter är tryckbara
 function onMouseMove( event ) {	
+	if(!selectPlanetsOk) {
+		return;		//do nothing (disable functionality)
+	}
+
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
