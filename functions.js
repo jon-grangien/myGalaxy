@@ -238,36 +238,8 @@ function addMoonOrbitPath(moonRadius) {
 	return path;
 }
 
-function updatePlanetTexture(textureName){
-	if (textureName == "Earth") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' );
-		// console.log('earth selected');
-	} else if (textureName == "Cloudy") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/cloudy.jpg' );
-		// console.log('cloudy selected');
-	} else if (textureName == "Steel") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/steeltexture.jpg' );
-		// console.log('steel selected');
-	} else if (textureName == "Terraformed mars") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/terramars.jpg' );
-		// console.log('terramars selected');
-	} else if (textureName == "Alien") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/alien.jpg' );
-		// console.log('alien selected');
-	} else if (textureName == "Desolate") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/desolate.png' );
-		// console.log('desolate selected');
-	} else if (textureName == "Sandy") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/sandy.jpg' );
-		// console.log('sandy selected');
-	} else if (textureName == "Klendathu") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/klendathu.png' );
-		// console.log('klendathu selected');
-	} else {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/scarl.png' );
-		// console.log('scarl selected');
-	}
-
+function updatePlanetTexture(textureFile){
+	activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/' + textureFile );
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 	activePlanet.material.needsUpdate = true;
 }
