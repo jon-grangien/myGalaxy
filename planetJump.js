@@ -1,9 +1,10 @@
 var cameraPosX, cameraPosY, cameraPosZ, controlsRotSpeed, zoomLevel, moonPosX, moonPosY, maxRadius;
 
 //Bigger number, further away from object
-var planetZoom = 1.1;
-var moonZoom = 0.4;
-var galaxyZoom = 500;
+var planetZoom = 1.6;
+var moonZoom = 0.5;
+var galaxyZoom = 650;
+jumpInAction = false;
 
 
 function planetJump(){
@@ -12,6 +13,7 @@ function planetJump(){
 		if(timer == 0){
 			//Timern börjar på pi och går ner till 0.
 			timer = Math.PI;
+			jumpInAction = true;
 			//Spara den förra planetens position och rotation.
 			posx = galaxyGroup.position.x;
 			posz = galaxyGroup.position.y;
@@ -53,6 +55,7 @@ function planetJump(){
 			
 		if(timer < 0){
 			timer = 0;
+			jumpInAction = false;
 			//När förflyttningen är klar sätts previousObject (det klickade objektet) till objektet som nu är i fokus.
 			previousObject = activePlanet;
 			//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
@@ -83,6 +86,7 @@ function moonJump(){
 		if(timer == 0){
 			//Timern börjar på pi och går ner till 0.
 			timer = Math.PI;
+			jumpInAction = true;
 			//Spara den förra planetens position och rotation.
 			posx = galaxyGroup.position.x;
 			posz = galaxyGroup.position.y;
@@ -129,6 +133,7 @@ function moonJump(){
 			
 		if(timer < 0){
 			timer = 0;
+			jumpInAction = false;
 			//När förflyttningen är klar sätts previousObject (det klickade objektet) till objektet som nu är i fokus.
 			previousObject = activeMoon;
 			//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.
@@ -163,6 +168,7 @@ function jumpToSun(){
 		if(timer == 0){
 			//Timern börjar på pi och går ner till 0.
 			timer = Math.PI;
+			jumpInAction = true;
 			//Spara den förra planetens position och rotation.
 			posx = galaxyGroup.position.x;
 			posz = galaxyGroup.position.y;
@@ -181,7 +187,7 @@ function jumpToSun(){
 		for(i = 0; i < planetOrbitRadiuses.length; i++)
 			if(planetOrbitRadiuses[i][1] > maxRadius)
 				maxRadius = planetOrbitRadiuses[i][1];
-		zoomLevel = galaxyZoom + maxRadius*maxRadius*0.02;
+		zoomLevel = galaxyZoom + maxRadius*maxRadius*0.02 + maxRadius*Math.sin(maxRadius/300*Math.PI);
 		
 		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
 		galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - sunSphere.position.x*(1+Math.cos(timer))/2;
@@ -202,6 +208,7 @@ function jumpToSun(){
 			
 		if(timer < 0){
 			timer = 0;
+			jumpInAction = false;
 			//När förflyttningen är klar sätts previousObject (det klickade objektet) till objektet som nu är i fokus.
 			previousObject = sunSphere;
 			//Denna loop ska se till att rotationen inte nollställs direkt efter ett hopp.

@@ -433,6 +433,7 @@
 		var jumpPlanetOk;
 		var jumpMoonOk;
 		var jumpSolarOk;
+		var jumpInAction;
 		
 		// Variables for building on planets/moons
 		var buildHouseOk;
@@ -617,10 +618,10 @@
 				texture8: function() { updatePlanetTexture("Klendathu") },
 				texture9: function() { updatePlanetTexture() },
 				addMoon: function() { addMoon() },
-				jumpPlanet: function (){ if(activePlanet){jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;}},
-			    jumpMoon: function (){ if(activeMoon){jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;}},
-				jumpSolar: function (){ jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true;},
-				buildHouse: function (){ if(!buildHouseOk) {buildHouseOk = true;} else {buildHouseOk = false;}},
+				jumpPlanet: function (){ if(!jumpInAction)if(activePlanet){jumpPlanetOk = true; jumpMoonOk = false; jumpSolarOk = false;}},
+			    jumpMoon: function (){ if(!jumpInAction)if(activeMoon){jumpPlanetOk = false; jumpMoonOk = true; jumpSolarOk = false;}},
+				jumpSolar: function (){ if(!jumpInAction){jumpPlanetOk = false; jumpMoonOk = false; jumpSolarOk = true; previousObject = activePlanet;}},
+				buildHouse: function (){ if(!jumpInAction)if(!buildHouseOk) {buildHouseOk = true;} else {buildHouseOk = false;}},
 				moonRadius: 10,
 				moonRotation: 0.001,
 				playNewWorlds: function() { playMusic("New Worlds.mp3") },
@@ -914,7 +915,12 @@
 					visibility(mesh.children[2],true); //Show clicked background
 
 				}
-			}
+			} 
+			if(!activeMoon)
+				for (var i = 0; i < clickedMoonShells.length; ++i) {	
+					mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[2],false); //Show clicked background
+				} 
 
 			renderer.render(scene, camera);
 		}

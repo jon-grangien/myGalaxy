@@ -25,6 +25,7 @@ function onWindowResize() {
 function addPlanet(){
 
 	planetPropertiesFl.open();
+	activeMoon = null;
 
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
@@ -521,7 +522,7 @@ function onDocumentMouseDown( event ) {
 	}
 
 
-	if ( intersects.length > 0 ) {
+	if ( intersects.length > 0 && !jumpInAction) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
 		if(jumpPlanetOk)
@@ -532,8 +533,9 @@ function onDocumentMouseDown( event ) {
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
 				activePlanet = clickedObject;
-				if(activePlanet.children.length > 4)
-					activeMoon = activePlanet.children[4].children[0];
+				activeMoon = null;
+				//if(activePlanet.children.length > 6)
+					//activeMoon = activePlanet.children[4].children[0];
 				console.log("clicked object is a planet");
 			}
 		}
