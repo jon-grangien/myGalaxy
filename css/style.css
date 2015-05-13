@@ -15,8 +15,8 @@ canvas {
 	right: 10px;
 	max-width: 230px;
 	min-width: 210px;
-	min-height: 32%;
-	max-height: 40%;
+	min-height: 60%;
+	max-height: 70%;
 
 	background: rgb(10, 10, 10);
 	border: 1px solid rgba(100, 100, 100,0.6);
@@ -59,6 +59,23 @@ canvas {
 	top: 1px;
 	border: 1px solid rgb(12, 76, 87);	
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
+
+/* selectable-grid */
+#feedback { 
+	font-size: 1.4em; 
+}
+#selectable .ui-selecting {
+	background: #FECA40; 
+}
+#selectable .ui-selected {
+	background: #F39814; color: white; 
+}
+#selectable {
+	list-style-type: none; margin: 0; padding: 0; width: 450px; 
+}
+#selectable li {
+	margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; 
 }
 
 #add-button-container {
