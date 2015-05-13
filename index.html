@@ -11,8 +11,39 @@
 		<script src="js/three.js"></script>
 
 		<script src="js/TrackballControls.js"></script>
+
+<script src="js/Projector.js"></script>
+
+<script src="js/ImageUtils.js"></script>
+
+<script src="js/OBJLoader.js"></script>
+
+<script src="js/DDSLoader.js"></script>
+
+<script src="js/MTLLoader.js"></script>
+
+<script src="js/OBJMTLLoader.js"></script>
+
+<script src="js/Detector.js"></script>
 		
 		<script>
+		var SCREEN_WIDTH = window.innerWidth;
+			var SCREEN_HEIGHT = window.innerHeight;
+ 
+			var container;
+ 
+			var camera, scene;
+			var canvasRenderer, webglRenderer;
+ 
+			var mesh, zmesh, geometry;
+ 
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+ 
+			var meshes = [];
+
+
+
 			var scene = new THREE.Scene();
 			scene.fog = new THREE.FogExp2( 0x000000, 0.002 );
 			var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -47,7 +78,7 @@
 			sunMaterial.specular  = new THREE.Color('grey');
 			
 			var sunSphere = new THREE.Mesh( sunGeometry, sunMaterial );
-			sunGroup.add( sunSphere);
+			//sunGroup.add( sunSphere);
 			//***********************************
 
 			
@@ -66,14 +97,7 @@
 		
 			galaxyGroup.add( galaxySphere);
 			//*********************************
-			
-			
-	
-			
-			
-			
-			
-			
+
 			
 			sceneGraph.add(galaxyGroup);
 			//Lägger till grupper till scengraf
@@ -84,6 +108,22 @@
 			scene.add(sceneGraph);
 			
 			sceneGraph.rotation.x += 0.5;
+
+
+			//MODEL
+			var loader = new THREE.JSONLoader(),
+				callbackKey = function(geometry) {createScene(geometry,  0, 0, 0, 15, "obj/cube.jpg")};
+				loader.load("obj/mama.js", callbackKey);
+
+		
+			function createScene(geometry, x, y, z, scale, tmap) {
+				zmesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(tmap)}));
+
+				zmesh.scale.set(scale, scale, scale);
+				meshes.push(zmesh);
+				scene.add(zmesh);
+			}
+
 			
 			
 			controls = new THREE.TrackballControls( camera );
