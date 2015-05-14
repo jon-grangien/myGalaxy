@@ -151,7 +151,6 @@ function addPlanet(){
 	activePlanet.add(houseGroup);
 
 	menusOnCreatePlanet();
-
 }
 
 function addMeteorbelt(){
@@ -160,7 +159,6 @@ function addMeteorbelt(){
 
 	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor11.png" );
 	//sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor2.png" );
-
 
 	for ( i = 0; i < 10000; i ++ ) {
 
@@ -188,7 +186,6 @@ function addMeteorbelt(){
 
 	parameters = [ [ [0.0, 0.0, 0.0], sprite1, 0.05 ] ];
 
-
 	for ( i = 0; i < parameters.length; i ++ ) {
 
 		color  = parameters[i][0];
@@ -214,9 +211,7 @@ function addMeteorbelt(){
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
 	var pathGeometry = new THREE.TorusGeometry( radius, 0.3, 16, 100 );
-
 	var path = new THREE.Mesh( pathGeometry, planetOrbitMaterial );
-
 
 	return path;
 }
@@ -350,6 +345,7 @@ function saveCreatedPlanet() {
 	console.log("saved");
 	selectPlanetsOk = true;
 	menusOnSave();
+	menusOnPlanetActive();
 }
 
 function playMusic(songFile) {

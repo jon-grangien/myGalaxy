@@ -473,6 +473,12 @@ p.user_info {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
+.edit-created-moon-label {
+	color: white;
+	margin-left: 10px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+}
+
 /**** EDIT PLANET ****/
 #edit-existing-planet-button-container {
 	position: absolute;
@@ -482,7 +488,7 @@ p.user_info {
 	max-height: 60px;
 	min-width: 100px;
 	max-width: 110px;
-	cursor: pointer;	
+	cursor: pointer;
 }
 
 #edit_planet_button {
@@ -493,16 +499,11 @@ p.user_info {
 	cursor: pointer;	
 	background: rgb(119, 189, 163);
 	padding: 30px 5px 30px 5px;
-	/*margin: 10px 0px 0px 10px;*/
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(99, 54, 54);
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);	
-	border-radius: 7px;	
-	/*box-shadow:
-		0px 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
-		0px 0px 0px 2px rgb(254, 254, 254),
-		0px 1px 1px 3px rgb(210, 210, 210);*/
+	border-radius: 7px;
 	transition: all 0.2s linear;
 }
 #edit_planet_button:hover {
@@ -517,16 +518,65 @@ p.user_info {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
-/******** PLANET BUILD GUI ********/
+#edit-existing-planet-container {
+	position: absolute;
+	top: 1%;
+	right: 10px;
+	max-width: 230px;
+	min-width: 210px;
+	min-height: 45%;
+	max-height: 50%;
 
-/*.bygg-main {
+	background: rgb(10, 10, 10);
+	border: 1px solid rgba(100, 100, 100,0.6);
+	box-shadow:	
+		0pt 2px 5px rgba(10, 10, 30,  0.7),	
+		0px 0px 8px 5px rgba(100, 100, 100, 0.3) inset;
+	border-radius: 5px;
+	z-index: 22;
+}
+
+#add-moon-button {
+	min-width: 100px;
+	max-width: 100px;
+	min-heigth: 100px;
+	max-heigth: 100px;
+	cursor: pointer;	
+	background: rgb(119, 189, 163);
+	padding: 30px 5px 30px 5px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	color: rgb(99, 54, 54);
+	font-size: 18px;	
+	border: 1px solid rgb(0, 0, 0);	
+	transition: all 0.2s linear;
+}
+#add-moon-button:hover {
+	background: rgb(235, 255, 212);
+}
+#add-moon-button:active {
+	background: rgb(40, 137, 154);
+	position: relative;
+	top: 1px;
+	border: 1px solid rgb(12, 76, 87);	
+	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
+
+#moon-radius-slider,
+#moon-rotation-slider {
+	position: relative;
+	width: 80%;
+	left: 20px;
+}
+
+/******** PLANET BUILD GUI ********/
+.bygg-main {
 	width:300px;
 	height:100px;
 	position:absolute;
 	top:25%;
 	left:10px;
 	z-index:22;
-}*/
+}
 
 .site-header-wrap {
 	margin-bottom:60px;

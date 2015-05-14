@@ -131,6 +131,49 @@
 		</script>
 
 		<script>
+			$(function() {
+				$( "#moon-radius-slider" ).slider({
+					min: 20,
+					max: 40,
+					value: 20,
+					step: 1,
+					slide: function(event, ui) {
+							for (var i = 0; i < moonPaths.length; ++i) {
+								if (moonPaths[i][0] == activeMoon) {
+									moonOrbitRadiuses[i][1] = ui.value; 
+					
+									activeMoon.parent.remove(moonPaths[i][1]); 
+									
+									var newPath = addMoonOrbitPath(ui.value);
+									activeMoon.parent.add(newPath);
+									moonPaths[i][1] = newPath;
+								}
+							}
+					}
+				});
+			});
+		</script>
+
+		<script>
+			$(function() {
+				$( "#moon-rotation-slider" ).slider({
+					min: 0.001,
+					max: 0.01,
+					value: 0.001,
+					step: 0.001,
+					slide: function(event, ui) {
+						for (var i = 0; i < moonSpeeds.length; ++i) {
+							if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
+								moonSpeeds[i][1] = ui.value;		//change second element to slider value
+								// console.log("rotation changed to " + value);
+							}
+						}
+					}
+				});
+			});
+		</script>
+
+		<script>
 		    $(document).ready(function() {     
 		        $('#earth-tex-img').click(function() {
 		            updatePlanetTexture('earthmap.jpg');
@@ -675,6 +718,7 @@
 			<button id="add_planet_button" onClick="addPlanet()">Create planet</button>
 			<!-- <button id="add_moon_button" onClick="addMoon()">Add moon</button> -->
 		</div>
+
 		<div id="edit-created-planet-container">
 			<div id="planet-radius-container">
 				<p class="edit-created-planet-label">Radius</p>
@@ -737,8 +781,23 @@
 		<div id="edit-existing-planet-button-container">
 			<button id="edit_planet_button" onClick="menusOnEditPlanet()">Edit planet</button>
 		</div>
-		<div id="edt-existing-planet-container">
-			 
+
+		<div id="edit-existing-planet-container">
+			<button id="add-moon-button" onClick="addMoon()">Add moon</button>
+
+			<div id="moon-properties-container">
+				<div id="moon-radius-container">
+					<p class="edit-created-moon-label">Moon radius</p>
+					<div id="moon-radius-slider"></div>
+				</div>
+				<div id="moon-rotation-container">
+					<p class="edit-created-moon-label">Moon rotation</p>
+					<div id="moon-rotation-slider"></div>
+				</div>
+			</div>
+			
+			<button id="edit-done-button" onClick="menusOnEditDone()">Done</button>
+
 		</div>
 
 		<div id="accordion-container">
