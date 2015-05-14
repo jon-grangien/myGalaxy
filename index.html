@@ -129,6 +129,70 @@
 			});
 
 		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#earth-tex-img').click(function() {
+		            updatePlanetTexture('earthmap.jpg');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#alien-tex-img').click(function() {
+		            updatePlanetTexture('alien.jpg');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#cloudy-tex-img').click(function() {
+		            updatePlanetTexture('cloudy.jpg');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#desolate-tex-img').click(function() {
+		            updatePlanetTexture('desolate.png');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#klendathu-tex-img').click(function() {
+		            updatePlanetTexture('klendathu.png');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#sandy-tex-img').click(function() {
+		            updatePlanetTexture('sandy.jpg');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#scarl-tex-img').click(function() {
+		            updatePlanetTexture('scarl.png');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#steel-tex-img').click(function() {
+		            updatePlanetTexture('steeltexture.jpg');
+		        });    
+		    });
+		</script>
 		
 		<script>
 		  $(function() {
@@ -613,69 +677,98 @@
 		</div>
 		<div id="edit-planet-container">
 			<div id="planet-radius-container">
-				<p class="slider-text">Radius</p>
+				<p class="edit-created-planet-label">Radius</p>
 				<div id="planet_radius_slider"></div>
 			</div>
 			<div id="planet-size-container">
-				<p class="slider-text">Size</p>
+				<p class="edit-created-planet-label">Size</p>
 				<div id="planet_size_slider"></div>
 			</div>
 			<div id="planet-rotation-container">
-				<p class="slider-text">Rotation speed</p>
+				<p class="edit-created-planet-label">Rotation speed</p>
 				<div id="planet_rotation_slider"></div>
 			</div>
 			<div id="meteor-check-container">
 				<!-- <input type="checkbox" id="meteor-check"><label for="meteor-check">Meteor belt</label> -->
 				<input type="checkbox" id="meteor-check"><label for="meteor-check" id="meteor-check-label">Meteor belt</label>
 			</div>
-			
-		<br>
-		<div id="accordion">
-		  <h3>Build</h3>
-		  <div id="build-image-container">
 
-			<tr>
-			<img src="images/goose.png" class="goose" onclick="showBuild(1);">
-			<img src="images/satellite.png" class="goose" onclick="showBuild(2);"><br>
-			<img src="images/eiffel.png" class="goose" onclick="showBuild(3);">
-			<img src="images/satellite.png" class="goose" onclick="showBuild(4);"><br>
-			<img src="images/eiffel.png" class="goose" onclick="showBuild(5);">
-			<img src="images/goose.png" class="goose" onclick="showBuild(6);">
-			</tr>
-			
-		  </div>
-		  <h3>Trade</h3>
-		  <div id="build-image-container">
+			<div id="texture-container">
+				<p class="edit-created-planet-label">Textures:</p>
+				<div class="img-container">
+					<img src="textures/earthmap.jpg" id="earth-tex-img" class="tex-img">
+					<label for="earth-tex-img" class="tex-img-label">Earth</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/alien.jpg" id="alien-tex-img" class="tex-img">
+					<label for="alien-tex-img" class="tex-img-label">Alien</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/cloudy.jpg" id="cloudy-tex-img" class="tex-img">
+					<label for="cloudy-tex-img" class="tex-img-label">Cloudy</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/desolate.png" id="desolate-tex-img" class="tex-img">
+					<label for="desolate-tex-img" class="tex-img-label">Desolate</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/klendathu.png" id="klendathu-tex-img" class="tex-img">
+					<label for="klendathu-tex-img" class="tex-img-label">Klendathu</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/sandy.jpg" id="sandy-tex-img" class="tex-img">
+					<label for="sandy-tex-img" class="tex-img-label">Sandy</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/scarl.png" id="scarl-tex-img" class="tex-img">
+					<label for="scarl-tex-img" class="tex-img-label">Scarl</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/steeltexture.jpg" id="steel-tex-img" class="tex-img">
+					<label for="steel-tex-img" class="tex-img-label">Steel</label>
+				</div>
+			</div>
 
-			<tr>
-			<img src="images/goose.png" class="goose">
-			<img src="images/satellite.png" class="goose"><br>
-			<img src="images/eiffel.png" class="goose">
-			<img src="images/satellite.png" class="goose"><br>
-			<img src="images/eiffel.png" class="goose">
-			<img src="images/goose.png" class="goose">
-			</tr>
-			
-		  </div>
-		  
-		  <h3>Chat</h3>
-		  <div id="build-image-container">
-		  <p>Send text to älgen</p>
-		  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
-					<form action="">
-  						<input type="submit" value="Send">
-					</form>
-		  </div>
-		  
-		</div>			
-			
 			<div id="save-planet-container">
-				<button id="save_planet_button">Save</button>
+				<button id="save_planet_button" onClick="saveCreatedPlanet()">Save</button>
 			</div>
 		</div>
 
-
-
+		<div id="accordion-container">
+			<div id="accordion">
+			  <h3>Build</h3>
+			  <div id="build-image-container">
+				<tr>
+				<img src="images/goose.png" class="goose" onclick="showBuild(1);">
+				<img src="images/satellite.png" class="goose" onclick="showBuild(2);"><br>
+				<img src="images/eiffel.png" class="goose" onclick="showBuild(3);">
+				<img src="images/satellite.png" class="goose" onclick="showBuild(4);"><br>
+				<img src="images/eiffel.png" class="goose" onclick="showBuild(5);">
+				<img src="images/goose.png" class="goose" onclick="showBuild(6);">
+				</tr>
+			  </div>
+			  <h3>Trade</h3>
+			  <div id="build-image-container">
+				<tr>
+				<img src="images/goose.png" class="goose">
+				<img src="images/satellite.png" class="goose"><br>
+				<img src="images/eiffel.png" class="goose">
+				<img src="images/satellite.png" class="goose"><br>
+				<img src="images/eiffel.png" class="goose">
+				<img src="images/goose.png" class="goose">
+				</tr>
+			  </div>
+			  
+			  <h3>Chat</h3>
+			  <div id="build-image-container">
+			  <p>Send text to älgen</p>
+			  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
+						<form action="">
+	  						<input type="submit" value="Send">
+						</form>
+			  </div>
+			</div>
+		</div>
 		<script>
 
 		// Basic global variables
@@ -768,6 +861,7 @@
 		var raycaster = new THREE.Raycaster();		
 		var intersects = raycaster.intersectObjects( clickableObjects );	
 		var mouse = new THREE.Vector2();
+		var selectPlanetsOk = true;
 
 		var music;				//global var for music property, see playMusic()
 		var currentSong = "";	//store name of current music file being played

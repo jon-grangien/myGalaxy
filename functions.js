@@ -23,6 +23,8 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
+	selectPlanetsOk = false;
+
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
 		if (clickedShells[i][0] == activePlanet) {
@@ -235,36 +237,8 @@ function addMoonOrbitPath(moonRadius) {
 	return path;
 }
 
-function updatePlanetTexture(textureName){
-	if (textureName == "Earth") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' );
-		// console.log('earth selected');
-	} else if (textureName == "Cloudy") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/cloudy.jpg' );
-		// console.log('cloudy selected');
-	} else if (textureName == "Steel") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/steeltexture.jpg' );
-		// console.log('steel selected');
-	} else if (textureName == "Terraformed mars") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/terramars.jpg' );
-		// console.log('terramars selected');
-	} else if (textureName == "Alien") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/alien.jpg' );
-		// console.log('alien selected');
-	} else if (textureName == "Desolate") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/desolate.png' );
-		// console.log('desolate selected');
-	} else if (textureName == "Sandy") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/sandy.jpg' );
-		// console.log('sandy selected');
-	} else if (textureName == "Klendathu") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/klendathu.png' );
-		// console.log('klendathu selected');
-	} else {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/scarl.png' );
-		// console.log('scarl selected');
-	}
-
+function updatePlanetTexture(textureFile){
+	activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/' + textureFile );
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 	activePlanet.material.needsUpdate = true;
 }
@@ -372,6 +346,12 @@ function addMoon() {
 	// console.log("moon spawned");
 }
 
+function saveCreatedPlanet() {
+	console.log("saved");
+	selectPlanetsOk = true;
+	menusOnSave();
+}
+
 function playMusic(songFile) {
 	if (currentSong != "") {		//something is being played
 		if (music.ended) {		//it was just the last track that had ended,
@@ -445,6 +425,10 @@ function onDocumentTouchStart( event ) {
 
 function onDocumentMouseDown( event ) {
 	// console.log("mouse is down");
+
+	if (!selectPlanetsOk) {
+		return;		//do nothing (disable functionality)
+	}
 
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
@@ -565,6 +549,10 @@ function onDocumentMouseDown( event ) {
 
 //Hover funktion, visar att planeter är tryckbara
 function onMouseMove( event ) {	
+	if(!selectPlanetsOk) {
+		return;		//do nothing (disable functionality)
+	}
+
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
