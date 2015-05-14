@@ -1,7 +1,6 @@
-
-				var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare02.png" );
-				var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
-				var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
+var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare02.png" );
+var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
+var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
 
 				
 
@@ -40,8 +39,10 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
+	// Disables other planet click functionality while editing proprs during create
+	selectPlanetsOk = false;
+	menusOnCreatePlanet();
 
-	planetPropertiesFl.open();
 	activeMoon = null;
 
 	//Turn off planet clicked background
@@ -263,46 +264,14 @@ function addMoonOrbitPath(moonRadius) {
 	return path;
 }
 
-function updatePlanetTexture(textureName){
-	if (textureName == "Earth") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' );
-		// console.log('earth selected');
-	} else if (textureName == "Cloudy") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/cloudy.jpg' );
-		// console.log('cloudy selected');
-	} else if (textureName == "Steel") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/steeltexture.jpg' );
-		// console.log('steel selected');
-	} else if (textureName == "Terraformed mars") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/terramars.jpg' );
-		// console.log('terramars selected');
-	} else if (textureName == "Alien") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/alien.jpg' );
-		// console.log('alien selected');
-	} else if (textureName == "Desolate") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/desolate.png' );
-		// console.log('desolate selected');
-	} else if (textureName == "Sandy") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/sandy.jpg' );
-		// console.log('sandy selected');
-	} else if (textureName == "Klendathu") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/klendathu.png' );
-		// console.log('klendathu selected');
-	} else {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/scarl.png' );
-		// console.log('scarl selected');
-	}
-
+function updatePlanetTexture(textureFile){
+	activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/' + textureFile );
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 	activePlanet.material.needsUpdate = true;
 }
 
 // Add moon to active planet (gui)
 function addMoon() {
-
-	//Open moon property-menusa
-	moonPropertiesFl.open();
-
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
@@ -319,9 +288,6 @@ function addMoon() {
 	activeMoon.castShadow = true;
 	var activeGroup = new THREE.Object3D;
 	activeGroup.add(activeMoon);
-
-	
-
 
 	var path = addMoonOrbitPath(20);
 	activeMoon.parent.add(path);
@@ -366,7 +332,6 @@ function addMoon() {
 	hoverMoonShell = new THREE.Mesh(hoverGeometry, moonHoverMaterial);
 	visibility(hoverMoonShell,false);
 	activeMoon.add(hoverMoonShell);
-	//-------hoverend-------------
 
 	//click on moon shell
 	var clickedGeometry = new THREE.SphereGeometry( 4, 32, 32 );
@@ -382,9 +347,6 @@ function addMoon() {
 	clickedMoonShell = new THREE.Mesh(clickedGeometry, moonHoverMaterial);
 	visibility(clickedMoonShell,false);
 	activeMoon.add(clickedMoonShell);
-	//-------clickedend-------------
-
-	
 
 	// put moon to corresponding planet in array
 	for (var i = 0; i < planets.length; ++i) {
@@ -426,6 +388,23 @@ function addMoon() {
 	activeMoon.add(houseHoverGroup);
 	
 	// console.log("moon spawned");
+}
+
+function saveCreatedPlanet() {
+	console.log("saved");
+	selectPlanetsOk = true;
+	menusOnSave();
+	menusOnPlanetActive();
+}
+
+function buildHouse() {
+	if(!jumpInAction) {
+		if(!buildHouseOk) {
+			buildHouseOk = true;
+		} else {
+		buildHouseOk = false;
+		}
+	}
 }
 
 function playMusic(songFile) {
@@ -476,13 +455,8 @@ function login() {
 	Parse.User.logIn(username, userPassword, {
 		success: function(loggedinuser) {
 			user = loggedinuser;
+			menusOnLogin();
 			// console.log("logged in!");
-
-			// Rearrange menus
-		    $('#login').hide("fast");
-		    $('#register').hide("fast");
-		    $('#user_menu').show("fast");
-   		    $(".user_info").text("Logged in: " + user.getUsername());
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
@@ -493,12 +467,8 @@ function login() {
 
 function logout() {
 	Parse.User.logOut();
+	menusOnLogout();
 	// console.log("logged out");
-
-	// Rearrange menus
-    $('#user_menu').hide("fast");
-    $('#login').show("fast");
-    $('#register').show("fast");
 
 }
 
@@ -511,6 +481,9 @@ function onDocumentTouchStart( event ) {
 
 function onDocumentMouseDown( event ) {
 	// console.log("mouse is down");
+	if (!selectPlanetsOk) {
+		return;		//do nothing (disable functionality)
+	}
 
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
@@ -625,7 +598,11 @@ function onDocumentMouseDown( event ) {
 
 
 //Hover funktion, visar att planeter är tryckbara
-function onMouseMove( event ) {	
+function onMouseMove( event ) {
+	if(!selectPlanetsOk) {
+		return;		//do nothing (disable functionality)
+	}
+
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
@@ -863,5 +840,32 @@ function addSun(){
 			//Origo
 			addLight( 0.55, 0.9, 0.5, 0, 0.5, 1 );
 			addLight( 0.08, 0.8, 0.5, 1, -0.5, 0 );
+
+		}
+
+function showBuild(input){
+	if(input == 1){
+		console.log('GOOOSE'); 
+	}
+
+	if(input == 2){
+		console.log('TOWER'); 
+	}
+
+	if(input == 3){
+		console.log('FISH'); 
+	}
+
+	if(input == 4){
+		console.log('LIBRARY'); 
+	}
+
+	if(input == 5){
+		console.log('SATELLITE'); 
+	}
+
+	if(input == 6){
+		console.log('ANTKA'); 
+	}
 
 }

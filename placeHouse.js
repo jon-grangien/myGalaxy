@@ -8,7 +8,6 @@ function showHouse(pos) {
 		object.scale.z = 0.01;
 
 		object.traverse( function ( child ) {
-
 			if ( child instanceof THREE.Mesh ) {
 				var  geometry = child.geometry;
 				material = child.material;

@@ -144,7 +144,7 @@ function moonJump(){
 			for(i = 0; i < planetOrbitRadiuses.length; i++)
 				if(planetOrbitRadiuses[i][0] == activeMoon.parent.parent)
 					var radiusFactor = 1/(planetOrbitRadiuses[i][1]/50);
-				console.log(radiusFactor);
+				// console.log(radiusFactor);
 			zoomLevel = activeMoon.scale.x*moonZoom*radiusFactor;
 
 			//Möjliggör ändring av transparens
@@ -224,7 +224,7 @@ function jumpToSun(){
 			cameraPosZ = camera.position.z;
 			controlsRotSpeed = controls.rotateSpeed;
 			
-			console.log(hoverOpacity);
+			// console.log(hoverOpacity);
 
 			console.log("Paborjar hopp");
 		}
