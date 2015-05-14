@@ -403,44 +403,6 @@ p.user_info {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
-/*animations*/
-#toregister:target ~ #account-gui-wrapper #register,
-#tologin:target ~ #account-gui-wrapper #login {
-	z-index: 22;
-	-webkit-animation-name: fadeInLeft;
-	-moz-animation-name: fadeInLeft;
-	-ms-animation-name: fadeInLeft;
-	-o-animation-name: fadeInLeft;
-	animation-name: fadeInLeft;
-	-webkit-animation-delay: .1s;
-	-moz-animation-delay: .1s;
-	-o-animation-delay: .1s;
-	-ms-animation-delay: .1s;
-	animation-delay: .1s;
-}
-
-.animate{
-	-webkit-animation-duration: 0.4s;
-	-webkit-animation-timing-function: ease;
-	-webkit-animation-fill-mode: both;
-	
-	-moz-animation-duration: 0.4s;
-	-moz-animation-timing-function: ease;
-	-moz-animation-fill-mode: both;
-	
-	-o-animation-duration: 0.4s;
-	-o-animation-timing-function: ease;
-	-o-animation-fill-mode: both;
-	
-	-ms-animation-duration: 0.4s;
-	-ms-animation-timing-function: ease;
-	-ms-animation-fill-mode: both;
-	
-	animation-duration: 0.4s;
-	animation-timing-function: ease;
-	animation-fill-mode: both;
-}
-
 #toregister:target ~ #account-gui-wrapper #login,
 #tologin:target ~ #account-gui-wrapper #register{
 	-webkit-animation-name: fadeOutLeft;
@@ -448,6 +410,36 @@ p.user_info {
 	-ms-animation-name: fadeOutLeft;
 	-o-animation-name: fadeOutLeft;
 	animation-name: fadeOutLeft;
+}
+
+/* jump to system */
+#jump-system-container {
+	position: absolute;
+	bottom: 20px;
+	left: 40%;
+	width: 20%;
+	heigth: 40px;
+}
+
+#jump-system-button {
+	width: 100%;
+	heigth: 100%;
+	background: rgb(119, 189, 163);
+	padding: 15px 10px 15px 10px;
+	border: 1px solid rgb(0, 0, 0);	
+	border-radius: 3px;	
+	transition: all 0.2s linear;
+}
+#jump-system-button:hover {
+	background: rgb(235, 255, 212);
+}
+#jump-system-button:active,
+#jump-system-button:focus {
+	background: rgb(40, 137, 154);
+	position: relative;
+	top: 1px;
+	border: 1px solid rgb(12, 76, 87);	
+	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
 /******** PLANET BUILD GUI ********/
@@ -558,4 +550,42 @@ p.user_info {
 #insideBygg img:hover {
     opacity: 1.0;
     filter: alpha(opacity=100);
+}
+
+/*animations*/
+#toregister:target ~ #account-gui-wrapper #register,
+#tologin:target ~ #account-gui-wrapper #login {
+	z-index: 22;
+	-webkit-animation-name: fadeInLeft;
+	-moz-animation-name: fadeInLeft;
+	-ms-animation-name: fadeInLeft;
+	-o-animation-name: fadeInLeft;
+	animation-name: fadeInLeft;
+	-webkit-animation-delay: .1s;
+	-moz-animation-delay: .1s;
+	-o-animation-delay: .1s;
+	-ms-animation-delay: .1s;
+	animation-delay: .1s;
+}
+
+.animate{
+	-webkit-animation-duration: 0.4s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-fill-mode: both;
+	
+	-moz-animation-duration: 0.4s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-fill-mode: both;
+	
+	-o-animation-duration: 0.4s;
+	-o-animation-timing-function: ease;
+	-o-animation-fill-mode: both;
+	
+	-ms-animation-duration: 0.4s;
+	-ms-animation-timing-function: ease;
+	-ms-animation-fill-mode: both;
+	
+	animation-duration: 0.4s;
+	animation-timing-function: ease;
+	animation-fill-mode: both;
 }

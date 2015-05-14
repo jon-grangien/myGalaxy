@@ -209,3 +209,7 @@ function jumpToSun(){
 	}
 	
 }
+
+function jumpToSystem() {
+	console.log("system jump");
+}
