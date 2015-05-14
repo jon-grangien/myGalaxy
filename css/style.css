@@ -412,7 +412,7 @@ p.user_info {
 	animation-name: fadeOutLeft;
 }
 
-/* jump to system */
+/***** VIEWS ******/
 #jump-system-container {
 	position: absolute;
 	bottom: 20px;
@@ -435,6 +435,37 @@ p.user_info {
 }
 #jump-system-button:active,
 #jump-system-button:focus {
+	background: rgb(40, 137, 154);
+	position: relative;
+	top: 1px;
+	border: 1px solid rgb(12, 76, 87);	
+	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
+
+#jump-planet-moon-container {
+	position: absolute;
+	top: 20px;
+	left: 42%;
+	width: 30%;
+	heigth: 40px;
+}
+
+.jump-planet-moon-buttons {
+	float: left;
+	width: 20%;
+	heigth: 100%;
+	padding: 15px 0px 15px 0px;
+	margin: 10px;
+	background: rgb(119, 189, 163);
+	border: 1px solid rgb(0, 0, 0);	
+	border-radius: 3px;	
+	transition: all 0.2s linear;
+}
+.jump-planet-moon-buttons:hover {
+	background: rgb(235, 255, 212);
+}
+.jump-planet-moon-buttons:active,
+.jump-planet-moon-buttons:focus {
 	background: rgb(40, 137, 154);
 	position: relative;
 	top: 1px;
