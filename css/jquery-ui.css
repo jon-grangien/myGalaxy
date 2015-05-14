@@ -93,8 +93,10 @@
 	margin: 2px 0 0 0;
 	padding: .5em .5em .5em .7em;
 	min-height: 0; /* support: IE7 */
-	font-size: 100%;
+	font-size: 50%;
 }
+
+
 .ui-accordion .ui-accordion-icons {
 	padding-left: 2.2em;
 }
@@ -108,9 +110,14 @@
 	margin-top: -8px;
 }
 .ui-accordion .ui-accordion-content {
-	padding: 1em 2.2em;
+	padding-top:10px;
+	padding-left:22px;
+	padding-right:2px;
+	padding-bottom:10px;
 	border-top: 0;
-	overflow: auto;
+
+	
+
 }
 .ui-autocomplete {
 	position: absolute;
