@@ -1,18 +1,35 @@
+
+				var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare02.png" );
+				var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
+				var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
+
+				
+
 function addLight( h, s, l, x, y, z ) {
-	var light = new THREE.PointLight( 0xaaffff, 1.5, 0 );
+
+	var light = new THREE.PointLight( 0xffffff, 1.5, 4500 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
 	sunSphere.add( light );
 
-	var flareColor = new THREE.Color( 0x00ffff );
-	flareColor.setHSL( h, s, l + 0.3 );
+	var flareColor = new THREE.Color( 0xffffff );
+	flareColor.setHSL( h, s, l + 0.5 );
 
-	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare01.png" );
-	var lensFlare = new THREE.LensFlare( textureFlare0, 900, 0.0, THREE.AdditiveBlending, flareColor );
+	var lensFlare = new THREE.LensFlare( textureFlare0, 6400, 0.0, THREE.AdditiveBlending, flareColor );
+
+	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+
+	lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending );
+
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
-	//lensFlare.position.copy( light.position );
+	lensFlare.position.copy( light.position );
 
-	//sunSphere.add( lensFlare );
+	sunSphere.add( lensFlare );
 }
 
 function onWindowResize() {
@@ -818,7 +835,10 @@ function addSun(){
 			        }
 			    },
 			    vertexShader: document.getElementById( 'vertexShaderProcedural' ).textContent,
-			    fragmentShader: document.getElementById( 'fragmentShaderProcedural' ).textContent
+			    fragmentShader: document.getElementById( 'fragmentShaderProcedural' ).textContent,
+			    side: THREE.BackSide,
+				//blending: THREE.AdditiveBlending,
+			    transparent: true
 			    
 			} );
 
@@ -841,7 +861,7 @@ function addSun(){
 			scene.add(rotationGroup);
 
 			//Origo
-			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
-			addLight( 0.08, 0.8, 0.5, 2, 2, 2 );
+			addLight( 0.55, 0.9, 0.5, 0, 0.5, 1 );
+			addLight( 0.08, 0.8, 0.5, 1, -0.5, 0 );
 
 }
