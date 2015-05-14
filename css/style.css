@@ -64,6 +64,46 @@ canvas {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
+<<<<<<< HEAD
+=======
+/* selectable-grid */
+#texture-container {
+	position: relative;
+	left: 25px;
+	top: 20px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+}
+#texture-label {
+	position: absolute;
+	color: white;
+	padding-bottom: 1px;
+}
+
+.img-container {
+	position: relative;
+	float: left;
+	margin: 15px;
+	width:70px;
+	heigth:90px;
+	cursor: pointer;
+}
+.img-container:hover {
+	background: rgba(255,255,255,0.4);
+	z-index:5;
+}
+.tex-img {
+	width: 100%;
+}
+.tex-img-label {
+	position: absolute;
+	color: white;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 10;
+	text-align: center;
+	margin-left: 5px;
+}
+
+>>>>>>> parent of 06bbe25... add basic tex img hover style
 #add-button-container {
 	position:absolute;
 	top: 10px;
