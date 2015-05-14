@@ -779,3 +779,7 @@ function addSun(){
 			addLight( 0.08, 0.8, 0.5, 2, 2, 2 );
 
 }
+
+function placeHouse() {
+	console.log("place house");
+}
