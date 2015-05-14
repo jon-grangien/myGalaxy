@@ -255,6 +255,34 @@
 		  });
 		</script>
 
+		<script>
+		    $(document).ready(function() {     
+		        $('#add_planet_button').click(function() {
+		            selectPlanetsOk = false;
+		            menusOnCreatePlanet();
+		            addPlanet();
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#edit_planet_button').click(function() {
+		            selectPlanetsOk = false;
+		            menusOnEditPlanet();
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#edit-done-button').click(function() {
+		            selectPlanetsOk = true;
+		            menusOnEditDone();
+		        });    
+		    });
+		</script>
+
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
 			vec3 mod289(vec3 x)
 			{
@@ -730,7 +758,7 @@
 
 		<!-- general GUI -->
 		<div id="add-button-container">
-			<button id="add_planet_button" onClick="addPlanet()">Create planet</button>
+			<button id="add_planet_button">Create planet</button>
 			<!-- <button id="add_moon_button" onClick="addMoon()">Add moon</button> -->
 		</div>
 
@@ -794,7 +822,7 @@
 		</div>
 
 		<div id="edit-existing-planet-button-container">
-			<button id="edit_planet_button" onClick="menusOnEditPlanet()">Edit planet</button>
+			<button id="edit_planet_button">Edit planet</button>
 		</div>
 
 		<div id="edit-existing-planet-container">
@@ -812,7 +840,7 @@
 			</div>
 
 			<div id="#edit-planet-container">
-				<button id="edit-done-button" onClick="menusOnEditDone()">Done</button>
+				<button id="edit-done-button">Done</button>
 			</div>
 			
 		</div>

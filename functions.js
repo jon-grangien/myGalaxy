@@ -39,10 +39,6 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
-	// Disables other planet click functionality while editing proprs during create
-	selectPlanetsOk = false;
-	menusOnCreatePlanet();
-
 	activeMoon = null;
 
 	//Turn off planet clicked background
