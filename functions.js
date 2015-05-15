@@ -397,11 +397,13 @@ function saveCreatedPlanet() {
 }
 
 function buildHouse() {
+	// console.log("house function called");
 	if(!jumpInAction) {
+		// console.log("jump is in action?");
 		if(!buildHouseOk) {
 			buildHouseOk = true;
 		} else {
-		buildHouseOk = false;
+			buildHouseOk = false;
 		}
 	}
 }
@@ -480,7 +482,7 @@ function onDocumentTouchStart( event ) {
 
 function onDocumentMouseDown( event ) {
 	// console.log("mouse is down");
-	if (!selectPlanetsOk) {
+	if (!selectPlanetsOk && !buildHouseOk) {
 		return;		//do nothing (disable functionality)
 	}
 
@@ -491,27 +493,28 @@ function onDocumentMouseDown( event ) {
 	intersects = raycaster.intersectObjects( clickableObjects );
 	
 
+	if (selectPlanetsOk) {
+		//Hides planet clicked
+		for (var i = 0; i < clickedShells.length; ++i) {
+			if (clickedShells[i][0] == activePlanet) {
+				
+				mesh = clickedShells[i][0];
+				visibility(mesh.children[2],false);
+			}
+		}
 
-	//Hides planet clicked
-	for (var i = 0; i < clickedShells.length; ++i) {
-		if (clickedShells[i][0] == activePlanet) {
-			
-			mesh = clickedShells[i][0];
-			visibility(mesh.children[2],false);
+		//Hides moon clicked
+		for (var i = 0; i < clickedMoonShells.length; ++i) {
+			if (clickedMoonShells[i][0] == activeMoon) {
+				
+				mesh = clickedMoonShells[i][0];
+				visibility(mesh.children[2],false);
+			}
 		}
 	}
 
-	//Hides moon clicked
-	for (var i = 0; i < clickedMoonShells.length; ++i) {
-		if (clickedMoonShells[i][0] == activeMoon) {
-			
-			mesh = clickedMoonShells[i][0];
-			visibility(mesh.children[2],false);
-		}
-	}
-
-
-	if ( intersects.length > 0 && !jumpInAction ) {
+	// Handle active object if no jumping and if not editing
+	if ( intersects.length > 0 && !jumpInAction && selectPlanetsOk) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
 		if(jumpPlanetOk)
@@ -552,41 +555,10 @@ function onDocumentMouseDown( event ) {
 				check = 0;
 			}
 		}
-
-
-		/*if(check)	// if clicked object is a planet
-		{
-			for (var i = 0; i < clickedShells.length; ++i) {
-				if (clickedShells[i][0] == activePlanet) {
-					
-					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
-					visibility(mesh.children[2],true); //Show clicked background
-				}
-			}
-			if(activePlanet.children.length > 0)
-				console.log("hej2");
-				for(var i = 0; i < clickedMoonShells.length; i++) {
-					if (clickedMoonShells[i][0] == activePlanet.children[0]) {
-						mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
-						visibility(mesh.children[1],true); //Show clicked background
-						console.log("hej3");
-					}
-				}
-		}
-		else	// if clicked object is a moon
-		{
-			for (var i = 0; i < clickedMoonShells.length; ++i) {
-				if (clickedMoonShells[i][0] == activeMoon) {
-
-					mesh = clickedMoonShells[i][0];
-					visibility(mesh.children[1],true);
-
-				}
-			}
-		}*/
 	}
 	
-	if ( intersects.length > 0 && buildHouseOk) {
+	// House functionality if house function called and if editing
+	if ( intersects.length > 0 && buildHouseOk && !selectPlanetsOk) {
 		
 		//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
 		createHouse(intersects[0].object.worldToLocal(intersects[0].point));
@@ -598,7 +570,7 @@ function onDocumentMouseDown( event ) {
 
 //Hover funktion, visar att planeter är tryckbara
 function onMouseMove( event ) {
-	if(!selectPlanetsOk) {
+	if(!selectPlanetsOk && !buildHouseOk) {
 		return;		//do nothing (disable functionality)
 	}
 
@@ -673,9 +645,9 @@ function onMouseMove( event ) {
 	}
 	
 	//If-satsen gör att man kan hovra med ett hus över en planet.
-	if(buildHouseOk) {
-		
+	if(buildHouseOk) {		
 		if(jumpPlanetOk) {
+
 			//En forloop som ser till att det inte spawnar hus överallt där man har musen.
 			for ( i = activePlanet.children[5].children.length; i >= 0; i-- )
 				activePlanet.children[5].remove(activePlanet.children[5].children[i]);
