@@ -599,74 +599,12 @@ p.user_info {
 }
 
 /******** PLANET BUILD GUI ********/
-.bygg-main {
-	width:300px;
-	height:100px;
-	position:absolute;
-	top:25%;
-	left:10px;
-	z-index:22;
-}
-
-.site-header-wrap {
-	margin-bottom:60px;
-	border-bottom:1px solid #cd9ad6;
-}
-
 #accordion-container {
 	position: aboslute;
 	bottom: 10%;
 	left: 10%;
 	z-index: 5;
-}
-.accordion, .accordion * {
-	-webkit-box-sizing:border-box; 
-	-moz-box-sizing:border-box; 
-	box-sizing:border-box;
-}
-.accordion-1{
-	padding-bottom:0px;
-}
-
-.accordion {
-	overflow:hidden;
-	box-shadow:0px 1px 3px rgba(0,0,0,0.25);
-	border-radius:3px;
-	background:#f7f7f7;
-}
-
-.accordion-section-title {
-	width:100%;
-	padding:15px;
-	display:inline-block;
-	border-bottom:1px solid #1a1a1a;
-	background:#333;
-	transition:all linear 0.15s;
-	font-family: 'Roboto', sans-serif;
-	font-size:1.200em;
-	text-shadow:0px 1px 0px #1a1a1a;
-	color:#fff;
-	text-decoration:none;
-}
-
-.accordion-section-title.active, .accordion-section-title:hover {
-	background:#4c4c4c;
-	text-decoration:none;
-	font-family: 'Roboto', sans-serif;
-}
-
-.accordion-section:last-child .accordion-section-title {
-	border-bottom:none;
-}
-
-.accordion-section-content {
-	padding:15px;
-	display:none;
-	font-family: 'Roboto', sans-serif;
-}
-
-.accordion{
-	background:#4c4c4c;
+	background: rgb(10,10,10);
 }
 
 #insideBygg img {
