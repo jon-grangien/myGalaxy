@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="css/animate.css">
 		<link rel="stylesheet" href="css/jquery-ui.css">
 		<link href="css/square/green.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/font-awesome-4.3.0/css/font-awesome.css">
 
 		<!-- jquery libs -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -670,104 +671,12 @@
 			</div>
 		</div>
 
-		<!-- planet build GUI -->
-		<div class="bygg-main">
-			<div class="accordion">
-				<div class="accordion-section">
-					<a class="accordion-section-title" href="#accordion-1">Build</a>
-					<div id="accordion-1" class="accordion-section-content">
-						<p>What do you want to build?</p><br>
-						<div id="insideBygg">
-							<tr>
-								<td>
-									<div id="gooseDiv">
-										<img src="images/goose.png" style="width:60px;height:60px;" onclick="buildHouse();">
-									<td>
-									<p>Domestic goose </p>
-									</td>
-									</div>
-								</td><br>
-								<td>
-									<div id="eiffelDiv">
-										<img src="images/eiffel.png" style="width:60px;height:60px;">
-									<td>
-									<p>Eiffel tower </p>
-									</td>
-									</div>
-								</td><br>
-								<td>
-									<div id="satelliteDiv">
-										<img src="images/satellite.png" style="width:60px;height:60px;">
-									<td>
-									<p>Satellite </p>
-									</td>
-									</div>
-								</td><br>
-							</tr>
-						</div>
-					</div><!--end .accordion-section-content-->
-				</div><!--end .accordion-section-->
-	
-				<div class="accordion-section">
-					<a class="accordion-section-title" href="#accordion-2">Send to another planet</a>
-					<div id="accordion-2" class="accordion-section-content">
-						<p>Choose what to send</p>
-							<tr>
-								<td>
-									<div id="sendObjDiv">
-										<td>
-											<img src="images/goose.png" style="width:50px;height:50px;">
-										</td>
-										<td>
-											<img src="images/eiffel.png" style="width:50px;height:50px;">
-										</td>
-										<td>
-											<img src="images/satellite.png" style="width:50px;height:50px;">
-										</td>
-									</div>
-								</td>
-							</tr>
-							
-						<p>Choose which planet to send to</p>
-						<form action="">
-	  						<input type="checkbox" name="vehicle" value="Bike">Uranus<br>
-	  						<input type="checkbox" name="vehicle" value="Car" checked>Mars<br><br>
-	  						<input type="submit" value="Send">
-						</form> 
-					</div><!--end .accordion-section-content-->
-				</div><!--end .accordion-section-->
-	
-				<div class="accordion-section">
-					<a class="accordion-section-title" href="#accordion-3">Chat with aliens</a>
-					<div id="accordion-3" class="accordion-section-content">
-						<p>Choose planet to communicate with</p>
-							<td>
-									<div id="sendObjDiv">
-										<td>
-											<img src="images/goose.png" style="width:50px;height:50px;">
-										</td>
-										<td>
-											<img src="images/eiffel.png" style="width:50px;height:50px;">
-										</td>
-										<td>
-											<img src="images/satellite.png" style="width:50px;height:50px;">
-										</td>
-									</div>
-								</td>
-						<br><br><p>Enter your message:</p>
-						<textarea cols="30" rows="8" name="comment"></textarea>
-						<form action="">
-	  						<input type="submit" value="Send">
-						</form>
-					</div><!--end .accordion-section-content-->
-				</div><!--end .accordion-section-->
-			</div><!--end .accordion-->
-		</div>
-		<!-- ************************************** -->
-
 		<!-- general GUI -->
 		<div id="add-button-container">
-			<button id="add-planet-button">Create planet</button>
+			<button id="add-planet-button">
+				<i class="fa fa-plus fa-fw fa-2x"></i>
+				Create planet
+			</button>
 		</div>
 
 		<div id="edit-created-planet-container">
@@ -830,7 +739,10 @@
 		</div>
 
 		<div id="edit-existing-planet-button-container">
-			<button id="edit_planet_button">Edit planet</button>
+			<button id="edit_planet_button">
+				<i class="fa fa-pencil fa-fw fa-2x"></i>
+				Edit planet
+			</button>
 		</div>
 
 		<div id="edit-existing-planet-container">
@@ -846,11 +758,8 @@
 					<div id="moon-rotation-slider"></div>
 				</div>
 			</div>
-
-			<div id="#edit-planet-container">
-				<button id="edit-done-button">Done</button>
-			</div>
 			
+			<button id="edit-done-button">Done</button>
 		</div>
 
 		<div id="accordion-container">
@@ -882,21 +791,34 @@
 			  <div id="build-image-container">
 			  <p>Send text to älgen</p>
 			  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
-						<form action="">
-	  						<input type="submit" value="Send">
-						</form>
+				<form action="">
+						<input type="submit" value="Send">
+				</form>
 			  </div>
 			</div>
 		</div>
 
 		<div id="jump-system-container">
-			<button id="jump-system-button" onClick="solarBools()">View system</button>
+			<button id="jump-system-button" onClick="solarBools()">
+				<i class="fa fa-chevron-down fa-fw"></i>
+				View system
+				<i class="fa fa-chevron-down fa-fw"></i>
+			</button>
 		</div>
 
 		<div id="jump-planet-moon-container">
-			<button class="jump-planet-moon-buttons" id="jump-planet-button" onClick="planetBools()">View planet</button>
-			<button class="jump-planet-moon-buttons" id="jump-moon-button" onClick="moonBools()">View moon</button>
-			<button class="jump-planet-moon-buttons" id="place-house-button" onClick="buildHouse()">place house</button>	
+			<button class="jump-planet-moon-buttons" id="jump-planet-button" onClick="planetBools()">
+				<i class="fa fa-eye fa-fw"></i>
+				View planet
+			</button>
+			<button class="jump-planet-moon-buttons" id="jump-moon-button" onClick="moonBools()">
+				<i class="fa fa-eye fa-fw"></i>
+				View moon
+			</button>
+			<button class="jump-planet-moon-buttons" id="place-house-button" onClick="buildHouse()">
+				<i class="fa fa-building-o fa-fw"></i>
+				Place house
+			</button>	
 		</div>
 		<script>
 
