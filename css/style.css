@@ -39,7 +39,7 @@ canvas {
 	width: 100%;
 	height: 15%;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	font-size: 18;
+	font-size: 18px;
 }
 
 #save_planet_button {
@@ -111,7 +111,7 @@ canvas {
 	position: absolute;
 	color: white;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	font-size: 10;
+	font-size: 10px;
 	text-align: center;
 	margin-left: 5px;
 }
@@ -133,10 +133,8 @@ canvas {
 	min-heigth: 100px;
 	max-heigth: 100px;
 	cursor: pointer;	
-	/*background: rgb(30, 30, 30);*/
 	background: rgb(40, 40, 40);
 	padding: 20px 5px;
-	/*margin: 10px 0px 0px 10px;*/
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(121, 173, 143);
 	font-size: 18px;	
@@ -538,8 +536,7 @@ p.user_info {
 	right: 10px;
 	max-width: 230px;
 	min-width: 210px;
-	min-height: 45%;
-	max-height: 50%;
+	min-height: 380px;
 
 	background: rgb(10, 10, 10);
 	border: 1px solid rgba(100, 100, 100,0.6);
@@ -551,17 +548,18 @@ p.user_info {
 }
 
 #add-moon-button {
-	min-width: 100px;
-	max-width: 100px;
-	min-heigth: 100px;
-	max-heigth: 100px;
+	position: relative;
+	width: 50%;
+	left: 25%;
+	top: 20px;
 	cursor: pointer;	
 	background: rgb(30, 30, 30);
 	padding: 30px 5px  30px 5px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(121, 173, 143);
 	font-size: 18px;	
-	border: 1px solid rgb(0, 0, 0);	
+	border: 1px solid rgb(0, 0, 0);
+	border-radius: 7px;
 	transition: all 0.2s linear;
 }
 #add-moon-button:hover {
@@ -576,27 +574,24 @@ p.user_info {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
-#moon-radius-slider,
-#moon-rotation-slider {
+#moon-properties-container {
 	position: relative;
+	top: 20px;
 	width: 80%;
 	left: 20px;
 }
 
-#edit-planet-container {
-	position: absolute;
-	bottom: 0px;
-	width: 100%;
-	height: 15%;
-	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	/*font-size: 18;*/
-}
-
 #edit-done-button {
-	width:130px;
-	height: 70px;
-	margin: 0 0% 0 25%;
+	position: relative;
+	left: 25%;
+	width:50%;
+	top: 50px;
+	min-height: 70px;
+	/*margin: 0 0% 0 25%;*/
 	background: rgb(30, 30, 30);
+	color: rgb(121, 173, 143);
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 18px;
 	border: 1px solid rgb( 0,  0, 0);	
 	border-radius: 3px;	
 	transition: all 0.2s linear;
