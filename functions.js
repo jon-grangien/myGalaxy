@@ -1,31 +1,46 @@
+var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare02.png" );
+var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
+var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
+
+				
+
 function addLight( h, s, l, x, y, z ) {
-	var light = new THREE.PointLight( 0xaaffff, 1.5, 0 );
+
+	var light = new THREE.PointLight( 0xffffff, 1.5, 4500 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
-	scene.add( light );
+	sunSphere.add( light );
 
-	var flareColor = new THREE.Color( 0x00ffff );
-	flareColor.setHSL( h, s, l + 0.3 );
+	var flareColor = new THREE.Color( 0xffffff );
+	flareColor.setHSL( h, s, l + 0.5 );
 
-	var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare01.png" );
-	var lensFlare = new THREE.LensFlare( textureFlare0, 900, 0.0, THREE.AdditiveBlending, flareColor );
+	var lensFlare = new THREE.LensFlare( textureFlare0, 6400, 0.0, THREE.AdditiveBlending, flareColor );
+
+	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+
+	lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending );
+	lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending );
+
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
-	//lensFlare.position.copy( light.position );
+	lensFlare.position.copy( light.position );
 
-	//scene.add( lensFlare );
+	sunSphere.add( lensFlare );
 }
 
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
-
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 // Planet spawn (gui)
 function addPlanet(){
-
-	planetPropertiesFl.open();
+	thereArePlanets = true;
+	activeMoon = null;
 
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
@@ -36,7 +51,7 @@ function addPlanet(){
 	}
 
 	// Atmosphere
-	var atmosphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var atmosphereGeometry = new THREE.SphereGeometry( 12.5, 60, 60 );
 	var atmosphereMaterial = new THREE.ShaderMaterial( {
 	    uniforms: {  },
 		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
@@ -51,10 +66,10 @@ function addPlanet(){
 	atmosphere.castShadow = false;
 
 	// orbit path
-	var path = addOrbitPath(60);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
+	var path = addOrbitPath(80);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
 
 	// Planet
-	var sphereGeometry = new THREE.SphereGeometry( 11, 40, 40 );
+	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
 	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
@@ -63,7 +78,13 @@ function addPlanet(){
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
 
-	sunSphere.add(path);
+
+	orbitsMother.push(path);
+	for(var i = 0; i < orbitsMother.length; ++i)
+			{
+				sunSphere.add(orbitsMother[i]);
+			}
+
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
@@ -71,7 +92,7 @@ function addPlanet(){
 	planetNeedsInitialShift = true;
 
 	//Hover-background
-	var hoverGeometry = new THREE.SphereGeometry( 12, 40, 40 );
+	var hoverGeometry = new THREE.SphereGeometry( 12, 60, 60 );
 	var hoverMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -81,13 +102,13 @@ function addPlanet(){
 				transparent: true
 			}   );
 	hoverMaterial.side = THREE.BackSide;
-	hoverShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	hoverShell = new THREE.Mesh(hoverGeometry, planetHoverMaterial);
 	visibility(hoverShell, false);
 	activePlanet.add(hoverShell);
 	//----------------hoverend------------------
 
 	//Clicked-background
-	var clickedGeometry = new THREE.SphereGeometry( 15, 40, 40 );
+	var clickedGeometry = new THREE.SphereGeometry( 15, 60, 60 );
 	var clickedMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -97,10 +118,12 @@ function addPlanet(){
 				transparent: true
 			}   );
 	clickedMaterial.side = THREE.BackSide;
-	clickedShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	clickedShell = new THREE.Mesh(clickedGeometry, planetHoverMaterial);
 	visibility(clickedShell, false);
 	activePlanet.add(clickedShell);
 	//----------------clickedend------------------
+	
+
 
 
 	// sunGroup.add(activeGroup);
@@ -120,7 +143,7 @@ function addPlanet(){
 	var tempArray;
 
 	// Push to planetSpeeds (planets|rotationSpeeds)
-	tempArray = [activePlanet, activeRotationSpeed];
+	tempArray = [activePlanet, activeRotationSpeed, activeRotationSpeed];
 	planetSpeeds.push(tempArray);
 
 	// Push to planets (planets|moons)
@@ -140,8 +163,18 @@ function addPlanet(){
 	clickedShells.push(tempArray);
 
 	// Push to planetOrbitRadiuses
-	tempArray = [activePlanet, 60]; //the value 60 should maybe be replaced by a variable
+	tempArray = [activePlanet, 80]; //the value 60 should maybe be replaced by a variable
 	planetOrbitRadiuses.push(tempArray);
+	
+	//tempArray = [activePlanet, 0];
+	//planetHouses.push(tempArray);
+	
+	//A group containing all houses on the planet, this is the 5:th child of a new planet.
+	var houseGroup = new THREE.Object3D;
+	activePlanet.add(houseGroup);
+	//A group containing all temporary houses (hovering houses) on the planet.
+	var houseHoverGroup = new THREE.Object3D;
+	activePlanet.add(houseHoverGroup);
 
 }
 
@@ -202,69 +235,15 @@ function addMeteorbelt(){
 }
 
 
-function addMeteorbelt2(){
-	var meteorbelt = new THREE.Object3D;
-	var meteorStoneGeometry;
-	var meteorStoneMaterial;
-	for(var i = 0; i < 800; i++){
-
-		w = Math.floor((Math.random() * 1) + 1);
-		h = Math.floor((Math.random() * 1) + 1);
-
-		var rockSize = Math.random()*0.09+0.01
-		meteorStoneGeometry = new THREE.SphereGeometry( rockSize, w, h );
-		meteorStoneMaterial = new THREE.MeshPhongMaterial(  );
-		rock = new THREE.Mesh(meteorStoneGeometry, meteorStoneMaterial);
-
-		sunRadius = 16;
-		sunRadius = Math.random()*9 + sunRadius;
-
-		var xTrans = (Math.random() -0.5)*2*sunRadius;
-		var yTrans;
-		if(Math.random() < 0.5){
-			yTrans = Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
-		}
-		else
-			yTrans = -Math.sqrt(sunRadius*sunRadius-xTrans*xTrans);
-
-		var zTrans = 0;
-
-		rock.translateX(xTrans);
-		rock.translateY(yTrans);
-		rock.translateZ(zTrans);
-
-		meteorbelt.add(rock);
-	}
-	visibility(meteorbelt,false);
-
-	activePlanet.add(meteorbelt);
-
-	var tempArray;
-
-	// Push to meteorbelts (planets|meteorbelts)
-	tempArray = [activePlanet, meteorbelt];
-	meteorbelts.push(tempArray);
-
-}
-
-
 // Add orbit path torus about sun to planets
 function addOrbitPath(radius) {
-	var pathGeometry = new THREE.TorusGeometry( radius, 0.4, 16, 100 );
-	var pathMaterial = new THREE.ShaderMaterial( {
-			    uniforms: {  },
-				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
-				fragmentShader: document.getElementById( 'torusFragmentShader' ).textContent,
-				side: THREE.BackSide,
-				blending: THREE.AdditiveBlending,
-				transparent: true
-			}   );
+	var pathGeometry = new THREE.TorusGeometry( radius, 0.3, 16, 100 );
 
-	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+	var path = new THREE.Mesh( pathGeometry, planetOrbitMaterial );
+
 
 	return path;
 }
-
 
 function addMoonOrbitPath(moonRadius) {
 	var pathGeometry = new THREE.TorusGeometry( moonRadius, 0.2, 16, 100 );
@@ -277,57 +256,27 @@ function addMoonOrbitPath(moonRadius) {
 				transparent: true
 			}   );
 
-	var path = new THREE.Mesh( pathGeometry, pathMaterial );
+	var path = new THREE.Mesh( pathGeometry, moonOrbitMaterial );
 
 	return path;
 }
 
-function updatePlanetTexture(textureName){
-	if (textureName == "Earth") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' );
-		// console.log('earth selected');
-	} else if (textureName == "Cloudy") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/cloudy.jpg' );
-		// console.log('cloudy selected');
-	} else if (textureName == "Steel") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/steeltexture.jpg' );
-		// console.log('steel selected');
-	} else if (textureName == "Terraformed mars") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/terramars.jpg' );
-		// console.log('terramars selected');
-	} else if (textureName == "Alien") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/alien.jpg' );
-		// console.log('alien selected');
-	} else if (textureName == "Desolate") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/desolate.png' );
-		// console.log('desolate selected');
-	} else if (textureName == "Sandy") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/sandy.jpg' );
-		// console.log('sandy selected');
-	} else if (textureName == "Klendathu") {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/klendathu.png' );
-		// console.log('klendathu selected');
-	} else {
-		activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/scarl.png' );
-		// console.log('scarl selected');
-	}
-
+function updatePlanetTexture(textureFile){
+	activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/' + textureFile );
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 	activePlanet.material.needsUpdate = true;
 }
 
 // Add moon to active planet (gui)
 function addMoon() {
-
-	//Open moon property-menusa
-	moonPropertiesFl.open();
-
+	thereAreMoons = true;
+	
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
 
 			mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
-			visibility(mesh.children[1],false); //Show clicked background
+			visibility(mesh.children[2],false); //Show clicked background
 		}
 	}
 
@@ -351,8 +300,25 @@ function addMoon() {
 	activePlanet.add(activeGroup);
 	moonGroups.push(activeGroup);
 
+	// Atmosphere
+	var atmosphereGeometry = new THREE.SphereGeometry( 3, 32, 32 );
+	var atmosphereMaterial = new THREE.ShaderMaterial( {
+	    uniforms: {  },
+		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShaderMoonAtmos' ).textContent,
+		side: THREE.BackSide,
+		blending: THREE.AdditiveBlending,
+		transparent: true
+	}   );
+
+	var atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+	atmosphere.receiveShadow = false;
+	atmosphere.castShadow = false;
+	
+	activeMoon.add(atmosphere);
+
 	//hover on moon shell
-	var hoverGeometry = new THREE.SphereGeometry( 3, 32, 32 );
+	var hoverGeometry = new THREE.SphereGeometry( 2.8, 32, 32 );
 	var hoverMaterial = new THREE.ShaderMaterial( {
 			    uniforms: {  },
 				vertexShader:   document.getElementById( 'torusVertexShader'   ).textContent,
@@ -362,10 +328,9 @@ function addMoon() {
 				transparent: true
 			}   );
 	hoverMaterial.side = THREE.BackSide;
-	hoverMoonShell = new THREE.Mesh(hoverGeometry, hoverMaterial);
+	hoverMoonShell = new THREE.Mesh(hoverGeometry, moonHoverMaterial);
 	visibility(hoverMoonShell,false);
 	activeMoon.add(hoverMoonShell);
-	//-------hoverend-------------
 
 	//click on moon shell
 	var clickedGeometry = new THREE.SphereGeometry( 4, 32, 32 );
@@ -378,11 +343,9 @@ function addMoon() {
 				transparent: true
 			}   );
 	clickedMaterial.side = THREE.BackSide;
-	clickedMoonShell = new THREE.Mesh(clickedGeometry, clickedMaterial);
+	clickedMoonShell = new THREE.Mesh(clickedGeometry, moonHoverMaterial);
 	visibility(clickedMoonShell,false);
 	activeMoon.add(clickedMoonShell);
-	//-------clickedend-------------
-	
 
 	// put moon to corresponding planet in array
 	for (var i = 0; i < planets.length; ++i) {
@@ -393,7 +356,7 @@ function addMoon() {
 	}
 
 	// Push moon object + rotationSpeed
-	tempArray = [activeMoon, activeRotationSpeed];
+	tempArray = [activeMoon, activeRotationSpeed, activeRotationSpeed];
 	moonSpeeds.push(tempArray);
 
 	// Push to planetPaths
@@ -413,10 +376,34 @@ function addMoon() {
 	clickedMoonShells.push(tempArray);
 
 	// Push to planetOrbitRadiuses
-	tempArray = [activePlanet, 20]; //the value 60 should maybe be replaced by a variable
+	tempArray = [activePlanet, 20]; //the value 20 should maybe be replaced by a variable
 	moonOrbitRadiuses.push(tempArray);
 	
+	//A group containing all houses on the moon, this is the 3:th child of a moon.
+	var houseGroup = new THREE.Object3D;
+	activeMoon.add(houseGroup);
+	//A group containing all temporary houses (hovering houses) on the moon.
+	var houseHoverGroup = new THREE.Object3D;
+	activeMoon.add(houseHoverGroup);
+	
 	// console.log("moon spawned");
+}
+
+function saveCreatedPlanet() {
+	console.log("saved");
+	selectPlanetsOk = true;
+	menusOnSave();
+	menusOnPlanetActive();
+}
+
+function buildHouse() {
+	if(!jumpInAction) {
+		if(!buildHouseOk) {
+			buildHouseOk = true;
+		} else {
+		buildHouseOk = false;
+		}
+	}
 }
 
 function playMusic(songFile) {
@@ -467,13 +454,8 @@ function login() {
 	Parse.User.logIn(username, userPassword, {
 		success: function(loggedinuser) {
 			user = loggedinuser;
+			menusOnLogin();
 			// console.log("logged in!");
-
-			// Rearrange menus
-		    $('#login').hide("fast");
-		    $('#register').hide("fast");
-		    $('#user_menu').show("fast");
-   		    $(".user_info").text("Logged in: " + user.getUsername());
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
@@ -484,12 +466,8 @@ function login() {
 
 function logout() {
 	Parse.User.logOut();
+	menusOnLogout();
 	// console.log("logged out");
-
-	// Rearrange menus
-    $('#user_menu').hide("fast");
-    $('#login').show("fast");
-    $('#register').show("fast");
 
 }
 
@@ -502,6 +480,9 @@ function onDocumentTouchStart( event ) {
 
 function onDocumentMouseDown( event ) {
 	// console.log("mouse is down");
+	if (!selectPlanetsOk) {
+		return;		//do nothing (disable functionality)
+	}
 
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
@@ -519,24 +500,30 @@ function onDocumentMouseDown( event ) {
 			visibility(mesh.children[2],false);
 		}
 	}
+
 	//Hides moon clicked
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
 			
 			mesh = clickedMoonShells[i][0];
-			visibility(mesh.children[1],false);
+			visibility(mesh.children[2],false);
 		}
 	}
 
 
-	if ( intersects.length > 0 ) {
+	if ( intersects.length > 0 && !jumpInAction ) {
 		// console.log("we have an intersect");
 		var clickedObject = intersects[0].object;
-		previousObject = activePlanet;
+		if(jumpPlanetOk)
+			previousObject = activePlanet;
+		if(jumpMoonOk)
+			previousObject = activeMoon;
 
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
 				activePlanet = clickedObject;
+				if(!jumpMoonOk)
+					activeMoon = null;
 				console.log("clicked object is a planet");
 			}
 		}
@@ -545,6 +532,7 @@ function onDocumentMouseDown( event ) {
 			if (clickedObject.parent == moonGroups[i]) {
 				activeMoon = clickedObject;
 				console.log("clicked object is a moon");
+				activePlanet = activeMoon.parent.parent;
 			}
 		}
 
@@ -566,16 +554,24 @@ function onDocumentMouseDown( event ) {
 		}
 
 
-		if(check)	// if clicked object is a planet
+		/*if(check)	// if clicked object is a planet
 		{
 			for (var i = 0; i < clickedShells.length; ++i) {
 				if (clickedShells[i][0] == activePlanet) {
 					
 					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
 					visibility(mesh.children[2],true); //Show clicked background
-
 				}
 			}
+			if(activePlanet.children.length > 0)
+				console.log("hej2");
+				for(var i = 0; i < clickedMoonShells.length; i++) {
+					if (clickedMoonShells[i][0] == activePlanet.children[0]) {
+						mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
+						visibility(mesh.children[1],true); //Show clicked background
+						console.log("hej3");
+					}
+				}
 		}
 		else	// if clicked object is a moon
 		{
@@ -587,13 +583,25 @@ function onDocumentMouseDown( event ) {
 
 				}
 			}
-		}
+		}*/
+	}
+	
+	if ( intersects.length > 0 && buildHouseOk) {
+		
+		//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
+		createHouse(intersects[0].object.worldToLocal(intersects[0].point));
+
+		buildHouseOk = false;
 	}
 }
 
 
 //Hover funktion, visar att planeter är tryckbara
-function onMouseMove( event ) {	
+function onMouseMove( event ) {
+	if(!selectPlanetsOk) {
+		return;		//do nothing (disable functionality)
+	}
+
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
@@ -613,7 +621,7 @@ function onMouseMove( event ) {
 		if (hoverMoonShells[i][0] == hoveredMoon) {
 			
 			mesh = hoverMoonShells[i][0];
-			visibility(mesh.children[0],false);
+			visibility(mesh.children[1],false);
 		}
 	}
 
@@ -656,14 +664,37 @@ function onMouseMove( event ) {
 				if (hoverMoonShells[i][0] == hoveredMoon) {
 
 					mesh = hoverMoonShells[i][0];
-					visibility(mesh.children[0],true);
+					visibility(mesh.children[1],true);
 
 				}
 			}
 		}
 		
 	}
-
+	
+	//If-satsen gör att man kan hovra med ett hus över en planet.
+	if(buildHouseOk) {
+		
+		if(jumpPlanetOk) {
+			//En forloop som ser till att det inte spawnar hus överallt där man har musen.
+			for ( i = activePlanet.children[5].children.length; i >= 0; i-- )
+				activePlanet.children[5].remove(activePlanet.children[5].children[i]);
+			if ( intersects.length > 0 && intersects[0].object == activePlanet) {
+				//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
+				showHouse(intersects[0].object.worldToLocal(intersects[0].point));
+			}
+		}
+		
+		if(jumpMoonOk) {
+			//En forloop som ser till att det inte spawnar hus överallt där man har musen.
+			for ( i = activeMoon.children[3].children.length; i >= 0; i-- )
+				activeMoon.children[3].remove(activeMoon.children[3].children[i]); 
+			if ( intersects.length > 0 && intersects[0].object == activeMoon) {
+				//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
+				showHouse(intersects[0].object.worldToLocal(intersects[0].point));
+			}
+		}
+	}
 }
 
 function lensFlareUpdateCallback( object ) {
@@ -702,6 +733,7 @@ function loadStars(){
 	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/star15.png" );
 	
 	for ( i = 0; i < 20000; i ++ ) {
+
 		var vertex = new THREE.Vector3();
 		vertex.x = Math.random()* 20000 - 10000;
 		vertex.y = Math.random() * 20000 - 10000;
@@ -726,6 +758,7 @@ function loadStars(){
 		size   = parameters[i][2];
 
 		materials[i] = new THREE.PointCloudMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: true, transparent : true, alphaTest: 0.015, opacity: 0.85, fog: 0.8} );
+
 		//materials[i].color.setHSL( color[0], color[1], color[2] );
 
 		particles = new THREE.PointCloud( geometry, materials[i] );
@@ -735,5 +768,103 @@ function loadStars(){
 		particles.rotation.z = Math.random() * 6;
 		
 		stars.push(particles);
+
+
 	}
+}
+
+
+function addSun(){
+	/************* SUN ****************/
+			/* create custom material from the shader code above
+			that is within specially labeled script tags */
+			customSunMaterial = new THREE.ShaderMaterial( {
+			    uniforms: {
+					//cameraPos: { type: "v3", value: new THREE.Vector3() }
+				},
+				vertexShader:   document.getElementById( 'vertexShaderSun'   ).textContent,
+				fragmentShader: document.getElementById( 'fragmentShaderSun' ).textContent,
+				side: THREE.BackSide,
+				blending: THREE.AdditiveBlending,
+				transparent: true
+			}   );
+
+
+				
+			sunGeometry = new THREE.SphereGeometry( 19, 54, 54 );
+			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
+			activePlanet = sunSphere;
+			clickedObject = sunSphere;
+
+
+			//Procedural Sun	
+		    proceduralSunMaterial = new THREE.ShaderMaterial( {
+
+			    uniforms: { 
+			        tExplosion: {
+			            type: "t", 
+			            value: THREE.ImageUtils.loadTexture( 'explosion.png' )
+			        },
+			        time: { // float initialized to 0
+			            type: "f", 
+			            value: 0.0 
+			        }
+			    },
+			    vertexShader: document.getElementById( 'vertexShaderProcedural' ).textContent,
+			    fragmentShader: document.getElementById( 'fragmentShaderProcedural' ).textContent,
+			    side: THREE.BackSide,
+				//blending: THREE.AdditiveBlending,
+			    transparent: true
+			    
+			} );
+
+		
+		    // create a sphere and assign the material
+		    proceduralSun = new THREE.Mesh( 
+		        new THREE.IcosahedronGeometry( 12, 5 ), 
+		        proceduralSunMaterial 
+		    );
+		    sunSphere.add(proceduralSun);
+
+			galaxyGroup = new THREE.Object3D;
+			rotationGroup = new THREE.Object3D;
+			galaxyGroup.add(sunSphere);
+			//clickableObjects.push(sunSphere);
+
+
+			rotationGroup.add(galaxyGroup);
+
+			scene.add(rotationGroup);
+
+			//Origo
+			addLight( 0.55, 0.9, 0.5, 0, 0.5, 1 );
+			addLight( 0.08, 0.8, 0.5, 1, -0.5, 0 );
+
+		}
+
+function showBuild(input){
+	if(input == 1){
+		console.log('GOOOSE'); 
+	}
+
+	if(input == 2){
+		console.log('TOWER'); 
+	}
+
+	if(input == 3){
+		console.log('FISH'); 
+	}
+
+	if(input == 4){
+		console.log('LIBRARY'); 
+	}
+
+	if(input == 5){
+		console.log('SATELLITE'); 
+	}
+
+	if(input == 6){
+		console.log('ANTKA'); 
+	}
+
 }

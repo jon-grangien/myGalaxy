@@ -1,35 +1,523 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>logga in!</title>
+
+		<title>Nya menyer!</title>
+
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/animate.css">
+		<link rel="stylesheet" href="css/jquery-ui.css">
+		<link href="css/square/green.css" rel="stylesheet">
+
+		<!-- jquery libs -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="js/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+		<script src="js/icheck.js"></script>
 
 		<!-- parse -->
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
 
+		<!-- includes -->
 		<script src="js/three.js"></script>
 		<script src="js/MTLLoader.js"></script>
+		<script src="js/DDSLoader.js"></script>
 		<script src="js/OBJMTLLoader.js"></script>
 		<script src="js/OBJLoader.js"></script>
 		<script src="js/OrbitControls.js"></script>
 		<script type="text/javascript" src="js/dat.gui.min.js"></script>
 		<script src="js/TrackballControls.js"></script>
 		<script src="js/stats.min.js"></script>
+
 		<script src="planetJump.js"></script>
-
-		<!-- includes -->
-		<!-- <link rel="import" href="shaders.html"> -->
-
+		<script src="placeHouse.js"></script>
 		<script src="functions.js"></script>
+		<script src="accordion.js"></script>
+		<script src="arrange-gui-functions.js"></script>
+
+		<!-- planet_radius_slider -->
+		<script>
+			$(function() {
+				$( "#planet_radius_slider" ).slider({
+					min: 30,
+					max: 600,
+					value: 30,
+					step: 1,
+					slide: function(event, ui) {
+							activePlanet.position.x = ui.value;
+
+							// Find planet's torus replace
+							for (var i = 0; i < planetPaths.length; ++i) {
+								if (planetPaths[i][0] == activePlanet) {
+									sunSphere.remove(planetPaths[i][1]);
+									planetOrbitRadiuses[i][1] = ui.value; 
+									
+									var newPath = addOrbitPath(ui.value);
+
+
+									sunSphere.add(newPath);
+									planetPaths[i][1] = newPath;
+								}
+							}
+					}
+				});
+			});
+		</script>
+
+		<!-- planet_size_slider -->
+		<script>
+			$(function() {
+				$( "#planet_size_slider" ).slider({
+					min: 1,
+					max: 5,
+					value: 1,
+					step: 0.01,
+					slide: function(event, ui) {
+						activePlanet.scale.x = ui.value;
+						activePlanet.scale.y = ui.value;
+						activePlanet.scale.z = ui.value;
+					}
+				});
+			});
+		</script>
+
+		<!-- planet_rotation_slider -->
+		<script>
+			$(function() {
+				$( "#planet_rotation_slider" ).slider({
+					min: 0.001,
+					max: 0.05,
+					value: 0.001,
+					step: 0.001,
+					slide: function(event, ui) {
+						for (var i = 0; i < planetSpeeds.length; ++i) {
+							if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
+								if(planetSpeeds[i][1] != ui.value) {
+									planetSpeeds[i][2] = planetSpeeds[i][1];
+								}
+								
+								planetSpeeds[i][3] = time;
+								planetSpeeds[i][1] = ui.value;		//change second element to slider value
+							}
+						}
+					}
+				});
+			});
+		</script>
+
+		<script>
+			$(document).ready(function(){
+				$('#meteor-check').iCheck({
+					checkboxClass: 'icheckbox_square-green',
+					increaseArea: '20%' // optional
+				});
+				$('#meteor-check').on('ifChecked', function(event){
+					for (var i = 0; i < meteorbelts.length; ++i) {
+						if (meteorbelts[i][0] == activePlanet) {
+						mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+						visibility(mesh.children[3],true); //Show clicked background
+						}
+					}
+				});
+				$('#meteor-check').on('ifUnchecked', function(event){
+					for (var i = 0; i < meteorbelts.length; ++i) {
+						if (meteorbelts[i][0] == activePlanet) {
+						mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+						visibility(mesh.children[3],false); //Show clicked background
+						}
+					}
+				});
+			});
+
+		</script>
+
+		<script>
+			$(function() {
+				$( "#moon-radius-slider" ).slider({
+					min: 20,
+					max: 40,
+					value: 20,
+					step: 1,
+					slide: function(event, ui) {
+							for (var i = 0; i < moonPaths.length; ++i) {
+								if (moonPaths[i][0] == activeMoon) {
+									moonOrbitRadiuses[i][1] = ui.value; 
+					
+									activeMoon.parent.remove(moonPaths[i][1]); 
+									
+									var newPath = addMoonOrbitPath(ui.value);
+									activeMoon.parent.add(newPath);
+									moonPaths[i][1] = newPath;
+								}
+							}
+					}
+				});
+			});
+		</script>
+
+		<script>
+			$(function() {
+				$( "#moon-rotation-slider" ).slider({
+					min: 0.001,
+					max: 0.01,
+					value: 0.001,
+					step: 0.001,
+					slide: function(event, ui) {
+						for (var i = 0; i < moonSpeeds.length; ++i) {
+							if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
+								moonSpeeds[i][1] = ui.value;		//change second element to slider value
+							}
+						}
+					}
+				});
+			});
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#earth-tex-img').click(function() {
+		            updatePlanetTexture('earthmap.jpg');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#alien-tex-img').click(function() {
+		            updatePlanetTexture('alien.jpg');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#cloudy-tex-img').click(function() {
+		            updatePlanetTexture('cloudy.jpg');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#desolate-tex-img').click(function() {
+		            updatePlanetTexture('desolate.png');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#klendathu-tex-img').click(function() {
+		            updatePlanetTexture('klendathu.png');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#sandy-tex-img').click(function() {
+		            updatePlanetTexture('sandy.jpg');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#scarl-tex-img').click(function() {
+		            updatePlanetTexture('scarl.png');
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#steel-tex-img').click(function() {
+		            updatePlanetTexture('steeltexture.jpg');
+		        });    
+		    });
+		</script>
+		
+		<script>
+		  $(function() {
+			$( "#accordion" ).accordion({
+			  collapsible: true,
+			  active: false,
+			  animate:'linear',
+			  animate:300
+			});
+		  });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#add-planet-button').click(function() {
+		            selectPlanetsOk = false;
+		            menusOnCreatePlanet();
+		            addPlanet();
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#add-moon-button').click(function() {
+		            // selectPlanetsOk = false;   går inte än
+		            addMoon();
+		            buttonsOnAddMoon();
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#edit_planet_button').click(function() {
+		            selectPlanetsOk = false;
+
+		            if(!jumpPlanetOk) {
+		            	planetBools();
+		            }
+
+		            menusOnEditPlanet();
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
+		        $('#edit-done-button').click(function() {
+		            selectPlanetsOk = true;
+
+		            if(jumpPlanetOk) {
+		            	solarBools();
+		            }
+
+		            menusOnEditDone();
+		        });    
+		    });
+		</script>
+
+		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
+			vec3 mod289(vec3 x) {
+			  return x - floor(x * (1.0 / 289.0)) * 289.0;
+			}
+
+			vec4 mod289(vec4 x) {
+			  return x - floor(x * (1.0 / 289.0)) * 289.0;
+			}
+
+			vec4 permute(vec4 x) {
+			  return mod289(((x*34.0)+1.0)*x);
+			}
+
+			vec4 taylorInvSqrt(vec4 r) {
+			  return 1.79284291400159 - 0.85373472095314 * r;
+			}
+
+			vec3 fade(vec3 t) {
+			  return t*t*t*(t*(t*6.0-15.0)+10.0);
+			}
+
+			// Classic Perlin noise
+			float cnoise(vec3 P)
+			{
+			  vec3 Pi0 = floor(P); // Integer part for indexing
+			  vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
+			  Pi0 = mod289(Pi0);
+			  Pi1 = mod289(Pi1);
+			  vec3 Pf0 = fract(P); // Fractional part for interpolation
+			  vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+			  vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+			  vec4 iy = vec4(Pi0.yy, Pi1.yy);
+			  vec4 iz0 = Pi0.zzzz;
+			  vec4 iz1 = Pi1.zzzz;
+
+			  vec4 ixy = permute(permute(ix) + iy);
+			  vec4 ixy0 = permute(ixy + iz0);
+			  vec4 ixy1 = permute(ixy + iz1);
+
+			  vec4 gx0 = ixy0 * (1.0 / 7.0);
+			  vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
+			  gx0 = fract(gx0);
+			  vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+			  vec4 sz0 = step(gz0, vec4(0.0));
+			  gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+			  gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+
+			  vec4 gx1 = ixy1 * (1.0 / 7.0);
+			  vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
+			  gx1 = fract(gx1);
+			  vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+			  vec4 sz1 = step(gz1, vec4(0.0));
+			  gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+			  gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+
+			  vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+			  vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+			  vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+			  vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+			  vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+			  vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+			  vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+			  vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+
+			  vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+			  g000 *= norm0.x;
+			  g010 *= norm0.y;
+			  g100 *= norm0.z;
+			  g110 *= norm0.w;
+			  vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+			  g001 *= norm1.x;
+			  g011 *= norm1.y;
+			  g101 *= norm1.z;
+			  g111 *= norm1.w;
+
+			  float n000 = dot(g000, Pf0);
+			  float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+			  float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+			  float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+			  float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+			  float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+			  float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+			  float n111 = dot(g111, Pf1);
+
+			  vec3 fade_xyz = fade(Pf0);
+			  vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+			  vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+			  float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x); 
+			  return 2.2 * n_xyz;
+			}
+
+			// Classic Perlin noise, periodic variant
+			float pnoise(vec3 P, vec3 rep)
+			{
+			  vec3 Pi0 = mod(floor(P), rep); // Integer part, modulo period
+			  vec3 Pi1 = mod(Pi0 + vec3(1.0), rep); // Integer part + 1, mod period
+			  Pi0 = mod289(Pi0);
+			  Pi1 = mod289(Pi1);
+			  vec3 Pf0 = fract(P); // Fractional part for interpolation
+			  vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+			  vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+			  vec4 iy = vec4(Pi0.yy, Pi1.yy);
+			  vec4 iz0 = Pi0.zzzz;
+			  vec4 iz1 = Pi1.zzzz;
+
+			  vec4 ixy = permute(permute(ix) + iy);
+			  vec4 ixy0 = permute(ixy + iz0);
+			  vec4 ixy1 = permute(ixy + iz1);
+
+			  vec4 gx0 = ixy0 * (1.0 / 7.0);
+			  vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
+			  gx0 = fract(gx0);
+			  vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+			  vec4 sz0 = step(gz0, vec4(0.0));
+			  gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+			  gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+
+			  vec4 gx1 = ixy1 * (1.0 / 7.0);
+			  vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
+			  gx1 = fract(gx1);
+			  vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+			  vec4 sz1 = step(gz1, vec4(0.0));
+			  gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+			  gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+
+			  vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+			  vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+			  vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+			  vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+			  vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+			  vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+			  vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+			  vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+
+			  vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+			  g000 *= norm0.x;
+			  g010 *= norm0.y;
+			  g100 *= norm0.z;
+			  g110 *= norm0.w;
+			  vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+			  g001 *= norm1.x;
+			  g011 *= norm1.y;
+			  g101 *= norm1.z;
+			  g111 *= norm1.w;
+
+			  float n000 = dot(g000, Pf0);
+			  float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+			  float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+			  float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+			  float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+			  float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+			  float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+			  float n111 = dot(g111, Pf1);
+
+			  vec3 fade_xyz = fade(Pf0);
+			  vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+			  vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+			  float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x); 
+			  return 2.2 * n_xyz;
+			}
+
+			// Include the Ashima code here!
+			 
+			varying vec2 vUv;
+			varying float noise;
+			uniform float time;
+
+
+			float turbulence( vec3 p ) {
+			    float w = 50.0;
+			    float t = -.38;
+			    for (float f = 1.0 ; f <= 10.0 ; f++ ){
+			        float power = pow( 2.0, f );
+			        t += abs( pnoise( vec3( power * p ), vec3( 10.0, 10.0, 10.0 ) ) / power );
+			    }
+			    return t;
+			}
+
+			void main() {
+
+			    vUv = uv;
+
+			    // add time to the noise parameters so it's animated
+			    noise = 10.0 *  -.10 * turbulence( .5 * normal + time );
+			    float b = 1.0 * pnoise( 0.05 * position + vec3( 1.0 * time ), vec3( 100.0 ) );
+			    float displacement = - noise*0.4 + b*0.2;
+			    
+			    vec3 newPosition = position + normal * displacement;
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+
+			}		
+   		</script>
+
+   		<script type="x-shader/x-vertex" id="fragmentShaderProcedural">
+
+			varying vec2 vUv;
+			varying float noise;
+			uniform sampler2D tExplosion;
+
+			float random( vec3 scale, float seed ){
+			    return fract( sin( dot( gl_FragCoord.xyz + seed, scale ) ) * 43758.5453 + seed ) ;
+			}
+
+			void main() {
+
+			    // get a random offset
+			    float r = .01 * random( vec3( 12.9898, 78.233, 151.7182 ), 0.0 );
+			    // lookup vertically in the texture, using noise and offset
+			    // to get the right RGB colour
+			    vec2 tPos = vec2( 0, 1.0 - 1.3 * noise + r );
+			    vec4 color = texture2D( tExplosion, tPos );
+
+			    gl_FragColor = vec4( color.rgb, 1.0 );
+
+			}
+   		</script>
 
 		<script id="vertexShader" type="x-shader/x-vertex">	
 			varying vec3 vNormal;
 			void main() {
 			    vNormal = normalize( normalMatrix * normal );
-			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 0.9 );
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 			}
 		</script>
 
@@ -57,6 +545,14 @@
 			}
 		</script>
 
+		<script id="fragmentShaderMoonAtmos" type="x-shader/x-vertex">			 
+			varying vec3 vNormal;
+			void main() {
+				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 15.0 ); 
+			    gl_FragColor = vec4( 0.2, 0.4, 0.5, 0.0 ) * intensity;
+			}
+		</script>
+
 		<script id="torusFragmentShader" type="x-shader/x-vertex">			 
 			varying vec3 vNormal;
 			void main() 
@@ -74,21 +570,48 @@
 				float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.0 ) ), 5.0 ); 
 			   gl_FragColor = vec4( 0.5, 0.5, 0.9, 1.0 ) * intensity;
 			}
-
 		</script>
 
 		<script id="vertexShaderSun" type="x-shader/x-vertex">	
+			
+				varying vec3 vNormal;
+				void main() {
+				    vNormal = normalize( normalMatrix * normal );
+				    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+				}
+			
+				/*
 			varying vec3 vNormal;
+			varying vec3 worldPos;
+
+
 			void main() {
-			    vNormal = normalize( normalMatrix * normal );
-			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1 );
+
+			    vNormal = normalize( normalMatrix * normal);
+			    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			    worldPos = (modelViewMatrix * vec4( position, 1.0 )).xyz;
 			}
+			*/
+
 		</script>
 
-		<script id="fragmentShaderSun" type="x-shader/x-vertex">			 
+		<script id="fragmentShaderSun" type="x-shader/x-vertex">		
+
+			/*	 
+			varying vec3 vNormal;
+			varying vec3 worldPos;
+			uniform vec3 cameraPos;
+			
+			void main() {
+
+				float intensity = pow( 0.65 - dot( vNormal, normalize(cameraPos-worldPos) ), 9.0 ); 
+			    //gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
+			}
+			*/
 			varying vec3 vNormal;
 			void main() {
-				float intensity = pow( 0.65 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 9.0 ); 
+				float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 7.0 ); 
 			    gl_FragColor = vec4( 1.0, 0.8, 0.5, 1.0 ) * intensity;
 			}
 		</script>
@@ -134,18 +657,247 @@
 						</p>
 					</form>
 				</div>
-
-				<div id="user_menu" class="animate form">
-					<p class="user_info">
-						Logged in:
-					</p>
-					<button onClick="logout()">Log out</button>
-				</div>
+			</div>	
+		</div>
+		
+		<div id="user_menu">
+			<div id="user-text-container">
+				<p class="user_info">
+				</p>
+			</div>
+			<div id="user-button-container">
+				<button onClick="logout()">Log out</button>
 			</div>
 		</div>
 
+		<!-- planet build GUI -->
+		<div class="bygg-main">
+			<div class="accordion">
+				<div class="accordion-section">
+					<a class="accordion-section-title" href="#accordion-1">Build</a>
+					<div id="accordion-1" class="accordion-section-content">
+						<p>What do you want to build?</p><br>
+						<div id="insideBygg">
+							<tr>
+								<td>
+									<div id="gooseDiv">
+										<img src="images/goose.png" style="width:60px;height:60px;" onclick="buildHouse();">
+									<td>
+									<p>Domestic goose </p>
+									</td>
+									</div>
+								</td><br>
+								<td>
+									<div id="eiffelDiv">
+										<img src="images/eiffel.png" style="width:60px;height:60px;">
+									<td>
+									<p>Eiffel tower </p>
+									</td>
+									</div>
+								</td><br>
+								<td>
+									<div id="satelliteDiv">
+										<img src="images/satellite.png" style="width:60px;height:60px;">
+									<td>
+									<p>Satellite </p>
+									</td>
+									</div>
+								</td><br>
+							</tr>
+						</div>
+					</div><!--end .accordion-section-content-->
+				</div><!--end .accordion-section-->
+	
+				<div class="accordion-section">
+					<a class="accordion-section-title" href="#accordion-2">Send to another planet</a>
+					<div id="accordion-2" class="accordion-section-content">
+						<p>Choose what to send</p>
+							<tr>
+								<td>
+									<div id="sendObjDiv">
+										<td>
+											<img src="images/goose.png" style="width:50px;height:50px;">
+										</td>
+										<td>
+											<img src="images/eiffel.png" style="width:50px;height:50px;">
+										</td>
+										<td>
+											<img src="images/satellite.png" style="width:50px;height:50px;">
+										</td>
+									</div>
+								</td>
+							</tr>
+							
+						<p>Choose which planet to send to</p>
+						<form action="">
+	  						<input type="checkbox" name="vehicle" value="Bike">Uranus<br>
+	  						<input type="checkbox" name="vehicle" value="Car" checked>Mars<br><br>
+	  						<input type="submit" value="Send">
+						</form> 
+					</div><!--end .accordion-section-content-->
+				</div><!--end .accordion-section-->
+	
+				<div class="accordion-section">
+					<a class="accordion-section-title" href="#accordion-3">Chat with aliens</a>
+					<div id="accordion-3" class="accordion-section-content">
+						<p>Choose planet to communicate with</p>
+							<td>
+									<div id="sendObjDiv">
+										<td>
+											<img src="images/goose.png" style="width:50px;height:50px;">
+										</td>
+										<td>
+											<img src="images/eiffel.png" style="width:50px;height:50px;">
+										</td>
+										<td>
+											<img src="images/satellite.png" style="width:50px;height:50px;">
+										</td>
+									</div>
+								</td>
+						<br><br><p>Enter your message:</p>
+						<textarea cols="30" rows="8" name="comment"></textarea>
+						<form action="">
+	  						<input type="submit" value="Send">
+						</form>
+					</div><!--end .accordion-section-content-->
+				</div><!--end .accordion-section-->
+			</div><!--end .accordion-->
+		</div>
+		<!-- ************************************** -->
 
+		<!-- general GUI -->
+		<div id="add-button-container">
+			<button id="add-planet-button">Create planet</button>
+		</div>
 
+		<div id="edit-created-planet-container">
+			<div id="planet-radius-container">
+				<p class="edit-created-planet-label">Radius</p>
+				<div id="planet_radius_slider"></div>
+			</div>
+			<div id="planet-size-container">
+				<p class="edit-created-planet-label">Size</p>
+				<div id="planet_size_slider"></div>
+			</div>
+			<div id="planet-rotation-container">
+				<p class="edit-created-planet-label">Rotation speed</p>
+				<div id="planet_rotation_slider"></div>
+			</div>
+			<div id="meteor-check-container">
+				<!-- <input type="checkbox" id="meteor-check"><label for="meteor-check">Meteor belt</label> -->
+				<input type="checkbox" id="meteor-check"><label for="meteor-check" id="meteor-check-label">Meteor belt</label>
+			</div>
+
+			<div id="texture-container">
+				<p class="edit-created-planet-label">Textures:</p>
+				<div class="img-container">
+					<img src="textures/earthmap.jpg" id="earth-tex-img" class="tex-img">
+					<label for="earth-tex-img" class="tex-img-label">Earth</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/alien.jpg" id="alien-tex-img" class="tex-img">
+					<label for="alien-tex-img" class="tex-img-label">Alien</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/cloudy.jpg" id="cloudy-tex-img" class="tex-img">
+					<label for="cloudy-tex-img" class="tex-img-label">Cloudy</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/desolate.png" id="desolate-tex-img" class="tex-img">
+					<label for="desolate-tex-img" class="tex-img-label">Desolate</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/klendathu.png" id="klendathu-tex-img" class="tex-img">
+					<label for="klendathu-tex-img" class="tex-img-label">Klendathu</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/sandy.jpg" id="sandy-tex-img" class="tex-img">
+					<label for="sandy-tex-img" class="tex-img-label">Sandy</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/scarl.png" id="scarl-tex-img" class="tex-img">
+					<label for="scarl-tex-img" class="tex-img-label">Scarl</label>
+				</div>
+				<div class="img-container">
+					<img src="textures/steeltexture.jpg" id="steel-tex-img" class="tex-img">
+					<label for="steel-tex-img" class="tex-img-label">Steel</label>
+				</div>
+			</div>
+
+			<div id="save-planet-container">
+				<button id="save_planet_button" onClick="saveCreatedPlanet()">Save</button>
+			</div>
+		</div>
+
+		<div id="edit-existing-planet-button-container">
+			<button id="edit_planet_button">Edit planet</button>
+		</div>
+
+		<div id="edit-existing-planet-container">
+			<button id="add-moon-button">Add moon</button>
+
+			<div id="moon-properties-container">
+				<div id="moon-radius-container">
+					<p class="edit-created-moon-label">Moon radius</p>
+					<div id="moon-radius-slider"></div>
+				</div>
+				<div id="moon-rotation-container">
+					<p class="edit-created-moon-label">Moon rotation</p>
+					<div id="moon-rotation-slider"></div>
+				</div>
+			</div>
+
+			<div id="#edit-planet-container">
+				<button id="edit-done-button">Done</button>
+			</div>
+			
+		</div>
+
+		<div id="accordion-container">
+			<div id="accordion">
+			  <h3>Build</h3>
+			  <div id="build-image-container">
+				<tr>
+				<img src="images/goose.png" class="goose" onclick="showBuild(1);">
+				<img src="images/satellite.png" class="goose" onclick="showBuild(2);"><br>
+				<img src="images/eiffel.png" class="goose" onclick="showBuild(3);">
+				<img src="images/satellite.png" class="goose" onclick="showBuild(4);"><br>
+				<img src="images/eiffel.png" class="goose" onclick="showBuild(5);">
+				<img src="images/goose.png" class="goose" onclick="showBuild(6);">
+				</tr>
+			  </div>
+			  <h3>Trade</h3>
+			  <div id="build-image-container">
+				<tr>
+				<img src="images/goose.png" class="goose">
+				<img src="images/satellite.png" class="goose"><br>
+				<img src="images/eiffel.png" class="goose">
+				<img src="images/satellite.png" class="goose"><br>
+				<img src="images/eiffel.png" class="goose">
+				<img src="images/goose.png" class="goose">
+				</tr>
+			  </div>
+			  
+			  <h3>Chat</h3>
+			  <div id="build-image-container">
+			  <p>Send text to älgen</p>
+			  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
+						<form action="">
+	  						<input type="submit" value="Send">
+						</form>
+			  </div>
+			</div>
+		</div>
+
+		<div id="jump-system-container">
+			<button id="jump-system-button" onClick="solarBools()">View system</button>
+		</div>
+
+		<div id="jump-planet-moon-container">
+			<button class="jump-planet-moon-buttons" id="jump-planet-button" onClick="planetBools()">View planet</button>
+			<button class="jump-planet-moon-buttons" id="jump-moon-button" onClick="moonBools()">View moon</button>
+			<button class="jump-planet-moon-buttons" id="place-house-button" onClick="buildHouse()">place house</button>			
+		</div>
 		<script>
 
 		// Basic global variables
@@ -155,21 +907,47 @@
 		var sunSphere;
 		var sunCore;
 		var stars = []; //star particle system
+		var customSunMaterial;
+		var sunGeometry;
+
+		//Procedural Sun
+		var proceduralSunMaterial;
+		var start = Date.now();
+		var proceduralSun;
 
 		// Variables to be used for current object to be changed
 		var activePlanet;
 		var previousObject;
 		var activeMoon;
+		var resetSolarView;
+		var smallJump;
+		var orbitsMother = [];
 		var customTexture;
 		var activeRotationSpeed;
-		var jumpOk;
+		var jumpPlanetOk;
+		var jumpMoonOk;
+		var jumpSolarOk;
+		var jumpInAction;
+		var thereArePlanets = false;
+		var thereAreMoons = false;
+		
+		// Variables for building on planets/moons
+		var buildHouseOk;
+		var houseCount;
+		var onProgress;
+		var onError;
+		var loader;
 
 		//Temporary movement variables
-		var posx, posz, roty, camzoom, timer = 0;
+		var posx, posz, roty, timer = 0;
 
 		//Temporary hover variables
 		var hoveredPlanet;
 		var hoveredMoon;
+		var planetOrbitMaterial;
+		var planetHoverMaterial;
+		var hoverOpacity;
+		var moonHoverMaterial;
 		var clickedPlanet;
 		var clickedMoon;
 		var hoverShell;
@@ -191,23 +969,27 @@
 		
 
 		// Multiarrays to keep track of things that correspond to each other 
-		var planets = [];		//multiarray of planet|moons
-		var planetSpeeds = [];	//multiarray of planet|rotationSpeed
-		var moonSpeeds = [];	//multiarray of moon|rotationSpeed
-		var planetPaths = [];	//multiarray of planet|orbitPathTorus
-		var moonPaths = [];	//multiarray of moon|orbitPathTorus
-		var planetObjects = [];	//multiarray of planet|Objects+moon
-		var moonObjects = [];	//multiarray of moon|Objects+moon
-		var hoverShells = [];	//multiarray of planet|shell
-		var hoverMoonShells = [];	//multiarray of moon|shell
-		var clickedShells = [];	//multiarray of planet|shell
-		var clickedMoonShells = [];	//multiarray of moon|shell
-		var meteorbelts = [];	//multiarray of planet|meteorbelt
+		var planets = [];		//planet|moons
+		var planetSpeeds = [];	//planet|rotationSpeed
+		var moonSpeeds = [];	//moon|rotationSpeed
+		var planetPaths = [];	//planet|orbitPathTorus
+		var moonPaths = [];	//moon|orbitPathTorus
+		var planetObjects = [];	//planet|Objects+moon
+		var moonObjects = [];	//moon|Objects+moon
+		var hoverShells = [];	//planet|shell
+		var hoverMoonShells = [];	//moon|shell
+		var clickedShells = [];	//planet|shell
+		var clickedMoonShells = [];	//moon|shell
+		var meteorbelts = [];	//planet|meteorbelt
+		//var planetHouses = []; //planet|houses
+		//var moonHouses = []; //moon|houses
 
 		// Variables for render loop
 		var currentPlanet;					
 		var currentMoon;					
-		var currentRotationSpeed;			
+		var currentRotationSpeed;	
+		var previousRotationSpeed;
+		var rotationNormalizer;
 		var planetNeedsInitialShift = false;
 		var moonNeedsInitialShift = false;  
 		var orbitPathDistanceLimit = 300;	//value for show/hide limit of orbit paths
@@ -216,6 +998,7 @@
 		var raycaster = new THREE.Raycaster();		
 		var intersects = raycaster.intersectObjects( clickableObjects );	
 		var mouse = new THREE.Vector2();
+		var selectPlanetsOk = true;
 
 		var music;				//global var for music property, see playMusic()
 		var currentSong = "";	//store name of current music file being played
@@ -240,8 +1023,8 @@
 			scene = new THREE.Scene();
 			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
-			camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 20000 );
-			camera.position.z = 200;
+			camera = new THREE.PerspectiveCamera( 15, window.innerWidth/window.innerHeight, 0.1, 20000 );
+			camera.position.z = 0;
 			scene.add(camera);
 			
 			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
@@ -250,9 +1033,23 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			renderer.shadowMapEnabled = true;
 			$container.append(renderer.domElement);
+			
 
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
+			
+			//Create a material for the planet toruses
+			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0x27241c,opacity:1,transparent:false});
+			
+			hoverOpacity = 0.2;
+			//Create a material for hovering over planets
+			planetHoverMaterial = new THREE.MeshBasicMaterial({color:0xA7FF85,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
+			
+			//Create a material for the moon toruses
+			moonOrbitMaterial = new THREE.MeshBasicMaterial({color:0x7A86D6,opacity:hoverOpacity,transparent:true,side:THREE.BackSide,blending: THREE.NormalBlending});
+			
+			//Create a meterial for hovering over moons
+			moonHoverMaterial = new THREE.MeshBasicMaterial({color:0x7A86D6,opacity:hoverOpacity,transparent:true,side:THREE.BackSide});
 			
 			var ambientLight = new THREE.AmbientLight( 0xaaaaaa ); // soft white light
 			ambientLight.color.setHSL( 0.01, 0.02, 0.01 );
@@ -262,7 +1059,7 @@
 			Parse.initialize("CcZM1EKFecH10ReZCSKiai6cjn2inIzidafcgEXc", "uOyr4MGkaeYbpFjpT640oxVt1itBoaJF98k5PEAH");
 
 			// hide user menu initially
-		    $('#user_menu').hide();
+		    initiallyHideMenus();
 
 			// Parse user cache
 			var currentUser = Parse.User.current();
@@ -271,11 +1068,7 @@
 			    username = user.getUsername();
 			    console.log("logged in: " + username);
 
-			    // Rearrange menus
-			    $('#login').hide("slow");
-			    $('#register').hide("slow");
-			    $('#user_menu').show("slow");
-    		    $(".user_info").text("Logged in: " + user.getUsername());
+			    menusOnLogin();
     		    
 			} else {
 			    console.log("no user logged in");
@@ -293,212 +1086,29 @@
 			    newUserPassword = jQuery("#password_register_field").val();
 			    createAccount();	//newUsername, newUserPassword global
 			});
-			
 
-			/************* SUN ****************/
-			/* create custom material from the shader code above
-			that is within specially labeled script tags */
-			var customSunMaterial = new THREE.ShaderMaterial( {
-			    uniforms: {  },
-				vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-				fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
-				side: THREE.BackSide,
-				blending: THREE.AdditiveBlending,
-				transparent: true
-			}   );
-				
-			var sunGeometry = new THREE.SphereGeometry( 19, 54, 54 );
-			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
-			activePlanet = sunSphere;
-			clickedObject = sunSphere;
-			clickableObjects.push(sunSphere);
-			
-			galaxyGroup = new THREE.Object3D;
-			rotationGroup = new THREE.Object3D;
-
-			galaxyGroup.add(sunSphere);
-			rotationGroup.add(galaxyGroup);
+			addSun();
 
 			loadStars();
 			for (var i = 0; i < stars.length; ++i){
 				rotationGroup.add(stars[i]);
 			}
 
-			scene.add(rotationGroup);
-
-			// Core
-			var sunCoreGeometry = new THREE.SphereGeometry( 3, 40, 40 );
-			var sunCoreMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
-			sunCore = new THREE.Mesh(sunCoreGeometry, sunCoreMaterial);	//activePlanet is a global var
-			sunCore.material.map.minFilter = THREE.NearestFilter;
-			//scene.add(sunCore);
-
-			//Origo
-			addLight( 0.55, 0.9, 0.5, 1, 1, 1 );
-			addLight( 0.08, 0.8, 0.5, 2, 2, 2 );
-
-
-			/******* GUI *******/
-	        var gui = new dat.GUI();
-
-			var parameters = {
-				addPlanet: function() { addPlanet() },
-				radius: 30,
-				size: 1,
-				rotation: 0.001,
-				jump: false,
-				texture1: function() { updatePlanetTexture("Earth") },
-				texture2: function() { updatePlanetTexture("Cloudy") },
-				texture3: function() { updatePlanetTexture("Steel") },
-				texture4: function() { updatePlanetTexture("Terraformed mars") },
-				texture5: function() { updatePlanetTexture("Alien") },
-				texture6: function() { updatePlanetTexture("Desolate") },
-				texture7: function() { updatePlanetTexture("Sandy") },
-				texture8: function() { updatePlanetTexture("Klendathu") },
-				texture9: function() { updatePlanetTexture() },
-				addMoon: function() { addMoon() },
-				moonRadius: 10,
-				moonRotation: 0.001,
-				playNewWorlds: function() { playMusic("New Worlds.mp3") },
-				playStrangers: function() { playMusic("STRANGERS by DRAX.mp3") },
-				playPotato: function() { playMusic("Digging My Potato.mp3") },
-				playMemory: function() { playMusic("Memory.mp3") },
-				playAnotherReflection: function() { playMusic("Another Reflection.mp3")},
-				visible: true,
-				meteorbeltVisible: false
-			};
-
-			gui.add( parameters, 'addPlanet').name("Spawn new planet");
-			
-			// planet properties
-			planetPropertiesFl = gui.addFolder('Planet properties');
-			var sphereRadius = planetPropertiesFl.add( parameters, 'radius',0 ).min(30).max(300).step(1).listen();
-			var sphereSize = planetPropertiesFl.add( parameters, 'size' ).min(1.0).max(5).step(0.1).listen(); 
-			var planetRotation = planetPropertiesFl.add(parameters, 'rotation').min(0.001).max(0.0100).step(0.001).listen(); 
-			var meteorbeltVisibility = planetPropertiesFl.add( parameters, 'meteorbeltVisible' ).name('Spawn meteorbelt').listen();
-
-			planetPropertiesFl.close();
-
-			// planet textures
-			var planetTexturesFl = gui.addFolder('Planet textures');
-			planetTexturesFl.add( parameters, 'texture1' ).name("Earth");
-			planetTexturesFl.add( parameters, 'texture2' ).name("Cloudy");
-			planetTexturesFl.add( parameters, 'texture3' ).name("Steel");
-			planetTexturesFl.add( parameters, 'texture4' ).name("Terraformed mars");
-			planetTexturesFl.add( parameters, 'texture5' ).name("Alien");
-			planetTexturesFl.add( parameters, 'texture6' ).name("Desolate");
-			planetTexturesFl.add( parameters, 'texture7' ).name("Sandy");
-			planetTexturesFl.add( parameters, 'texture8' ).name("Klendathu");
-			planetTexturesFl.add( parameters, 'texture9' ).name("Scarl");
-		
-
-			//Add moon
-			gui.add( parameters, 'addMoon' ).name("Spawn moon");
-			moonPropertiesFl = gui.addFolder('Moon properties');
-
-			var moonRadius = moonPropertiesFl.add( parameters, 'moonRadius',0 ).min(5).max(50).step(1).listen();
-			var moonRotation = moonPropertiesFl.add(parameters, 'moonRotation').min(0.001).max(0.010).step(0.001).listen(); 
-
-			var musicFl = gui.addFolder('Music');
-			musicFl.add( parameters, "playNewWorlds" ).name("New Worlds");
-			musicFl.add( parameters, "playStrangers" ).name("Strangers");
-			musicFl.add( parameters, "playPotato" ).name("Digging My Potato");
-			musicFl.add( parameters, "playMemory" ).name("Memory");
-			musicFl.add( parameters, "playAnotherReflection" ).name("Another Reflection");
-
-			//Toggle orbit-visibility
-			var orbitVisibility = gui.add( parameters, 'visible' ).name('Show orbits').listen();
-			var jumpToActivePlanet = gui.add( parameters, 'jump' ).name('Jump to active planet').listen();
-		
-			orbitVisibility.onChange(function(value) 
-			{
-				for (var i = 0; i < planetPaths.length; ++i) {
-					planetPaths[i][1].visible = value;
+			buildHouseOk = false;
+			onProgress = function ( xhr ) {
+				if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round(percentComplete, 2) + '% downloaded' );
 				}
-
-				for (var j = 0; j < moonPaths.length; ++j) {
-					moonPaths[j][1].visible = value;
-				}
-			});
-
-
-			meteorbeltVisibility.onChange(function(value) 
-			{
-				for (var i = 0; i < meteorbelts.length; ++i) {
-					if (meteorbelts[i][0] == activePlanet) {
-
-					mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
-					visibility(mesh.children[3],value); //Show clicked background
-					}
-				}
-			});
-			
-			jumpToActivePlanet.onChange(function(value) 
-			{	jumpOk = value });
-
-			sphereRadius.onChange(function(value) {
-				activePlanet.position.x = value;   
-
-				// Find planet's torus replace
-				for (var i = 0; i < planetPaths.length; ++i) {
-					if (planetPaths[i][0] == activePlanet) {
-						sunSphere.remove(planetPaths[i][1]);
-						planetOrbitRadiuses[i][1] = value; 
-						
-						var newPath = addOrbitPath(value);
-
-
-						sunSphere.add(newPath);
-						planetPaths[i][1] = newPath;
-					}
-				}
-			});
-			
-			sphereSize.onChange(function(value) {
-				activePlanet.scale.x = value;
-				activePlanet.scale.y = value;
-				activePlanet.scale.z = value;
-			});
-			
-			planetRotation.onChange(function(value) {
-				for (var i = 0; i < planetSpeeds.length; ++i) {
-					if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
-						planetSpeeds[i][1] = value;		//change second element to slider value
-						// console.log("rotation changed to " + value);
-					}
-				}
-			});
-
-			moonRadius.onChange(function(value) 
-			{ 
-
-				for (var i = 0; i < moonPaths.length; ++i) {
-					if (moonPaths[i][0] == activeMoon) {
-						moonOrbitRadiuses[i][1] = value; 
-		
-						activeMoon.parent.remove(moonPaths[i][1]); 
-						
-						var newPath = addMoonOrbitPath(value);
-
-						activeMoon.parent.add(newPath);
-						moonPaths[i][1] = newPath;
-					}
-				}
-
-			});
-
-			moonRotation.onChange(function(value) {
-				for (var i = 0; i < moonSpeeds.length; ++i) {
-					if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
-						moonSpeeds[i][1] = value;		//change second element to slider value
-						// console.log("rotation changed to " + value);
-					}
-				}
-			});
-
-			gui.open();
-			
-			/*******************/
+	        };
+	        onError = function ( xhr ) {
+	        	console.log("build house error " + xhr);
+	        };
+	        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+			lock = new THREE.Object3D();
+			scene.add( lock );
+	        // Loader
+	        loader = new THREE.OBJMTLLoader();
 
 			/************** FPS counter *************/
 			stats = new Stats();
@@ -525,6 +1135,8 @@
 			controls.panSpeed = 0;
 			controls.rotateSpeed = 0.5;
 			// controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+
 
 			window.addEventListener( 'resize', onWindowResize, false );
 			document.getElementById("container").addEventListener( 'mousedown', onDocumentMouseDown, true );
@@ -557,15 +1169,25 @@
 		}
 
 		function render() {
-			//Variabeln time används till timern och även planeternas rotation.
-			time = Date.now() * 0.0005;
 
-			if(jumpOk){
+			//Procedural sun
+			proceduralSunMaterial.uniforms[ 'time' ].value = .000025 * ( Date.now() - start );
+			//customSunMaterial.uniforms[ 'cameraPos' ].value = camera.position;
+
+			//Variabeln time används till timern och även planeternas rotation.
+			time = (Date.now() * 0.000005 - Math.floor((Date.now() * 0.000005)))*100;
+
+			//Handles the jumps between planets.	
+			if(jumpPlanetOk && activePlanet){
 				planetJump();
+			} else if(jumpMoonOk && activeMoon) {
+				moonJump();
+			} else {
+				jumpToSun();
 			}
 
 			if (planetNeedsInitialShift) {
-				activePlanet.position.x += 60;
+				activePlanet.position.x += 80;
 				planetNeedsInitialShift = false;
 				// console.log("planet shifted");
 			}
@@ -579,27 +1201,44 @@
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				currentPlanetGroup = planetSpeeds[i][0].parent;
 				currentRotationSpeed = planetSpeeds[i][1];
+				previousRotationSpeed = planetSpeeds[i][2];
+				
+				rotationNormalizer = previousRotationSpeed * planetSpeeds[i][3] * 10;
+				//console.log(planetSpeeds[i][1]);
+				//console.log(planetSpeeds[i][2]);
 
 				//The following lines makes the planets orbit.
 				orbit = planetOrbitRadiuses[i][1];
-				currentPlanetGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 10) * orbit;
-				currentPlanetGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 10) * orbit;
+				if(currentRotationSpeed == previousRotationSpeed){
+					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10) * orbit;
+					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10) * orbit;
+					// console.log(time*currentRotationSpeed*10);
+					//console.log(time*currentRotationSpeed*10);
+				} else {
+					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
+					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
+					//console.log(time*currentRotationSpeed*10 - rotationNormalizer);
+				}
 			}
 
 			// planet rotations about self (ha som variabel?)
 			for (var i = 0; i < planets.length; ++i) {
-				planets[i][0].rotation.z += 0.005;
+				planets[i][0].rotation.z += 0.001;
 			}
 
 			// moon rotation speeds about planet
 			for (var i = 0; i < moonSpeeds.length; ++i) {
 				currentMoonGroup = moonSpeeds[i][0].parent;
 				currentRotationSpeed = moonSpeeds[i][1];
+				
+				orbit = moonOrbitRadiuses[i][1];
 
 				//The following lines makes the moons orbit.
-				orbit = moonOrbitRadiuses[i][1];
-				currentMoonGroup.children[0].position.x = Math.cos( time * currentRotationSpeed * 100) * orbit;
-				currentMoonGroup.children[0].position.y = Math.sin( time * currentRotationSpeed * 100) * orbit;
+				currentMoonGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*100) * orbit;
+				currentMoonGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*100) * orbit;
+
+				//The following line is needed to be able to jump to moons.
+				currentMoonGroup.rotation.z = -currentMoonGroup.parent.rotation.z;
 			}
 
 			//Turn on planet clicked background
@@ -617,15 +1256,19 @@
 				if (clickedMoonShells[i][0] == activeMoon) {
 					
 					mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
-					visibility(mesh.children[1],true); //Show clicked background
+					visibility(mesh.children[2],true); //Show clicked background
 
 				}
-			}
-		
+			} 
+			if(!activeMoon)
+				for (var i = 0; i < clickedMoonShells.length; ++i) {	
+					mesh = clickedMoonShells[i][0];	//Extraxt clicked-mesh from array
+					visibility(mesh.children[2],false); //Show clicked background
+				} 
+
 			renderer.render(scene, camera);
 		}
-		
-
 		</script>
 	</body>
 </html>
+
