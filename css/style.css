@@ -46,17 +46,20 @@ canvas {
 	width:130px;
 	height: 70px;
 	margin: 0 0% 0 25%;
-	background: rgb(119, 189, 163);
+	background: rgb(30, 30, 30);
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	color: rgb(121, 173, 143);
+	font-size: 18px;
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 3px;	
-	/*box-shadow:
-		0px 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
-		0px 0px 0px 2px rgb(254, 254, 254),
-		0px 1px 1px 3px rgb(210, 210, 210);*/
+	box-shadow:	
+		0pt 2px 5px rgba(10, 10, 30,  0.7),	
+		0px 0px 6px 5px rgba(100, 100, 100, 0.3) inset;
 	transition: all 0.2s linear;
 }
 #save_planet_button:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 #save_planet_button:active,
 #save_planet_button:focus {
@@ -130,22 +133,23 @@ canvas {
 	min-heigth: 100px;
 	max-heigth: 100px;
 	cursor: pointer;	
-	background: rgb(119, 189, 163);
+	/*background: rgb(30, 30, 30);*/
+	background: rgb(40, 40, 40);
 	padding: 20px 5px;
 	/*margin: 10px 0px 0px 10px;*/
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	color: rgb(99, 54, 54);
+	color: rgb(121, 173, 143);
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;	
-	/*box-shadow:
-		0px 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
-		0px 0px 0px 2px rgb(254, 254, 254),
-		0px 1px 1px 3px rgb(210, 210, 210);*/
+	/*box-shadow:	
+		0pt 2px 5px rgba(10, 10, 30,  0.7),	
+		0px 0px 4px 5px rgba(50, 50, 50, 0.1) inset;*/
 	transition: all 0.2s linear;
 }
 #add-button-container button:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 #add-button-container button:active,
 #add-button-container button:focus {
@@ -225,10 +229,10 @@ canvas {
 #account-gui-wrapper p.button input {
 	width: 60%;
 	cursor: pointer;	
-	background: rgb(119, 189, 163);
-	padding: 4px 2px;
+	background: rgb(30, 30, 30);
+	padding:  4px  2px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	color: rgb(99, 54, 54);
+	color: rgb(121, 173, 143);
 	font-size: 13px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;	
@@ -239,7 +243,8 @@ canvas {
 	transition: all 0.2s linear;
 }
 #account-gui-wrapper p.button input:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 #account-gui-wrapper p.button input:active,
 #account-gui-wrapper p.button input:focus {
@@ -300,18 +305,18 @@ p.change_link{
 #account-gui-wrapper p.change_link a {
 	display: inline-block;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	background: rgb(119, 189, 163);
-	padding: 2px 6px;
-	color: rgb(99, 54, 54);
+	background: rgb(30, 30, 30);
+	padding:  2px  6px;
+	color: rgb(121, 173, 143);
 	margin-left: 5px;
 	text-decoration: none;
 	border-radius: 4px;
-	border: 1px solid rgb(203, 213, 214);
+	border: 1px solid rgb(0, 0, 0);
 	transition: all 0.4s  linear;
 }
 #account-gui-wrapper p.change_link a:hover {
 	color: rgb(57, 191, 215);
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
 	border: 1px solid rgb(74, 179, 198);
 }
 #account-gui-wrapper p.change_link a:active{
@@ -380,17 +385,18 @@ p.user_info {
 	max-height: 70%;
 	margin: 7px 0px 0px 20px;
 	cursor: pointer;	
-	background: rgb(119, 189, 163);
-	padding: 4px 2px;
+	background: rgb(30, 30, 30);
+	padding:  4px  2px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	color: rgb(99, 54, 54);
+	color: rgb(121, 173, 143);
 	font-size: 13px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;	
 	transition: all 0.2s linear;
 }
 #user_menu button:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 #user_menu button:active,
 #user_menu button:focus {
@@ -423,14 +429,16 @@ p.user_info {
 #jump-system-button {
 	width: 100%;
 	heigth: 100%;
-	background: rgb(119, 189, 163);
-	padding: 15px 10px 15px 10px;
+	background: rgb(30, 30, 30);
+	color: rgb(121, 173, 143);
+	padding: 15px 10px  15px 10px;
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 3px;	
 	transition: all 0.2s linear;
 }
 #jump-system-button:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 #jump-system-button:active,
 #jump-system-button:focus {
@@ -441,7 +449,7 @@ p.user_info {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
-#system-down-arrow {
+#jump-system-container i {
 	padding: 0 10% 0 10%;
 }
 
@@ -459,13 +467,15 @@ p.user_info {
 	heigth: 100%;
 	padding: 15px 0px 15px 0px;
 	margin: 10px;
-	background: rgb(119, 189, 163);
-	border: 1px solid rgb(0, 0, 0);	
+	background: rgb(30, 30, 30);
+	color: rgb(121, 173, 143);
+	border: 1px solid rgb( 0,  0, 0);	
 	border-radius: 3px;	
 	transition: all 0.2s linear;
 }
 .jump-planet-moon-buttons:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 .jump-planet-moon-buttons:active,
 .jump-planet-moon-buttons:focus {
@@ -485,32 +495,33 @@ p.user_info {
 /**** EDIT PLANET ****/
 #edit-existing-planet-button-container {
 	position: absolute;
-	top: 100px;
+	top: 150px;
 	right: 10px;
-	min-height: 50px;
-	max-height: 60px;
-	min-width: 100px;
+	/*min-height: 50px;*/
+	/*max-height: 60px;*/
+	/*min-width: 100px;*/
 	max-width: 110px;
 	cursor: pointer;
 }
 
 #edit_planet_button {
-	min-width: 100px;
 	max-width: 100px;
-	min-heigth: 100px;
-	max-heigth: 100px;
+	/*min-width: 100px;
+	min-heigth: 100px;*/
+	/*max-heigth: 100px;*/
 	cursor: pointer;	
-	background: rgb(119, 189, 163);
-	padding: 30px 5px 30px 5px;
+	background: rgb(30, 30, 30);
+	padding: 20px 10px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	color: rgb(99, 54, 54);
+	color: rgb(121, 173, 143);
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;
 	transition: all 0.2s linear;
 }
 #edit_planet_button:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 #edit_planet_button:active,
 #edit_planet_button:focus {
@@ -545,16 +556,17 @@ p.user_info {
 	min-heigth: 100px;
 	max-heigth: 100px;
 	cursor: pointer;	
-	background: rgb(119, 189, 163);
-	padding: 30px 5px 30px 5px;
+	background: rgb(30, 30, 30);
+	padding: 30px 5px  30px 5px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	color: rgb(99, 54, 54);
+	color: rgb(121, 173, 143);
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);	
 	transition: all 0.2s linear;
 }
 #add-moon-button:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 #add-moon-button:active {
 	background: rgb(40, 137, 154);
@@ -584,13 +596,14 @@ p.user_info {
 	width:130px;
 	height: 70px;
 	margin: 0 0% 0 25%;
-	background: rgb(119, 189, 163);
-	border: 1px solid rgb(0, 0, 0);	
+	background: rgb(30, 30, 30);
+	border: 1px solid rgb( 0,  0, 0);	
 	border-radius: 3px;	
 	transition: all 0.2s linear;
 }
 #edit-done-button:hover {
-	background: rgb(235, 255, 212);
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
 }
 #edit-done-button:active,
 #edit-done-button:focus {
