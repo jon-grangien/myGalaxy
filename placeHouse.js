@@ -1,5 +1,7 @@
 function showHouse(pos) {
 	if(jumpPlanetOk) {
+		console.log("show house planet");
+
 		loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
 		activePlanet.children[5].add(object);
 		object.position.copy( pos );
@@ -31,6 +33,8 @@ function showHouse(pos) {
 		}, onProgress, onError);
 		
 	} else if(jumpMoonOk) {
+		console.log("show house moon");
+
 		loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
 		activeMoon.children[3].add(object);
 		object.position.copy( pos );
@@ -66,6 +70,8 @@ function showHouse(pos) {
 }
 
 function createHouse(pos) {
+	console.log("create house planet");
+
 	if(jumpPlanetOk) {
 		loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
 			activePlanet.children[4].add(object);
@@ -80,6 +86,8 @@ function createHouse(pos) {
 					
 		}, onProgress, onError);
 	} else if(jumpMoonOk) {
+		console.log("create house moon");
+
 		loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
 			activeMoon.children[2].add(object);
 			activeMoon.children[3].remove(activeMoon.children[3].children[0]);
