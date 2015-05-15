@@ -92,18 +92,12 @@
 					slide: function(event, ui) {
 						for (var i = 0; i < planetSpeeds.length; ++i) {
 							if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
-								// console.log(planetSpeeds[i][1]);
-								// console.log(planetSpeeds[i][2]);
 								if(planetSpeeds[i][1] != ui.value) {
 									planetSpeeds[i][2] = planetSpeeds[i][1];
 								}
 								
 								planetSpeeds[i][3] = time;
-								// console.log(planetSpeeds[i][2]);
-								// console.log(planetSpeeds[i][3]);
-								planetSpeeds[i][1] = ui.value;		//change second element to slider ui.value
-								// console.log(planetSpeeds[i][1]);
-								// console.log("rotation changed to " + ui.value);
+								planetSpeeds[i][1] = ui.value;		//change second element to slider value
 							}
 						}
 					}
@@ -172,7 +166,6 @@
 						for (var i = 0; i < moonSpeeds.length; ++i) {
 							if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
 								moonSpeeds[i][1] = ui.value;		//change second element to slider value
-								// console.log("rotation changed to " + value);
 							}
 						}
 					}
@@ -257,7 +250,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#add_planet_button').click(function() {
+		        $('#add-planet-button').click(function() {
 		            selectPlanetsOk = false;
 		            menusOnCreatePlanet();
 		            addPlanet();
@@ -267,8 +260,23 @@
 
 		<script>
 		    $(document).ready(function() {     
+		        $('#add-moon-button').click(function() {
+		            // selectPlanetsOk = false;   går inte än
+		            addMoon();
+		            buttonsOnAddMoon();
+		        });    
+		    });
+		</script>
+
+		<script>
+		    $(document).ready(function() {     
 		        $('#edit_planet_button').click(function() {
 		            selectPlanetsOk = false;
+
+		            if(!jumpPlanetOk) {
+		            	planetBools();
+		            }
+
 		            menusOnEditPlanet();
 		        });    
 		    });
@@ -278,29 +286,30 @@
 		    $(document).ready(function() {     
 		        $('#edit-done-button').click(function() {
 		            selectPlanetsOk = true;
+
+		            if(jumpPlanetOk) {
+		            	solarBools();
+		            }
+
 		            menusOnEditDone();
 		        });    
 		    });
 		</script>
 
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
-			vec3 mod289(vec3 x)
-			{
+			vec3 mod289(vec3 x) {
 			  return x - floor(x * (1.0 / 289.0)) * 289.0;
 			}
 
-			vec4 mod289(vec4 x)
-			{
+			vec4 mod289(vec4 x) {
 			  return x - floor(x * (1.0 / 289.0)) * 289.0;
 			}
 
-			vec4 permute(vec4 x)
-			{
+			vec4 permute(vec4 x) {
 			  return mod289(((x*34.0)+1.0)*x);
 			}
 
-			vec4 taylorInvSqrt(vec4 r)
-			{
+			vec4 taylorInvSqrt(vec4 r) {
 			  return 1.79284291400159 - 0.85373472095314 * r;
 			}
 
@@ -758,8 +767,7 @@
 
 		<!-- general GUI -->
 		<div id="add-button-container">
-			<button id="add_planet_button">Create planet</button>
-			<!-- <button id="add_moon_button" onClick="addMoon()">Add moon</button> -->
+			<button id="add-planet-button">Create planet</button>
 		</div>
 
 		<div id="edit-created-planet-container">
@@ -826,7 +834,7 @@
 		</div>
 
 		<div id="edit-existing-planet-container">
-			<button id="add-moon-button" onClick="addMoon()">Add moon</button>
+			<button id="add-moon-button">Add moon</button>
 
 			<div id="moon-properties-container">
 				<div id="moon-radius-container">
@@ -886,9 +894,9 @@
 		</div>
 
 		<div id="jump-planet-moon-container">
-			<button class="jump-planet-moon-buttons" onClick="planetBools()">View planet</button>
-			<button class="jump-planet-moon-buttons" onClick="moonBools()">View moon</button>
-			<button class="jump-planet-moon-buttons" onClick="buildHouse()">place house</button>			
+			<button class="jump-planet-moon-buttons" id="jump-planet-button" onClick="planetBools()">View planet</button>
+			<button class="jump-planet-moon-buttons" id="jump-moon-button" onClick="moonBools()">View moon</button>
+			<button class="jump-planet-moon-buttons" id="place-house-button" onClick="buildHouse()">place house</button>			
 		</div>
 		<script>
 
@@ -920,6 +928,8 @@
 		var jumpMoonOk;
 		var jumpSolarOk;
 		var jumpInAction;
+		var thereArePlanets = false;
+		var thereAreMoons = false;
 		
 		// Variables for building on planets/moons
 		var buildHouseOk;

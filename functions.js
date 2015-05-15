@@ -39,6 +39,7 @@ function onWindowResize() {
 
 // Planet spawn (gui)
 function addPlanet(){
+	thereArePlanets = true;
 	activeMoon = null;
 
 	//Turn off planet clicked background
@@ -268,6 +269,8 @@ function updatePlanetTexture(textureFile){
 
 // Add moon to active planet (gui)
 function addMoon() {
+	thereAreMoons = true;
+	
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
