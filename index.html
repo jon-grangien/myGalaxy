@@ -42,7 +42,7 @@
 				$( ".planet_radius_slider" ).slider({
 					min: 30,
 					max: 600,
-					value: 30,
+					value: 60,
 					step: 1,
 					slide: function(event, ui) {
 							activePlanet.position.x = ui.value;
@@ -289,6 +289,9 @@
 		            if(!jumpPlanetOk) {
 		            	planetBools();
 		            }
+
+		            //update slider value
+		            $( ".planet_radius_slider" ).slider( "option", "value", activePlanet.position.x );
 
 		            menusOnEditPlanet();
 		        });    
@@ -788,7 +791,7 @@
 			<div id="edit-planet-properties">
 				<div id="edit-texture-accordion-container">
 					<div id="texture-accordion">
-						<h3>Textures</h3>
+						<h2>Textures</h2>
 						<div id="edit-texture-image-container">
 							<tr>
 							<img src="textures/earthmap.jpg" class="accordion-tex-img earth-tex-img">
@@ -829,7 +832,7 @@
 
 			<div id="accordion-container">
 				<div id="accordion">
-				  <h3>Build</h3>
+				  <h2>Build</h2>
 				  <div id="build-image-container">
 					<tr>
 					<img src="images/goose.png" class="goose" onclick="showBuild(1);">
@@ -840,7 +843,7 @@
 					<img src="images/goose.png" class="goose" onclick="showBuild(6);">
 					</tr>
 				  </div>
-				  <h3>Trade</h3>
+				  <h2>Trade</h2>
 				  <div id="build-image-container">
 					<tr>
 					<img src="images/goose.png" class="goose">
@@ -852,7 +855,7 @@
 					</tr>
 				  </div>
 				  
-				  <h3>Chat</h3>
+				  <h2>Chat</h2>
 				  <div id="build-image-container">
 				  <p>Send text to älgen</p>
 				  <textarea cols="12.5" rows="5" name="comment"></textarea><br>

@@ -1,5 +1,5 @@
+// Menus that aren't supposed to show initially (prestanda?)
 function initiallyHideMenus() {
-	// Menus that aren't supposed to show initially (prestanda?)
     $('#user_menu').hide();
     $('.edit-created-planet-container').hide();
     $('.bygg-main').hide();
@@ -49,7 +49,6 @@ function menusOnPlanetActive() {
 function menusOnEditPlanet() {
     $('#add_planet_button').hide();
     $('#edit-existing-planet-button-container').hide();
-    // $('#edit-existing-planet-container').show("fast");
     $('#edit-planet-tabs').show();
     $('#place-house-button').show();
 }
