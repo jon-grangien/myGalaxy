@@ -42,24 +42,22 @@
 				$( ".planet_radius_slider" ).slider({
 					min: 30,
 					max: 600,
-					value: 60,
+					value: 80,
 					step: 1,
 					slide: function(event, ui) {
-							activePlanet.position.x = ui.value;
+						// activePlanet.position.x = ui.value;  påverkar inte
 
-							// Find planet's torus replace
-							for (var i = 0; i < planetPaths.length; ++i) {
-								if (planetPaths[i][0] == activePlanet) {
-									sunSphere.remove(planetPaths[i][1]);
-									planetOrbitRadiuses[i][1] = ui.value; 
-									
-									var newPath = addOrbitPath(ui.value);
-
-
-									sunSphere.add(newPath);
-									planetPaths[i][1] = newPath;
-								}
+						// Find planet's torus replace
+						for (var i = 0; i < planetPaths.length; ++i) {
+							if (planetPaths[i][0] == activePlanet) {
+								sunSphere.remove(planetPaths[i][1]);
+								planetOrbitRadiuses[i][1] = ui.value; 
+								
+								var newPath = addOrbitPath(ui.value);
+								sunSphere.add(newPath);
+								planetPaths[i][1] = newPath;
 							}
+						}
 					}
 				});
 			});
@@ -154,17 +152,16 @@
 					value: 20,
 					step: 1,
 					slide: function(event, ui) {
-							for (var i = 0; i < moonPaths.length; ++i) {
-								if (moonPaths[i][0] == activeMoon) {
-									moonOrbitRadiuses[i][1] = ui.value; 
-					
-									activeMoon.parent.remove(moonPaths[i][1]); 
-									
-									var newPath = addMoonOrbitPath(ui.value);
-									activeMoon.parent.add(newPath);
-									moonPaths[i][1] = newPath;
-								}
+						for (var i = 0; i < moonPaths.length; ++i) {
+							if (moonPaths[i][0] == activeMoon) {
+								moonOrbitRadiuses[i][1] = ui.value; 
+								activeMoon.parent.remove(moonPaths[i][1]); 
+
+								var newPath = addMoonOrbitPath(ui.value);
+								activeMoon.parent.add(newPath);
+								moonPaths[i][1] = newPath;
 							}
+						}
 					}
 				});
 			});
@@ -304,6 +301,13 @@
 		            	planetBools();
 		            }
 
+		            var radius;
+					for (var i = 0; i < planetPaths.length; ++i) {
+						if (planetPaths[i][0] == activePlanet) {
+							radius = planetOrbitRadiuses[i][1]; 
+						}
+					}
+
 		            var size;
 		            for (var i = 0; i < planetSizes.length; i++) {
 		            	if(planetSizes[i][0] == activePlanet) {
@@ -319,9 +323,9 @@
             		}
 
 		            //update slider values
-		            $( ".planet_radius_slider" ).slider( "option", "value", activePlanet.position.x );
+		            $( ".planet_radius_slider" ).slider( "option", "value", radius );
             		$( ".planet_size_slider" ).slider( "option", "value", size );
-            		$('.planet_rotation_slider').slider( "option", "value", rotation);
+            		$('.planet_rotation_slider').slider( "option", "value", rotation );
 
 		            menusOnEditPlanet();
 		        });    

@@ -80,10 +80,9 @@ function addPlanet(){
 
 
 	orbitsMother.push(path);
-	for(var i = 0; i < orbitsMother.length; ++i)
-			{
-				sunSphere.add(orbitsMother[i]);
-			}
+	for(var i = 0; i < orbitsMother.length; ++i){
+		sunSphere.add(orbitsMother[i]);
+	}
 
 
 	var activeGroup = new THREE.Object3D;
