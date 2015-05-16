@@ -1,7 +1,7 @@
 function initiallyHideMenus() {
 	// Menus that aren't supposed to show initially (prestanda?)
     $('#user_menu').hide();
-    $('#edit-created-planet-container').hide();
+    $('.edit-created-planet-container').hide();
     $('.bygg-main').hide();
     $('#edit-existing-planet-container').hide();
     $('#edit-existing-planet-button-container').hide();
@@ -9,6 +9,7 @@ function initiallyHideMenus() {
     $('#jump-system-button').hide();
     $('#jump-moon-button').hide();
     $('#place-house-button').hide();
+    $('#edit-planet-tabs').hide();
 }
 
 function menusOnLogin() {
@@ -30,12 +31,12 @@ function menusOnLogout() {
 
 function menusOnCreatePlanet() {
 	$('#add_planet_button').hide();
-    $('#edit-created-planet-container').show("fast");
+    $('.edit-created-planet-container').show("fast");
 }
 
 function menusOnSave() {
     $('#add_planet_button').show();
-    $('#edit-created-planet-container').hide("fast");
+    $('.edit-created-planet-container').hide("fast");
     $('#jump-planet-button').show();
 }
 
@@ -48,14 +49,16 @@ function menusOnPlanetActive() {
 function menusOnEditPlanet() {
     $('#add_planet_button').hide();
     $('#edit-existing-planet-button-container').hide();
-    $('#edit-existing-planet-container').show("fast");
+    // $('#edit-existing-planet-container').show("fast");
+    $('#edit-planet-tabs').show();
     $('#place-house-button').show();
 }
 
 function menusOnEditDone() {
     $('#add_planet_button').show();
     $('#edit-existing-planet-button-container').show();
-    $('#edit-existing-planet-container').hide("fast");
+    // $('#edit-existing-planet-container').hide("fast");
+    $('#edit-planet-tabs').hide();
     $('#place-house-button').hide();
 }
 
