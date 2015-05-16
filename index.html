@@ -5,9 +5,9 @@
 		<title>Nya menyer!</title>
 
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/animate.css">
 		<link rel="stylesheet" href="css/jquery-ui.css">
+		<link rel="stylesheet" href="css/style.css">
 		<link href="css/square/green.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/font-awesome-4.3.0/css/font-awesome.css">
 
@@ -39,7 +39,7 @@
 		<!-- planet_radius_slider -->
 		<script>
 			$(function() {
-				$( "#planet_radius_slider" ).slider({
+				$( ".planet_radius_slider" ).slider({
 					min: 30,
 					max: 600,
 					value: 30,
@@ -68,7 +68,7 @@
 		<!-- planet_size_slider -->
 		<script>
 			$(function() {
-				$( "#planet_size_slider" ).slider({
+				$( ".planet_size_slider" ).slider({
 					min: 1,
 					max: 5,
 					value: 1,
@@ -85,7 +85,7 @@
 		<!-- planet_rotation_slider -->
 		<script>
 			$(function() {
-				$( "#planet_rotation_slider" ).slider({
+				$( ".planet_rotation_slider" ).slider({
 					min: 0.001,
 					max: 0.05,
 					value: 0.001,
@@ -108,11 +108,11 @@
 
 		<script>
 			$(document).ready(function(){
-				$('#meteor-check').iCheck({
+				$('.meteor-check').iCheck({
 					checkboxClass: 'icheckbox_square-green',
 					increaseArea: '20%' // optional
 				});
-				$('#meteor-check').on('ifChecked', function(event){
+				$('.meteor-check').on('ifChecked', function(event){
 					for (var i = 0; i < meteorbelts.length; ++i) {
 						if (meteorbelts[i][0] == activePlanet) {
 						mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
@@ -120,7 +120,7 @@
 						}
 					}
 				});
-				$('#meteor-check').on('ifUnchecked', function(event){
+				$('.meteor-check').on('ifUnchecked', function(event){
 					for (var i = 0; i < meteorbelts.length; ++i) {
 						if (meteorbelts[i][0] == activePlanet) {
 						mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
@@ -176,7 +176,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#earth-tex-img').click(function() {
+		        $('.earth-tex-img').click(function() {
 		            updatePlanetTexture('earthmap.jpg');
 		        });    
 		    });
@@ -184,15 +184,16 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#alien-tex-img').click(function() {
+		        $('.alien-tex-img').click(function() {
 		            updatePlanetTexture('alien.jpg');
+		            console.log("alien clicked");
 		        });    
 		    });
 		</script>
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#cloudy-tex-img').click(function() {
+		        $('.cloudy-tex-img').click(function() {
 		            updatePlanetTexture('cloudy.jpg');
 		        });    
 		    });
@@ -200,7 +201,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#desolate-tex-img').click(function() {
+		        $('.desolate-tex-img').click(function() {
 		            updatePlanetTexture('desolate.png');
 		        });    
 		    });
@@ -208,7 +209,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#klendathu-tex-img').click(function() {
+		        $('.klendathu-tex-img').click(function() {
 		            updatePlanetTexture('klendathu.png');
 		        });    
 		    });
@@ -216,7 +217,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#sandy-tex-img').click(function() {
+		        $('.sandy-tex-img').click(function() {
 		            updatePlanetTexture('sandy.jpg');
 		        });    
 		    });
@@ -224,7 +225,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#scarl-tex-img').click(function() {
+		        $('.scarl-tex-img').click(function() {
 		            updatePlanetTexture('scarl.png');
 		        });    
 		    });
@@ -232,7 +233,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#steel-tex-img').click(function() {
+		        $('.steel-tex-img').click(function() {
 		            updatePlanetTexture('steeltexture.jpg');
 		        });    
 		    });
@@ -241,6 +242,17 @@
 		<script>
 		  $(function() {
 			$( "#accordion" ).accordion({
+			  collapsible: true,
+			  active: false,
+			  animate:'linear',
+			  animate:300
+			});
+		  });
+		</script>
+
+		<script>
+		  $(function() {
+			$( "#texture-accordion" ).accordion({
 			  collapsible: true,
 			  active: false,
 			  animate:'linear',
@@ -285,7 +297,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#edit-done-button').click(function() {
+		        $('.edit-done-button').click(function() {
 		            selectPlanetsOk = true;
 
 		            if(jumpPlanetOk) {
@@ -295,6 +307,12 @@
 		            menusOnEditDone();
 		        });    
 		    });
+		</script>
+
+		<script>
+			$(function() {
+				$( "#edit-planet-tabs" ).tabs();
+			});
 		</script>
 
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
@@ -679,56 +697,55 @@
 			</button>
 		</div>
 
-		<div id="edit-created-planet-container">
-			<div id="planet-radius-container">
+		<div class="edit-created-planet-container">
+			<div class="planet-radius-container">
 				<p class="edit-created-planet-label">Radius</p>
-				<div id="planet_radius_slider"></div>
+				<div class="planet_radius_slider"></div>
 			</div>
-			<div id="planet-size-container">
+			<div class="planet-size-container">
 				<p class="edit-created-planet-label">Size</p>
-				<div id="planet_size_slider"></div>
+				<div class="planet_size_slider"></div>
 			</div>
-			<div id="planet-rotation-container">
+			<div class="planet-rotation-container">
 				<p class="edit-created-planet-label">Rotation speed</p>
-				<div id="planet_rotation_slider"></div>
+				<div class="planet_rotation_slider"></div>
 			</div>
-			<div id="meteor-check-container">
-				<!-- <input type="checkbox" id="meteor-check"><label for="meteor-check">Meteor belt</label> -->
-				<input type="checkbox" id="meteor-check"><label for="meteor-check" id="meteor-check-label">Meteor belt</label>
+			<div class="meteor-check-container">
+				<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
 			</div>
 
 			<div id="texture-container">
 				<p class="edit-created-planet-label">Textures:</p>
 				<div class="img-container">
-					<img src="textures/earthmap.jpg" id="earth-tex-img" class="tex-img">
+					<img src="textures/earthmap.jpg" class="earth-tex-img" class="tex-img">
 					<label for="earth-tex-img" class="tex-img-label">Earth</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/alien.jpg" id="alien-tex-img" class="tex-img">
+					<img src="textures/alien.jpg" class="alien-tex-img" class="tex-img">
 					<label for="alien-tex-img" class="tex-img-label">Alien</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/cloudy.jpg" id="cloudy-tex-img" class="tex-img">
+					<img src="textures/cloudy.jpg" class="cloudy-tex-img" class="tex-img">
 					<label for="cloudy-tex-img" class="tex-img-label">Cloudy</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/desolate.png" id="desolate-tex-img" class="tex-img">
+					<img src="textures/desolate.png" class="desolate-tex-img" class="tex-img">
 					<label for="desolate-tex-img" class="tex-img-label">Desolate</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/klendathu.png" id="klendathu-tex-img" class="tex-img">
+					<img src="textures/klendathu.png" class="klendathu-tex-img" class="tex-img">
 					<label for="klendathu-tex-img" class="tex-img-label">Klendathu</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/sandy.jpg" id="sandy-tex-img" class="tex-img">
+					<img src="textures/sandy.jpg" class="sandy-tex-img" class="tex-img">
 					<label for="sandy-tex-img" class="tex-img-label">Sandy</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/scarl.png" id="scarl-tex-img" class="tex-img">
+					<img src="textures/scarl.png" class="scarl-tex-img" class="tex-img">
 					<label for="scarl-tex-img" class="tex-img-label">Scarl</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/steeltexture.jpg" id="steel-tex-img" class="tex-img">
+					<img src="textures/steeltexture.jpg" class="steel-tex-img" class="tex-img">
 					<label for="steel-tex-img" class="tex-img-label">Steel</label>
 				</div>
 			</div>
@@ -745,56 +762,107 @@
 			</button>
 		</div>
 
-		<div id="edit-existing-planet-container">
-			<button id="add-moon-button">Add moon</button>
+		<div id="edit-planet-tabs">
+			<ul>
+			    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
+			    <li><a href="#edit-planet-properties">Properties</a></li>
+			    <li><a href="#accordion-container">Buildings</a></li>
+		  	</ul>
+			<div id="edit-existing-planet-moons-container">
+				<button id="add-moon-button">Add moon</button>
 
-			<div id="moon-properties-container">
-				<div id="moon-radius-container">
-					<p class="edit-created-moon-label">Moon radius</p>
-					<div id="moon-radius-slider"></div>
+				<div id="moon-properties-container">
+					<div id="moon-radius-container">
+						<p class="edit-created-moon-label">Moon radius</p>
+						<div id="moon-radius-slider"></div>
+					</div>
+					<div id="moon-rotation-container">
+						<p class="edit-created-moon-label">Moon rotation</p>
+						<div id="moon-rotation-slider"></div>
+					</div>
 				</div>
-				<div id="moon-rotation-container">
-					<p class="edit-created-moon-label">Moon rotation</p>
-					<div id="moon-rotation-slider"></div>
-				</div>
+				
+				<button class="edit-done-button">Done</button>
 			</div>
-			
-			<button id="edit-done-button">Done</button>
-		</div>
 
-		<div id="accordion-container">
-			<div id="accordion">
-			  <h3>Build</h3>
-			  <div id="build-image-container">
-				<tr>
-				<img src="images/goose.png" class="goose" onclick="showBuild(1);">
-				<img src="images/satellite.png" class="goose" onclick="showBuild(2);"><br>
-				<img src="images/eiffel.png" class="goose" onclick="showBuild(3);">
-				<img src="images/satellite.png" class="goose" onclick="showBuild(4);"><br>
-				<img src="images/eiffel.png" class="goose" onclick="showBuild(5);">
-				<img src="images/goose.png" class="goose" onclick="showBuild(6);">
-				</tr>
-			  </div>
-			  <h3>Trade</h3>
-			  <div id="build-image-container">
-				<tr>
-				<img src="images/goose.png" class="goose">
-				<img src="images/satellite.png" class="goose"><br>
-				<img src="images/eiffel.png" class="goose">
-				<img src="images/satellite.png" class="goose"><br>
-				<img src="images/eiffel.png" class="goose">
-				<img src="images/goose.png" class="goose">
-				</tr>
-			  </div>
-			  
-			  <h3>Chat</h3>
-			  <div id="build-image-container">
-			  <p>Send text to älgen</p>
-			  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
-				<form action="">
+			<div id="edit-planet-properties">
+				<div id="edit-texture-accordion-container">
+					<div id="texture-accordion">
+						<h3>Textures</h3>
+						<div id="edit-texture-image-container">
+							<tr>
+							<img src="textures/earthmap.jpg" class="accordion-tex-img earth-tex-img">
+							<img src="textures/cloudy.jpg" class="accordion-tex-img cloudy-tex-img">
+							<br>
+							<img src="textures/alien.jpg" class="accordion-tex-img alien-tex-img">
+							<img src="textures/desolate.png" class="accordion-tex-img desolate-tex-img">
+							<br>
+							<img src="textures/klendathu.png" class="accordion-tex-img klendathu-tex-img">
+							<img src="textures/sandy.jpg" class="accordion-tex-img sandy-tex-img">
+							<br>
+							<img src="textures/scarl.png" class="accordion-tex-img scarl-tex-img">
+							<img src="textures/steeltexture.jpg" class="accordion-tex-img steel-tex-img">
+							</tr>
+						</div>
+					</div>	
+				</div>
+
+				<div class="planet-radius-container">
+					<p class="edit-created-planet-label">Radius</p>
+					<div class="planet_radius_slider"></div>
+				</div>
+				<div class="planet-size-container">
+					<p class="edit-created-planet-label">Size</p>
+					<div class="planet_size_slider"></div>
+				</div>
+				<div class="planet-rotation-container">
+					<p class="edit-created-planet-label">Rotation speed</p>
+					<div class="planet_rotation_slider"></div>
+				</div>
+				<div class="meteor-check-container">
+					<!-- <input type="checkbox" class="meteor-check"><label for="meteor-check">Meteor belt</label> -->
+					<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
+				</div>
+
+				<button class="edit-done-button">Done</button>
+			</div>
+
+			<div id="accordion-container">
+				<div id="accordion">
+				  <h3>Build</h3>
+				  <div id="build-image-container">
+					<tr>
+					<img src="images/goose.png" class="goose" onclick="showBuild(1);">
+					<img src="images/satellite.png" class="goose" onclick="showBuild(2);"><br>
+					<img src="images/eiffel.png" class="goose" onclick="showBuild(3);">
+					<img src="images/satellite.png" class="goose" onclick="showBuild(4);"><br>
+					<img src="images/eiffel.png" class="goose" onclick="showBuild(5);">
+					<img src="images/goose.png" class="goose" onclick="showBuild(6);">
+					</tr>
+				  </div>
+				  <h3>Trade</h3>
+				  <div id="build-image-container">
+					<tr>
+					<img src="images/goose.png" class="goose">
+					<img src="images/satellite.png" class="goose"><br>
+					<img src="images/eiffel.png" class="goose">
+					<img src="images/satellite.png" class="goose"><br>
+					<img src="images/eiffel.png" class="goose">
+					<img src="images/goose.png" class="goose">
+					</tr>
+				  </div>
+				  
+				  <h3>Chat</h3>
+				  <div id="build-image-container">
+				  <p>Send text to älgen</p>
+				  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
+					<form action="">
 						<input type="submit" value="Send">
-				</form>
-			  </div>
+					</form>
+				  </div>
+				</div>
+
+				<button class="edit-done-button">Done</button>
 			</div>
 		</div>
 

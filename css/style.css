@@ -10,7 +10,7 @@ canvas {
 	display: block; 
 }
 /************* GENERAL GUI *********************/
-#edit-created-planet-container {
+.edit-created-planet-container {
 	position: absolute;
 	top: 1%;
 	right: 10px;
@@ -29,7 +29,8 @@ canvas {
 }
 .edit-created-planet-label {
 	color: white;
-	margin-left: 10px;
+	margin-left: 20px;
+	margin-bottom: 10px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 }
 
@@ -158,32 +159,26 @@ canvas {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
-#planet_radius_slider,
-#planet_size_slider,
-#planet_rotation_slider {
+.planet_radius_slider,
+.planet_size_slider,
+.planet_rotation_slider {
 	position: relative;
 	width: 80%;
 	left: 20px;
 }
 
-#planet_radius_container p,
-#planet_size_container p,
-#planet_rotation_container p{
+.planet_radius_container p,
+.planet_size_container p,
+.planet_rotation_container p{
 	position: relative;
 }
 
-.edit-created-planet-label {
-	color: white;
-	margin-left: 20px;
-	margin-bottom: 10px;
-}
-
-#meteor-check-container {
+.meteor-check-container {
 	position: relative;
 	margin-top: 8%;
 	left: 20px;
 }
-#meteor-check-label {
+.meteor-check-label {
 	color: white;
 	margin-left: 10px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
@@ -530,7 +525,53 @@ p.user_info {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
-#edit-existing-planet-container {
+#edit-planet-tabs {
+	position: absolute;
+	top: 1%;
+	right: 10px;
+	max-width: 245px;
+	min-width: 240px;
+	min-height: 450px;
+}
+
+
+/* overrides jquery-ui, there's more in jquery-ui.css*/
+.ui-tabs .ui-tabs-nav {
+	margin: 0px;
+	padding: .2em .2em 0;
+	font-size: 12px;
+}
+.ui-tabs .ui-tabs-nav li {
+	list-style: none;
+	float: left;
+	position: relative;
+	top: 0px;
+	margin: 1px .2em 0 0;
+	border-bottom-width: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.accordion-tex-img{
+	width:60px;
+	height:60px;
+	margin: 8px;
+}
+
+#edit-texture-image-container{
+	padding-bottom: 350px;
+}
+#edit-texture-image-container img {
+    opacity: 0.9;
+}
+
+#edit-texture-image-container img:hover {
+    opacity: 1.0;
+	-webkit-filter: brightness(150%);
+	cursor: pointer;
+}
+
+#edit-existing-planet-moon-container {
 	position: absolute;
 	top: 1%;
 	right: 10px;
@@ -577,15 +618,16 @@ p.user_info {
 #moon-properties-container {
 	position: relative;
 	top: 20px;
+	margin-bottom: 20px;
 	width: 80%;
 	left: 20px;
 }
 
-#edit-done-button {
+.edit-done-button {
 	position: relative;
 	left: 25%;
 	width:50%;
-	top: 50px;
+	top: 20px;
 	min-height: 70px;
 	/*margin: 0 0% 0 25%;*/
 	background: rgb(30, 30, 30);
@@ -596,12 +638,12 @@ p.user_info {
 	border-radius: 3px;	
 	transition: all 0.2s linear;
 }
-#edit-done-button:hover {
+.edit-done-button:hover {
 	background: rgba(194, 234, 237, 1);
 	color: rgb(10, 10, 10);
 }
-#edit-done-button:active,
-#edit-done-button:focus {
+.edit-done-button:active,
+.edit-done-button:focus {
 	background: rgb(40, 137, 154);
 	position: relative;
 	top: 1px;
@@ -625,9 +667,6 @@ p.user_info {
 
 #build-image-container{
 	padding-bottom: 250px;
-	
-	
-
 }
 #build-image-container img {
     opacity: 0.8;
@@ -649,8 +688,8 @@ p.user_info {
 	height:60px;
 	margin: 10px;
 	position: center
-
 }
+
 #insideBygg img:hover {
     opacity: 1.0;
     filter: alpha(opacity=100);
