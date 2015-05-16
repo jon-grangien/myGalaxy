@@ -176,7 +176,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#earth-tex-img').click(function() {
+		        $('.earth-tex-img').click(function() {
 		            updatePlanetTexture('earthmap.jpg');
 		        });    
 		    });
@@ -184,15 +184,16 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#alien-tex-img').click(function() {
+		        $('.alien-tex-img').click(function() {
 		            updatePlanetTexture('alien.jpg');
+		            console.log("alien clicked");
 		        });    
 		    });
 		</script>
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#cloudy-tex-img').click(function() {
+		        $('.cloudy-tex-img').click(function() {
 		            updatePlanetTexture('cloudy.jpg');
 		        });    
 		    });
@@ -200,7 +201,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#desolate-tex-img').click(function() {
+		        $('.desolate-tex-img').click(function() {
 		            updatePlanetTexture('desolate.png');
 		        });    
 		    });
@@ -208,7 +209,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#klendathu-tex-img').click(function() {
+		        $('.klendathu-tex-img').click(function() {
 		            updatePlanetTexture('klendathu.png');
 		        });    
 		    });
@@ -216,7 +217,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#sandy-tex-img').click(function() {
+		        $('.sandy-tex-img').click(function() {
 		            updatePlanetTexture('sandy.jpg');
 		        });    
 		    });
@@ -224,7 +225,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#scarl-tex-img').click(function() {
+		        $('.scarl-tex-img').click(function() {
 		            updatePlanetTexture('scarl.png');
 		        });    
 		    });
@@ -232,7 +233,7 @@
 
 		<script>
 		    $(document).ready(function() {     
-		        $('#steel-tex-img').click(function() {
+		        $('.steel-tex-img').click(function() {
 		            updatePlanetTexture('steeltexture.jpg');
 		        });    
 		    });
@@ -710,42 +711,41 @@
 				<div class="planet_rotation_slider"></div>
 			</div>
 			<div class="meteor-check-container">
-				<!-- <input type="checkbox" class="meteor-check"><label for="meteor-check">Meteor belt</label> -->
 				<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
 			</div>
 
 			<div id="texture-container">
 				<p class="edit-created-planet-label">Textures:</p>
 				<div class="img-container">
-					<img src="textures/earthmap.jpg" id="earth-tex-img" class="tex-img">
+					<img src="textures/earthmap.jpg" class="earth-tex-img" class="tex-img">
 					<label for="earth-tex-img" class="tex-img-label">Earth</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/alien.jpg" id="alien-tex-img" class="tex-img">
+					<img src="textures/alien.jpg" class="alien-tex-img" class="tex-img">
 					<label for="alien-tex-img" class="tex-img-label">Alien</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/cloudy.jpg" id="cloudy-tex-img" class="tex-img">
+					<img src="textures/cloudy.jpg" class="cloudy-tex-img" class="tex-img">
 					<label for="cloudy-tex-img" class="tex-img-label">Cloudy</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/desolate.png" id="desolate-tex-img" class="tex-img">
+					<img src="textures/desolate.png" class="desolate-tex-img" class="tex-img">
 					<label for="desolate-tex-img" class="tex-img-label">Desolate</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/klendathu.png" id="klendathu-tex-img" class="tex-img">
+					<img src="textures/klendathu.png" class="klendathu-tex-img" class="tex-img">
 					<label for="klendathu-tex-img" class="tex-img-label">Klendathu</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/sandy.jpg" id="sandy-tex-img" class="tex-img">
+					<img src="textures/sandy.jpg" class="sandy-tex-img" class="tex-img">
 					<label for="sandy-tex-img" class="tex-img-label">Sandy</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/scarl.png" id="scarl-tex-img" class="tex-img">
+					<img src="textures/scarl.png" class="scarl-tex-img" class="tex-img">
 					<label for="scarl-tex-img" class="tex-img-label">Scarl</label>
 				</div>
 				<div class="img-container">
-					<img src="textures/steeltexture.jpg" id="steel-tex-img" class="tex-img">
+					<img src="textures/steeltexture.jpg" class="steel-tex-img" class="tex-img">
 					<label for="steel-tex-img" class="tex-img-label">Steel</label>
 				</div>
 			</div>
@@ -789,14 +789,19 @@
 				<div id="edit-texture-accordion-container">
 					<div id="texture-accordion">
 						<h3>Textures</h3>
-						<div id="build-image-container">
+						<div id="edit-texture-image-container">
 							<tr>
-							<img src="images/goose.png" class="accordion-tex-img" onclick="showBuild(1);">
-							<img src="images/satellite.png" class="accordion-tex-img" onclick="showBuild(2);"><br>
-							<img src="images/eiffel.png" class="accordion-tex-img" onclick="showBuild(3);">
-							<img src="images/satellite.png" class="accordion-tex-img" onclick="showBuild(4);"><br>
-							<img src="images/eiffel.png" class="accordion-tex-img" onclick="showBuild(5);">
-							<img src="images/goose.png" class="accordion-tex-img" onclick="showBuild(6);">
+							<img src="textures/earthmap.jpg" class="accordion-tex-img earth-tex-img">
+							<img src="textures/cloudy.jpg" class="accordion-tex-img cloudy-tex-img">
+							<br>
+							<img src="textures/alien.jpg" class="accordion-tex-img alien-tex-img">
+							<img src="textures/desolate.png" class="accordion-tex-img desolate-tex-img">
+							<br>
+							<img src="textures/klendathu.png" class="accordion-tex-img klendathu-tex-img">
+							<img src="textures/sandy.jpg" class="accordion-tex-img sandy-tex-img">
+							<br>
+							<img src="textures/scarl.png" class="accordion-tex-img scarl-tex-img">
+							<img src="textures/steeltexture.jpg" class="accordion-tex-img steel-tex-img">
 							</tr>
 						</div>
 					</div>	

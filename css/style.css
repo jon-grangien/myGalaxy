@@ -534,10 +534,8 @@ p.user_info {
 	min-height: 450px;
 }
 
-.ui-tabs {
-	position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
-	padding: .2em;
-}
+
+/* overrides jquery-ui, there's more in jquery-ui.css*/
 .ui-tabs .ui-tabs-nav {
 	margin: 0px;
 	padding: .2em .2em 0;
@@ -553,35 +551,24 @@ p.user_info {
 	padding: 0;
 	white-space: nowrap;
 }
-.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
-	float: left;
-	padding: .5em 1em;
-	text-decoration: none;
-}
-.ui-tabs .ui-tabs-nav li.ui-tabs-active {
-	margin-bottom: -1px;
-	padding-bottom: 1px;
-}
-.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,
-.ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,
-.ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
-	cursor: text;
-}
-.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
-	cursor: pointer;
-}
-.ui-tabs .ui-tabs-panel {
-	display: block;
-	border-width: 0;
-	padding: 1em 1.4em;
-	background: none;
-}
 
 .accordion-tex-img{
 	width:60px;
 	height:60px;
-	margin: 10px;
-	position: center
+	margin: 8px;
+}
+
+#edit-texture-image-container{
+	padding-bottom: 350px;
+}
+#edit-texture-image-container img {
+    opacity: 0.9;
+}
+
+#edit-texture-image-container img:hover {
+    opacity: 1.0;
+	-webkit-filter: brightness(150%);
+	cursor: pointer;
 }
 
 #edit-existing-planet-moon-container {
@@ -680,9 +667,6 @@ p.user_info {
 
 #build-image-container{
 	padding-bottom: 250px;
-	
-	
-
 }
 #build-image-container img {
     opacity: 0.8;
