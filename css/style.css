@@ -537,18 +537,19 @@ p.user_info {
 
 /* overrides jquery-ui, there's more in jquery-ui.css*/
 .ui-tabs .ui-tabs-nav {
-	margin: 0px;
+	margin: 2px;
 	padding: .2em .2em 0;
-	font-size: 12px;
 }
 .ui-tabs .ui-tabs-nav li {
+	font-size: 12px;
+	text-decoration: none;
 	list-style: none;
 	float: left;
 	position: relative;
 	top: 0px;
 	margin: 1px .2em 0 0;
+	padding: 0 3px 0 3px;
 	border-bottom-width: 0;
-	padding: 0;
 	white-space: nowrap;
 }
 
