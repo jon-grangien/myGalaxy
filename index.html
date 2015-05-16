@@ -276,6 +276,12 @@
 		    $(document).ready(function() {     
 		        $('#add-planet-button').click(function() {
 		            selectPlanetsOk = false;
+
+		            //reset slider values to inital values
+		            $( ".planet_radius_slider" ).slider( "option", "value", 80 );
+            		$( ".planet_size_slider" ).slider( "option", "value", 1 );
+            		$('.planet_rotation_slider').slider( "option", "value", 0.001 );
+
 		            menusOnCreatePlanet();
 		            addPlanet();
 		        });    
