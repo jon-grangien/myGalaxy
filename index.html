@@ -42,24 +42,22 @@
 				$( ".planet_radius_slider" ).slider({
 					min: 30,
 					max: 600,
-					value: 30,
+					value: 80,
 					step: 1,
 					slide: function(event, ui) {
-							activePlanet.position.x = ui.value;
+						// activePlanet.position.x = ui.value;  påverkar inte
 
-							// Find planet's torus replace
-							for (var i = 0; i < planetPaths.length; ++i) {
-								if (planetPaths[i][0] == activePlanet) {
-									sunSphere.remove(planetPaths[i][1]);
-									planetOrbitRadiuses[i][1] = ui.value; 
-									
-									var newPath = addOrbitPath(ui.value);
-
-
-									sunSphere.add(newPath);
-									planetPaths[i][1] = newPath;
-								}
+						// Find planet's torus replace
+						for (var i = 0; i < planetPaths.length; ++i) {
+							if (planetPaths[i][0] == activePlanet) {
+								sunSphere.remove(planetPaths[i][1]);
+								planetOrbitRadiuses[i][1] = ui.value; 
+								
+								var newPath = addOrbitPath(ui.value);
+								sunSphere.add(newPath);
+								planetPaths[i][1] = newPath;
 							}
+						}
 					}
 				});
 			});
@@ -77,7 +75,21 @@
 						activePlanet.scale.x = ui.value;
 						activePlanet.scale.y = ui.value;
 						activePlanet.scale.z = ui.value;
+
+						// update planet size array
+						for (var i = 0; i < planetSizes.length; ++i) {
+							if(planetSizes[i][0] == activePlanet) {
+								planetSizes[i][1] = ui.value;
+							}
+						}
 					}
+
+					// change: function( event, ui ) {
+					// 	// update planet size array
+					// 	for (var i = 0; i < planetSizes.length; ++i) {
+					// 		planetSizes[i][1] = ui.value;
+					// 	}
+					// }
 				});
 			});
 		</script>
@@ -90,7 +102,7 @@
 					max: 0.05,
 					value: 0.001,
 					step: 0.001,
-					slide: function(event, ui) {
+					change: function(event, ui) {
 						for (var i = 0; i < planetSpeeds.length; ++i) {
 							if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
 								if(planetSpeeds[i][1] != ui.value) {
@@ -140,17 +152,16 @@
 					value: 20,
 					step: 1,
 					slide: function(event, ui) {
-							for (var i = 0; i < moonPaths.length; ++i) {
-								if (moonPaths[i][0] == activeMoon) {
-									moonOrbitRadiuses[i][1] = ui.value; 
-					
-									activeMoon.parent.remove(moonPaths[i][1]); 
-									
-									var newPath = addMoonOrbitPath(ui.value);
-									activeMoon.parent.add(newPath);
-									moonPaths[i][1] = newPath;
-								}
+						for (var i = 0; i < moonPaths.length; ++i) {
+							if (moonPaths[i][0] == activeMoon) {
+								moonOrbitRadiuses[i][1] = ui.value; 
+								activeMoon.parent.remove(moonPaths[i][1]); 
+
+								var newPath = addMoonOrbitPath(ui.value);
+								activeMoon.parent.add(newPath);
+								moonPaths[i][1] = newPath;
 							}
+						}
 					}
 				});
 			});
@@ -265,6 +276,12 @@
 		    $(document).ready(function() {     
 		        $('#add-planet-button').click(function() {
 		            selectPlanetsOk = false;
+
+		            //reset slider values to inital values
+		            $( ".planet_radius_slider" ).slider( "option", "value", 80 );
+            		$( ".planet_size_slider" ).slider( "option", "value", 1 );
+            		$('.planet_rotation_slider').slider( "option", "value", 0.001 );
+
 		            menusOnCreatePlanet();
 		            addPlanet();
 		        });    
@@ -289,6 +306,32 @@
 		            if(!jumpPlanetOk) {
 		            	planetBools();
 		            }
+
+		            var radius;
+					for (var i = 0; i < planetPaths.length; ++i) {
+						if (planetPaths[i][0] == activePlanet) {
+							radius = planetOrbitRadiuses[i][1]; 
+						}
+					}
+
+		            var size;
+		            for (var i = 0; i < planetSizes.length; i++) {
+		            	if(planetSizes[i][0] == activePlanet) {
+		            		size = planetSizes[i][1];
+		            	}
+		            }
+
+            		var rotation;
+            		for (var i = 0; i < planetSpeeds.length; i++) {
+            			if(planetSpeeds[i][0] == activePlanet) {
+            				rotation = planetSpeeds[i][1];
+            			}
+            		}
+
+		            //update slider values
+		            $( ".planet_radius_slider" ).slider( "option", "value", radius );
+            		$( ".planet_size_slider" ).slider( "option", "value", size );
+            		$('.planet_rotation_slider').slider( "option", "value", rotation );
 
 		            menusOnEditPlanet();
 		        });    
@@ -788,7 +831,7 @@
 			<div id="edit-planet-properties">
 				<div id="edit-texture-accordion-container">
 					<div id="texture-accordion">
-						<h3>Textures</h3>
+						<h2>Textures</h2>
 						<div id="edit-texture-image-container">
 							<tr>
 							<img src="textures/earthmap.jpg" class="accordion-tex-img earth-tex-img">
@@ -829,7 +872,7 @@
 
 			<div id="accordion-container">
 				<div id="accordion">
-				  <h3>Build</h3>
+				  <h2>Build</h2>
 				  <div id="build-image-container">
 					<tr>
 					<img src="images/goose.png" class="goose" onclick="showBuild(1);">
@@ -840,7 +883,7 @@
 					<img src="images/goose.png" class="goose" onclick="showBuild(6);">
 					</tr>
 				  </div>
-				  <h3>Trade</h3>
+				  <h2>Trade</h2>
 				  <div id="build-image-container">
 					<tr>
 					<img src="images/goose.png" class="goose">
@@ -852,7 +895,7 @@
 					</tr>
 				  </div>
 				  
-				  <h3>Chat</h3>
+				  <h2>Chat</h2>
 				  <div id="build-image-container">
 				  <p>Send text to älgen</p>
 				  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
@@ -970,6 +1013,7 @@
 		var hoverMoonShells = [];	//moon|shell
 		var clickedShells = [];	//planet|shell
 		var clickedMoonShells = [];	//moon|shell
+		var planetSizes = [];
 		var meteorbelts = [];	//planet|meteorbelt
 		//var planetHouses = []; //planet|houses
 		//var moonHouses = []; //moon|houses

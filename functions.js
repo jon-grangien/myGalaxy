@@ -80,10 +80,9 @@ function addPlanet(){
 
 
 	orbitsMother.push(path);
-	for(var i = 0; i < orbitsMother.length; ++i)
-			{
-				sunSphere.add(orbitsMother[i]);
-			}
+	for(var i = 0; i < orbitsMother.length; ++i){
+		sunSphere.add(orbitsMother[i]);
+	}
 
 
 	var activeGroup = new THREE.Object3D;
@@ -149,6 +148,10 @@ function addPlanet(){
 	// Push to planets (planets|moons)
 	tempArray = [activePlanet];
 	planets.push(tempArray);
+
+	// Push to planetSizes
+	tempArray = [activePlanet, 1];
+	planetSizes.push(tempArray);
 
 	// Push to planetPaths
 	tempArray = [activePlanet, path];
