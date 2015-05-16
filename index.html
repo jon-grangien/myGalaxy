@@ -77,7 +77,21 @@
 						activePlanet.scale.x = ui.value;
 						activePlanet.scale.y = ui.value;
 						activePlanet.scale.z = ui.value;
+
+						// update planet size array
+						for (var i = 0; i < planetSizes.length; ++i) {
+							if(planetSizes[i][0] == activePlanet) {
+								planetSizes[i][1] = ui.value;
+							}
+						}
 					}
+
+					// change: function( event, ui ) {
+					// 	// update planet size array
+					// 	for (var i = 0; i < planetSizes.length; ++i) {
+					// 		planetSizes[i][1] = ui.value;
+					// 	}
+					// }
 				});
 			});
 		</script>
@@ -90,7 +104,7 @@
 					max: 0.05,
 					value: 0.001,
 					step: 0.001,
-					slide: function(event, ui) {
+					change: function(event, ui) {
 						for (var i = 0; i < planetSpeeds.length; ++i) {
 							if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
 								if(planetSpeeds[i][1] != ui.value) {
@@ -290,8 +304,19 @@
 		            	planetBools();
 		            }
 
-		            //update slider value
+		            //update slider values
 		            $( ".planet_radius_slider" ).slider( "option", "value", activePlanet.position.x );
+
+		            var size;
+		            for (var i = 0; i < planetSizes.length; i++) {
+		            	if(planetSizes[i][0] == activePlanet) {
+		            		size = planetSizes[i][1];
+		            	}
+		            }
+            		
+            		$( ".planet_size_slider" ).slider( "option", "value", size );
+
+		            
 
 		            menusOnEditPlanet();
 		        });    
@@ -973,6 +998,7 @@
 		var hoverMoonShells = [];	//moon|shell
 		var clickedShells = [];	//planet|shell
 		var clickedMoonShells = [];	//moon|shell
+		var planetSizes = [];
 		var meteorbelts = [];	//planet|meteorbelt
 		//var planetHouses = []; //planet|houses
 		//var moonHouses = []; //moon|houses

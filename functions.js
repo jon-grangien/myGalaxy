@@ -150,6 +150,10 @@ function addPlanet(){
 	tempArray = [activePlanet];
 	planets.push(tempArray);
 
+	// Push to planetSizes
+	tempArray = [activePlanet, 1];
+	planetSizes.push(tempArray);
+
 	// Push to planetPaths
 	tempArray = [activePlanet, path];
 	planetPaths.push(tempArray);
