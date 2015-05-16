@@ -304,19 +304,24 @@
 		            	planetBools();
 		            }
 
-		            //update slider values
-		            $( ".planet_radius_slider" ).slider( "option", "value", activePlanet.position.x );
-
 		            var size;
 		            for (var i = 0; i < planetSizes.length; i++) {
 		            	if(planetSizes[i][0] == activePlanet) {
 		            		size = planetSizes[i][1];
 		            	}
 		            }
-            		
-            		$( ".planet_size_slider" ).slider( "option", "value", size );
 
-		            
+            		var rotation;
+            		for (var i = 0; i < planetSpeeds.length; i++) {
+            			if(planetSpeeds[i][0] == activePlanet) {
+            				rotation = planetSpeeds[i][1];
+            			}
+            		}
+
+		            //update slider values
+		            $( ".planet_radius_slider" ).slider( "option", "value", activePlanet.position.x );
+            		$( ".planet_size_slider" ).slider( "option", "value", size );
+            		$('.planet_rotation_slider').slider( "option", "value", rotation);
 
 		            menusOnEditPlanet();
 		        });    
