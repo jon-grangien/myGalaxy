@@ -554,16 +554,16 @@ p.user_info {
 	white-space: nowrap;
 }
 
-.edit-texture-image-container{
+#edit-texture-image-container{
 	padding-bottom: 350px;
 }
-.edit-texture-image-container img {
+#edit-texture-image-container img {
 	width:60px;
 	height:60px;
 	margin: 8px;
 }
 
-.edit-texture-image-container img:hover {
+#edit-texture-image-container img:hover {
     margin: 0px;
 	border: 8px solid rgba(255, 255, 255, 0.7);
 	border-radius: 3px;
