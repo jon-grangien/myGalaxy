@@ -726,6 +726,9 @@
 		var username = "No one";
 		var userPassword;
 
+		var mesh, zmesh, geometry, scale;
+		var meshes = [];
+
 		init();
 		animate();
 
@@ -807,6 +810,14 @@
 			}
 
 			buildHouseOk = false;
+
+
+			//************ LOADERS ********************/
+			loader = new THREE.JSONLoader();
+			//callbackKey = function(geometry) {createScene(geometry,  0, -30, 0, 1, "obj/volcano2.png")};
+			
+
+			/*
 			onProgress = function ( xhr ) {
 				if ( xhr.lengthComputable ) {
 					var percentComplete = xhr.loaded / xhr.total * 100;
@@ -821,6 +832,7 @@
 			scene.add( lock );
 	        // Loader
 	        loader = new THREE.OBJMTLLoader();
+	        */
 
 			/************** FPS counter *************/
 			stats = new Stats();
@@ -856,6 +868,18 @@
 			document.getElementById("container").addEventListener( 'mousemove', onMouseMove, false );
 		
 		}
+
+		
+
+		function createScene(geometry, x, y, z, scale, tmap) {
+				zmesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(tmap)}));
+				zmesh.position.set(x, y, z);
+				//scale = 0.1;
+				zmesh.scale.set(scale, scale, scale);
+				meshes.push(zmesh);
+				scene.add(zmesh);
+		}
+
 
 		function animate() {
 			requestAnimationFrame( animate );

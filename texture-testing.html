@@ -79,8 +79,8 @@
 				container.appendChild(webglRenderer.domElement);
  
 				var loader = new THREE.JSONLoader(),
-				callbackKey = function(geometry) {createScene(geometry,  0, 0, 0, 15, "obj/brickwall.jpg")};
-				loader.load("obj/housetex.js", callbackKey);
+				callbackKey = function(geometry) {createScene(geometry,  0, 0, 0, 15, "obj/volcano2.png")};
+				loader.load("obj/volcano.js", callbackKey);
  
 				window.addEventListener('resize', onWindowResize, false);
  
