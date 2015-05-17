@@ -191,7 +191,7 @@ $( "#accordion" ).accordion({
 });
 
 $(function() {
-$( "#texture-accordion" ).accordion({
+$( ".texture-accordion" ).accordion({
   collapsible: true,
   active: false,
   animate:'linear',

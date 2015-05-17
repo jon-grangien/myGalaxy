@@ -16,7 +16,7 @@ canvas {
 	right: 10px;
 	max-width: 230px;
 	min-width: 210px;
-	min-height: 80%;
+	min-height: 680px;
 	max-height: 80%;
 
 	background: rgb(10, 10, 10);
@@ -44,9 +44,10 @@ canvas {
 }
 
 #save_planet_button {
-	width:130px;
+	position: absolute;
+	width: 66%;
 	height: 70px;
-	margin: 0 0% 0 25%;
+	left: 17%;
 	background: rgb(30, 30, 30);
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(121, 173, 143);
@@ -84,30 +85,30 @@ canvas {
 	padding-bottom: 1px;
 }
 
-.img-container {
+#create-planet-texture-label {
 	position: relative;
+	top: 30px;
+	left: 20px;
+	margin-bottom: 30px; /*push down imgs*/
+	color: white;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+}
+
+#create-planet-texture-container {
 	float: left;
-	margin: 15px;
-	width:70px;
-	heigth:90px;
+	left: 20px;
+}
+#create-planet-texture-container img {
+	margin: 10px;
+	max-width: 80px;
+	max-heigth: 80px;
+}
+#create-planet-texture-container img:hover {
+	margin: 0;
+	border: 10px solid rgba(255, 255, 255, 0.9);
 	cursor: pointer;
 }
-.img-container img {
-	width: 100%;
-	opacity: 0.8;
-	/*border-style: solid;
-	border-opacity: 0;*/
 
-}
-#texture-container img:hover {
-	background: rgba(255,255,255,0.4);
-	opacity: 1;
-	/*border-style: solid;
-	border-width: 1px;
-	border-color: white;*/
-	/*width:99%;*/
-
-}
 .tex-img-label {
 	position: absolute;
 	color: white;
@@ -553,21 +554,19 @@ p.user_info {
 	white-space: nowrap;
 }
 
-.accordion-tex-img{
+.edit-texture-image-container{
+	padding-bottom: 350px;
+}
+.edit-texture-image-container img {
 	width:60px;
 	height:60px;
 	margin: 8px;
 }
 
-#edit-texture-image-container{
-	padding-bottom: 350px;
-}
-#edit-texture-image-container img {
-    opacity: 0.9;
-}
-
-#edit-texture-image-container img:hover {
-    opacity: 1.0;
+.edit-texture-image-container img:hover {
+    margin: 0px;
+	border: 8px solid rgba(255, 255, 255, 0.7);
+	border-radius: 3px;
 	-webkit-filter: brightness(150%);
 	cursor: pointer;
 }
@@ -670,25 +669,15 @@ p.user_info {
 	padding-bottom: 250px;
 }
 #build-image-container img {
-    opacity: 0.8;
-    filter: alpha(opacity=40); /* For IE8 and earlier */
-}
-
-#build-image-container img:hover {
-    opacity: 1.0;
-	width: 58px;
-	height:58px; 
-	border-style: solid;
-	border-width: 1px;
-	border-color: white;
-    filter: alpha(opacity=100); /* For IE8 and earlier */
-}
-
-.goose{
 	width:60px;
 	height:60px;
 	margin: 10px;
-	position: center
+}
+
+#build-image-container img:hover {
+	margin: 0;
+	border: 10px solid rgba(255, 255, 255, 0.9);
+	cursor: pointer;
 }
 
 #insideBygg img:hover {
