@@ -6,15 +6,15 @@ var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3
 
 function addLight( h, s, l, x, y, z ) {
 
-	var light = new THREE.PointLight( 0xffffff, 1.5, 4500 );
+	light = new THREE.PointLight( 0xffffff, 1.5, 4500 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
 	sunSphere.add( light );
 
-	var flareColor = new THREE.Color( 0xffffff );
+	flareColor = new THREE.Color( 0xffffff );
 	flareColor.setHSL( h, s, l + 0.5 );
 
-	var lensFlare = new THREE.LensFlare( textureFlare0, 6400, 0.0, THREE.AdditiveBlending, flareColor );
+	lensFlare = new THREE.LensFlare( textureFlare0, 6400, 0.0, THREE.AdditiveBlending, flareColor );
 
 	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
 	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
@@ -26,7 +26,7 @@ function addLight( h, s, l, x, y, z ) {
 	lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending );
 
 	lensFlare.customUpdateCallback = lensFlareUpdateCallback;
-	lensFlare.position.copy( light.position );
+	//lensFlare.position.copy( light.position );
 
 	sunSphere.add( lensFlare );
 }
@@ -488,6 +488,8 @@ function onDocumentMouseDown( event ) {
 	if (!selectPlanetsOk && !buildHouseOk) {
 		return;		//do nothing (disable functionality)
 	}
+
+	visibility(volcano,false);
 
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;

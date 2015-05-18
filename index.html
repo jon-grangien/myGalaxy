@@ -32,6 +32,7 @@
 		<script src="planetJump.js"></script>
 		<script src="placeHouse.js"></script>
 		<script src="functions.js"></script>
+		<script src="loadModels.js"></script>
 		<script src="accordion.js"></script>
 		<script src="arrange-gui-functions.js"></script>
 		<script src="ui-functionality.js"></script>
@@ -642,6 +643,11 @@
 		var start = Date.now();
 		var proceduralSun;
 
+		//Lensflare
+		var lensFlare;
+		var flareColor;
+		var light; 
+
 		// Variables to be used for current object to be changed
 		var activePlanet;
 		var previousObject;
@@ -742,8 +748,13 @@
 		var username = "No one";
 		var userPassword;
 
-		var mesh, zmesh, geometry, scale;
+		//Json import
+		var mesh, geometry;
 		var meshes = [];
+
+		//Json objects
+		var volcano;
+
 
 		init();
 		animate();
@@ -769,6 +780,9 @@
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
 			
+
+
+
 			//Create a material for the planet toruses
 			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0x27241c,opacity:1,transparent:false});
 			
@@ -828,27 +842,8 @@
 			buildHouseOk = false;
 
 
-			//************ LOADERS ********************/
-			loader = new THREE.JSONLoader();
-			//callbackKey = function(geometry) {createScene(geometry,  0, -30, 0, 1, "obj/volcano2.png")};
 			
 
-			/*
-			onProgress = function ( xhr ) {
-				if ( xhr.lengthComputable ) {
-					var percentComplete = xhr.loaded / xhr.total * 100;
-					console.log( Math.round(percentComplete, 2) + '% downloaded' );
-				}
-	        };
-	        onError = function ( xhr ) {
-	        	console.log("build house error " + xhr);
-	        };
-	        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-			lock = new THREE.Object3D();
-			scene.add( lock );
-	        // Loader
-	        loader = new THREE.OBJMTLLoader();
-	        */
 
 			/************** FPS counter *************/
 			stats = new Stats();
