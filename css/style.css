@@ -416,16 +416,16 @@ p.user_info {
 	bottom: 20px;
 	left: 42%;
 	max-width: 16%;
-	min-width: 220px; /*centreringen pajar men pilarna hålls på plats*/
-	heigth: 40px;
+	min-width: 200px;
+	height: 40px;
 }
 
 #jump-system-button {
 	width: 100%;
-	heigth: 100%;
+	height: 100%;
 	background: rgb(30, 30, 30);
 	color: rgb(121, 173, 143);
-	padding: 15px 10px  15px 10px;
+	padding: 10px 15px;
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 3px;	
 	transition: all 0.2s linear;
@@ -444,7 +444,7 @@ p.user_info {
 }
 
 #jump-system-container i {
-	padding: 0 10% 0 10%;
+	padding: 0 5%;
 }
 
 #jump-planet-moon-container {
