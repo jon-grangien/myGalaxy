@@ -780,7 +780,7 @@ function addSun(){
 			    uniforms: { 
 			        tExplosion: {
 			            type: "t", 
-			            value: THREE.ImageUtils.loadTexture( 'explosion.png' )
+			            value: THREE.ImageUtils.loadTexture( 'textures/explosion.png' )
 			        },
 			        time: { // float initialized to 0
 			            type: "f", 

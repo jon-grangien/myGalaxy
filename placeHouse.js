@@ -41,16 +41,6 @@ function showHouse(pos) {
 					}
 				});
 		*/		
-				object.lookAt({ x: 0, y: 0, z: 0 });
-
-				object.receiveShadow = true;
-				object.castShadow = true;
-				object.transparent = true;
-				object.opacity = 0.2;
-
-
-
-
 
 		});
 	}
@@ -75,8 +65,6 @@ function createHouse(pos) {
 
 				object.receiveShadow = true;
 				object.castShadow = true;
-
-
 				meshes.push(object);
 
 		});
@@ -94,10 +82,8 @@ function createHouse(pos) {
 				object.position.copy( pos );
 				object.scale.set(0.5, 0.5, 0.5);
 				object.lookAt({ x: 0, y: 0, z: 0 });
-
 				object.receiveShadow = true;
 				object.castShadow = true;
-
 
 				meshes.push(object);
 
