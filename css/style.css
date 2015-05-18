@@ -16,8 +16,8 @@ canvas {
 	right: 10px;
 	max-width: 230px;
 	min-width: 210px;
-	min-height: 680px;
-	max-height: 80%;
+	min-height: 500px;
+	max-height: 510px;
 
 	background: rgb(10, 10, 10);
 	border: 1px solid rgba(100, 100, 100,0.6);
@@ -32,11 +32,12 @@ canvas {
 	margin-left: 20px;
 	margin-bottom: 10px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 15px;
 }
 
 #save-planet-container {
 	position: absolute;
-	bottom: 0px;
+	bottom: 10px;
 	width: 100%;
 	height: 15%;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
@@ -46,7 +47,7 @@ canvas {
 #save_planet_button {
 	position: absolute;
 	width: 66%;
-	height: 70px;
+	height: 50px;
 	left: 17%;
 	background: rgb(30, 30, 30);
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
@@ -87,25 +88,31 @@ canvas {
 
 #create-planet-texture-label {
 	position: relative;
-	top: 30px;
+	top: 10px;
 	left: 20px;
-	margin-bottom: 30px; /*push down imgs*/
+	margin-bottom: 10px; /*push down imgs*/
 	color: white;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 }
 
 #create-planet-texture-container {
-	float: left;
-	left: 20px;
+	position: absolute;
+	min-width: 90%;
+	/*max-width: 95%;*/
+	max-height: 150px;
+	left: 7%;
+	max-height: 30%;
 }
 #create-planet-texture-container img {
-	margin: 10px;
-	max-width: 80px;
-	max-heigth: 80px;
+	/*float: right;*/
+	position: relative;
+	margin: 3px;
+	max-width: 50px;
+	/*max-height: 80px;*/
 }
 #create-planet-texture-container img:hover {
 	margin: 0;
-	border: 10px solid rgba(255, 255, 255, 0.9);
+	border: 3px solid rgba(255, 255, 255, 0.9);
 	cursor: pointer;
 }
 
@@ -165,13 +172,14 @@ canvas {
 .planet_rotation_slider {
 	position: relative;
 	width: 80%;
+	heiht: 50%;
 	left: 20px;
 }
 
-.planet_radius_container p,
-.planet_size_container p,
-.planet_rotation_container p{
-	position: relative;
+.planet-radius-container,
+.planet-size-container,
+.planet-rotation-container{
+	min-height: 7%;
 }
 
 .meteor-check-container {
@@ -183,6 +191,7 @@ canvas {
 	color: white;
 	margin-left: 10px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 15px;
 }
 
 /************* LOGIN/REGISTER GUI **************/
@@ -484,6 +493,7 @@ p.user_info {
 	color: white;
 	margin-left: 10px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 15px;
 }
 
 /**** EDIT PLANET ****/
@@ -530,8 +540,8 @@ p.user_info {
 	position: absolute;
 	top: 1%;
 	right: 10px;
-	max-width: 245px;
-	min-width: 240px;
+	max-width: 200px;
+	min-width: 190px;
 	min-height: 450px;
 }
 
@@ -553,19 +563,24 @@ p.user_info {
 	border-bottom-width: 0;
 	white-space: nowrap;
 }
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: left;
+    padding: 8px 5px;
+    text-decoration: none;
+}
 
 #edit-texture-image-container{
-	padding-bottom: 350px;
+	padding-bottom: 230px;
 }
 #edit-texture-image-container img {
-	width:60px;
-	height:60px;
-	margin: 8px;
+	width: 40px;
+	height: 40px;
+	margin: 5px;
 }
 
 #edit-texture-image-container img:hover {
     margin: 0px;
-	border: 8px solid rgba(255, 255, 255, 0.7);
+	border: 5px solid rgba(255, 255, 255, 0.7);
 	border-radius: 3px;
 	-webkit-filter: brightness(150%);
 	cursor: pointer;
@@ -590,12 +605,12 @@ p.user_info {
 
 #add-moon-button {
 	position: relative;
-	width: 50%;
-	left: 25%;
-	top: 20px;
+	width: 75%;
+	left: 12.5%;
+	top: 10px;
 	cursor: pointer;	
 	background: rgb(30, 30, 30);
-	padding: 30px 5px  30px 5px;
+	padding: 15px 5px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(121, 173, 143);
 	font-size: 18px;	
@@ -653,7 +668,7 @@ p.user_info {
 
 /******** PLANET BUILD GUI ********/
 #accordion-container {
-	position: aboslute;
+	/*width: 90%;*/
 	bottom: 10%;
 	left: 10%;
 	z-index: 5;
@@ -662,27 +677,25 @@ p.user_info {
 
 #insideBygg img {
     opacity: 0.4;
-    filter: alpha(opacity=40);
 }
 
 #build-image-container{
-	padding-bottom: 250px;
+	padding-bottom: 180px;
 }
 #build-image-container img {
-	width:60px;
-	height:60px;
-	margin: 10px;
+	width: 40px;
+	height: 40px;
+	margin: 5px;
 }
 
 #build-image-container img:hover {
 	margin: 0;
-	border: 10px solid rgba(255, 255, 255, 0.9);
+	border: 5px solid rgba(255, 255, 255, 0.9);
 	cursor: pointer;
 }
 
 #insideBygg img:hover {
     opacity: 1.0;
-    filter: alpha(opacity=100);
 }
 
 /*animations*/
