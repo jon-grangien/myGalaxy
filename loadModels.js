@@ -20,7 +20,7 @@ loader.load("obj/volcano.js",
 		});
 
 //************* load house ***********************
-loader.load("obj/volcano2.js", 
+loader.load("obj/housetex.js", 
 
 			function(geometry) {
 

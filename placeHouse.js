@@ -83,11 +83,11 @@ function createHouse(pos) {
 		}
 
 		if(building == 2){
-			loader.load("obj/volcano2.js", 
+			loader.load("obj/housetex.js", 
 
 				function(geometry) {
 
-					object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+					object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/brickwall.jpg")}));
 					activePlanet.children[4].add(object);
 					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
 					object.position.copy( pos );
