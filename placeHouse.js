@@ -2,10 +2,21 @@ function showHouse(pos) {
 	if(jumpPlanetOk) {
 		console.log("show house planet");
 
-		visibility(volcano,true);
-		//volcano.materials[0].opacity = 0.2;
-		volcano.position.copy( pos );
-		volcano.lookAt({ x: 0, y: 0, z: 0 });
+		if(building == 1){
+			visibility(volcano,true);
+			//volcano.materials[0].opacity = 0.2;
+			volcano.position.copy( pos );
+			volcano.lookAt({ x: 0, y: 0, z: 0 });	
+		}
+
+		if(building == 2){
+			visibility(volcano2,true);
+			//volcano.materials[0].opacity = 0.2;
+			volcano2.position.copy( pos );
+			volcano2.lookAt({ x: 0, y: 0, z: 0 });	
+		}
+
+		
 
 		
 	} else if(jumpMoonOk) {
@@ -52,22 +63,45 @@ function createHouse(pos) {
 
 	if(jumpPlanetOk) {
 
-		loader.load("obj/volcano.js", 
+		if(building == 1){
+			loader.load("obj/volcano.js", 
 
-			function(geometry) {
+				function(geometry) {
 
-				object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/volcano.png")}));
-				activePlanet.children[4].add(object);
-				activePlanet.children[5].remove(activePlanet.children[5].children[0]);
-				object.position.copy( pos );
-				object.scale.set(0.5, 0.5, 0.5);
-				object.lookAt({ x: 0, y: 0, z: 0 });
+					object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/volcano.png")}));
+					activePlanet.children[4].add(object);
+					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
+					object.position.copy( pos );
+					object.scale.set(0.5, 0.5, 0.5);
+					object.lookAt({ x: 0, y: 0, z: 0 });
 
-				object.receiveShadow = true;
-				object.castShadow = true;
-				meshes.push(object);
+					object.receiveShadow = true;
+					object.castShadow = true;
+					meshes.push(object);
 
-		});
+			});	
+		}
+
+		if(building == 2){
+			loader.load("obj/volcano2.js", 
+
+				function(geometry) {
+
+					object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+					activePlanet.children[4].add(object);
+					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
+					object.position.copy( pos );
+					object.scale.set(0.5, 0.5, 0.5);
+					object.lookAt({ x: 0, y: 0, z: 0 });
+
+					object.receiveShadow = true;
+					object.castShadow = true;
+					meshes.push(object);
+
+			});	
+		}
+
+		
 
 	} else if(jumpMoonOk) {
 		console.log("create house moon");

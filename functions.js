@@ -2,7 +2,7 @@ var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0
 var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
 var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
 
-				
+
 
 function addLight( h, s, l, x, y, z ) {
 
@@ -14,7 +14,7 @@ function addLight( h, s, l, x, y, z ) {
 	var flareColor = new THREE.Color( 0xffffff );
 	flareColor.setHSL( h, s, l + 0.5 );
 
-	var lensFlare = new THREE.LensFlare( textureFlare0, 6400, 0.0, THREE.AdditiveBlending, flareColor );
+	lensFlare = new THREE.LensFlare( textureFlare0, 6400, 0.0, THREE.AdditiveBlending, flareColor );
 
 	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
 	lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
@@ -29,6 +29,85 @@ function addLight( h, s, l, x, y, z ) {
 	lensFlare.position.copy( light.position );
 
 	sunSphere.add( lensFlare );
+	
+}
+
+function addSun(){
+	/************* SUN ****************/
+	/* create custom material from the shader code above
+	that is within specially labeled script tags */
+	customSunMaterial = new THREE.ShaderMaterial( {
+	    uniforms: {
+			//cameraPos: { type: "v3", value: new THREE.Vector3() }
+		},
+		vertexShader:   document.getElementById( 'vertexShaderSun'   ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShaderSun' ).textContent,
+		side: THREE.BackSide,
+		blending: THREE.AdditiveBlending,
+		transparent: true
+	}   );
+
+
+		
+	sunGeometry = new THREE.SphereGeometry( 19, 54, 54 );
+	sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
+	activePlanet = sunSphere;
+	clickedObject = sunSphere;
+
+
+	//Procedural Sun	
+    proceduralSunMaterial = new THREE.ShaderMaterial( {
+
+	    uniforms: { 
+	        tExplosion: {
+	            type: "t", 
+	            value: THREE.ImageUtils.loadTexture( 'textures/explosion.png' )
+	        },
+	        time: { // float initialized to 0
+	            type: "f", 
+	            value: 0.0 
+	        }
+	    },
+	    vertexShader: document.getElementById( 'vertexShaderProcedural' ).textContent,
+	    fragmentShader: document.getElementById( 'fragmentShaderProcedural' ).textContent,
+	    side: THREE.BackSide,
+		//blending: THREE.AdditiveBlending,
+	    transparent: true
+	    
+	} );
+
+
+    // create a sphere and assign the material
+    proceduralSun = new THREE.Mesh( 
+        new THREE.IcosahedronGeometry( 12, 5 ), 
+        proceduralSunMaterial 
+    );
+	sunSphere.add(proceduralSun);
+    
+
+	galaxyGroup = new THREE.Object3D;
+	rotationGroup = new THREE.Object3D;
+	galaxyGroup.add(sunSphere);
+	//clickableObjects.push(sunSphere);
+
+
+	rotationGroup.add(galaxyGroup);
+
+	scene.add(rotationGroup);
+
+	//Origo
+	addLight( 0.55, 0.9, 0.5, 0, 0.5, 1 );
+	addLight( 0.08, 0.8, 0.5, 1, -0.5, 0 );
+
+}
+
+function turnOnLensFlare(bool){
+	if(!bool)
+		proceduralSun.material.side = THREE.FrontSide;
+	else
+		proceduralSun.material.side = THREE.BackSide;
+
+	visibility(lensFlare, bool);
 }
 
 function onWindowResize() {
@@ -490,6 +569,7 @@ function onDocumentMouseDown( event ) {
 	}
 
 	visibility(volcano,false);
+	visibility(volcano2,false);
 
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
@@ -751,81 +831,19 @@ function loadStars(){
 }
 
 
-function addSun(){
-	/************* SUN ****************/
-			/* create custom material from the shader code above
-			that is within specially labeled script tags */
-			customSunMaterial = new THREE.ShaderMaterial( {
-			    uniforms: {
-					//cameraPos: { type: "v3", value: new THREE.Vector3() }
-				},
-				vertexShader:   document.getElementById( 'vertexShaderSun'   ).textContent,
-				fragmentShader: document.getElementById( 'fragmentShaderSun' ).textContent,
-				side: THREE.BackSide,
-				blending: THREE.AdditiveBlending,
-				transparent: true
-			}   );
 
-
-				
-			sunGeometry = new THREE.SphereGeometry( 19, 54, 54 );
-			sunSphere = new THREE.Mesh( sunGeometry, customSunMaterial );
-			activePlanet = sunSphere;
-			clickedObject = sunSphere;
-
-
-			//Procedural Sun	
-		    proceduralSunMaterial = new THREE.ShaderMaterial( {
-
-			    uniforms: { 
-			        tExplosion: {
-			            type: "t", 
-			            value: THREE.ImageUtils.loadTexture( 'textures/explosion.png' )
-			        },
-			        time: { // float initialized to 0
-			            type: "f", 
-			            value: 0.0 
-			        }
-			    },
-			    vertexShader: document.getElementById( 'vertexShaderProcedural' ).textContent,
-			    fragmentShader: document.getElementById( 'fragmentShaderProcedural' ).textContent,
-			    side: THREE.BackSide,
-				//blending: THREE.AdditiveBlending,
-			    transparent: true
-			    
-			} );
-
-		
-		    // create a sphere and assign the material
-		    proceduralSun = new THREE.Mesh( 
-		        new THREE.IcosahedronGeometry( 12, 5 ), 
-		        proceduralSunMaterial 
-		    );
-		    sunSphere.add(proceduralSun);
-
-			galaxyGroup = new THREE.Object3D;
-			rotationGroup = new THREE.Object3D;
-			galaxyGroup.add(sunSphere);
-			//clickableObjects.push(sunSphere);
-
-
-			rotationGroup.add(galaxyGroup);
-
-			scene.add(rotationGroup);
-
-			//Origo
-			addLight( 0.55, 0.9, 0.5, 0, 0.5, 1 );
-			addLight( 0.08, 0.8, 0.5, 1, -0.5, 0 );
-
-		}
 
 function showBuild(input){
 	if(input == 1){
 		console.log('GOOOSE'); 
+		buildHouseOk = true;
+		building = input;
 	}
 
 	if(input == 2){
 		console.log('TOWER'); 
+		buildHouseOk = true;
+		building = input;
 	}
 
 	if(input == 3){

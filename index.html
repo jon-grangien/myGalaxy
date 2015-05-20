@@ -669,6 +669,15 @@
 		var onProgress;
 		var onError;
 		var loader;
+		var building;
+
+		//Json import
+		var mesh, geometry;
+		var meshes = [];
+
+		//Json objects
+		var volcano;
+		var volcano2;
 
 		//Temporary movement variables
 		var posx, posz, roty, timer = 0;
@@ -747,12 +756,7 @@
 		var username = "No one";
 		var userPassword;
 
-		//Json import
-		var mesh, geometry;
-		var meshes = [];
-
-		//Json objects
-		var volcano;
+		
 
 
 		init();
@@ -832,6 +836,7 @@
 			});
 
 			addSun();
+			turnOnLensFlare(true);
 
 			loadStars();
 			for (var i = 0; i < stars.length; ++i){
