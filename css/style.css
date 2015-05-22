@@ -144,7 +144,7 @@ img{
 
 .add-edit-planet-text {
 	margin: 0;
-	padding: 0 0 10px 0;
+	padding: 5px 0 10px 0;
 	font-size: 15px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 }
@@ -475,10 +475,12 @@ p.user_info {
 
 .jump-planet-moon-buttons {
 	float: right;
-	width: 20%;
+	/*min-width: 45px;*/
+	/*width: 20%;*/
+	width: 100px;
 	heigth: 100%;
 	padding: 15px 0px 15px 0px;
-	margin: 0 10px;
+	margin: 0 0px;
 	background: rgb(30, 30, 30);
 	color: rgb(245, 229, 215);
 	border: 1px solid rgb( 0,  0, 0);	

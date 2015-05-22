@@ -8,6 +8,7 @@ function initiallyHideMenus() {
     $('#jump-planet-button').hide();
     $('#jump-moon-button').hide();
     $('#edit-planet-tabs').hide();
+    $('#build-planet-button').hide();
 }
 
 function menusOnLogin() {
@@ -67,6 +68,8 @@ function buttonsOnAddMoon() {
 // When zoomed in on planet
 function buttonsOnViewPlanet() {
     $('#jump-planet-button').hide();
+    $('#edit-planet-button').hide();
+    $('#build-planet-button').show();
 
     if(thereAreMoons)
         $('#jump-moon-button').show();
@@ -79,8 +82,12 @@ function buttonsOnViewMoon() {
 
 // When viewing system
 function buttonsOnViewSystem() {
-    if(thereArePlanets)
+    $('#build-planet-button').hide();
+
+    if(thereArePlanets) {
         $('#jump-planet-button').show();
+        $('#edit-planet-button').show();
+    }
 
     if(thereAreMoons)
         $('#jump-moon-button').show();
