@@ -4,7 +4,7 @@ function initiallyHideMenus() {
     $('.edit-created-planet-container').hide();
     $('.bygg-main').hide();
     $('#edit-existing-planet-container').hide();
-    $('#edit-existing-planet-button-container').hide();
+    $('#edit-planet-button').hide();
     $('#jump-planet-button').hide();
     $('#jump-moon-button').hide();
     $('#edit-planet-tabs').hide();
@@ -42,20 +42,20 @@ function menusOnSave() {
 
 // When planet selected and editable
 function menusOnPlanetActive() {
-    $('#edit-existing-planet-button-container').show();
+    $('#edit-planet-button').show();
 }
 
 // When edit-planet button is pressed
 function menusOnEditPlanet() {
     $('#add_planet_button').hide();
-    $('#edit-existing-planet-button-container').hide();
+    $('#edit-planet-button').hide();
     $('#edit-planet-tabs').show();
     $("#jump-planet-moon-container").css({"right": "220px" });  //move out
 }
 
 function menusOnEditDone() {
     $('#add_planet_button').show();
-    $('#edit-existing-planet-button-container').show();
+    $('#edit-planet-button').show();
     // $('#edit-existing-planet-container').hide("fast");
     $('#edit-planet-tabs').hide();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in

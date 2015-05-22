@@ -19,8 +19,6 @@ $(function() {
 					} else {
 						console.log("error: path not found");
 					}
-					
-					
 				}
 			}
 		}
@@ -227,7 +225,7 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {     
-    $('#edit_planet_button').click(function() {
+    $('#edit-planet-button').click(function() {
         selectPlanetsOk = false;
 
         var radius;
