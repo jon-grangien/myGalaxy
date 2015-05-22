@@ -58,7 +58,7 @@ canvas {
 	box-shadow:	
 		0pt 2px 5px rgba(10, 10, 30,  0.7),	
 		0px 0px 6px 5px rgba(100, 100, 100, 0.3) inset;
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 #save_planet_button:hover {
 	background: rgba(194, 234, 237, 1);
@@ -167,7 +167,7 @@ canvas {
 	/*box-shadow:	
 		0pt 2px 5px rgba(10, 10, 30,  0.7),	
 		0px 0px 4px 5px rgba(50, 50, 50, 0.1) inset;*/
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 #add-button-container button:hover {
 	background: rgb(30, 30, 30);
@@ -234,7 +234,7 @@ canvas {
 	box-sizing: content-box;
 	border-radius: 1px;
 	box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6) inset;
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 #account-gui-wrapper input:not([type="checkbox"]):active,
 #account-gui-wrapper input:not([type="checkbox"]):focus {
@@ -258,7 +258,7 @@ canvas {
 		0px 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
 		0px 0px 0px 2px rgb(254, 254, 254),
 		0px 1px 1px 3px rgb(210, 210, 210);*/
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 #account-gui-wrapper p.button input:hover {
 	background: rgba(194, 234, 237, 1);
@@ -330,7 +330,7 @@ p.change_link{
 	text-decoration: none;
 	border-radius: 4px;
 	border: 1px solid rgb(0, 0, 0);
-	transition: all 0.4s  linear;
+	transition: all 0.1s  linear;
 }
 #account-gui-wrapper p.change_link a:hover {
 	color: rgb(57, 191, 215);
@@ -410,7 +410,7 @@ p.user_info {
 	font-size: 13px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;	
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 #user_menu button:hover {
 	background: rgba(194, 234, 237, 1);
@@ -452,7 +452,7 @@ p.user_info {
 	padding: 10px 15px;
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 3px;	
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 #jump-system-button:hover {
 	background: rgba(194, 234, 237, 1);
@@ -489,11 +489,12 @@ p.user_info {
 	color: rgb(245, 229, 215);
 	border: 1px solid rgb( 0,  0, 0);	
 	border-radius: 7px;	
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 .jump-planet-moon-buttons:hover {
 	background: rgba(194, 234, 237, 1);
 	color: rgb(10, 10, 10);
+	transition: all 0.1s linear;
 }
 .jump-planet-moon-buttons:active,
 .jump-planet-moon-buttons:focus {
@@ -536,7 +537,7 @@ p.user_info {
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 #edit_planet_button:hover {
 	background: rgb(30, 30, 30);
@@ -631,7 +632,7 @@ p.user_info {
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);
 	border-radius: 7px;
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 #add-moon-button:hover {
 	background: rgba(194, 234, 237, 1);
@@ -666,7 +667,7 @@ p.user_info {
 	font-size: 18px;
 	border: 1px solid rgb( 0,  0, 0);	
 	border-radius: 3px;	
-	transition: all 0.2s linear;
+	transition: all 0.1s linear;
 }
 .edit-done-button:hover {
 	background: rgba(194, 234, 237, 1);
