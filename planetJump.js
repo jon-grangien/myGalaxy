@@ -212,8 +212,6 @@ function moonJump(){
 
 //Aktiveras när man vill gå tillbaka till att ha solen centrerad.
 function jumpToSun(){
-	buttonsOnViewSystem();
-
 	if(sunSphere != previousObject || resetSolarView) {
 		if(timer == 0){
 			//Timern börjar på pi och går ner till 0.

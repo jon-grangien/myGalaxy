@@ -261,24 +261,34 @@ $(document).ready(function() {
 
 $(document).ready(function() {     
     $('#jump-planet-button').click(function() {
-    	planetBools();
-
-        buttonsOnViewPlanet();
+    	if(!jumpInAction) {
+			planetBools();
+		    buttonsOnViewPlanet();
+		}
     });    
 });
 
 $(document).ready(function() {     
     $('#jump-moon-button').click(function() {
-    	moonBools();
+    	if(!jumpInAction) {
+	    	moonBools();
+	        buttonsOnViewMoon();
+	    }
+    });    
+});
 
-        buttonsOnViewMoon();
+$(document).ready(function() {     
+    $('#jump-system-button').click(function() {
+    	if(!jumpInAction) {
+	    	solarBools();
+	        buttonsOnViewSystem();
+	    }
     });    
 });
 
 $(document).ready(function() {     
     $('#build-planet-button').click(function() {
     	selectPlanetsOk = false;
-    	
         menusOnBuildPlanet();
     });    
 });
@@ -286,7 +296,6 @@ $(document).ready(function() {
 $(document).ready(function() {     
     $('.edit-done-button').click(function() {
         selectPlanetsOk = true;
-
         menusOnEditDone();
     });    
 });

@@ -32,6 +32,7 @@ function menusOnLogout() {
 function menusOnCreatePlanet() {
 	$('#add-planet-button').hide();
     $('.edit-created-planet-container').show("fast");
+    $('#jump-planet-button').show();
     $("#jump-planet-moon-container").css({"right": "240px" });  //move out 
 }
 
@@ -61,40 +62,58 @@ function menusOnBuildPlanet() {
     $('#edit-planet-button').hide();
     $('#accordion-container').show();
     $("#jump-planet-moon-container").css({"right": "240px" });  //move out
-    console.log("build planet");
 }
 
 function menusOnEditDone() {
-    $('#add-planet-button').show();
-    $('#edit-planet-button').show();
-    $('#build-planet-button').show();
     $('#edit-planet-tabs').hide();
     $('#accordion-container').hide();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in
+
+    if(!jumpPlanetOk && !jumpMoonOk) {     //not viewing planet/moon
+        $('#edit-planet-button').show();
+        $('#add-planet-button').show();
+    } else {
+        $('#build-planet-button').show();   //viewing planet/moon
+    }
+
 }
 
 function buttonsOnAddMoon() {
     $('#jump-moon-button').show();
 }
+
 // When zoomed in on planet
 function buttonsOnViewPlanet() {
+    $('#add-planet-button').hide();
     $('#jump-planet-button').hide();
     $('#build-planet-button').show();
+    $('#edit-planet-button').hide();
+    $('#edit-planet-tabs').hide();
+    $('#accordion-container').hide();
 
     if(thereAreMoons)
         $('#jump-moon-button').show();
-
-    console.log("view planet");
 }
 
 // When zoomed in on moon
 function buttonsOnViewMoon() {
+    $('#add-planet-button').hide();
     $('#jump-moon-button').hide();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
+    $('#build-planet-button').show();
+    $('#edit-planet-button').hide();
+    $('#edit-planet-tabs').hide();
+    $('#accordion-container').hide();
 }
 
 // When viewing system
 function buttonsOnViewSystem() {
     $('#build-planet-button').hide();
+    $('#add-planet-button').show();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
+    $('#accordion-container').hide();
+
+    console.log("viewing system");
 
     if(thereArePlanets) {
         $('#jump-planet-button').show();
