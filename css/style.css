@@ -142,10 +142,10 @@ canvas {
 	min-heigth: 100px;
 	max-heigth: 100px;
 	cursor: pointer;	
-	background: rgb(40, 40, 40);
+	background: rgb(30, 30, 30);
 	padding: 20px 5px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	color: rgb(121, 173, 143);
+	color: rgb(245, 229, 215);
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;	
@@ -155,8 +155,8 @@ canvas {
 	transition: all 0.2s linear;
 }
 #add-button-container button:hover {
-	background: rgba(194, 234, 237, 1);
-	color: rgb(10, 10, 10);
+	background: rgb(30, 30, 30);
+	color: rgb(245, 229, 215);;
 }
 #add-button-container button:active,
 #add-button-container button:focus {
@@ -517,15 +517,15 @@ p.user_info {
 	background: rgb(30, 30, 30);
 	padding: 20px 10px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
-	color: rgb(121, 173, 143);
+	color: rgb(245, 229, 215);
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;
 	transition: all 0.2s linear;
 }
 #edit_planet_button:hover {
-	background: rgba(194, 234, 237, 1);
-	color: rgb(10, 10, 10);
+	background: rgb(30, 30, 30);
+	color: rgb(245, 229, 215);
 }
 #edit_planet_button:active,
 #edit_planet_button:focus {
