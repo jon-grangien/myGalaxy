@@ -277,6 +277,8 @@ $(document).ready(function() {
 
 $(document).ready(function() {     
     $('#build-planet-button').click(function() {
+    	selectPlanetsOk = false;
+    	
         menusOnBuildPlanet();
     });    
 });
