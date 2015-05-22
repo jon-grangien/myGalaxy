@@ -415,7 +415,7 @@
 		<div id="add-button-container">
 			<button id="add-planet-button">
 				<i class="fa fa-plus fa-fw fa-2x"></i>
-				Create planet
+				<p class="add-edit-planet-text">Create <br />planet</p>
 			</button>
 		</div>
 
@@ -620,10 +620,6 @@
 				<i class="fa fa-eye fa-fw"></i>
 				View moon
 			</button>
-			<button class="jump-planet-moon-buttons" id="place-house-button" onClick="buildHouse()">
-				<i class="fa fa-building-o fa-fw"></i>
-				Place house
-			</button>	
 		</div>
 		<script>
 
@@ -653,7 +649,6 @@
 		var activeMoon;
 		var resetSolarView;
 		var smallJump;
-		var orbitsMother = [];
 		var customTexture;
 		var activeRotationSpeed;
 		var jumpPlanetOk;
