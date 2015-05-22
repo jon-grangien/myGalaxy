@@ -669,16 +669,17 @@ p.user_info {
 }
 
 /******** PLANET BUILD GUI ********/
-#accordion-container {
-	/*width: 90%;*/
-	bottom: 10%;
-	left: 10%;
-	z-index: 5;
+#accordion-container {	/*same as edit-planet-tabs*/
+	position: absolute;
+	top: 1%;
+	right: 10px;
+	max-width: 200px;
+	min-width: 190px;
+	min-height: 450px;
 	
 }
 
 #insideBygg img {
-
 	padding: 0px;
 	margin: 0px;
 	opacity: 0.4;
@@ -687,7 +688,6 @@ p.user_info {
 }
 
 #build-image-container{
-	
 	background: rgb(40,40,40);
 	padding: 0px;
 	margin: 0px;

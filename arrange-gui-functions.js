@@ -9,6 +9,7 @@ function initiallyHideMenus() {
     $('#jump-moon-button').hide();
     $('#edit-planet-tabs').hide();
     $('#build-planet-button').hide();
+    $('#accordion-container').hide();
 }
 
 function menusOnLogin() {
@@ -29,13 +30,13 @@ function menusOnLogout() {
 }
 
 function menusOnCreatePlanet() {
-	$('#add_planet_button').hide();
+	$('#add-planet-button').hide();
     $('.edit-created-planet-container').show("fast");
-    $("#jump-planet-moon-container").css({"right": "220px" });  //move out 
+    $("#jump-planet-moon-container").css({"right": "240px" });  //move out 
 }
 
 function menusOnSave() {
-    $('#add_planet_button').show();
+    $('#add-planet-button').show();
     $('.edit-created-planet-container').hide("fast");
     $('#jump-planet-button').show();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in
@@ -48,17 +49,27 @@ function menusOnPlanetActive() {
 
 // When edit-planet button is pressed
 function menusOnEditPlanet() {
-    $('#add_planet_button').hide();
+    $('#add-planet-button').hide();
     $('#edit-planet-button').hide();
     $('#edit-planet-tabs').show();
-    $("#jump-planet-moon-container").css({"right": "220px" });  //move out
+    $("#jump-planet-moon-container").css({"right": "240px" });  //move out
+}
+
+function menusOnBuildPlanet() {
+    $('#build-planet-button').hide();
+    $('#add-planet-button').hide();
+    $('#edit-planet-button').hide();
+    $('#accordion-container').show();
+    $("#jump-planet-moon-container").css({"right": "240px" });  //move out
+    console.log("build planet");
 }
 
 function menusOnEditDone() {
-    $('#add_planet_button').show();
+    $('#add-planet-button').show();
     $('#edit-planet-button').show();
-    // $('#edit-existing-planet-container').hide("fast");
+    $('#build-planet-button').show();
     $('#edit-planet-tabs').hide();
+    $('#accordion-container').hide();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in
 }
 
@@ -68,11 +79,12 @@ function buttonsOnAddMoon() {
 // When zoomed in on planet
 function buttonsOnViewPlanet() {
     $('#jump-planet-button').hide();
-    $('#edit-planet-button').hide();
     $('#build-planet-button').show();
 
     if(thereAreMoons)
         $('#jump-moon-button').show();
+
+    console.log("view planet");
 }
 
 // When zoomed in on moon

@@ -260,6 +260,28 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {     
+    $('#jump-planet-button').click(function() {
+    	planetBools();
+
+        buttonsOnViewPlanet();
+    });    
+});
+
+$(document).ready(function() {     
+    $('#jump-moon-button').click(function() {
+    	moonBools();
+
+        buttonsOnViewMoon();
+    });    
+});
+
+$(document).ready(function() {     
+    $('#build-planet-button').click(function() {
+        menusOnBuildPlanet();
+    });    
+});
+
+$(document).ready(function() {     
     $('.edit-done-button').click(function() {
         selectPlanetsOk = true;
 
@@ -297,6 +319,10 @@ $(document).ready(function() {
 	})
 
 	$(".edit-done-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#build-planet-button").mouseup(function(){
 	    $(this).blur();
 	})
 });
