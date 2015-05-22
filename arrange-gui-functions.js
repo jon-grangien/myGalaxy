@@ -7,7 +7,6 @@ function initiallyHideMenus() {
     $('#edit-existing-planet-button-container').hide();
     $('#jump-planet-button').hide();
     $('#jump-moon-button').hide();
-    $('#place-house-button').hide();
     $('#edit-planet-tabs').hide();
 }
 
@@ -51,7 +50,6 @@ function menusOnEditPlanet() {
     $('#add_planet_button').hide();
     $('#edit-existing-planet-button-container').hide();
     $('#edit-planet-tabs').show();
-    $('#place-house-button').show();
     $("#jump-planet-moon-container").css({"right": "220px" });  //move out
 }
 
@@ -60,7 +58,6 @@ function menusOnEditDone() {
     $('#edit-existing-planet-button-container').show();
     // $('#edit-existing-planet-container').hide("fast");
     $('#edit-planet-tabs').hide();
-    $('#place-house-button').hide();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in
 }
 
