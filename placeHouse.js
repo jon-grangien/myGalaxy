@@ -2,69 +2,58 @@ function showHouse(pos) {
 	if(jumpPlanetOk) {
 		console.log("show house planet");
 
-		loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
-		activePlanet.children[5].add(object);
-		object.position.copy( pos );
-		object.scale.x = 0.01;
-		object.scale.y = 0.01;
-		object.scale.z = 0.01;
+		if(building == 1){
+			visibility(volcano,true);
+			//volcano.materials[0].opacity = 0.2;
+			volcano.position.copy( pos );
+			volcano.lookAt({ x: 0, y: 0, z: 0 });	
+		}
 
-		object.traverse( function ( child ) {
-			if ( child instanceof THREE.Mesh ) {
-				var  geometry = child.geometry;
-				material = child.material;
-				mesh = new THREE.Mesh(geometry, material);
-				var customMaterial = new THREE.ShaderMaterial( 
-				{
-					uniforms: {  },
-					vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-					fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
-					side: THREE.BackSide,
-					blending: THREE.AdditiveBlending,
-					transparent: true
+		if(building == 2){
+			visibility(volcano2,true);
+			//volcano.materials[0].opacity = 0.2;
+			volcano2.position.copy( pos );
+			volcano2.lookAt({ x: 0, y: 0, z: 0 });	
+		}
 
-				}   );
-				//child.material = customMaterial;
-				child.material.wireframe = true;
-			}
-		});
-		object.lookAt({ x: 0, y: 0, z: 0 });
 		
-		}, onProgress, onError);
+
 		
 	} else if(jumpMoonOk) {
 		console.log("show house moon");
 
-		loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
-		activeMoon.children[3].add(object);
-		object.position.copy( pos );
-		object.scale.x = 0.01;
-		object.scale.y = 0.01;
-		object.scale.z = 0.01;
+		loader.load("obj/volcano.js", 
 
-		object.traverse( function ( child ) {
+			function(geometry) {
 
-			if ( child instanceof THREE.Mesh ) {
-				var  geometry = child.geometry;
-				material = child.material;
-				mesh = new THREE.Mesh(geometry, material);
-				var customMaterial = new THREE.ShaderMaterial( 
-				{
-					uniforms: {  },
-					vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-					fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
-					side: THREE.BackSide,
-					blending: THREE.AdditiveBlending,
-					transparent: true
 
-				}   );
-				//child.material = customMaterial;
-				child.material.wireframe = true;
-			}
+				visibility(volcano,true);
+				volcano.position.copy( pos );
+				volcano.lookAt({ x: 0, y: 0, z: 0 });
+
+/*
+				object.traverse( function ( child ) {
+					if ( child instanceof THREE.Mesh ) {
+						var  geometry = child.geometry;
+						material = child.material;
+						mesh = new THREE.Mesh(geometry, material);
+						var customMaterial = new THREE.ShaderMaterial( 
+						{
+							uniforms: {  },
+							vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+							fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+							side: THREE.BackSide,
+							blending: THREE.AdditiveBlending,
+							transparent: true
+
+						}   );
+						//child.material = customMaterial;
+						child.material.wireframe = true;
+					}
+				});
+		*/		
+
 		});
-		object.lookAt({ x: 0, y: 0, z: 0 });
-		
-		}, onProgress, onError);
 	}
 	
 }
@@ -73,33 +62,66 @@ function createHouse(pos) {
 	console.log("create house planet");
 
 	if(jumpPlanetOk) {
-		loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
-			activePlanet.children[4].add(object);
-			activePlanet.children[5].remove(activePlanet.children[5].children[0]);
-			object.position.copy( pos );
-			object.scale.x = 0.01;
-			object.scale.y = 0.01;
-			object.scale.z = 0.01;
-			
-			object.lookAt({ x: 0, y: 0, z: 0 });
-			
-					
-		}, onProgress, onError);
+
+		if(building == 1){
+			loader.load("obj/volcano.js", 
+
+				function(geometry) {
+
+					object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/volcano.png")}));
+					activePlanet.children[4].add(object);
+					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
+					object.position.copy( pos );
+					object.scale.set(0.5, 0.5, 0.5);
+					object.lookAt({ x: 0, y: 0, z: 0 });
+
+					object.receiveShadow = true;
+					object.castShadow = true;
+					meshes.push(object);
+
+			});	
+		}
+
+		if(building == 2){
+			loader.load("obj/housetex.js", 
+
+				function(geometry) {
+
+					object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/brickwall.jpg")}));
+					activePlanet.children[4].add(object);
+					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
+					object.position.copy( pos );
+					object.scale.set(0.5, 0.5, 0.5);
+					object.lookAt({ x: 0, y: 0, z: 0 });
+
+					object.receiveShadow = true;
+					object.castShadow = true;
+					meshes.push(object);
+
+			});	
+		}
+
+		
+
 	} else if(jumpMoonOk) {
 		console.log("create house moon");
 
-		loader.load( "obj/house.obj", "obj/house.mtl", function(object){ 
-			activeMoon.children[2].add(object);
-			activeMoon.children[3].remove(activeMoon.children[3].children[0]);
-			object.position.copy( pos );
-			object.scale.x = 0.01;
-			object.scale.y = 0.01;
-			object.scale.z = 0.01;
-			
-			object.lookAt({ x: 0, y: 0, z: 0 });
+		loader.load("obj/volcano.js", 
 
-				
-		}, onProgress, onError);
+			function(geometry) {
+
+				object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/volcano.png")}));
+				activeMoon.children[2].add(object);
+				activeMoon.children[3].remove(activeMoon.children[3].children[0]);
+				object.position.copy( pos );
+				object.scale.set(0.5, 0.5, 0.5);
+				object.lookAt({ x: 0, y: 0, z: 0 });
+				object.receiveShadow = true;
+				object.castShadow = true;
+
+				meshes.push(object);
+
+		});
 	}
 
 }

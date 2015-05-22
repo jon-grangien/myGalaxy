@@ -10,12 +10,17 @@ $(function() {
 			// Find planet's torus replace
 			for (var i = 0; i < planetPaths.length; ++i) {
 				if (planetPaths[i][0] == activePlanet) {
-					sunSphere.remove(planetPaths[i][1]);
-					planetOrbitRadiuses[i][1] = ui.value; 
+					if(planetPaths[i][1]) {
+						sunSphere.remove(planetPaths[i][1]);
+						var newPath = addOrbitPath(ui.value);
+						sunSphere.add(newPath);
+						planetPaths[i][1] = newPath;
+						planetOrbitRadiuses[i][1] = ui.value;
+					} else {
+						console.log("error: path not found");
+					}
 					
-					var newPath = addOrbitPath(ui.value);
-					sunSphere.add(newPath);
-					planetPaths[i][1] = newPath;
+					
 				}
 			}
 		}

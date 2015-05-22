@@ -32,6 +32,7 @@
 		<script src="planetJump.js"></script>
 		<script src="placeHouse.js"></script>
 		<script src="functions.js"></script>
+		<script src="loadModels.js"></script>
 		<script src="accordion.js"></script>
 		<script src="arrange-gui-functions.js"></script>
 		<script src="ui-functionality.js"></script>
@@ -435,7 +436,7 @@
 				<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
 			</div>
 
-			<div id="texture-container">
+			<!-- <div id="texture-container">
 				<p class="edit-created-planet-label">Textures:</p>
 				<div class="img-container">
 					<img src="textures/earthmap.jpg" class="earth-tex-img" class="tex-img">
@@ -469,6 +470,21 @@
 					<img src="textures/steeltexture.jpg" class="steel-tex-img" class="tex-img">
 					<label for="steel-tex-img" class="tex-img-label">Steel</label>
 				</div>
+			</div> -->
+
+			<p id="create-planet-texture-label">Textures</p>
+
+			<div id="create-planet-texture-container">
+				<img src="textures/earthmap.jpg" class="earth-tex-img">
+				<img src="textures/cloudy.jpg" class="cloudy-tex-img">
+				<img src="textures/alien.jpg" class="alien-tex-img">
+				<br>
+				<img src="textures/desolate.png" class="desolate-tex-img">
+				<img src="textures/klendathu.png" class="klendathu-tex-img">
+				<img src="textures/sandy.jpg" class="sandy-tex-img">
+				<br>
+				<img src="textures/scarl.png" class="scarl-tex-img">
+				<img src="textures/steeltexture.jpg" class="steel-tex-img">
 			</div>
 
 			<div id="save-planet-container">
@@ -487,7 +503,7 @@
 			<ul>
 			    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
 			    <li><a href="#edit-planet-properties">Properties</a></li>
-			    <li><a href="#accordion-container">Buildings</a></li>
+			    <li><a href="#accordion-container">Build</a></li>
 		  	</ul>
 			<div id="edit-existing-planet-moons-container">
 				<button id="add-moon-button">Add moon</button>
@@ -626,13 +642,17 @@
 		var start = Date.now();
 		var proceduralSun;
 
+		//Lensflare
+		var lensFlare;
+		var flareColor;
+		var light; 
+
 		// Variables to be used for current object to be changed
 		var activePlanet;
 		var previousObject;
 		var activeMoon;
 		var resetSolarView;
 		var smallJump;
-		var orbitsMother = [];
 		var customTexture;
 		var activeRotationSpeed;
 		var jumpPlanetOk;
@@ -648,6 +668,15 @@
 		var onProgress;
 		var onError;
 		var loader;
+		var building;
+
+		//Json import
+		var mesh, geometry;
+		var meshes = [];
+
+		//Json objects
+		var volcano;
+		var volcano2;
 
 		//Temporary movement variables
 		var posx, posz, roty, timer = 0;
@@ -726,6 +755,9 @@
 		var username = "No one";
 		var userPassword;
 
+		
+
+
 		init();
 		animate();
 
@@ -750,6 +782,9 @@
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
 			
+
+
+
 			//Create a material for the planet toruses
 			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0x27241c,opacity:1,transparent:false});
 			
@@ -800,6 +835,7 @@
 			});
 
 			addSun();
+			turnOnLensFlare(true);
 
 			loadStars();
 			for (var i = 0; i < stars.length; ++i){
@@ -807,20 +843,10 @@
 			}
 
 			buildHouseOk = false;
-			onProgress = function ( xhr ) {
-				if ( xhr.lengthComputable ) {
-					var percentComplete = xhr.loaded / xhr.total * 100;
-					console.log( Math.round(percentComplete, 2) + '% downloaded' );
-				}
-	        };
-	        onError = function ( xhr ) {
-	        	console.log("build house error " + xhr);
-	        };
-	        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-			lock = new THREE.Object3D();
-			scene.add( lock );
-	        // Loader
-	        loader = new THREE.OBJMTLLoader();
+
+
+			
+
 
 			/************** FPS counter *************/
 			stats = new Stats();
@@ -856,6 +882,18 @@
 			document.getElementById("container").addEventListener( 'mousemove', onMouseMove, false );
 		
 		}
+
+		
+
+		function createScene(geometry, x, y, z, scale, tmap) {
+				zmesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(tmap)}));
+				zmesh.position.set(x, y, z);
+				//scale = 0.1;
+				zmesh.scale.set(scale, scale, scale);
+				meshes.push(zmesh);
+				scene.add(zmesh);
+		}
+
 
 		function animate() {
 			requestAnimationFrame( animate );
