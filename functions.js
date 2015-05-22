@@ -563,9 +563,7 @@ function onDocumentMouseDown( event ) {
 		return;		//do nothing (disable functionality)
 	}
 
-	visibility(volcano,false);
-	visibility(volcano2,false);
-
+	
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
@@ -645,6 +643,8 @@ function onDocumentMouseDown( event ) {
 
 		buildHouseOk = false;
 	}
+
+
 }
 
 

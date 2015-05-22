@@ -11,7 +11,6 @@ function showHouse(pos) {
 
 		if(building == 2){
 			visibility(volcano2,true);
-			//volcano.materials[0].opacity = 0.2;
 			volcano2.position.copy( pos );
 			volcano2.lookAt({ x: 0, y: 0, z: 0 });	
 		}
@@ -83,11 +82,27 @@ function createHouse(pos) {
 		}
 
 		if(building == 2){
-			loader.load("obj/housetex.js", 
+
+			loader2.load( "obj/windmill.obj", "obj/windmill.mtl", function(object){ 
+					
+					activePlanet.children[4].add(object);
+					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
+					object.position.copy( pos );
+					object.scale.set(0.5, 0.5, 0.5);
+					object.lookAt({ x: 0, y: 0, z: 0 });
+
+					meshes.push(object);
+					
+					}, onProgress, onError);
+
+
+
+
+			/*loader.load("obj/test1.js", 
 
 				function(geometry) {
 
-					object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/brickwall.jpg")}));
+					object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/white.png")}));
 					activePlanet.children[4].add(object);
 					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
 					object.position.copy( pos );
@@ -98,7 +113,7 @@ function createHouse(pos) {
 					object.castShadow = true;
 					meshes.push(object);
 
-			});	
+			});	*/
 		}
 
 		
@@ -123,5 +138,10 @@ function createHouse(pos) {
 
 		});
 	}
+
+
+
+	visibility(volcano,false);
+	visibility(volcano2,false);
 
 }
