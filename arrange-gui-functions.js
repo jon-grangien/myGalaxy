@@ -31,12 +31,14 @@ function menusOnLogout() {
 function menusOnCreatePlanet() {
 	$('#add_planet_button').hide();
     $('.edit-created-planet-container').show("fast");
+    $("#jump-planet-moon-container").css({"right": "220px" });  //move out 
 }
 
 function menusOnSave() {
     $('#add_planet_button').show();
     $('.edit-created-planet-container').hide("fast");
     $('#jump-planet-button').show();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
 }
 
 // When planet selected and editable
@@ -50,6 +52,7 @@ function menusOnEditPlanet() {
     $('#edit-existing-planet-button-container').hide();
     $('#edit-planet-tabs').show();
     $('#place-house-button').show();
+    $("#jump-planet-moon-container").css({"right": "220px" });  //move out
 }
 
 function menusOnEditDone() {
@@ -58,6 +61,7 @@ function menusOnEditDone() {
     // $('#edit-existing-planet-container').hide("fast");
     $('#edit-planet-tabs').hide();
     $('#place-house-button').hide();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
 }
 
 function buttonsOnAddMoon() {
