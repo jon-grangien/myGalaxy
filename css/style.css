@@ -9,6 +9,11 @@ canvas {
 	height: 100%; 
 	display: block; 
 }
+
+img{
+	margin: 0px;
+	padding: 0px;
+}
 /************* GENERAL GUI *********************/
 .edit-created-planet-container {
 	position: absolute;
@@ -139,7 +144,7 @@ canvas {
 
 .add-edit-planet-text {
 	margin: 0;
-	padding: 0 0 10px 0;
+	padding: 5px 0 10px 0;
 	font-size: 15px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 }
@@ -470,10 +475,12 @@ p.user_info {
 
 .jump-planet-moon-buttons {
 	float: right;
-	width: 20%;
+	/*min-width: 45px;*/
+	/*width: 20%;*/
+	width: 100px;
 	heigth: 100%;
 	padding: 15px 0px 15px 0px;
-	margin: 0 10px;
+	margin: 0 0px;
 	background: rgb(30, 30, 30);
 	color: rgb(245, 229, 215);
 	border: 1px solid rgb( 0,  0, 0);	
@@ -662,31 +669,54 @@ p.user_info {
 }
 
 /******** PLANET BUILD GUI ********/
-#accordion-container {
-	/*width: 90%;*/
-	bottom: 10%;
-	left: 10%;
-	z-index: 5;
-	background: rgb(10,10,10);
+#accordion-container {	/*same as edit-planet-tabs*/
+	position: absolute;
+	top: 1%;
+	right: 10px;
+	max-width: 200px;
+	min-width: 190px;
+	min-height: 450px;
+	
 }
 
 #insideBygg img {
-    opacity: 0.4;
+	padding: 0px;
+	margin: 0px;
+	opacity: 0.4;
+	background: rgb(10,10,10);
+
 }
 
 #build-image-container{
-	padding-bottom: 180px;
+	background: rgb(40,40,40);
+	padding: 0px;
+	margin: 0px;
+	padding-bottom: 220px;
+
+	
 }
 #build-image-container img {
-	width: 40px;
-	height: 40px;
-	margin: 5px;
+
+	width: 65px;
+	height: 65px;
+	margin: 3px;
+	padding: 0px;
+
 }
 
 #build-image-container img:hover {
-	margin: 0;
-	border: 5px solid rgba(255, 255, 255, 0.9);
+	margin: 2px;
+	border: 1px solid rgba(255, 255, 255, 0.4);
 	cursor: pointer;
+	opacity: 0.75;
+}
+
+#build-image-container img:active {
+	margin: 2px;
+	padding: 0px;
+	border: 1px solid rgba(255, 255, 255, 0.6);
+	cursor: pointer;
+	opacity: 0.6;
 }
 
 #insideBygg img:hover {

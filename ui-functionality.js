@@ -216,6 +216,7 @@ $(document).ready(function() {
     });    
 });
 
+
 $(document).ready(function() {     
     $('#add-moon-button').click(function() {
         // selectPlanetsOk = false;   går inte än
@@ -259,13 +260,80 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {     
+    $('#jump-planet-button').click(function() {
+    	if(!jumpInAction) {
+			planetBools();
+		    buttonsOnViewPlanet();
+		}
+    });    
+});
+
+$(document).ready(function() {     
+    $('#jump-moon-button').click(function() {
+    	if(!jumpInAction) {
+	    	moonBools();
+	        buttonsOnViewMoon();
+	    }
+    });    
+});
+
+$(document).ready(function() {     
+    $('#jump-system-button').click(function() {
+    	if(!jumpInAction) {
+	    	solarBools();
+	        buttonsOnViewSystem();
+	    }
+    });    
+});
+
+$(document).ready(function() {     
+    $('#build-planet-button').click(function() {
+    	selectPlanetsOk = false;
+        menusOnBuildPlanet();
+    });    
+});
+
+$(document).ready(function() {     
     $('.edit-done-button').click(function() {
         selectPlanetsOk = true;
-
         menusOnEditDone();
     });    
 });
 
 $(function() {
 	$( "#edit-planet-tabs" ).tabs();
+});
+
+$(document).ready(function() {     
+	$("#jump-system-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#jump-moon-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#jump-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#add-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#edit-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#add-moon-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$(".edit-done-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#build-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
 });
