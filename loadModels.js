@@ -24,7 +24,7 @@ loader.load("obj/housetex.js",
 
 			function(geometry) {
 
-				volcano2 = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture()}));
+				volcano2 = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/brickwall.jpg")}));
 				scene.add(volcano2);
 				
 				volcano2.scale.set(0.5, 0.5, 0.5);
