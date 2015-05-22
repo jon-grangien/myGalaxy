@@ -129,7 +129,7 @@ canvas {
 	position:absolute;
 	top: 10px;
 	right: 10px;
-	min-height: 70px;
+	min-height: 90px;
 	height: 10%;
 	min-width: 60px;
 	max-width: 100px;
@@ -139,34 +139,23 @@ canvas {
 
 .add-edit-planet-text {
 	margin: 0;
-	padding: 0;
+	padding: 0 0 10px 0;
 	font-size: 15px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 }
 
-#add-button-container:i {
-	margin: 0;
-	padding: 0;
-}
-
 #add-button-container button {
-	/*min-width: 100px;*/
-	/*max-width: 100px;*/
-	/*min-heigth: 100px;*/
-	/*max-heigth: 100px;*/
 	width: 100%;
 	height: 100%;
 	cursor: pointer;	
 	background: rgb(30, 30, 30);
 	padding: 10px 5px;
+	margin-bottom: 10px; /*push down edit-planet-button*/
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: rgb(245, 229, 215);
 	font-size: 18px;	
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;	
-	/*box-shadow:	
-		0pt 2px 5px rgba(10, 10, 30,  0.7),	
-		0px 0px 4px 5px rgba(50, 50, 50, 0.1) inset;*/
 	transition: all 0.1s linear;
 }
 #add-button-container button:hover {
@@ -513,22 +502,11 @@ p.user_info {
 }
 
 /**** EDIT PLANET ****/
-#edit-existing-planet-button-container {
+/*#edit-planet-button {
 	position: absolute;
 	top: 150px;
 	right: 10px;
-	/*min-height: 50px;*/
-	/*max-height: 60px;*/
-	/*min-width: 100px;*/
-	max-width: 110px;
-	cursor: pointer;
-}
-
-#edit_planet_button {
 	max-width: 100px;
-	/*min-width: 100px;
-	min-heigth: 100px;*/
-	/*max-heigth: 100px;*/
 	cursor: pointer;	
 	background: rgb(30, 30, 30);
 	padding: 20px 10px;
@@ -538,19 +516,20 @@ p.user_info {
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 7px;
 	transition: all 0.1s linear;
+	cursor: pointer;
 }
-#edit_planet_button:hover {
+#edit-planet-button:hover {
 	background: rgb(30, 30, 30);
 	color: rgb(245, 229, 215);
 }
-#edit_planet_button:active,
-#edit_planet_button:focus {
+#edit-planet-button:active,
+#edit-planet-button:focus {
 	background: rgb(40, 137, 154);
 	position: relative;
 	top: 1px;
 	border: 1px solid rgb(12, 76, 87);	
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
-}
+}*/
 
 #edit-planet-tabs {
 	position: absolute;
