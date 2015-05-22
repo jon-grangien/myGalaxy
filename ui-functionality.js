@@ -216,6 +216,7 @@ $(document).ready(function() {
     });    
 });
 
+
 $(document).ready(function() {     
     $('#add-moon-button').click(function() {
         // selectPlanetsOk = false;   går inte än
@@ -268,4 +269,34 @@ $(document).ready(function() {
 
 $(function() {
 	$( "#edit-planet-tabs" ).tabs();
+});
+
+$(document).ready(function() {     
+	$("#jump-system-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#jump-moon-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#jump-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#add-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#edit-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#add-moon-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$(".edit-done-button").mouseup(function(){
+	    $(this).blur();
+	})
 });
