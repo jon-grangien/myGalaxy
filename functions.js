@@ -145,7 +145,8 @@ function addPlanet(){
 	atmosphere.castShadow = false;
 
 	// orbit path
-	var path = addOrbitPath(80);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
+	var path = addOrbitPath(80);	//80: path radius, newly spawned planet's intitial distance to sun (render loop)
+	sunSphere.add(path);
 
 	// Planet
 	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
@@ -156,12 +157,6 @@ function addPlanet(){
 	activePlanet.receiveShadow = true;
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
-
-
-	orbitsMother.push(path);
-	for(var i = 0; i < orbitsMother.length; ++i){
-		sunSphere.add(orbitsMother[i]);
-	}
 
 
 	var activeGroup = new THREE.Object3D;
@@ -245,7 +240,7 @@ function addPlanet(){
 	clickedShells.push(tempArray);
 
 	// Push to planetOrbitRadiuses
-	tempArray = [activePlanet, 80]; //the value 60 should maybe be replaced by a variable
+	tempArray = [activePlanet, 80]; //the value 80 should maybe be replaced by a variable
 	planetOrbitRadiuses.push(tempArray);
 	
 	//tempArray = [activePlanet, 0];
