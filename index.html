@@ -668,7 +668,8 @@
 		var houseCount;
 		var onProgress;
 		var onError;
-		var loader;
+		var loader; //JSON
+		var loader2;	//OBJ
 		var building;
 
 		//Json import
@@ -783,7 +784,8 @@
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
 			
-
+			volcano2 = new THREE.Object3D;
+			scene.add(volcano2);
 
 
 			//Create a material for the planet toruses
