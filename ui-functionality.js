@@ -230,10 +230,6 @@ $(document).ready(function() {
     $('#edit_planet_button').click(function() {
         selectPlanetsOk = false;
 
-        if(!jumpPlanetOk) {
-        	planetBools();
-        }
-
         var radius;
 		for (var i = 0; i < planetPaths.length; ++i) {
 			if (planetPaths[i][0] == activePlanet) {
@@ -267,10 +263,6 @@ $(document).ready(function() {
 $(document).ready(function() {     
     $('.edit-done-button').click(function() {
         selectPlanetsOk = true;
-
-        if(jumpPlanetOk) {
-        	solarBools();
-        }
 
         menusOnEditDone();
     });    
