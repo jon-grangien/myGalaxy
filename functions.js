@@ -116,7 +116,7 @@ function onWindowResize() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-// Planet spawn (gui)
+// Planet spawn
 function addPlanet(){
 	thereArePlanets = true;
 	activeMoon = null;
@@ -474,6 +474,7 @@ function saveCreatedPlanet() {	//flytta
 }
 
 function deletePlanet() {
+	// Find and remove planet from sun
 	for (var i = 0; i < planetGroups.length; ++i) {
 	    if (planetGroups[i].children[0] == activePlanet){
 	    	console.log("group found");
@@ -481,6 +482,15 @@ function deletePlanet() {
 	    	// console.log("new planet group added to sun")
 	    }
 	}
+
+	// Find and remove orbit
+	for (var i = 0; i < planetPaths.length; ++i) {
+		if(planetPaths[i][0] == activePlanet) {
+			sunSphere.remove(planetPaths[i][1]);
+		}
+	}
+
+	activePlanet = sunSphere;
 }
 
 function buildHouse() {
