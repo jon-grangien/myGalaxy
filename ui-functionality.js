@@ -260,6 +260,12 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {     
+    $('.delete-planet-button').click(function() {
+        deletePlanet();
+    });    
+});
+
+$(document).ready(function() {     
     $('#jump-planet-button').click(function() {
     	if(!jumpInAction) {
 			planetBools();

@@ -466,11 +466,21 @@ function addMoon() {
 	// console.log("moon spawned");
 }
 
-function saveCreatedPlanet() {
+function saveCreatedPlanet() {	//flytta
 	console.log("saved");
 	selectPlanetsOk = true;
 	menusOnSave();
 	menusOnPlanetActive();
+}
+
+function deletePlanet() {
+	for (var i = 0; i < planetGroups.length; ++i) {
+	    if (planetGroups[i].children[0] == activePlanet){
+	    	console.log("group found");
+	    	sunSphere.remove(planetGroups[i]);
+	    	// console.log("new planet group added to sun")
+	    }
+	}
 }
 
 function buildHouse() {
