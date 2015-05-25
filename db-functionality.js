@@ -45,11 +45,14 @@ function saveNewPlanet() {
 		var Planet = Parse.Object.extend("Planet");
 		var dbPlanet = new Planet();
 
-		dbPlanet.set("owner", username);
-		dbPlanet.set("userId", user.id);
-		dbPlanet.set("texture", "earthmap.jpg");	//initial texture
-		dbPlanet.set("radius", 80);					//initial radius
-		dbPlanet.set("size", 1);					//initial size
+		dbPlanet.set("ownerName", username);
+		dbPlanet.set("ownerId", user.id);
+
+		// Initial values
+		dbPlanet.set("texture", "earthmap.jpg");
+		dbPlanet.set("radius", 80);
+		dbPlanet.set("size", 1);	
+		dbPlanet.set("rotationSpeed", 0.001);
 
 		dbPlanet.save(null, {
 		  success: function(dbPlanet) {
@@ -72,4 +75,8 @@ function saveNewPlanet() {
 	else {
 		console.log("no user logged in, planet not stored in db")
 	}
+}
+
+function updatePlanet() {
+
 }
