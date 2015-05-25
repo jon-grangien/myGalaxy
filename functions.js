@@ -690,6 +690,48 @@ function onDocumentMouseDown( event ) {
 		buildHouseOk = false;
 	}
 
+	//Deselect on right-click
+	if(event.which == 3){
+		if(!jumpPlanetOk && !jumpMoonOk){
+	     	$('#edit-planet-tabs').hide();
+			$('#accordion-container').hide();
+			$("#jump-planet-moon-container").css({"right": "120px" });  //move in
+
+			if(!jumpPlanetOk && !jumpMoonOk) {     //not viewing planet/moon
+			    $('#edit-planet-button').hide();
+			    $('#add-planet-button').show();
+			} else {
+			    $('#build-planet-button').show();   //viewing planet/moon
+
+			}
+
+			selectPlanetsOk = true;
+			planetIsSelected = false;
+			$('#jump-planet-button').hide();
+				
+
+	     	for (var i = 0; i < clickedShells.length; ++i) {
+	     		if (clickedShells[i][0] == activePlanet) {
+	     			
+	     			mesh = clickedShells[i][0];
+	     			visibility(mesh.children[2],false);
+	     		}
+	     	}
+
+	     	//Hides moon clicked
+	     	for (var i = 0; i < clickedMoonShells.length; ++i) {
+	     		if (clickedMoonShells[i][0] == activeMoon) {
+	     			
+	     			mesh = clickedMoonShells[i][0];
+	     			visibility(mesh.children[2],false);
+	     		}
+	     	}
+
+	     	activePlanet = null;
+	     	activeMoon = null;
+		}
+	}
+
 
 }
 
@@ -905,7 +947,7 @@ function keyDown(e){
 			    $('#add-planet-button').show();
 			} else {
 			    $('#build-planet-button').show();   //viewing planet/moon
-			    
+
 			}
 
 			selectPlanetsOk = true;
