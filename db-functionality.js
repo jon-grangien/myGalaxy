@@ -198,7 +198,7 @@ function loadPlanetsFromDB() {
 				// Do something with the returned Parse.Object values
 				for (var i = 0; i < results.length; i++) { 
 					var object = results[i];
-					console.log(object.get('ownerName') + ' - ' + object.id + ' - ' + object.get('texture'));
+					console.log(object.get('ownerName') + ' - ' + object.get('name') + ' ' + object.id + ' - ' + object.get('texture'));
 		    		addPlanet(object.id, object.get('ownerId'), object.get('name'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'), true);
 		    	}
 
