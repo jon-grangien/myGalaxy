@@ -653,6 +653,9 @@ function onDocumentMouseDown( event ) {
 				check = 0;
 			}
 		}
+	}else{
+		activePlanet = null;
+		activeMoon = null;
 	}
 	
 	// House functionality if house function called and if editing
