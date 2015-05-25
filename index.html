@@ -36,6 +36,7 @@
 		<script src="accordion.js"></script>
 		<script src="arrange-gui-functions.js"></script>
 		<script src="ui-functionality.js"></script>
+		<script src="db-functionality.js"></script>
 
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
 			vec3 mod289(vec3 x) {
@@ -688,6 +689,7 @@
 		var clickedMoonShells = [];	//moon|shell
 		var planetSizes = [];
 		var meteorbelts = [];	//planet|meteorbelt
+		var planetIds = []; 	//planet|planet id|owner user id
 		//var planetHouses = []; //planet|houses
 		//var moonHouses = []; //moon|houses
 
@@ -720,6 +722,11 @@
 		var newUserPassword;
 		var username = "No one";
 		var userPassword;
+
+		// Database variables
+		var dbFunctionality = true;
+		var dbPlanet;
+		var planetToSpawn;
 
 		
 

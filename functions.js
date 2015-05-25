@@ -245,6 +245,8 @@ function addPlanet(){
 	var houseHoverGroup = new THREE.Object3D;
 	activePlanet.add(houseHoverGroup);
 
+	saveNewPlanet();
+
 }
 
 function addMeteorbelt(){
@@ -535,6 +537,13 @@ function deletePlanet() {
 		}
 	}
 
+	// Delete from planetIds (planet|planet id|owner user id)
+	for (var i = 0; i < planetIds.length; ++i) {
+		if (planetIds[i][0] == activePlanet) {
+			planetIds.splice(i, 1);	//remove 1 element (array) from index i
+		}
+	}
+
 	activePlanet = null;
 }
 
@@ -571,48 +580,6 @@ function playMusic(songFile) {
 	music = new Audio("music/" + songFile);
 	music.play();
 	currentSong = songFile;
-}
-
-// account functions
-function createAccount() {
-	// console.log("creating user account");
-	user = new Parse.User();
-	user.set("username", newUsername);
-	user.set("password", newUserPassword);	
-
-	user.signUp(null, {
-		success: function(user) {
-			// log in
-			username = newUsername;
-			userPassword = newUserPassword;
-			login();
-		},
-		error: function(user, error) {
-			// Show error message and let the user try again
-			alert("Error: " + error.code + " " + error.message);
-		}
-	});
-}
-
-function login() {
-	Parse.User.logIn(username, userPassword, {
-		success: function(loggedinuser) {
-			user = loggedinuser;
-			menusOnLogin();
-			// console.log("logged in!");
-		},
-		error: function(user, error) {
-		// The login failed. Check error to see why.
-		console.log("login failed: " + error);
-		}
-	});
-}
-
-function logout() {
-	Parse.User.logOut();
-	menusOnLogout();
-	// console.log("logged out");
-
 }
 
 function onDocumentTouchStart( event ) {	
