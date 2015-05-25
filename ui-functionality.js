@@ -71,7 +71,7 @@ $(function() {
 				}
 			}
 
-			updatePlanet();
+			// updatePlanet();
 		}
 	});
 });
@@ -228,6 +228,15 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {     
+    $('#save_planet_button').click(function() {
+        selectPlanetsOk = true;
+		menusOnSave();
+		menusOnPlanetActive();
+		updatePlanet();
+    });    
+});
+
+$(document).ready(function() {     
     $('#edit-planet-button').click(function() {
         selectPlanetsOk = false;
 
@@ -316,6 +325,7 @@ $(document).ready(function() {
     $('.edit-done-button').click(function() {
         selectPlanetsOk = true;
         menusOnEditDone();
+        updatePlanet();
     });    
 });
 

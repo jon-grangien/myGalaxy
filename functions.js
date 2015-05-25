@@ -346,13 +346,12 @@ function addMoonOrbitPath(moonRadius) {
 	return path;
 }
 
-function updatePlanetTexture(textureFile){
+function updatePlanetTexture(textureFile) {
 	activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/' + textureFile );
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 	activePlanet.material.needsUpdate = true;
 
 	for (var i = 0; i < planetTextureFiles.length; ++i) {
-		console.log("counter: " + i);
 		if (planetTextureFiles[i][0] == activePlanet) {
 			planetTextureFiles[i][1] = textureFile;
 		}
@@ -479,12 +478,6 @@ function addMoon() {
 	activeMoon.add(houseHoverGroup);
 	
 	// console.log("moon spawned");
-}
-
-function saveCreatedPlanet() {	//flytta
-	selectPlanetsOk = true;
-	menusOnSave();
-	menusOnPlanetActive();
 }
 
 function deletePlanet() {
