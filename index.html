@@ -864,17 +864,6 @@
 		
 		}
 
-		
-
-		function createScene(geometry, x, y, z, scale, tmap) {
-				zmesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(tmap)}));
-				zmesh.position.set(x, y, z);
-				//scale = 0.1;
-				zmesh.scale.set(scale, scale, scale);
-				meshes.push(zmesh);
-				scene.add(zmesh);
-		}
-
 
 		function animate() {
 			requestAnimationFrame( animate );
