@@ -178,7 +178,6 @@ function addPlanet(){
 	hoverShell = new THREE.Mesh(hoverGeometry, planetHoverMaterial);
 	visibility(hoverShell, false);
 	activePlanet.add(hoverShell);
-	//----------------hoverend------------------
 
 	//Clicked-background
 	var clickedGeometry = new THREE.SphereGeometry( 15, 60, 60 );
@@ -193,23 +192,17 @@ function addPlanet(){
 	clickedMaterial.side = THREE.BackSide;
 	clickedShell = new THREE.Mesh(clickedGeometry, planetHoverMaterial);
 	visibility(clickedShell, false);
-	activePlanet.add(clickedShell);
-	//----------------clickedend------------------
-	
+	activePlanet.add(clickedShell);	
 
-
-
-	// sunGroup.add(activeGroup);
 	activeGroup.add(activePlanet);
 	clickableObjects.push(activePlanet);
 	planetGroups.push(activeGroup);
 	addMeteorbelt();
 
-	// Add planet group (and missing ones if exist) to sungroup
 	for (var i = 0; i < planetGroups.length; ++i) {
-	    if (planetGroups[i].parent !== sunSphere){
+	    if (planetGroups[i] == activeGroup){
 	    	sunSphere.add(planetGroups[i]);
-	    	// console.log("new planet group added to sun")
+	    	console.log("new planet group added to sun")
 	    }
 	}
 
@@ -474,10 +467,12 @@ function saveCreatedPlanet() {	//flytta
 }
 
 function deletePlanet() {
+
 	// Find and remove planet from sun
 	for (var i = 0; i < planetGroups.length; ++i) {
 	    if (planetGroups[i].children[0] == activePlanet){
 	    	console.log("group found");
+	    	planetGroups[i].remove(0);
 	    	sunSphere.remove(planetGroups[i]);
 	    	// console.log("new planet group added to sun")
 	    }
@@ -490,7 +485,7 @@ function deletePlanet() {
 		}
 	}
 
-	activePlanet = sunSphere;
+	activePlanet = null;
 }
 
 function buildHouse() {
