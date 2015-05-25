@@ -78,7 +78,69 @@ function saveNewPlanet() {
 }
 
 function updatePlanet() {
-	
+	if(user && dbFunctionality) {
+		var planetId;
+		var planetOwnerId;
+		var planetRadius;
+		var planetSize;
+		var planetRotationSpeed;
+
+		// Get id's
+		for (var i = 0; i < planetIds.length; ++i) {
+			if (planetIds[i][0] == activePlanet) {
+				planetId = planetIds[i][1];
+				planetOwnerId = planetIds[i][2];
+			}
+		}
+
+		// Get radiuses
+		for (var i = 0; i < planetOrbitRadiuses.length; i++) {
+			if (planetOrbitRadiuses[i][0] == activePlanet) {
+				planetRadius = planetOrbitRadiuses[i][1];
+			}
+		}
+
+		// Get size (that's me!)
+		for (var i = 0; i < planetSizes.length; i++) {
+			if (planetSizes[i][0] == activePlanet) {
+				planetSize = planetSizes[i][1];
+			}
+		}
+
+		// Get rotation speed
+		for (var i = 0; i < planetSpeeds.length; i++) {
+			if (planetSpeeds[i][0] == activePlanet) {
+				planetRotationSpeed = planetSpeeds[i][1];
+			}
+		}
+
+		var Planet = Parse.Object.extend("Planet");
+		var dbPlanet = new Planet();
+		dbPlanet.id = planetId;
+
+		// Initial values
+		// dbPlanet.set("texture", "earthmap.jpg");
+		dbPlanet.set("radius", planetRadius);
+		dbPlanet.set("size", planetSize);	
+		dbPlanet.set("rotationSpeed", planetRotationSpeed);
+
+		dbPlanet.save(null, {
+		  success: function(dbPlanet) {
+		    // Execute any logic that should take place after the object is saved.
+		    console.log('Updated ' + dbPlanet.get("ownerName") + '\'s object (objectId: ' + dbPlanet.id + ')');
+
+		    // Push to planetIds
+		    // var tempArray = [activePlanet, dbPlanet.id, user.id];
+		    // planetIds.push(tempArray);
+
+		  },
+		  error: function(dbPlanet, error) {
+		    // Execute any logic that should take place if the save fails.
+		    // error is a Parse.Error with an error code and message.
+		    console.log('Failed to update object: ' + error.message);
+		  }
+		});
+	}
 }
 
 // Load planets from db
@@ -92,7 +154,7 @@ function loadPlanets() {
 			// Do something with the returned Parse.Object values
 			for (var i = 0; i < results.length; i++) { 
 				var object = results[i];
-				console.log(object.get('owner') + ' - ' + object.id + ' - ' + object.get('texture'));
+				console.log(object.get('ownerName') + ' - ' + object.id + ' - ' + object.get('texture'));
 	    		spawnLoadedPlanet(object.id, object.get('ownerId'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'));
 	    	}
 

@@ -66,10 +66,12 @@ $(function() {
 						planetSpeeds[i][2] = planetSpeeds[i][1];
 					}
 					
-					planetSpeeds[i][3] = time;
 					planetSpeeds[i][1] = ui.value;		//change second element to slider value
+					planetSpeeds[i][3] = time;
 				}
 			}
+
+			updatePlanet();
 		}
 	});
 });
