@@ -188,22 +188,24 @@ function deletePlanetFromDB() {
 
 // Load planets from db
 function loadPlanetsFromDB() {
-	var Planet = Parse.Object.extend("Planet");		//make global
-	var query = new Parse.Query(Planet);
-	// query.equalTo("playerName", "Dan Stemkoski");
-	query.find({
-		success: function(results) {
-			console.log("Successfully retrieved " + results.length + " planets.");
-			// Do something with the returned Parse.Object values
-			for (var i = 0; i < results.length; i++) { 
-				var object = results[i];
-				console.log(object.get('ownerName') + ' - ' + object.id + ' - ' + object.get('texture'));
-	    		addPlanet(object.id, object.get('ownerId'), object.get('name'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'), true);
-	    	}
+	if(dbFunctionality) {
+		var Planet = Parse.Object.extend("Planet");		//make global
+		var query = new Parse.Query(Planet);
+		// query.equalTo("playerName", "Dan Stemkoski");
+		query.find({
+			success: function(results) {
+				console.log("Successfully retrieved " + results.length + " planets.");
+				// Do something with the returned Parse.Object values
+				for (var i = 0; i < results.length; i++) { 
+					var object = results[i];
+					console.log(object.get('ownerName') + ' - ' + object.id + ' - ' + object.get('texture'));
+		    		addPlanet(object.id, object.get('ownerId'), object.get('name'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'), true);
+		    	}
 
-		},
-	  	error: function(error) {
-	    	console.log("Error retrieving planets: " + error.code + " " + error.message);
-		}
-	});
+			},
+		  	error: function(error) {
+		    	console.log("Error retrieving planets: " + error.code + " " + error.message);
+			}
+		});
+	}
 }
