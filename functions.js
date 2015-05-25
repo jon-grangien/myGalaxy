@@ -658,46 +658,40 @@ function onDocumentMouseDown( event ) {
 
 	// Handle active object if no jumping and if not editing
 	if ( intersects.length > 0 && !jumpInAction && selectPlanetsOk) {
-		// console.log("we have an intersect");
+		var planetIsSelected = false; 
+
 		var clickedObject = intersects[0].object;
 		if(jumpPlanetOk)
 			previousObject = activePlanet;
 		if(jumpMoonOk)
 			previousObject = activeMoon;
 
+
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
 				activePlanet = clickedObject;
+				planetIsSelected = true;
 				if(!jumpMoonOk)
 					activeMoon = null;
-				console.log("clicked object is a planet");
+
+				// console.log("clicked object is a planet");
 			}
 		}
 
 		for (var i = 0; i < moonGroups.length; ++i) {
 			if (clickedObject.parent == moonGroups[i]) {
 				activeMoon = clickedObject;
-				console.log("clicked object is a moon");
 				activePlanet = activeMoon.parent.parent;
+				planetIsSelected = true;
+
+				// console.log("clicked object is a moon");
 			}
 		}
 
-
-		var check = -1; //planet = 1, moon = 0 
-
-		for (var i = 0; i < planetGroups.length; ++i) {
-			if (clickedObject.parent == planetGroups[i]) {
-				activePlanet = clickedObject;
-				check = 1;
-			}
+		if (planetIsSelected) {
+			showButtonsForActivePlanet();
 		}
 
-		for (var i = 0; i < moonGroups.length; ++i) {
-			if (clickedObject.parent == moonGroups[i]) {
-				activeMoon = clickedObject;
-				check = 0;
-			}
-		}
 	}
 	
 	// House functionality if house function called and if editing

@@ -262,6 +262,17 @@ $(document).ready(function() {
 $(document).ready(function() {     
     $('.delete-planet-button').click(function() {
         deletePlanet();
+        selectPlanetsOk = true;
+        
+        if(jumpPlanetOk && jumpMoonOk) {     //viewing planet/moon
+        	solarBools();
+	        buttonsOnViewSystem();
+    	} else {
+        	menusOnDeletePlanetSystemView();
+    	}
+
+    	
+
     });    
 });
 
