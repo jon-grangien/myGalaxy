@@ -265,6 +265,7 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 		// Planet is not loaded from db and needs to be stored in it
 		saveNewPlanetToDB();
 	}
+			
 }
 
 function addMeteorbelt(){
@@ -645,6 +646,7 @@ function onDocumentMouseDown( event ) {
 	if ( intersects.length > 0 && !jumpInAction && selectPlanetsOk) {
 		var planetIsSelected = false; 
 
+
 		var clickedObject = intersects[0].object;
 		if(jumpPlanetOk)
 			previousObject = activePlanet;
@@ -869,7 +871,81 @@ function loadStars(){
 	}
 }
 
+function keyDown(e){
+	
+	var keynum;
 
+    if(window.event){ // IE					
+    	keynum = e.keyCode;
+    }else
+        if(e.which){ // Netscape/Firefox/Opera					
+    		keynum = e.which;
+         }
+    //alert(String.fromCharCode(keynum));
+    if(String.fromCharCode(keynum) == "H"){
+
+    	if(showOrbits){
+    		showOrbits = false;
+    	}
+    	else
+    		showOrbits = true;
+
+    	showOrbitsFunction();
+    }
+
+    if(String.fromCharCode(keynum) == "D"){
+
+    	if(!jumpPlanetOk && !jumpMoonOk){
+         	$('#edit-planet-tabs').hide();
+			$('#accordion-container').hide();
+			$("#jump-planet-moon-container").css({"right": "120px" });  //move in
+
+			if(!jumpPlanetOk && !jumpMoonOk) {     //not viewing planet/moon
+			    $('#edit-planet-button').hide();
+			    $('#add-planet-button').show();
+			} else {
+			    $('#build-planet-button').show();   //viewing planet/moon
+			    
+			}
+
+			selectPlanetsOk = true;
+			planetIsSelected = false;
+			$('#jump-planet-button').hide();
+				
+
+         	for (var i = 0; i < clickedShells.length; ++i) {
+         		if (clickedShells[i][0] == activePlanet) {
+         			
+         			mesh = clickedShells[i][0];
+         			visibility(mesh.children[2],false);
+         		}
+         	}
+
+         	//Hides moon clicked
+         	for (var i = 0; i < clickedMoonShells.length; ++i) {
+         		if (clickedMoonShells[i][0] == activeMoon) {
+         			
+         			mesh = clickedMoonShells[i][0];
+         			visibility(mesh.children[2],false);
+         		}
+         	}
+
+         	activePlanet = null;
+         	activeMoon = null;
+    	}
+    	
+    }
+}
+
+
+function showOrbitsFunction(){
+	for (var i = 0; i < planetPaths.length; ++i) {
+		planetPaths[i][1].visible = showOrbits;
+	}
+	for (var i = 0; i < moonPaths.length; ++i) {
+		moonPaths[i][1].visible = showOrbits;
+	}
+}
 
 
 function showBuild(input){

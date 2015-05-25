@@ -75,6 +75,9 @@ function planetJump(){
 			planetOrbitMaterial.transparent = true;
 
 			console.log("Paborjar hopp");
+			
+			showOrbits = true;
+			showOrbitsFunction();
 		}
 		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
 		galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - activePlanet.position.x*(1+Math.cos(timer))/2;
@@ -109,6 +112,10 @@ function planetJump(){
 					clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
 				
 			console.log("Fardig med hopp");
+			
+			showOrbits = false;
+			showOrbitsFunction();
+
 			controls.rotateSpeed = controlsRotSpeed;
 		}
 	} else {
@@ -154,6 +161,8 @@ function moonJump(){
 			planetOrbitMaterial.transparent = true;
 
 			console.log("Paborjar hopp");
+			showOrbits = true;
+			showOrbitsFunction();
 		}
 		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
 		moonPosX = activeMoon.position.x+activePlanet.position.x;
@@ -190,6 +199,8 @@ function moonJump(){
 					clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
 				
 			console.log("Fardig med hopp");
+			showOrbits = false;
+			showOrbitsFunction();
 			controls.rotateSpeed = controlsRotSpeed;
 		}
 	} else {
@@ -230,6 +241,12 @@ function jumpToSun(){
 			// console.log(hoverOpacity);
 
 			console.log("Paborjar hopp");
+			
+
+			showOrbits = true;
+			showOrbitsFunction();
+
+
 		}
 		maxRadius = 0;
 		for(i = 0; i < planetOrbitRadiuses.length; i++)
@@ -271,6 +288,7 @@ function jumpToSun(){
 			planetOrbitMaterial.transparent = false;
 			
 			console.log("Fardig med hopp");
+			
 			controls.rotateSpeed = controlsRotSpeed;
 		}
 	} else {

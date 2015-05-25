@@ -359,7 +359,7 @@
 		</script>
 
 	</head>
-	<body>
+	<body onkeydown="keyDown(event)">
 		<div id="container"></div>
 
 		<!-- Account GUI -->
@@ -663,6 +663,7 @@
 		var hoverShell;
 		var clickedShell;
 		var orbit;
+		var showOrbits = true;
 
 		// Array of all objects to be clickable (and hoverable)
 		var clickableObjects = [];
@@ -825,7 +826,7 @@
 			buildHouseOk = false;
 
 
-			
+
 
 
 			/************** FPS counter *************/
@@ -853,7 +854,6 @@
 			controls.panSpeed = 0;
 			controls.rotateSpeed = 0.5;
 			// controls = new THREE.OrbitControls( camera, renderer.domElement );
-
 
 
 			window.addEventListener( 'resize', onWindowResize, false );

@@ -46,7 +46,7 @@ loader2.load( "obj/windmill.obj", "obj/windmill.mtl", function(object){
 		
 		}, onProgress, onError);
 
-visibility(volcano2,false);
+	//volcano2.visible = false;
 
 /*
 loader.load("obj/test1.js", 
