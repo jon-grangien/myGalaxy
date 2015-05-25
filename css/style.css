@@ -544,7 +544,7 @@ p.user_info {
 	right: 10px;
 	max-width: 200px;
 	min-width: 190px;
-	min-height: 450px;
+	min-height: 500px;
 }
 
 
@@ -640,25 +640,35 @@ p.user_info {
 	left: 20px;
 }
 
+.delete-planet-button {
+	background: rgb(100, 30, 30);
+}
+
+.delete-planet-button,
 .edit-done-button {
 	position: relative;
-	left: 25%;
-	width:50%;
+	left: 10%;
+	width:80%;
 	top: 20px;
-	min-height: 70px;
-	/*margin: 0 0% 0 25%;*/
-	background: rgb(30, 30, 30);
 	color: rgb(245, 229, 215);
+	min-height: 70px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	font-size: 18px;
 	border: 1px solid rgb( 0,  0, 0);	
 	border-radius: 3px;	
 	transition: all 0.1s linear;
 }
+.edit-done-button {
+	background: rgb(30, 30, 30);
+	margin: 0 0% 20px 0%;
+}
+.delete-planet-button:hover,
 .edit-done-button:hover {
 	background: rgba(194, 234, 237, 1);
 	color: rgb(10, 10, 10);
 }
+.delete-planet-button:active,
+.delete-planet-button:focus,
 .edit-done-button:active,
 .edit-done-button:focus {
 	background: rgb(40, 137, 154);

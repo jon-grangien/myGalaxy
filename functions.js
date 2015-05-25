@@ -117,7 +117,7 @@ function onWindowResize() {
 }
 
 // Planet spawn
-function addPlanet(){
+function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, isLoadedPlanet){
 	thereArePlanets = true;
 	activeMoon = null;
 
@@ -145,12 +145,12 @@ function addPlanet(){
 	atmosphere.castShadow = false;
 
 	// orbit path
-	var path = addOrbitPath(80);	//80: path radius, newly spawned planet's intitial distance to sun (render loop)
+	var path = addOrbitPath(radius);
 	sunSphere.add(path);
 
 	// Planet
 	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
-	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
+	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/' + textureFile )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 
@@ -161,7 +161,7 @@ function addPlanet(){
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
-	activeRotationSpeed = 0.001;
+	activeRotationSpeed = rotationSpeed;
 	planetNeedsInitialShift = true;
 
 	//Hover-background
@@ -178,7 +178,6 @@ function addPlanet(){
 	hoverShell = new THREE.Mesh(hoverGeometry, planetHoverMaterial);
 	visibility(hoverShell, false);
 	activePlanet.add(hoverShell);
-	//----------------hoverend------------------
 
 	//Clicked-background
 	var clickedGeometry = new THREE.SphereGeometry( 15, 60, 60 );
@@ -194,26 +193,28 @@ function addPlanet(){
 	clickedShell = new THREE.Mesh(clickedGeometry, planetHoverMaterial);
 	visibility(clickedShell, false);
 	activePlanet.add(clickedShell);
-	//----------------clickedend------------------
-	
 
-
-
-	// sunGroup.add(activeGroup);
 	activeGroup.add(activePlanet);
 	clickableObjects.push(activePlanet);
 	planetGroups.push(activeGroup);
 	addMeteorbelt();
 
-	// Add planet group (and missing ones if exist) to sungroup
 	for (var i = 0; i < planetGroups.length; ++i) {
-	    if (planetGroups[i].parent !== sunSphere){
+	    if (planetGroups[i] == activeGroup){
 	    	sunSphere.add(planetGroups[i]);
-	    	// console.log("new planet group added to sun")
 	    }
 	}
 
+	// to do: set sizes above instead
+	activePlanet.scale.x = size;
+	activePlanet.scale.y = size;
+	activePlanet.scale.z = size;
+
 	var tempArray;
+
+	// Push to planetNames (planets|names)
+	tempArray = [activePlanet, name];
+	planetNames.push(tempArray);
 
 	// Push to planetSpeeds (planets|rotationSpeeds)
 	tempArray = [activePlanet, activeRotationSpeed, activeRotationSpeed];
@@ -224,8 +225,12 @@ function addPlanet(){
 	planets.push(tempArray);
 
 	// Push to planetSizes
-	tempArray = [activePlanet, 1];
+	tempArray = [activePlanet, size];
 	planetSizes.push(tempArray);
+
+	// Push to planetTextureFiles (planet|texture)
+	tempArray = [activePlanet, textureFile];
+	planetTextureFiles.push(tempArray);
 
 	// Push to planetPaths
 	tempArray = [activePlanet, path];
@@ -240,11 +245,14 @@ function addPlanet(){
 	clickedShells.push(tempArray);
 
 	// Push to planetOrbitRadiuses
-	tempArray = [activePlanet, 80]; //the value 80 should maybe be replaced by a variable
+	tempArray = [activePlanet, radius];
 	planetOrbitRadiuses.push(tempArray);
-	
-	//tempArray = [activePlanet, 0];
-	//planetHouses.push(tempArray);
+
+	if(isLoadedPlanet) {
+		// Planet is loaded from db and needs id's specified
+		var tempArray = [activePlanet, id, ownerId];
+	    planetIds.push(tempArray);
+	}
 	
 	//A group containing all houses on the planet, this is the 5:th child of a new planet.
 	var houseGroup = new THREE.Object3D;
@@ -253,6 +261,10 @@ function addPlanet(){
 	var houseHoverGroup = new THREE.Object3D;
 	activePlanet.add(houseHoverGroup);
 
+	if(!isLoadedPlanet) {
+		// Planet is not loaded from db and needs to be stored in it
+		saveNewPlanetToDB();
+	}
 }
 
 function addMeteorbelt(){
@@ -338,10 +350,16 @@ function addMoonOrbitPath(moonRadius) {
 	return path;
 }
 
-function updatePlanetTexture(textureFile){
+function updatePlanetTexture(textureFile) {
 	activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/' + textureFile );
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 	activePlanet.material.needsUpdate = true;
+
+	for (var i = 0; i < planetTextureFiles.length; ++i) {
+		if (planetTextureFiles[i][0] == activePlanet) {
+			planetTextureFiles[i][1] = textureFile;
+		}
+	}
 }
 
 // Add moon to active planet (gui)
@@ -466,31 +484,85 @@ function addMoon() {
 	// console.log("moon spawned");
 }
 
-function saveCreatedPlanet() {	//flytta
-	console.log("saved");
-	selectPlanetsOk = true;
-	menusOnSave();
-	menusOnPlanetActive();
-}
-
 function deletePlanet() {
+	//print array
+	// console.log("array before/after delete:")
+	// for (var i = 0; i < array.length; ++i) {
+	// 	console.log(array[i][0] + " " + array[i][1])
+	// }
+
+	// Delete from planetSpeeds (planets|rotationSpeeds)
+	for (var i = 0; i < planetSpeeds.length; ++i) {
+		if (planetSpeeds[i][0] == activePlanet) {
+			planetSpeeds.splice(i, 1);	//remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from planets (planets|moons)
+	for (var i = 0; i < planets.length; ++i) {
+		if (planets[i][0] == activePlanet) {
+			planets.splice(i, 1);	//remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from planetSizes (planet|size)
+	for (var i = 0; i < planetSizes.length; ++i) {
+		if (planetSizes[i][0] == activePlanet) {
+			planetSizes.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from hoverShells (planet|shell)
+	for (var i = 0; i < hoverShells.length; ++i) {
+		if (hoverShells[i][0] == activePlanet) {
+			hoverShells.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from clickedShells (planet|shell)
+	for (var i = 0; i < clickedShells.length; ++i) {
+		if (clickedShells[i][0] == activePlanet) {
+			clickedShells.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from planetOrbitRadiuses (planet|radius)
+	for (var i = 0; i < planetOrbitRadiuses.length; ++i) {
+		if (planetOrbitRadiuses[i][0] == activePlanet) {
+			planetOrbitRadiuses.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
+
 	// Find and remove planet from sun
 	for (var i = 0; i < planetGroups.length; ++i) {
 	    if (planetGroups[i].children[0] == activePlanet){
-	    	console.log("group found");
-	    	sunSphere.remove(planetGroups[i]);
-	    	// console.log("new planet group added to sun")
+	    	planetGroups[i].remove(0);				//remove planet (child) from planetGroup (parent)
+	    	sunSphere.remove(planetGroups[i]);		//remove planetGroup (child) from sun (parent)
 	    }
 	}
 
 	// Find and remove orbit
 	for (var i = 0; i < planetPaths.length; ++i) {
 		if(planetPaths[i][0] == activePlanet) {
-			sunSphere.remove(planetPaths[i][1]);
+			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
 		}
 	}
 
-	activePlanet = sunSphere;
+	// Delete from planetPaths (planet|path)
+	for (var i = 0; i < planetPaths.length; ++i) {
+		if (planetPaths[i][0] == activePlanet) {
+			planetPaths.splice(i, 1) //remove 1 element (array) from index 0
+		}
+	}
+
+	// Delete from planetIds (planet|planet id|owner user id)
+	for (var i = 0; i < planetIds.length; ++i) {
+		if (planetIds[i][0] == activePlanet) {
+			planetIds.splice(i, 1);	//remove 1 element (array) from index i
+		}
+	}
+
+	activePlanet = null;
 }
 
 function buildHouse() {
@@ -507,18 +579,18 @@ function buildHouse() {
 
 function playMusic(songFile) {
 	if (currentSong != "") {		//something is being played
-		if (music.ended) {		//it was just the last track that had ended,
-			currentSong = "";	//update the variable
+		if (music.ended) {			//it was just the last track that had ended,
+			currentSong = "";		//update the variable
 		} 
 
 		else if (currentSong == songFile) {	//song playing is the song clicked in the gui,
-			music.pause();			//pause song,
+			music.pause();					//pause song,
 			currentSong = "";
-			return;					//do nothing		
+			return;							//do nothing		
 		}
 
-		else {					//another song is being played than the one clicked in the gui
-			music.pause();		//pause so new song can be played
+		else {						//another song is being played than the one clicked in the gui
+			music.pause();			//pause so new song can be played
 		}
 	}
 
@@ -526,48 +598,6 @@ function playMusic(songFile) {
 	music = new Audio("music/" + songFile);
 	music.play();
 	currentSong = songFile;
-}
-
-// account functions
-function createAccount() {
-	// console.log("creating user account");
-	user = new Parse.User();
-	user.set("username", newUsername);
-	user.set("password", newUserPassword);	
-
-	user.signUp(null, {
-		success: function(user) {
-			// log in
-			username = newUsername;
-			userPassword = newUserPassword;
-			login();
-		},
-		error: function(user, error) {
-			// Show error message and let the user try again
-			alert("Error: " + error.code + " " + error.message);
-		}
-	});
-}
-
-function login() {
-	Parse.User.logIn(username, userPassword, {
-		success: function(loggedinuser) {
-			user = loggedinuser;
-			menusOnLogin();
-			// console.log("logged in!");
-		},
-		error: function(user, error) {
-		// The login failed. Check error to see why.
-		console.log("login failed: " + error);
-		}
-	});
-}
-
-function logout() {
-	Parse.User.logOut();
-	menusOnLogout();
-	// console.log("logged out");
-
 }
 
 function onDocumentTouchStart( event ) {	
@@ -613,49 +643,40 @@ function onDocumentMouseDown( event ) {
 
 	// Handle active object if no jumping and if not editing
 	if ( intersects.length > 0 && !jumpInAction && selectPlanetsOk) {
-		// console.log("we have an intersect");
+		var planetIsSelected = false; 
+
 		var clickedObject = intersects[0].object;
 		if(jumpPlanetOk)
 			previousObject = activePlanet;
 		if(jumpMoonOk)
 			previousObject = activeMoon;
 
+
 		for (var i = 0; i < planetGroups.length; ++i) {
 			if (clickedObject.parent == planetGroups[i]) {
 				activePlanet = clickedObject;
+				planetIsSelected = true;
 				if(!jumpMoonOk)
 					activeMoon = null;
-				console.log("clicked object is a planet");
+
+				// console.log("clicked object is a planet");
 			}
 		}
 
 		for (var i = 0; i < moonGroups.length; ++i) {
 			if (clickedObject.parent == moonGroups[i]) {
 				activeMoon = clickedObject;
-				console.log("clicked object is a moon");
 				activePlanet = activeMoon.parent.parent;
+				planetIsSelected = true;
+
+				// console.log("clicked object is a moon");
 			}
 		}
 
-
-		var check = -1; //planet = 1, moon = 0 
-
-		for (var i = 0; i < planetGroups.length; ++i) {
-			if (clickedObject.parent == planetGroups[i]) {
-				activePlanet = clickedObject;
-				check = 1;
-			}
+		// If planet is selected and not viewing planet/moon, make sure edit button is displayed
+		if (planetIsSelected && !jumpPlanetOk && !jumpMoonOk) {
+			showButtonsForActivePlanet();
 		}
-
-		for (var i = 0; i < moonGroups.length; ++i) {
-			if (clickedObject.parent == moonGroups[i]) {
-				activeMoon = clickedObject;
-				check = 0;
-			}
-		}
-	}else{
-		activePlanet = null;
-		activeMoon = null;
 	}
 	
 	// House functionality if house function called and if editing

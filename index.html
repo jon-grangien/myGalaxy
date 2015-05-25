@@ -36,6 +36,7 @@
 		<script src="accordion.js"></script>
 		<script src="arrange-gui-functions.js"></script>
 		<script src="ui-functionality.js"></script>
+		<script src="db-functionality.js"></script>
 
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
 			vec3 mod289(vec3 x) {
@@ -369,8 +370,8 @@
 			<div id="account-gui-wrapper">
 				<div id="login" class="animate form" >
 					<form id="login_form" action="javascript:void(0);" method="POST" autocomplete="on">
-						<label for="uname_field" class="uname_label" >Username</label> <br>
-						<input type="text" id="uname_field" name="uname_field" required="required"> <br>
+						<label for="uname_field" class="uname_label">Username</label> <br>
+						<input type="text" id="uname_field" name="uname_field" required="required" maxlength="15"> <br>
 						<label for="password_field" class="pass_label" >Password</label> <br>
 						<input type="password" id="password_field" name="password_field" required="required"><br>
 						<p class="login button">
@@ -430,6 +431,9 @@
 		</div>
 
 		<div class="edit-created-planet-container">
+			<label for="planet-name-field" class="edit-created-planet-label">Name</label> <br>
+			<input type="text" id="planet-name-field" name="planet-name-field">
+
 			<div class="planet-radius-container">
 				<p class="edit-created-planet-label">Radius</p>
 				<div class="planet_radius_slider"></div>
@@ -462,30 +466,15 @@
 			</div>
 
 			<div id="save-planet-container">
-				<button id="save_planet_button" onClick="saveCreatedPlanet()">Save</button>
+				<button id="save_planet_button">Save</button>
 			</div>
 		</div>
 
 		<div id="edit-planet-tabs">
 			<ul>
-			    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
 			    <li><a href="#edit-planet-properties">Properties</a></li>
+			    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
 		  	</ul>
-			<div id="edit-existing-planet-moons-container">
-				<button id="add-moon-button">Add moon</button>
-
-				<div id="moon-properties-container">
-					<div id="moon-radius-container">
-						<p class="edit-created-moon-label">Moon radius</p>
-						<div id="moon-radius-slider"></div>
-					</div>
-					<div id="moon-rotation-container">
-						<p class="edit-created-moon-label">Moon rotation</p>
-						<div id="moon-rotation-slider"></div>
-					</div>
-				</div>
-				<button class="edit-done-button">Done</button>
-			</div>
 
 			<div id="edit-planet-properties">
 				<div id="edit-texture-accordion-container">
@@ -527,6 +516,22 @@
 				</div>
 
 				<button class="delete-planet-button">Delete</button>
+				<button class="edit-done-button">Done</button>
+			</div>
+
+			<div id="edit-existing-planet-moons-container">
+				<button id="add-moon-button">Add moon</button>
+
+				<div id="moon-properties-container">
+					<div id="moon-radius-container">
+						<p class="edit-created-moon-label">Moon radius</p>
+						<div id="moon-radius-slider"></div>
+					</div>
+					<div id="moon-rotation-container">
+						<p class="edit-created-moon-label">Moon rotation</p>
+						<div id="moon-rotation-slider"></div>
+					</div>
+				</div>
 				<button class="edit-done-button">Done</button>
 			</div>
 
@@ -687,6 +692,9 @@
 		var clickedMoonShells = [];	//moon|shell
 		var planetSizes = [];
 		var meteorbelts = [];	//planet|meteorbelt
+		var planetIds = []; 	//planet|planet id|owner user id
+		var planetTextureFiles = [];	//planet|texturefile
+		var planetNames = [];		//planet|name
 		//var planetHouses = []; //planet|houses
 		//var moonHouses = []; //moon|houses
 
@@ -720,8 +728,10 @@
 		var username = "No one";
 		var userPassword;
 
-		
-
+		// Database variables
+		var dbFunctionality = true;
+		var dbPlanet;
+		var planetToSpawn;
 
 		init();
 		animate();
@@ -785,6 +795,10 @@
     		    
 			} else {
 			    console.log("no user logged in");
+			}
+
+			if (dbFunctionality) {
+				loadPlanetsFromDB();
 			}
 
 			// LOGIN/REGISTER

@@ -66,10 +66,12 @@ $(function() {
 						planetSpeeds[i][2] = planetSpeeds[i][1];
 					}
 					
-					planetSpeeds[i][3] = time;
 					planetSpeeds[i][1] = ui.value;		//change second element to slider value
+					planetSpeeds[i][3] = time;
 				}
 			}
+
+			// updatePlanet();
 		}
 	});
 });
@@ -212,7 +214,7 @@ $(document).ready(function() {
 		$('.planet_rotation_slider').slider( "option", "value", 0.001 );
 
         menusOnCreatePlanet();
-        addPlanet();
+        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false);
     });    
 });
 
@@ -222,6 +224,23 @@ $(document).ready(function() {
         // selectPlanetsOk = false;   går inte än
         addMoon();
         buttonsOnAddMoon();
+    });    
+});
+
+$(document).ready(function() {     
+    $('#save_planet_button').click(function() {
+    	var name = $('#planet-name-field').val();
+
+    	for (var i = 0; i < planetNames.length; ++i) {
+    		if (planetNames[i][0] == activePlanet) {
+    			planetNames[i][1] = name;
+    		}
+    	}
+
+        selectPlanetsOk = true;
+		menusOnSave();
+		menusOnPlanetActive();
+		updatePlanetInDB();
     });    
 });
 
@@ -261,7 +280,19 @@ $(document).ready(function() {
 
 $(document).ready(function() {     
     $('.delete-planet-button').click(function() {
+    	deletePlanetFromDB();	//before deletePlanet() which sets activePlanet to null
         deletePlanet();
+        selectPlanetsOk = true;
+        
+        if(jumpPlanetOk && jumpMoonOk) {     //viewing planet/moon
+        	solarBools();
+	        buttonsOnViewSystem();
+    	} else {
+        	menusOnDeletePlanetSystemView();
+    	}
+
+    	
+
     });    
 });
 
@@ -303,6 +334,7 @@ $(document).ready(function() {
     $('.edit-done-button').click(function() {
         selectPlanetsOk = true;
         menusOnEditDone();
+        updatePlanetInDB();
     });    
 });
 
