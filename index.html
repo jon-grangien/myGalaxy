@@ -646,7 +646,7 @@
 
 		//Json objects
 		var volcano;
-		var volcano2;
+		var windmill;
 
 		//Temporary movement variables
 		var posx, posz, roty, timer = 0;
@@ -758,8 +758,8 @@
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
 			
-			volcano2 = new THREE.Object3D;
-			scene.add(volcano2);
+			windmill = new THREE.Object3D;
+			scene.add(windmill);
 
 
 			//Create a material for the planet toruses
@@ -854,7 +854,6 @@
 			controls.panSpeed = 0;
 			controls.rotateSpeed = 0.5;
 			// controls = new THREE.OrbitControls( camera, renderer.domElement );
-
 
 			window.addEventListener( 'resize', onWindowResize, false );
 			document.getElementById("container").addEventListener( 'mousedown', onDocumentMouseDown, true );

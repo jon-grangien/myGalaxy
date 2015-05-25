@@ -265,7 +265,7 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 		// Planet is not loaded from db and needs to be stored in it
 		saveNewPlanetToDB();
 	}
-			
+
 }
 
 function addMeteorbelt(){

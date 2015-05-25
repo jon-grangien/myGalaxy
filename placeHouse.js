@@ -10,9 +10,9 @@ function showHouse(pos) {
 		}
 
 		if(building == 2){
-			visibility(volcano2,true);
-			volcano2.position.copy( pos );
-			volcano2.lookAt({ x: 0, y: 0, z: 0 });	
+			windmill.traverse( function ( object ) { object.visible = true; } );
+			windmill.position.copy( pos );
+			windmill.lookAt({ x: 0, y: 0, z: 0 });	
 		}
 
 		
@@ -142,6 +142,6 @@ function createHouse(pos) {
 
 
 	visibility(volcano,false);
-	visibility(volcano2,false);
+	windmill.traverse( function ( object ) { object.visible = false; } );
 
 }

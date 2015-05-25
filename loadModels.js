@@ -42,25 +42,25 @@ loader.load("obj/volcano.js",
 loader2.load( "obj/windmill.obj", "obj/windmill.mtl", function(object){ 
 		
 		object.scale.set(0.5, 0.5, 0.5);
-		volcano2.add(object);
-		
+		windmill.add(object);
+		windmill.traverse( function ( object ) { object.visible = false; } );
 		}, onProgress, onError);
 
-	//volcano2.visible = false;
+	
 
 /*
 loader.load("obj/test1.js", 
 
 			function(geometry) {
 
-				volcano2 = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/white.png")}));
-				scene.add(volcano2);
+				windmill = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/white.png")}));
+				scene.add(windmill);
 				
-				volcano2.scale.set(0.5, 0.5, 0.5);
+				windmill.scale.set(0.5, 0.5, 0.5);
 
-				volcano2.receiveShadow = true;
-				volcano2.castShadow = true;
-				volcano2.transparent = true;
-				visibility(volcano2,false);
+				windmill.receiveShadow = true;
+				windmill.castShadow = true;
+				windmill.transparent = true;
+				visibility(windmill,false);
 		});*/
 //***************************************************
