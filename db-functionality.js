@@ -49,6 +49,7 @@ function saveNewPlanetToDB() {
 		dbPlanet.set("ownerId", user.id);
 
 		// Initial values
+		dbPlanet.set("name" , "");
 		dbPlanet.set("texture", "earthmap.jpg");
 		dbPlanet.set("radius", 80);
 		dbPlanet.set("size", 1);	
@@ -85,6 +86,7 @@ function updatePlanetInDB() {
 		var planetSize;
 		var planetRotationSpeed;
 		var planetTexture;
+		var planetName;
 
 		// Get id's
 		for (var i = 0; i < planetIds.length; ++i) {
@@ -122,11 +124,19 @@ function updatePlanetInDB() {
 			}
 		}
 
+		// Get name
+		for (var i = 0; i < planetNames.length; i++) {
+			if (planetNames[i][0] == activePlanet) {
+				planetName = planetNames[i][1];
+			}
+		}
+
 		var Planet = Parse.Object.extend("Planet");
 		var dbPlanet = new Planet();
 		dbPlanet.id = planetId;
 
 		// updated values
+		dbPlanet.set("name", planetName);	
 		dbPlanet.set("texture", planetTexture);
 		dbPlanet.set("radius", planetRadius);
 		dbPlanet.set("size", planetSize);	
@@ -188,7 +198,7 @@ function loadPlanetsFromDB() {
 			for (var i = 0; i < results.length; i++) { 
 				var object = results[i];
 				console.log(object.get('ownerName') + ' - ' + object.id + ' - ' + object.get('texture'));
-	    		addPlanet(object.id, object.get('ownerId'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'), true);
+	    		addPlanet(object.id, object.get('ownerId'), object.get('name'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'), true);
 	    	}
 
 		},

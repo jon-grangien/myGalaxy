@@ -214,7 +214,7 @@ $(document).ready(function() {
 		$('.planet_rotation_slider').slider( "option", "value", 0.001 );
 
         menusOnCreatePlanet();
-        addPlanet(0, 0, "earthmap.jpg", 80, 1, 0.001, false);
+        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false);
     });    
 });
 
@@ -229,6 +229,14 @@ $(document).ready(function() {
 
 $(document).ready(function() {     
     $('#save_planet_button').click(function() {
+    	var name = $('#planet-name-field').val();
+
+    	for (var i = 0; i < planetNames.length; ++i) {
+    		if (planetNames[i][0] == activePlanet) {
+    			planetNames[i][1] = name;
+    		}
+    	}
+
         selectPlanetsOk = true;
 		menusOnSave();
 		menusOnPlanetActive();

@@ -117,7 +117,7 @@ function onWindowResize() {
 }
 
 // Planet spawn
-function addPlanet(id, ownerId, textureFile, radius, size, rotationSpeed, isLoadedPlanet){
+function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, isLoadedPlanet){
 	thereArePlanets = true;
 	activeMoon = null;
 
@@ -211,6 +211,10 @@ function addPlanet(id, ownerId, textureFile, radius, size, rotationSpeed, isLoad
 	activePlanet.scale.z = size;
 
 	var tempArray;
+
+	// Push to planetNames (planets|names)
+	tempArray = [activePlanet, name];
+	planetNames.push(tempArray);
 
 	// Push to planetSpeeds (planets|rotationSpeeds)
 	tempArray = [activePlanet, activeRotationSpeed, activeRotationSpeed];
