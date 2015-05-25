@@ -415,7 +415,17 @@
 		<div id="add-button-container">
 			<button id="add-planet-button">
 				<i class="fa fa-plus fa-fw fa-2x"></i>
-				Create planet
+				<p class="add-edit-planet-text">Create <br />planet</p>
+			</button>
+
+			<button id="edit-planet-button">
+				<i class="fa fa-pencil fa-fw fa-2x"></i>
+				<p class="add-edit-planet-text">Edit <br />planet</p>
+			</button>
+
+			<button id="build-planet-button">
+				<i class="fa fa-wrench fa-fw fa-2x"></i>
+				<p class="add-edit-planet-text">Build</p>
 			</button>
 		</div>
 
@@ -435,42 +445,6 @@
 			<div class="meteor-check-container">
 				<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
 			</div>
-
-			<!-- <div id="texture-container">
-				<p class="edit-created-planet-label">Textures:</p>
-				<div class="img-container">
-					<img src="textures/earthmap.jpg" class="earth-tex-img" class="tex-img">
-					<label for="earth-tex-img" class="tex-img-label">Earth</label>
-				</div>
-				<div class="img-container">
-					<img src="textures/alien.jpg" class="alien-tex-img" class="tex-img">
-					<label for="alien-tex-img" class="tex-img-label">Alien</label>
-				</div>
-				<div class="img-container">
-					<img src="textures/cloudy.jpg" class="cloudy-tex-img" class="tex-img">
-					<label for="cloudy-tex-img" class="tex-img-label">Cloudy</label>
-				</div>
-				<div class="img-container">
-					<img src="textures/desolate.png" class="desolate-tex-img" class="tex-img">
-					<label for="desolate-tex-img" class="tex-img-label">Desolate</label>
-				</div>
-				<div class="img-container">
-					<img src="textures/klendathu.png" class="klendathu-tex-img" class="tex-img">
-					<label for="klendathu-tex-img" class="tex-img-label">Klendathu</label>
-				</div>
-				<div class="img-container">
-					<img src="textures/sandy.jpg" class="sandy-tex-img" class="tex-img">
-					<label for="sandy-tex-img" class="tex-img-label">Sandy</label>
-				</div>
-				<div class="img-container">
-					<img src="textures/scarl.png" class="scarl-tex-img" class="tex-img">
-					<label for="scarl-tex-img" class="tex-img-label">Scarl</label>
-				</div>
-				<div class="img-container">
-					<img src="textures/steeltexture.jpg" class="steel-tex-img" class="tex-img">
-					<label for="steel-tex-img" class="tex-img-label">Steel</label>
-				</div>
-			</div> -->
 
 			<p id="create-planet-texture-label">Textures</p>
 
@@ -492,18 +466,10 @@
 			</div>
 		</div>
 
-		<div id="edit-existing-planet-button-container">
-			<button id="edit_planet_button">
-				<i class="fa fa-pencil fa-fw fa-2x"></i>
-				Edit planet
-			</button>
-		</div>
-
 		<div id="edit-planet-tabs">
 			<ul>
 			    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
 			    <li><a href="#edit-planet-properties">Properties</a></li>
-			    <li><a href="#accordion-container">Build</a></li>
 		  	</ul>
 			<div id="edit-existing-planet-moons-container">
 				<button id="add-moon-button">Add moon</button>
@@ -518,7 +484,6 @@
 						<div id="moon-rotation-slider"></div>
 					</div>
 				</div>
-				
 				<button class="edit-done-button">Done</button>
 			</div>
 
@@ -561,16 +526,20 @@
 					<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
 				</div>
 
+				<button class="delete-planet-button">Delete</button>
 				<button class="edit-done-button">Done</button>
 			</div>
 
+		</div>
+
+			<!-- build menu -->
 			<div id="accordion-container">
 				<div id="accordion">
 				  <h2>Build</h2>
 				  <div id="build-image-container">
 					<tr>
-					<img src="images/goose.png" class="goose" onclick="showBuild(1);">
-					<img src="images/satellite.png" class="goose" onclick="showBuild(2);"><br>
+					<img src="images/volcano.jpg" class="goose" onclick="showBuild(1);">
+					<img src="images/vindkraftverk.jpg" class="goose" onclick="showBuild(2);"><br>
 					<img src="images/eiffel.png" class="goose" onclick="showBuild(3);">
 					<img src="images/satellite.png" class="goose" onclick="showBuild(4);"><br>
 					<img src="images/eiffel.png" class="goose" onclick="showBuild(5);">
@@ -601,10 +570,9 @@
 
 				<button class="edit-done-button">Done</button>
 			</div>
-		</div>
 
 		<div id="jump-system-container">
-			<button id="jump-system-button" onClick="solarBools()">
+			<button id="jump-system-button">
 				<i class="fa fa-chevron-down fa-fw"></i>
 				View system
 				<i class="fa fa-chevron-down fa-fw"></i>
@@ -612,18 +580,14 @@
 		</div>
 
 		<div id="jump-planet-moon-container">
-			<button class="jump-planet-moon-buttons" id="jump-planet-button" onClick="planetBools()">
+			<button class="jump-planet-moon-buttons" id="jump-planet-button">
 				<i class="fa fa-eye fa-fw"></i>
 				View planet
 			</button>
-			<button class="jump-planet-moon-buttons" id="jump-moon-button" onClick="moonBools()">
+			<button class="jump-planet-moon-buttons" id="jump-moon-button">
 				<i class="fa fa-eye fa-fw"></i>
 				View moon
 			</button>
-			<button class="jump-planet-moon-buttons" id="place-house-button" onClick="buildHouse()">
-				<i class="fa fa-building-o fa-fw"></i>
-				Place house
-			</button>	
 		</div>
 		<script>
 
@@ -653,7 +617,6 @@
 		var activeMoon;
 		var resetSolarView;
 		var smallJump;
-		var orbitsMother = [];
 		var customTexture;
 		var activeRotationSpeed;
 		var jumpPlanetOk;
@@ -668,7 +631,8 @@
 		var houseCount;
 		var onProgress;
 		var onError;
-		var loader;
+		var loader; //JSON
+		var loader2;	//OBJ
 		var building;
 
 		//Json import
@@ -783,7 +747,8 @@
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
 			
-
+			volcano2 = new THREE.Object3D;
+			scene.add(volcano2);
 
 
 			//Create a material for the planet toruses

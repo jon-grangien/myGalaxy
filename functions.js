@@ -116,7 +116,7 @@ function onWindowResize() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-// Planet spawn (gui)
+// Planet spawn
 function addPlanet(){
 	thereArePlanets = true;
 	activeMoon = null;
@@ -145,7 +145,8 @@ function addPlanet(){
 	atmosphere.castShadow = false;
 
 	// orbit path
-	var path = addOrbitPath(80);	//60: path radius, newly spawned planet's intitial distance to sun (render loop)
+	var path = addOrbitPath(80);	//80: path radius, newly spawned planet's intitial distance to sun (render loop)
+	sunSphere.add(path);
 
 	// Planet
 	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
@@ -156,12 +157,6 @@ function addPlanet(){
 	activePlanet.receiveShadow = true;
 	activePlanet.castShadow = true;
 	activePlanet.add(atmosphere);
-
-
-	orbitsMother.push(path);
-	for(var i = 0; i < orbitsMother.length; ++i){
-		sunSphere.add(orbitsMother[i]);
-	}
 
 
 	var activeGroup = new THREE.Object3D;
@@ -245,7 +240,7 @@ function addPlanet(){
 	clickedShells.push(tempArray);
 
 	// Push to planetOrbitRadiuses
-	tempArray = [activePlanet, 80]; //the value 60 should maybe be replaced by a variable
+	tempArray = [activePlanet, 80]; //the value 80 should maybe be replaced by a variable
 	planetOrbitRadiuses.push(tempArray);
 	
 	//tempArray = [activePlanet, 0];
@@ -471,11 +466,31 @@ function addMoon() {
 	// console.log("moon spawned");
 }
 
-function saveCreatedPlanet() {
+function saveCreatedPlanet() {	//flytta
 	console.log("saved");
 	selectPlanetsOk = true;
 	menusOnSave();
 	menusOnPlanetActive();
+}
+
+function deletePlanet() {
+	// Find and remove planet from sun
+	for (var i = 0; i < planetGroups.length; ++i) {
+	    if (planetGroups[i].children[0] == activePlanet){
+	    	console.log("group found");
+	    	sunSphere.remove(planetGroups[i]);
+	    	// console.log("new planet group added to sun")
+	    }
+	}
+
+	// Find and remove orbit
+	for (var i = 0; i < planetPaths.length; ++i) {
+		if(planetPaths[i][0] == activePlanet) {
+			sunSphere.remove(planetPaths[i][1]);
+		}
+	}
+
+	activePlanet = sunSphere;
 }
 
 function buildHouse() {
@@ -568,9 +583,7 @@ function onDocumentMouseDown( event ) {
 		return;		//do nothing (disable functionality)
 	}
 
-	visibility(volcano,false);
-	visibility(volcano2,false);
-
+	
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
@@ -650,6 +663,8 @@ function onDocumentMouseDown( event ) {
 
 		buildHouseOk = false;
 	}
+
+
 }
 
 

@@ -10,12 +10,15 @@ $(function() {
 			// Find planet's torus replace
 			for (var i = 0; i < planetPaths.length; ++i) {
 				if (planetPaths[i][0] == activePlanet) {
-					sunSphere.remove(planetPaths[i][1]);
-					planetOrbitRadiuses[i][1] = ui.value; 
-					
-					var newPath = addOrbitPath(ui.value);
-					sunSphere.add(newPath);
-					planetPaths[i][1] = newPath;
+					if(planetPaths[i][1]) {
+						sunSphere.remove(planetPaths[i][1]);
+						var newPath = addOrbitPath(ui.value);
+						sunSphere.add(newPath);
+						planetPaths[i][1] = newPath;
+						planetOrbitRadiuses[i][1] = ui.value;
+					} else {
+						console.log("error: path not found");
+					}
 				}
 			}
 		}
@@ -213,6 +216,7 @@ $(document).ready(function() {
     });    
 });
 
+
 $(document).ready(function() {     
     $('#add-moon-button').click(function() {
         // selectPlanetsOk = false;   går inte än
@@ -222,12 +226,8 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {     
-    $('#edit_planet_button').click(function() {
+    $('#edit-planet-button').click(function() {
         selectPlanetsOk = false;
-
-        if(!jumpPlanetOk) {
-        	planetBools();
-        }
 
         var radius;
 		for (var i = 0; i < planetPaths.length; ++i) {
@@ -260,17 +260,86 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {     
+    $('.delete-planet-button').click(function() {
+        deletePlanet();
+    });    
+});
+
+$(document).ready(function() {     
+    $('#jump-planet-button').click(function() {
+    	if(!jumpInAction) {
+			planetBools();
+		    buttonsOnViewPlanet();
+		}
+    });    
+});
+
+$(document).ready(function() {     
+    $('#jump-moon-button').click(function() {
+    	if(!jumpInAction) {
+	    	moonBools();
+	        buttonsOnViewMoon();
+	    }
+    });    
+});
+
+$(document).ready(function() {     
+    $('#jump-system-button').click(function() {
+    	if(!jumpInAction) {
+	    	solarBools();
+	        buttonsOnViewSystem();
+	    }
+    });    
+});
+
+$(document).ready(function() {     
+    $('#build-planet-button').click(function() {
+    	selectPlanetsOk = false;
+        menusOnBuildPlanet();
+    });    
+});
+
+$(document).ready(function() {     
     $('.edit-done-button').click(function() {
         selectPlanetsOk = true;
-
-        if(jumpPlanetOk) {
-        	solarBools();
-        }
-
         menusOnEditDone();
     });    
 });
 
 $(function() {
 	$( "#edit-planet-tabs" ).tabs();
+});
+
+$(document).ready(function() {     
+	$("#jump-system-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#jump-moon-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#jump-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#add-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#edit-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#add-moon-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$(".edit-done-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#build-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
 });

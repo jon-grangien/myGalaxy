@@ -4,12 +4,12 @@ function initiallyHideMenus() {
     $('.edit-created-planet-container').hide();
     $('.bygg-main').hide();
     $('#edit-existing-planet-container').hide();
-    $('#edit-existing-planet-button-container').hide();
+    $('#edit-planet-button').hide();
     $('#jump-planet-button').hide();
-    $('#jump-system-button').hide();
     $('#jump-moon-button').hide();
-    $('#place-house-button').hide();
     $('#edit-planet-tabs').hide();
+    $('#build-planet-button').hide();
+    $('#accordion-container').hide();
 }
 
 function menusOnLogin() {
@@ -30,44 +30,66 @@ function menusOnLogout() {
 }
 
 function menusOnCreatePlanet() {
-	$('#add_planet_button').hide();
+	$('#add-planet-button').hide();
     $('.edit-created-planet-container').show("fast");
+    $('#jump-planet-button').show();
+    $("#jump-planet-moon-container").css({"right": "240px" });  //move out 
 }
 
 function menusOnSave() {
-    $('#add_planet_button').show();
+    $('#add-planet-button').show();
     $('.edit-created-planet-container').hide("fast");
     $('#jump-planet-button').show();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
 }
 
 // When planet selected and editable
 function menusOnPlanetActive() {
-    $('#edit-existing-planet-button-container').show();
+    $('#edit-planet-button').show();
 }
 
 // When edit-planet button is pressed
 function menusOnEditPlanet() {
-    $('#add_planet_button').hide();
-    $('#edit-existing-planet-button-container').hide();
+    $('#add-planet-button').hide();
+    $('#edit-planet-button').hide();
     $('#edit-planet-tabs').show();
-    $('#place-house-button').show();
+    $("#jump-planet-moon-container").css({"right": "240px" });  //move out
+}
+
+function menusOnBuildPlanet() {
+    $('#build-planet-button').hide();
+    $('#add-planet-button').hide();
+    $('#edit-planet-button').hide();
+    $('#accordion-container').show();
+    $("#jump-planet-moon-container").css({"right": "240px" });  //move out
 }
 
 function menusOnEditDone() {
-    $('#add_planet_button').show();
-    $('#edit-existing-planet-button-container').show();
-    // $('#edit-existing-planet-container').hide("fast");
     $('#edit-planet-tabs').hide();
-    $('#place-house-button').hide();
+    $('#accordion-container').hide();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
+
+    if(!jumpPlanetOk && !jumpMoonOk) {     //not viewing planet/moon
+        $('#edit-planet-button').show();
+        $('#add-planet-button').show();
+    } else {
+        $('#build-planet-button').show();   //viewing planet/moon
+    }
+
 }
 
 function buttonsOnAddMoon() {
     $('#jump-moon-button').show();
 }
+
 // When zoomed in on planet
 function buttonsOnViewPlanet() {
-    $('#jump-system-button').show();
+    $('#add-planet-button').hide();
     $('#jump-planet-button').hide();
+    $('#build-planet-button').show();
+    $('#edit-planet-button').hide();
+    $('#edit-planet-tabs').hide();
+    $('#accordion-container').hide();
 
     if(thereAreMoons)
         $('#jump-moon-button').show();
@@ -75,16 +97,28 @@ function buttonsOnViewPlanet() {
 
 // When zoomed in on moon
 function buttonsOnViewMoon() {
-    $('#jump-system-button').show();
+    $('#add-planet-button').hide();
     $('#jump-moon-button').hide();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
+    $('#build-planet-button').show();
+    $('#edit-planet-button').hide();
+    $('#edit-planet-tabs').hide();
+    $('#accordion-container').hide();
 }
 
 // When viewing system
 function buttonsOnViewSystem() {
-    $('#jump-system-button').hide();
+    $('#build-planet-button').hide();
+    $('#add-planet-button').show();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
+    $('#accordion-container').hide();
 
-    if(thereArePlanets)
+    console.log("viewing system");
+
+    if(thereArePlanets) {
         $('#jump-planet-button').show();
+        $('#edit-planet-button').show();
+    }
 
     if(thereAreMoons)
         $('#jump-moon-button').show();

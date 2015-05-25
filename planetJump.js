@@ -48,9 +48,7 @@ function solarBools(){
 
 
 
-function planetJump(){
-	buttonsOnViewPlanet();
-	
+function planetJump(){	
 	//Aktiveras när man klickar på en annan planet.
 	if(activePlanet != previousObject) {
 		if(timer == 0){
@@ -128,8 +126,6 @@ function planetJump(){
 }
 
 function moonJump(){
-	buttonsOnViewMoon();
-
 	//Aktiveras när man klickar på en annan planet.
 	if(activeMoon != previousObject) {
 		if(timer == 0){
@@ -216,8 +212,6 @@ function moonJump(){
 
 //Aktiveras när man vill gå tillbaka till att ha solen centrerad.
 function jumpToSun(){
-	buttonsOnViewSystem();
-
 	if(sunSphere != previousObject || resetSolarView) {
 		if(timer == 0){
 			//Timern börjar på pi och går ner till 0.
