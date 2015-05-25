@@ -259,7 +259,7 @@ function addPlanet(id, ownerId, textureFile, radius, size, rotationSpeed, isLoad
 
 	if(!isLoadedPlanet) {
 		// Planet is not loaded from db and needs to be stored in it
-		saveNewPlanet();
+		saveNewPlanetToDB();
 	}
 }
 

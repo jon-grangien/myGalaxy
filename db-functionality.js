@@ -40,7 +40,7 @@ function logout() {
 
 }
 
-function saveNewPlanet() {
+function saveNewPlanetToDB() {
 	if(user && dbFunctionality) {
 		var Planet = Parse.Object.extend("Planet");
 		var dbPlanet = new Planet();
@@ -77,7 +77,7 @@ function saveNewPlanet() {
 	}
 }
 
-function updatePlanet() {
+function updatePlanetInDB() {
 	if(user && dbFunctionality) {
 		var planetId;
 		var planetOwnerId;
@@ -146,8 +146,38 @@ function updatePlanet() {
 	}
 }
 
+function deletePlanetFromDB() {
+	if(user && dbFunctionality) {
+		var planetId;
+		// var planetOwnerId;
+
+		// Get id's
+		for (var i = 0; i < planetIds.length; ++i) {
+			if (planetIds[i][0] == activePlanet) {
+				planetId = planetIds[i][1];
+				// planetOwnerId = planetIds[i][2];
+			}
+		}
+
+		var Planet = Parse.Object.extend("Planet");
+		var dbPlanet = new Planet();
+		dbPlanet.id = planetId;
+
+		dbPlanet.destroy({
+		  success: function(dbPlanet) {
+		    // The object was deleted from the Parse Cloud.
+		    console.log(user.getUsername() + '\s planet was deleted from the db');
+		  },
+		  error: function(dbPlanet, error) {
+		    // The delete failed.
+		    console.log("could not delete planet: " + error);
+		  }
+		});
+	}
+}
+
 // Load planets from db
-function loadPlanets() {
+function loadPlanetsFromDB() {
 	var Planet = Parse.Object.extend("Planet");		//make global
 	var query = new Parse.Query(Planet);
 	// query.equalTo("playerName", "Dan Stemkoski");

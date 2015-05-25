@@ -232,7 +232,7 @@ $(document).ready(function() {
         selectPlanetsOk = true;
 		menusOnSave();
 		menusOnPlanetActive();
-		updatePlanet();
+		updatePlanetInDB();
     });    
 });
 
@@ -272,6 +272,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {     
     $('.delete-planet-button').click(function() {
+    	deletePlanetFromDB();	//before deletePlanet() which sets activePlanet to null
         deletePlanet();
         selectPlanetsOk = true;
         
@@ -325,7 +326,7 @@ $(document).ready(function() {
     $('.edit-done-button').click(function() {
         selectPlanetsOk = true;
         menusOnEditDone();
-        updatePlanet();
+        updatePlanetInDB();
     });    
 });
 
