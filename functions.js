@@ -266,6 +266,8 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 		saveNewPlanetToDB();
 	}
 
+	
+
 }
 
 function addMeteorbelt(){
@@ -331,6 +333,8 @@ function addOrbitPath(radius) {
 
 	var path = new THREE.Mesh( pathGeometry, planetOrbitMaterial );
 
+	if(!showOrbits)
+		path.visible = false;
 
 	return path;
 }
@@ -544,9 +548,7 @@ function deletePlanet() {
 
 	// Find and remove orbit
 	for (var i = 0; i < planetPaths.length; ++i) {
-		if(planetPaths[i][0] == activePlanet) {
 			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
-		}
 	}
 
 	// Delete from planetPaths (planet|path)
@@ -660,8 +662,6 @@ function onDocumentMouseDown( event ) {
 				planetIsSelected = true;
 				if(!jumpMoonOk)
 					activeMoon = null;
-
-				// console.log("clicked object is a planet");
 			}
 		}
 
@@ -926,6 +926,7 @@ function keyDown(e){
     //alert(String.fromCharCode(keynum));
     if(String.fromCharCode(keynum) == "H"){
 
+    	console.log(activePlanetSize);
     	if(showOrbits){
     		showOrbits = false;
     	}

@@ -639,6 +639,7 @@
 		var loader; //JSON
 		var loader2;	//OBJ
 		var building;
+		var buildingSize;
 
 		//Json import
 		var mesh, geometry;
@@ -664,6 +665,7 @@
 		var clickedShell;
 		var orbit;
 		var showOrbits = true;
+		var activePlanetSize;
 
 		// Array of all objects to be clickable (and hoverable)
 		var clickableObjects = [];
@@ -730,7 +732,7 @@
 		var userPassword;
 
 		// Database variables
-		var dbFunctionality = true;
+		var dbFunctionality = false;
 		var dbPlanet;
 		var planetToSpawn;
 
@@ -915,12 +917,13 @@
 				jumpToSun();
 			}
 
-			if (planetNeedsInitialShift) {
+
+			if (planetNeedsInitialShift && activePlanet) {
 				activePlanet.position.x += 80;
 				planetNeedsInitialShift = false;
 				// console.log("planet shifted");
 			}
-			if (moonNeedsInitialShift) {	//kolla om nödvändigt när alla rotationer finns
+			if (moonNeedsInitialShift && activeMoon) {	//kolla om nödvändigt när alla rotationer finns
 				activeMoon.position.x += 20;
 				moonNeedsInitialShift = false;
 				// console.log("moon shifted");
@@ -976,6 +979,12 @@
 					
 					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
 					visibility(mesh.children[2],true); //Show clicked background
+					//Determine size of buildings
+
+					buildingSize = 0.5/planetSizes[i][1];
+					activePlanetSize = planetSizes[i][1];
+						
+					
 
 				}
 			}

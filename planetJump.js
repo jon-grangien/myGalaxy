@@ -76,8 +76,10 @@ function planetJump(){
 
 			console.log("Paborjar hopp");
 			
-			showOrbits = true;
-			showOrbitsFunction();
+			if(showOrbits){
+				showOrbitsFunction();
+			}
+			
 		}
 		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
 		galaxyGroup.position.x = posx*(1-Math.cos(timer))/2 - activePlanet.position.x*(1+Math.cos(timer))/2;
@@ -161,8 +163,9 @@ function moonJump(){
 			planetOrbitMaterial.transparent = true;
 
 			console.log("Paborjar hopp");
-			showOrbits = true;
-			showOrbitsFunction();
+			if(showOrbits){
+				showOrbitsFunction();
+			}
 		}
 		//Skapa en mjuk övergång mellan nya och gamla positionen mha cosinus.
 		moonPosX = activeMoon.position.x+activePlanet.position.x;
@@ -242,9 +245,9 @@ function jumpToSun(){
 
 			console.log("Paborjar hopp");
 			
-
 			showOrbits = true;
 			showOrbitsFunction();
+			
 
 
 		}
