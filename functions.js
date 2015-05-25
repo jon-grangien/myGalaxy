@@ -117,7 +117,7 @@ function onWindowResize() {
 }
 
 // Planet spawn
-function addPlanet(){
+function addPlanet(id, ownerId, textureFile, radius, size, rotationSpeed, isLoadedPlanet){
 	thereArePlanets = true;
 	activeMoon = null;
 
@@ -145,12 +145,12 @@ function addPlanet(){
 	atmosphere.castShadow = false;
 
 	// orbit path
-	var path = addOrbitPath(80);	//80: path radius, newly spawned planet's intitial distance to sun (render loop)
+	var path = addOrbitPath(radius);
 	sunSphere.add(path);
 
 	// Planet
 	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
-	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
+	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/' + textureFile )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 
@@ -161,7 +161,7 @@ function addPlanet(){
 
 	var activeGroup = new THREE.Object3D;
 	activeGroup.position.x = 0;
-	activeRotationSpeed = 0.001;
+	activeRotationSpeed = rotationSpeed;
 	planetNeedsInitialShift = true;
 
 	//Hover-background
@@ -192,7 +192,7 @@ function addPlanet(){
 	clickedMaterial.side = THREE.BackSide;
 	clickedShell = new THREE.Mesh(clickedGeometry, planetHoverMaterial);
 	visibility(clickedShell, false);
-	activePlanet.add(clickedShell);	
+	activePlanet.add(clickedShell);
 
 	activeGroup.add(activePlanet);
 	clickableObjects.push(activePlanet);
@@ -205,6 +205,11 @@ function addPlanet(){
 	    }
 	}
 
+	// to do: set sizes above instead
+	activePlanet.scale.x = size;
+	activePlanet.scale.y = size;
+	activePlanet.scale.z = size;
+
 	var tempArray;
 
 	// Push to planetSpeeds (planets|rotationSpeeds)
@@ -216,11 +221,11 @@ function addPlanet(){
 	planets.push(tempArray);
 
 	// Push to planetSizes
-	tempArray = [activePlanet, 1];
+	tempArray = [activePlanet, size];
 	planetSizes.push(tempArray);
 
 	// Push to planetTextureFiles (planet|texture)
-	tempArray = [activePlanet, "earthmap.jpg"];
+	tempArray = [activePlanet, textureFile];
 	planetTextureFiles.push(tempArray);
 
 	// Push to planetPaths
@@ -236,11 +241,14 @@ function addPlanet(){
 	clickedShells.push(tempArray);
 
 	// Push to planetOrbitRadiuses
-	tempArray = [activePlanet, 80]; //the value 80 should maybe be replaced by a variable
+	tempArray = [activePlanet, radius];
 	planetOrbitRadiuses.push(tempArray);
-	
-	//tempArray = [activePlanet, 0];
-	//planetHouses.push(tempArray);
+
+	if(isLoadedPlanet) {
+		// Planet is loaded from db and needs id's specified
+		var tempArray = [activePlanet, id, ownerId];
+	    planetIds.push(tempArray);
+	}
 	
 	//A group containing all houses on the planet, this is the 5:th child of a new planet.
 	var houseGroup = new THREE.Object3D;
@@ -249,8 +257,10 @@ function addPlanet(){
 	var houseHoverGroup = new THREE.Object3D;
 	activePlanet.add(houseHoverGroup);
 
-	saveNewPlanet();
-
+	if(!isLoadedPlanet) {
+		// Planet is not loaded from db and needs to be stored in it
+		saveNewPlanet();
+	}
 }
 
 function addMeteorbelt(){

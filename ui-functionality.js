@@ -214,7 +214,7 @@ $(document).ready(function() {
 		$('.planet_rotation_slider').slider( "option", "value", 0.001 );
 
         menusOnCreatePlanet();
-        addPlanet();
+        addPlanet(0, 0, "earthmap.jpg", 80, 1, 0.001, false);
     });    
 });
 
