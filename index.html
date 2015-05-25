@@ -795,6 +795,10 @@
 			    console.log("no user logged in");
 			}
 
+			if (dbFunctionality) {
+				loadPlanets();
+			}
+
 			// LOGIN/REGISTER
 			$('#login_form').submit(function() {
 			    username = jQuery("#uname_field").val();
