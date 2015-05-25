@@ -84,6 +84,7 @@ function updatePlanet() {
 		var planetRadius;
 		var planetSize;
 		var planetRotationSpeed;
+		var planetTexture;
 
 		// Get id's
 		for (var i = 0; i < planetIds.length; ++i) {
@@ -114,12 +115,19 @@ function updatePlanet() {
 			}
 		}
 
+		// Get texture file name
+		for (var i = 0; i < planetTextureFiles.length; i++) {
+			if (planetTextureFiles[i][0] == activePlanet) {
+				planetTexture = planetTextureFiles[i][1];
+			}
+		}
+
 		var Planet = Parse.Object.extend("Planet");
 		var dbPlanet = new Planet();
 		dbPlanet.id = planetId;
 
-		// Initial values
-		// dbPlanet.set("texture", "earthmap.jpg");
+		// updated values
+		dbPlanet.set("texture", planetTexture);
 		dbPlanet.set("radius", planetRadius);
 		dbPlanet.set("size", planetSize);	
 		dbPlanet.set("rotationSpeed", planetRotationSpeed);
@@ -128,11 +136,6 @@ function updatePlanet() {
 		  success: function(dbPlanet) {
 		    // Execute any logic that should take place after the object is saved.
 		    console.log('Updated ' + dbPlanet.get("ownerName") + '\'s object (objectId: ' + dbPlanet.id + ')');
-
-		    // Push to planetIds
-		    // var tempArray = [activePlanet, dbPlanet.id, user.id];
-		    // planetIds.push(tempArray);
-
 		  },
 		  error: function(dbPlanet, error) {
 		    // Execute any logic that should take place if the save fails.
@@ -198,7 +201,7 @@ function spawnLoadedPlanet(id, ownerId, loadedTexture, loadedRadius, loadedSize,
 
 	// Planet
 	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
-	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/earthmap.jpg' )} );
+	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/' + loadedTexture )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 
@@ -270,6 +273,10 @@ function spawnLoadedPlanet(id, ownerId, loadedTexture, loadedRadius, loadedSize,
 	// Push to planetSizes
 	tempArray = [activePlanet, loadedSize];
 	planetSizes.push(tempArray);
+
+	// Push to planetTextureFiles (planet|texture)
+	tempArray = [activePlanet, "earthmap.jpg"];
+	planetTextureFiles.push(tempArray);
 
 	// Push to planetPaths
 	tempArray = [activePlanet, path];

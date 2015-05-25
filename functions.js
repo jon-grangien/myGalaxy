@@ -219,6 +219,10 @@ function addPlanet(){
 	tempArray = [activePlanet, 1];
 	planetSizes.push(tempArray);
 
+	// Push to planetTextureFiles (planet|texture)
+	tempArray = [activePlanet, "earthmap.jpg"];
+	planetTextureFiles.push(tempArray);
+
 	// Push to planetPaths
 	tempArray = [activePlanet, path];
 	planetPaths.push(tempArray);
@@ -336,6 +340,13 @@ function updatePlanetTexture(textureFile){
 	activePlanet.material.map = THREE.ImageUtils.loadTexture( 'textures/' + textureFile );
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 	activePlanet.material.needsUpdate = true;
+
+	for (var i = 0; i < planetTextureFiles.length; ++i) {
+		console.log("counter: " + i);
+		if (planetTextureFiles[i][0] == activePlanet) {
+			planetTextureFiles[i][1] = textureFile;
+		}
+	}
 }
 
 // Add moon to active planet (gui)
