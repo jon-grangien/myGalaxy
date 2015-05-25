@@ -202,7 +202,6 @@ function addPlanet(){
 	for (var i = 0; i < planetGroups.length; ++i) {
 	    if (planetGroups[i] == activeGroup){
 	    	sunSphere.add(planetGroups[i]);
-	    	console.log("new planet group added to sun")
 	    }
 	}
 
@@ -460,28 +459,79 @@ function addMoon() {
 }
 
 function saveCreatedPlanet() {	//flytta
-	console.log("saved");
 	selectPlanetsOk = true;
 	menusOnSave();
 	menusOnPlanetActive();
 }
 
 function deletePlanet() {
+	//print array
+	// console.log("array before/after delete:")
+	// for (var i = 0; i < array.length; ++i) {
+	// 	console.log(array[i][0] + " " + array[i][1])
+	// }
+
+	// Delete from planetSpeeds (planets|rotationSpeeds)
+	for (var i = 0; i < planetSpeeds.length; ++i) {
+		if (planetSpeeds[i][0] == activePlanet) {
+			planetSpeeds.splice(i, 1);	//remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from planets (planets|moons)
+	for (var i = 0; i < planets.length; ++i) {
+		if (planets[i][0] == activePlanet) {
+			planets.splice(i, 1);	//remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from planetSizes (planet|size)
+	for (var i = 0; i < planetSizes.length; ++i) {
+		if (planetSizes[i][0] == activePlanet) {
+			planetSizes.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from hoverShells (planet|shell)
+	for (var i = 0; i < hoverShells.length; ++i) {
+		if (hoverShells[i][0] == activePlanet) {
+			hoverShells.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from clickedShells (planet|shell)
+	for (var i = 0; i < clickedShells.length; ++i) {
+		if (clickedShells[i][0] == activePlanet) {
+			clickedShells.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from planetOrbitRadiuses (planet|radius)
+	for (var i = 0; i < planetOrbitRadiuses.length; ++i) {
+		if (planetOrbitRadiuses[i][0] == activePlanet) {
+			planetOrbitRadiuses.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
 
 	// Find and remove planet from sun
 	for (var i = 0; i < planetGroups.length; ++i) {
 	    if (planetGroups[i].children[0] == activePlanet){
-	    	console.log("group found");
-	    	planetGroups[i].remove(0);
-	    	sunSphere.remove(planetGroups[i]);
-	    	// console.log("new planet group added to sun")
+	    	planetGroups[i].remove(0);				//remove planet (child) from planetGroup (parent)
+	    	sunSphere.remove(planetGroups[i]);		//remove planetGroup (child) from sun (parent)
 	    }
 	}
 
 	// Find and remove orbit
 	for (var i = 0; i < planetPaths.length; ++i) {
 		if(planetPaths[i][0] == activePlanet) {
-			sunSphere.remove(planetPaths[i][1]);
+			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
+		}
+	}
+
+	// Delete from planetPaths (planet|path)
+	for (var i = 0; i < planetPaths.length; ++i) {
+		if (planetPaths[i][0] == activePlanet) {
+			planetPaths.splice(i, 1) //remove 1 element (array) from index 0
 		}
 	}
 
@@ -502,18 +552,18 @@ function buildHouse() {
 
 function playMusic(songFile) {
 	if (currentSong != "") {		//something is being played
-		if (music.ended) {		//it was just the last track that had ended,
-			currentSong = "";	//update the variable
+		if (music.ended) {			//it was just the last track that had ended,
+			currentSong = "";		//update the variable
 		} 
 
 		else if (currentSong == songFile) {	//song playing is the song clicked in the gui,
-			music.pause();			//pause song,
+			music.pause();					//pause song,
 			currentSong = "";
-			return;					//do nothing		
+			return;							//do nothing		
 		}
 
-		else {					//another song is being played than the one clicked in the gui
-			music.pause();		//pause so new song can be played
+		else {						//another song is being played than the one clicked in the gui
+			music.pause();			//pause so new song can be played
 		}
 	}
 
