@@ -84,7 +84,8 @@ function showButtonsForActivePlanet() {
     }
 
     if( !$('#jump-planet-moon-container').is(":visible") ){
-        $('#jump-planet-moon-container').show(); 
+        $('#jump-planet-moon-container').show();
+        $('#jump-moon-button').hide();  //hide until moon active
     }
 }
 

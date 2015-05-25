@@ -688,7 +688,8 @@ function onDocumentMouseDown( event ) {
 			}
 		}
 
-		if (planetIsSelected) {
+		// If planet is selected and not viewing planet/moon, make sure edit button is displayed
+		if (planetIsSelected && !jumpPlanetOk && !jumpMoonOk) {
 			showButtonsForActivePlanet();
 		}
 
