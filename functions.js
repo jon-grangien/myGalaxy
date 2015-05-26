@@ -661,7 +661,9 @@ function onDocumentMouseDown( event ) {
 				if(!jumpMoonOk)
 					activeMoon = null;
 			}
-			document.getElementById('multiaudio4').play();
+
+			if(!jumpPlanetOk)
+				document.getElementById('multiaudio4').play();
 			// console.log("clicked object is a planet");
 		}
 
@@ -672,7 +674,8 @@ function onDocumentMouseDown( event ) {
 				planetIsSelected = true;
 
 				// console.log("clicked object is a moon");
-				document.getElementById('multiaudio4').play();
+				if(!jumpMoonOk)
+					document.getElementById('multiaudio4').play();
 			}
 		}
 
