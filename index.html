@@ -36,6 +36,7 @@
 		<script src="accordion.js"></script>
 		<script src="arrange-gui-functions.js"></script>
 		<script src="ui-functionality.js"></script>
+		<script src="db-functionality.js"></script>
 
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
 			vec3 mod289(vec3 x) {
@@ -358,7 +359,7 @@
 		</script>
 
 	</head>
-	<body>
+	<body onkeydown="keyDown(event)">
 		<div id="container"></div>
 
 		<!-- Account GUI -->
@@ -369,8 +370,8 @@
 			<div id="account-gui-wrapper">
 				<div id="login" class="animate form" >
 					<form id="login_form" action="javascript:void(0);" method="POST" autocomplete="on">
-						<label for="uname_field" class="uname_label" >Username</label> <br>
-						<input type="text" id="uname_field" name="uname_field" required="required"> <br>
+						<label for="uname_field" class="uname_label">Username</label> <br>
+						<input type="text" id="uname_field" name="uname_field" required="required" maxlength="15"> <br>
 						<label for="password_field" class="pass_label" >Password</label> <br>
 						<input type="password" id="password_field" name="password_field" required="required"><br>
 						<p class="login button">
@@ -430,6 +431,9 @@
 		</div>
 
 		<div class="edit-created-planet-container">
+			<label for="planet-name-field" class="edit-created-planet-label">Name</label> <br>
+			<input type="text" id="planet-name-field" name="planet-name-field">
+
 			<div class="planet-radius-container">
 				<p class="edit-created-planet-label">Radius</p>
 				<div class="planet_radius_slider"></div>
@@ -462,31 +466,15 @@
 			</div>
 
 			<div id="save-planet-container">
-				<button id="save_planet_button" onClick="saveCreatedPlanet()">Save</button>
+				<button id="save_planet_button">Save</button>
 			</div>
 		</div>
 
 		<div id="edit-planet-tabs">
 			<ul>
-			    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
 			    <li><a href="#edit-planet-properties">Properties</a></li>
+			    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
 		  	</ul>
-			<div id="edit-existing-planet-moons-container">
-				<button id="add-moon-button">Add moon</button>
-
-				<div id="moon-properties-container">
-					<div id="moon-radius-container">
-						<p class="edit-created-moon-label">Moon radius</p>
-						<div id="moon-radius-slider"></div>
-					</div>
-					<div id="moon-rotation-container">
-						<p class="edit-created-moon-label">Moon rotation</p>
-						<div id="moon-rotation-slider"></div>
-					</div>
-				</div>
-				
-				<button class="edit-done-button">Done</button>
-			</div>
 
 			<div id="edit-planet-properties">
 				<div id="edit-texture-accordion-container">
@@ -527,6 +515,23 @@
 					<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
 				</div>
 
+				<button class="delete-planet-button">Delete</button>
+				<button class="edit-done-button">Done</button>
+			</div>
+
+			<div id="edit-existing-planet-moons-container">
+				<button id="add-moon-button">Add moon</button>
+
+				<div id="moon-properties-container">
+					<div id="moon-radius-container">
+						<p class="edit-created-moon-label">Moon radius</p>
+						<div id="moon-radius-slider"></div>
+					</div>
+					<div id="moon-rotation-container">
+						<p class="edit-created-moon-label">Moon rotation</p>
+						<div id="moon-rotation-slider"></div>
+					</div>
+				</div>
 				<button class="edit-done-button">Done</button>
 			</div>
 
@@ -634,6 +639,7 @@
 		var loader; //JSON
 		var loader2;	//OBJ
 		var building;
+		var buildingSize;
 
 		//Json import
 		var mesh, geometry;
@@ -641,7 +647,7 @@
 
 		//Json objects
 		var volcano;
-		var volcano2;
+		var windmill;
 
 		//Temporary movement variables
 		var posx, posz, roty, timer = 0;
@@ -658,6 +664,8 @@
 		var hoverShell;
 		var clickedShell;
 		var orbit;
+		var showOrbits = true;
+		var activePlanetSize;
 
 		// Array of all objects to be clickable (and hoverable)
 		var clickableObjects = [];
@@ -687,6 +695,9 @@
 		var clickedMoonShells = [];	//moon|shell
 		var planetSizes = [];
 		var meteorbelts = [];	//planet|meteorbelt
+		var planetIds = []; 	//planet|planet id|owner user id
+		var planetTextureFiles = [];	//planet|texturefile
+		var planetNames = [];		//planet|name
 		//var planetHouses = []; //planet|houses
 		//var moonHouses = []; //moon|houses
 
@@ -720,8 +731,10 @@
 		var username = "No one";
 		var userPassword;
 
-		
-
+		// Database variables
+		var dbFunctionality = false;
+		var dbPlanet;
+		var planetToSpawn;
 
 		init();
 		animate();
@@ -747,8 +760,8 @@
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
 			
-			volcano2 = new THREE.Object3D;
-			scene.add(volcano2);
+			windmill = new THREE.Object3D;
+			scene.add(windmill);
 
 
 			//Create a material for the planet toruses
@@ -787,6 +800,10 @@
 			    console.log("no user logged in");
 			}
 
+			if (dbFunctionality) {
+				loadPlanetsFromDB();
+			}
+
 			// LOGIN/REGISTER
 			$('#login_form').submit(function() {
 			    username = jQuery("#uname_field").val();
@@ -811,7 +828,7 @@
 			buildHouseOk = false;
 
 
-			
+
 
 
 			/************** FPS counter *************/
@@ -840,24 +857,11 @@
 			controls.rotateSpeed = 0.5;
 			// controls = new THREE.OrbitControls( camera, renderer.domElement );
 
-
-
 			window.addEventListener( 'resize', onWindowResize, false );
 			document.getElementById("container").addEventListener( 'mousedown', onDocumentMouseDown, true );
 			document.getElementById("container").addEventListener( 'touchstart', onDocumentTouchStart, true );
 			document.getElementById("container").addEventListener( 'mousemove', onMouseMove, false );
 		
-		}
-
-		
-
-		function createScene(geometry, x, y, z, scale, tmap) {
-				zmesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(tmap)}));
-				zmesh.position.set(x, y, z);
-				//scale = 0.1;
-				zmesh.scale.set(scale, scale, scale);
-				meshes.push(zmesh);
-				scene.add(zmesh);
 		}
 
 
@@ -902,12 +906,13 @@
 				jumpToSun();
 			}
 
-			if (planetNeedsInitialShift) {
+
+			if (planetNeedsInitialShift && activePlanet) {
 				activePlanet.position.x += 80;
 				planetNeedsInitialShift = false;
 				// console.log("planet shifted");
 			}
-			if (moonNeedsInitialShift) {	//kolla om nödvändigt när alla rotationer finns
+			if (moonNeedsInitialShift && activeMoon) {	//kolla om nödvändigt när alla rotationer finns
 				activeMoon.position.x += 20;
 				moonNeedsInitialShift = false;
 				// console.log("moon shifted");
@@ -963,6 +968,12 @@
 					
 					mesh = clickedShells[i][0];	//Extraxt clicked-mesh from array
 					visibility(mesh.children[2],true); //Show clicked background
+					//Determine size of buildings
+
+					buildingSize = 0.5/planetSizes[i][1];
+					activePlanetSize = planetSizes[i][1];
+						
+					
 
 				}
 			}

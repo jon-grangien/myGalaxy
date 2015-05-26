@@ -75,7 +75,26 @@ function menusOnEditDone() {
     } else {
         $('#build-planet-button').show();   //viewing planet/moon
     }
+}
 
+// Toggle on any hidden standard buttons when planet is clicked
+function showButtonsForActivePlanet() {
+    if( !$('#edit-planet-button').is(":visible") ){
+        $('#edit-planet-button').show(); 
+    }
+
+    if( !$('#jump-planet-moon-container').is(":visible") ){
+        $('#jump-planet-moon-container').show();
+        $('#jump-moon-button').hide();  //hide until moon active
+    }
+}
+
+function menusOnDeletePlanetSystemView() {
+    $('#edit-planet-tabs').hide();
+    $('#accordion-container').hide();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
+    $("#jump-planet-moon-container").hide();
+    $('#add-planet-button').show();
 }
 
 function buttonsOnAddMoon() {

@@ -1,25 +1,25 @@
 function showHouse(pos) {
 	if(jumpPlanetOk) {
-		console.log("show house planet");
+		//console.log("show house planet");
 
 		if(building == 1){
 			visibility(volcano,true);
 			//volcano.materials[0].opacity = 0.2;
-			volcano.position.copy( pos );
+			
+					//console.log(pos.x, pos.y, pos.z);
+			volcano.position.copy({ x: pos.x*activePlanetSize, y: pos.y*activePlanetSize, z: pos.z*activePlanetSize });
 			volcano.lookAt({ x: 0, y: 0, z: 0 });	
 		}
 
 		if(building == 2){
-			visibility(volcano2,true);
-			volcano2.position.copy( pos );
-			volcano2.lookAt({ x: 0, y: 0, z: 0 });	
+			windmill.traverse( function ( object ) { object.visible = true; } );
+			windmill.position.copy({ x: pos.x*activePlanetSize, y: pos.y*activePlanetSize, z: pos.z*activePlanetSize });
+			windmill.lookAt({ x: 0, y: 0, z: 0 });	
 		}
 
 		
-
-		
 	} else if(jumpMoonOk) {
-		console.log("show house moon");
+		//console.log("show house moon");
 
 		loader.load("obj/volcano.js", 
 
@@ -71,7 +71,12 @@ function createHouse(pos) {
 					activePlanet.children[4].add(object);
 					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
 					object.position.copy( pos );
-					object.scale.set(0.5, 0.5, 0.5);
+					for (var i = 0; i < planetSizes.length; i++) {
+						if (planetSizes[i][0] == activePlanet) {
+							buildingSize = 0.5/planetSizes[i][1];
+						}
+					}
+					object.scale.set(buildingSize,buildingSize,buildingSize);
 					object.lookAt({ x: 0, y: 0, z: 0 });
 
 					object.receiveShadow = true;
@@ -88,7 +93,12 @@ function createHouse(pos) {
 					activePlanet.children[4].add(object);
 					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
 					object.position.copy( pos );
-					object.scale.set(0.5, 0.5, 0.5);
+					for (var i = 0; i < planetSizes.length; i++) {
+						if (planetSizes[i][0] == activePlanet) {
+							buildingSize = 0.5/planetSizes[i][1];
+						}
+					}
+					object.scale.set(buildingSize,buildingSize,buildingSize);
 					object.lookAt({ x: 0, y: 0, z: 0 });
 
 					meshes.push(object);
@@ -142,6 +152,6 @@ function createHouse(pos) {
 
 
 	visibility(volcano,false);
-	visibility(volcano2,false);
+	windmill.traverse( function ( object ) { object.visible = false; } );
 
 }
