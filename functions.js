@@ -546,14 +546,11 @@ function deletePlanet() {
 	    }
 	}
 
-	// Find and remove orbit
-	for (var i = 0; i < planetPaths.length; ++i) {
-			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
-	}
 
 	// Delete from planetPaths (planet|path)
 	for (var i = 0; i < planetPaths.length; ++i) {
 		if (planetPaths[i][0] == activePlanet) {
+			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
 			planetPaths.splice(i, 1) //remove 1 element (array) from index 0
 		}
 	}
