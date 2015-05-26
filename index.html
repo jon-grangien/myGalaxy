@@ -594,6 +594,17 @@
 				View moon
 			</button>
 		</div>
+
+		//Audio
+		<audio id="multiaudio1" src="sounds/addPlanet1.mp3" preload="auto"></audio>
+		<audio id="multiaudio2" src="sounds/build1.mp3" preload="auto"></audio>
+		<audio id="multiaudio3" src="sounds/build4.mp3" preload="auto"></audio>
+		<audio id="multiaudio4" src="sounds/click1.mp3" preload="auto"></audio>
+		<audio id="multiaudio5" src="sounds/zoom1.mp3" preload="auto"></audio>
+		<audio id="multiaudio6" src="sounds/zoom2.mp3" preload="auto"></audio>
+		<audio id="multiaudio7" src="sounds/zoom3.mp3" preload="auto"></audio>
+
+
 		<script>
 
 		// Basic global variables
@@ -736,10 +747,14 @@
 		var dbPlanet;
 		var planetToSpawn;
 
+		
+
+
 		init();
 		animate();
 
 		function init() {
+
 			$container = $('#container');
 
 			scene = new THREE.Scene();

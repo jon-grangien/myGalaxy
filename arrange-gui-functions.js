@@ -112,6 +112,7 @@ function buttonsOnAddMoon() {
 
 // When zoomed in on planet
 function buttonsOnViewPlanet() {
+    document.getElementById('multiaudio6').play();
     $('#add-planet-button').hide();
     $('#jump-planet-button').hide();
     $('#build-planet-button').show();
@@ -125,6 +126,7 @@ function buttonsOnViewPlanet() {
 
 // When zoomed in on moon
 function buttonsOnViewMoon() {
+    document.getElementById('multiaudio6').play();
     $('#add-planet-button').hide();
     $('#jump-moon-button').hide();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in
@@ -136,6 +138,7 @@ function buttonsOnViewMoon() {
 
 // When viewing system
 function buttonsOnViewSystem() {
+    document.getElementById('multiaudio7').play();
     $('#build-planet-button').hide();
     $('#add-planet-button').show();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in
