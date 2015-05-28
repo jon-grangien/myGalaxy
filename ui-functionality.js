@@ -367,7 +367,7 @@ $(document).ready(function() {
 	    }
 	    
         else {
-	    	console.log("user has no access to edit this planet");
+	    	console.log(user.getUsername() + " has no access to edit this planet");
 	    }
     });    
 });

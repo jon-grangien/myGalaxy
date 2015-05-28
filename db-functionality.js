@@ -133,18 +133,18 @@ function updatePlanetInDB() {
 
 		var Planet = Parse.Object.extend("Planet");
 		
-		var planetOwner;
-		var query = new Parse.Query(Planet);
-		query.get(planetId, {
-		  success: function(planet) {
-		    planetOwner = planet.get('ownerName');
-		  },
-		  error: function(object, error) {
-		    // The object was not retrieved successfully.
-		    console.log("failed to retrieve " + object + ', ' + error);
-		  }
-		});
-
+		// var planetOwner;
+		// var query = new Parse.Query(Planet);
+		// query.get(planetId, {
+		//   success: function(planet) {
+		//     planetOwner = planet.get('ownerName');
+		//   },
+		//   error: function(object, error) {
+		//     // The object was not retrieved successfully.
+		//     console.log("failed to retrieve " + object + ', ' + error);
+		//   }
+		// });
+		
 		var dbPlanet = new Planet();
 		dbPlanet.id = planetId;
 
@@ -158,7 +158,7 @@ function updatePlanetInDB() {
 		dbPlanet.save(null, {
 		  success: function(dbPlanet) {
 		    // Execute any logic that should take place after the object is saved.
-		    console.log('Updated ' + planetOwner + '\'s object (id ' + dbPlanet.id + ')');
+		    console.log('Updated object (id ' + dbPlanet.id + ')');
 		  },
 		  error: function(dbPlanet, error) {
 		    // Execute any logic that should take place if the save fails.

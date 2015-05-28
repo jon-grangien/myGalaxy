@@ -699,6 +699,72 @@ function onDocumentMouseDown( event ) {
 			showButtonsForActivePlanet();
 		}
 
+		if(user && dbFunctionality) {
+
+			// get planet name
+			var planetName;
+			for (var i = 0; i < planetNames.length; ++i) {
+				// console.log("planet: " + planetNames[i][0] + " name: " + planetNames[i][1])
+				if (planetNames[i][0] == activePlanet) {
+					planetName = planetNames[i][1];
+				}
+			}
+
+			// get planet id
+			var planetId;
+			for (var i = 0; i < planetIds.length; ++i) {
+				if (activePlanet == planetIds[i][0]) {
+					planetId = planetIds[i][1];
+					// console.log("id found: " + planetId);
+				}
+			}
+
+			// get owner name and call to show
+			var ownerName;
+			var Planet = Parse.Object.extend("Planet");
+			var query = new Parse.Query(Planet);
+			query.get(planetId, {
+			  success: function(planet) {
+			    ownerName = planet.get('ownerName');
+			    // console.log("owner is: " + ownerName);
+				showPlanetInfoBox(planetName, ownerName);
+			  },
+			  error: function(object, error) {
+			    // The object was not retrieved successfully.
+			    console.log("failed to retrieve " + object + ', ' + error);
+			  }
+			});
+
+			editAccess = false;
+
+			for (var i = 0; i < planetIds.length; ++i) {
+				if(activePlanet == planetIds[i][0]) {
+					if(user.id == planetIds[i][2]) {
+						editAccess = true;
+						// console.log("user " + user.getUsername() + " (" + user.id + ") has access to this planet");
+					}
+				}
+			}
+
+			// if(!editAccess) {
+			// 	// console.log("user " + user.getUsername() + " (" + user.id + ") does not have access to this planet");
+			// }
+
+			if (!editAccess) {
+				$('#edit-planet-button').css({"color": "rgb(60, 60, 60)",
+											  "opacity": "0.7"});
+				$('#build-planet-button').css({"color": "rgb(60, 60, 60)",
+											  "opacity": "0.7"});
+			}
+
+			else {
+				$('#edit-planet-button').css({"color": "rgb(245, 229, 215)",
+											  "opacity": "1"});
+				$('#build-planet-button').css({"color": "rgb(245, 229, 215)",
+											  "opacity": "1"});
+			}
+		}
+
 	}
 	
 	// House functionality if house function called and if editing
@@ -752,38 +818,7 @@ function onDocumentMouseDown( event ) {
 		}
 	}
 
-	var planetIsSelected = false; 
-
-	if(user && dbFunctionality) {
-		editAccess = false;
-
-		for (var i = 0; i < planetIds.length; ++i) {
-			if(activePlanet == planetIds[i][0]) {
-				if(user.id == planetIds[i][2]) {
-					editAccess = true;
-					// console.log("user " + user.getUsername() + " (" + user.id + ") has access to this planet");
-				}
-			}
-		}
-
-		// if(!editAccess) {
-		// 	// console.log("user " + user.getUsername() + " (" + user.id + ") does not have access to this planet");
-		// }
-
-		if (!editAccess) {
-			$('#edit-planet-button').css({"color": "rgb(60, 60, 60)",
-										  "opacity": "0.7"});
-			$('#build-planet-button').css({"color": "rgb(60, 60, 60)",
-										  "opacity": "0.7"});
-		}
-
-		else {
-			$('#edit-planet-button').css({"color": "rgb(245, 229, 215)",
-										  "opacity": "1"});
-			$('#build-planet-button').css({"color": "rgb(245, 229, 215)",
-										  "opacity": "1"});
-		}
-	}
+	// planetIsSelected = false; 
 
 }
 
