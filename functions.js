@@ -118,8 +118,12 @@ function onWindowResize() {
 
 // Planet spawn
 function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, isLoadedPlanet){
+	
+	if(soundOn)
+		document.getElementById('multiaudio1').play();
+	
 	thereArePlanets = true;
-	activeMoon = null;
+	// activePlanet = null;
 
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
@@ -128,6 +132,18 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 			visibility(mesh.children[2],false); //Show clicked background
 		}
 	}
+	
+ 	//Hides moon clicked
+ 	for (var i = 0; i < clickedMoonShells.length; ++i) {
+ 		if (clickedMoonShells[i][0] == activeMoon) {
+ 			
+ 			mesh = clickedMoonShells[i][0];
+ 			visibility(mesh.children[2],false);
+ 		}
+ 	}
+
+	activeMoon = null;
+ 	activePlanet = null;
 
 	// Atmosphere
 	var atmosphereGeometry = new THREE.SphereGeometry( 12.5, 60, 60 );
@@ -370,7 +386,10 @@ function updatePlanetTexture(textureFile) {
 // Add moon to active planet (gui)
 function addMoon() {
 	thereAreMoons = true;
-	
+
+	if(soundOn)
+		document.getElementById('multiaudio8').play();
+
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
@@ -546,14 +565,11 @@ function deletePlanet() {
 	    }
 	}
 
-	// Find and remove orbit
-	for (var i = 0; i < planetPaths.length; ++i) {
-			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
-	}
 
 	// Delete from planetPaths (planet|path)
 	for (var i = 0; i < planetPaths.length; ++i) {
 		if (planetPaths[i][0] == activePlanet) {
+			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
 			planetPaths.splice(i, 1) //remove 1 element (array) from index 0
 		}
 	}
@@ -615,7 +631,6 @@ function onDocumentMouseDown( event ) {
 	if (!selectPlanetsOk && !buildHouseOk) {
 		return;		//do nothing (disable functionality)
 	}
-
 	
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
@@ -646,8 +661,6 @@ function onDocumentMouseDown( event ) {
 
 	// Handle active object if no jumping and if not editing
 	if ( intersects.length > 0 && !jumpInAction && selectPlanetsOk) {
-		var planetIsSelected = false; 
-
 
 		var clickedObject = intersects[0].object;
 		if(jumpPlanetOk)
@@ -663,6 +676,10 @@ function onDocumentMouseDown( event ) {
 				if(!jumpMoonOk)
 					activeMoon = null;
 			}
+
+			if(!jumpPlanetOk && soundOn)
+				document.getElementById('multiaudio4').play();
+			// console.log("clicked object is a planet");
 		}
 
 		for (var i = 0; i < moonGroups.length; ++i) {
@@ -672,6 +689,8 @@ function onDocumentMouseDown( event ) {
 				planetIsSelected = true;
 
 				// console.log("clicked object is a moon");
+				if(!jumpMoonOk && soundOn)
+					document.getElementById('multiaudio4').play();
 			}
 		}
 
@@ -679,6 +698,73 @@ function onDocumentMouseDown( event ) {
 		if (planetIsSelected && !jumpPlanetOk && !jumpMoonOk) {
 			showButtonsForActivePlanet();
 		}
+
+		if(user && dbFunctionality) {
+
+			// get planet name
+			var planetName;
+			for (var i = 0; i < planetNames.length; ++i) {
+				// console.log("planet: " + planetNames[i][0] + " name: " + planetNames[i][1])
+				if (planetNames[i][0] == activePlanet) {
+					planetName = planetNames[i][1];
+				}
+			}
+
+			// get planet id
+			var planetId;
+			for (var i = 0; i < planetIds.length; ++i) {
+				if (activePlanet == planetIds[i][0]) {
+					planetId = planetIds[i][1];
+					// console.log("id found: " + planetId);
+				}
+			}
+
+			// get owner name and call to show
+			var ownerName;
+			var Planet = Parse.Object.extend("Planet");
+			var query = new Parse.Query(Planet);
+			query.get(planetId, {
+			  success: function(planet) {
+			    ownerName = planet.get('ownerName');
+			    // console.log("owner is: " + ownerName);
+				showPlanetInfoBox(planetName, ownerName);
+			  },
+			  error: function(object, error) {
+			    // The object was not retrieved successfully.
+			    console.log("failed to retrieve " + object + ', ' + error);
+			  }
+			});
+
+			editAccess = false;
+
+			for (var i = 0; i < planetIds.length; ++i) {
+				if(activePlanet == planetIds[i][0]) {
+					if(user.id == planetIds[i][2]) {
+						editAccess = true;
+						// console.log("user " + user.getUsername() + " (" + user.id + ") has access to this planet");
+					}
+				}
+			}
+
+			// if(!editAccess) {
+			// 	// console.log("user " + user.getUsername() + " (" + user.id + ") does not have access to this planet");
+			// }
+
+			if (!editAccess) {
+				$('#edit-planet-button').css({"color": "rgb(60, 60, 60)",
+											  "opacity": "0.7"});
+				$('#build-planet-button').css({"color": "rgb(60, 60, 60)",
+											  "opacity": "0.7"});
+			}
+
+			else {
+				$('#edit-planet-button').css({"color": "rgb(245, 229, 215)",
+											  "opacity": "1"});
+				$('#build-planet-button').css({"color": "rgb(245, 229, 215)",
+											  "opacity": "1"});
+			}
+		}
+
 	}
 	
 	// House functionality if house function called and if editing
@@ -696,6 +782,7 @@ function onDocumentMouseDown( event ) {
 	     	$('#edit-planet-tabs').hide();
 			$('#accordion-container').hide();
 			$("#jump-planet-moon-container").css({"right": "120px" });  //move in
+		    $('#planet-info-container').hide();
 
 			if(!jumpPlanetOk && !jumpMoonOk) {     //not viewing planet/moon
 			    $('#edit-planet-button').hide();
@@ -732,11 +819,12 @@ function onDocumentMouseDown( event ) {
 		}
 	}
 
+	// planetIsSelected = false; 
 
 }
 
 
-//Hover funktion, visar att planeter är tryckbara
+//Hover-funktion, visar att planeter är tryckbara
 function onMouseMove( event ) {
 	if(!selectPlanetsOk && !buildHouseOk) {
 		return;		//do nothing (disable functionality)
@@ -926,7 +1014,7 @@ function keyDown(e){
     //alert(String.fromCharCode(keynum));
     if(String.fromCharCode(keynum) == "H"){
 
-    	console.log(activePlanetSize);
+    	// console.log(activePlanetSize);
     	if(showOrbits){
     		showOrbits = false;
     	}
@@ -954,6 +1042,7 @@ function keyDown(e){
 			selectPlanetsOk = true;
 			planetIsSelected = false;
 			$('#jump-planet-button').hide();
+		    $('#planet-info-container').hide();
 				
 
          	for (var i = 0; i < clickedShells.length; ++i) {
@@ -975,8 +1064,22 @@ function keyDown(e){
 
          	activePlanet = null;
          	activeMoon = null;
+
     	}
     	
+    }
+
+
+    if(String.fromCharCode(keynum) == "Q"){
+
+    	if(showMenu){
+    		$('#all-panels').hide();
+    		showMenu = false
+    	}
+    	else{
+    		$('#all-panels').show();
+    		showMenu = true;
+    	}
     }
 }
 
@@ -993,23 +1096,27 @@ function showOrbitsFunction(){
 
 function showBuild(input){
 	if(input == 1){
-		console.log('GOOOSE'); 
+		console.log('VOLCANO'); 
 		buildHouseOk = true;
 		building = input;
 	}
 
 	if(input == 2){
-		console.log('TOWER'); 
+		console.log('WINDMILL'); 
 		buildHouseOk = true;
 		building = input;
 	}
 
 	if(input == 3){
-		console.log('FISH'); 
+		console.log('BRIDGE'); 
+		buildHouseOk = true;
+		building = input;
 	}
 
 	if(input == 4){
-		console.log('LIBRARY'); 
+		console.log('GOOSE'); 
+		buildHouseOk = true;
+		building = input;
 	}
 
 	if(input == 5){

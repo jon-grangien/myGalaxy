@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>My Galaxy</title>
+		<title>Galaxy Goose</title>
 
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/animate.css">
 		<link rel="stylesheet" href="css/jquery-ui.css">
 		<link rel="stylesheet" href="css/style.css">
-		<link href="css/square/green.css" rel="stylesheet">
+		<link href="css/square/yellow.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/font-awesome-4.3.0/css/font-awesome.css">
 
 		<!-- jquery libs -->
@@ -37,6 +37,17 @@
 		<script src="arrange-gui-functions.js"></script>
 		<script src="ui-functionality.js"></script>
 		<script src="db-functionality.js"></script>
+
+		<!--Audio-->
+		<audio id="multiaudio1" src="sounds/addPlanet1.mp3" preload="auto"></audio>
+		<audio id="multiaudio2" src="sounds/build1.mp3" preload="auto"></audio>
+		<audio id="multiaudio3" src="sounds/build4.mp3" preload="auto"></audio>
+		<audio id="multiaudio4" src="sounds/click2.mp3" preload="auto"></audio>
+		<audio id="multiaudio5" src="sounds/zoom1.mp3" preload="auto"></audio>
+		<audio id="multiaudio6" src="sounds/zoomIn.mp3" preload="auto"></audio>
+		<audio id="multiaudio7" src="sounds/zoomOut.mp3" preload="auto"></audio>
+		<audio id="multiaudio8" src="sounds/addMoon1.mp3" preload="auto"></audio>
+
 
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
 			vec3 mod289(vec3 x) {
@@ -362,141 +373,112 @@
 	<body onkeydown="keyDown(event)">
 		<div id="container"></div>
 
-		<!-- Account GUI -->
-		<div id="account-gui-container">
-			<!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
-			<a class="hiddenanchor" id="toregister"></a>
-			<a class="hiddenanchor" id="tologin"></a>
-			<div id="account-gui-wrapper">
-				<div id="login" class="animate form" >
-					<form id="login_form" action="javascript:void(0);" method="POST" autocomplete="on">
-						<label for="uname_field" class="uname_label">Username</label> <br>
-						<input type="text" id="uname_field" name="uname_field" required="required" maxlength="15"> <br>
-						<label for="password_field" class="pass_label" >Password</label> <br>
-						<input type="password" id="password_field" name="password_field" required="required"><br>
-						<p class="login button">
-							<input type="submit" name="submit "value="Log in"> 
-						</p>
-						<p class="change_link">
-							No account? 
-							<a href="#toregister" class="to_register">Create one</a>
-						</p>
-					</form>
+		<div id="all-panels">
+			<div id="account-gui-container">
+				<!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
+				<a class="hiddenanchor" id="toregister"></a>
+				<a class="hiddenanchor" id="tologin"></a>
+				<div id="account-gui-wrapper">
+					<div id="login" class="animate form" >
+						<form id="login_form" action="javascript:void(0);" method="POST" autocomplete="on">
+							<label for="uname_field" class="uname_label">Username</label> <br>
+							<input type="text" id="uname_field" name="uname_field" required="required" maxlength="15"> <br>
+							<label for="password_field" class="pass_label" >Password</label> <br>
+							<input type="password" id="password_field" name="password_field" required="required"><br>
+							<p class="login button">
+								<input type="submit" name="submit "value="Log in"> 
+							</p>
+							<p class="change_link">
+								No account? 
+								<a href="#toregister" class="to_register">Create one</a>
+							</p>
+						</form>
+					</div>
+
+					<div id="register" class="animate form" >
+						<form id="register_form" action="javascript:void(0);" method="POST" autocomplete="on">
+							<label for="uname_register_field" class="uname_label" >Username</label> <br>
+							<input type="text" id="uname_register_field" name="uname_register_field" required="required"> <br>
+							<label for="password_register_field" class="pass_label" >Password</label> <br>
+							<input type="password" id="password_register_field" name="password_register_field" required="required"><br>
+							<p class="register button">
+								<input type="submit" value="Create account" > 
+							</p>
+							<p class="change_link">
+								Have an account?
+								<a href="#tologin" class="to_login">Log in</a>
+							</p>
+						</form>
+					</div>
+				</div>	
+			</div>
+			
+			<div id="user_menu">
+				<div id="user-text-container">
+					<p class="user_info">
+					</p>
 				</div>
-
-				<div id="register" class="animate form" >
-					<form id="register_form" action="javascript:void(0);" method="POST" autocomplete="on">
-						<label for="uname_register_field" class="uname_label" >Username</label> <br>
-						<input type="text" id="uname_register_field" name="uname_register_field" required="required"> <br>
-						<label for="password_register_field" class="pass_label" >Password</label> <br>
-						<input type="password" id="password_register_field" name="password_register_field" required="required"><br>
-						<p class="register button">
-							<input type="submit" value="Create account" > 
-						</p>
-						<p class="change_link">
-							Have an account?
-							<a href="#tologin" class="to_login">Log in</a>
-						</p>
-					</form>
+				<div id="user-button-container">
+					<button onClick="logout()">Log out</button>
 				</div>
-			</div>	
-		</div>
-		
-		<div id="user_menu">
-			<div id="user-text-container">
-				<p class="user_info">
-				</p>
-			</div>
-			<div id="user-button-container">
-				<button onClick="logout()">Log out</button>
-			</div>
-		</div>
-
-		<!-- general GUI -->
-		<div id="add-button-container">
-			<button id="add-planet-button">
-				<i class="fa fa-plus fa-fw fa-2x"></i>
-				<p class="add-edit-planet-text">Create <br />planet</p>
-			</button>
-
-			<button id="edit-planet-button">
-				<i class="fa fa-pencil fa-fw fa-2x"></i>
-				<p class="add-edit-planet-text">Edit <br />planet</p>
-			</button>
-
-			<button id="build-planet-button">
-				<i class="fa fa-wrench fa-fw fa-2x"></i>
-				<p class="add-edit-planet-text">Build</p>
-			</button>
-		</div>
-
-		<div class="edit-created-planet-container">
-			<label for="planet-name-field" class="edit-created-planet-label">Name</label> <br>
-			<input type="text" id="planet-name-field" name="planet-name-field">
-
-			<div class="planet-radius-container">
-				<p class="edit-created-planet-label">Radius</p>
-				<div class="planet_radius_slider"></div>
-			</div>
-			<div class="planet-size-container">
-				<p class="edit-created-planet-label">Size</p>
-				<div class="planet_size_slider"></div>
-			</div>
-			<div class="planet-rotation-container">
-				<p class="edit-created-planet-label">Rotation speed</p>
-				<div class="planet_rotation_slider"></div>
-			</div>
-			<div class="meteor-check-container">
-				<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
 			</div>
 
-			<p id="create-planet-texture-label">Textures</p>
-
-			<div id="create-planet-texture-container">
-				<img src="textures/earthmap.jpg" class="earth-tex-img">
-				<img src="textures/cloudy.jpg" class="cloudy-tex-img">
-				<img src="textures/alien.jpg" class="alien-tex-img">
+			<!-- planet info box -->
+			<div id="planet-info-container">
+				<!-- <p id="planet-info-name">Name:</p> 
 				<br>
-				<img src="textures/desolate.png" class="desolate-tex-img">
-				<img src="textures/klendathu.png" class="klendathu-tex-img">
-				<img src="textures/sandy.jpg" class="sandy-tex-img">
+				<p id="planet-info-owner">Owned by:</p> -->
+				<table id="planet-info-table"  cellspacing="1" cellpadding="1">
+					<tr id="planet-info-name-row">
+						<td>
+							<p id="planet-info-name">name</p>
+						</td>
+					</tr>
+					<tr id="planet-info-owner-row">
+						<td>
+							<p id="planet-info-owner">owner</p>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!-- general GUI -->
+			<div id="add-button-container">
+				<button id="add-planet-button">
+					<i class="fa fa-plus fa-fw fa-2x"></i>
+					<p class="add-edit-planet-text">Create <br />planet</p>
+				</button>
+
+				<button id="edit-planet-button">
+					<i class="fa fa-pencil fa-fw fa-2x"></i>
+					<p class="add-edit-planet-text">Edit <br />planet</p>
+				</button>
+
+				<button id="build-planet-button">
+					<i class="fa fa-wrench fa-fw fa-2x"></i>
+					<p class="add-edit-planet-text">Build</p>
+				</button>
+			</div>
+
+			<div id="sound-button-container">
+				<button id="music-button">
+					<i id="play-pause-icon" class="fa fa-play fa-fw fa-1x"></i>
+					<i class="fa fa-music fa-fw fa-1x"></i>
+				</button>
+
+				<button id="sound-button">
+					<i id="sound-check-icon" class="fa fa-volume-up fa-fw fa-1x"></i>
+					<p class="add-edit-planet-text">Sounds </p>
+				</button>
+
+			</div>
+
+
+
+			<div class="edit-created-planet-container">
+				<label for="planet-name-field" class="edit-created-planet-label planet-name-label">Name</label>
 				<br>
-				<img src="textures/scarl.png" class="scarl-tex-img">
-				<img src="textures/steeltexture.jpg" class="steel-tex-img">
-			</div>
-
-			<div id="save-planet-container">
-				<button id="save_planet_button">Save</button>
-			</div>
-		</div>
-
-		<div id="edit-planet-tabs">
-			<ul>
-			    <li><a href="#edit-planet-properties">Properties</a></li>
-			    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
-		  	</ul>
-
-			<div id="edit-planet-properties">
-				<div id="edit-texture-accordion-container">
-					<div id="texture-accordion">
-						<h2>Textures</h2>
-						<div id="edit-texture-image-container">
-							<tr>
-							<img src="textures/earthmap.jpg" class="accordion-tex-img earth-tex-img">
-							<img src="textures/cloudy.jpg" class="accordion-tex-img cloudy-tex-img">
-							<br>
-							<img src="textures/alien.jpg" class="accordion-tex-img alien-tex-img">
-							<img src="textures/desolate.png" class="accordion-tex-img desolate-tex-img">
-							<br>
-							<img src="textures/klendathu.png" class="accordion-tex-img klendathu-tex-img">
-							<img src="textures/sandy.jpg" class="accordion-tex-img sandy-tex-img">
-							<br>
-							<img src="textures/scarl.png" class="accordion-tex-img scarl-tex-img">
-							<img src="textures/steeltexture.jpg" class="accordion-tex-img steel-tex-img">
-							</tr>
-						</div>
-					</div>	
-				</div>
+				<input type="text" id="planet-name-field" name="planet-name-field">
 
 				<div class="planet-radius-container">
 					<p class="edit-created-planet-label">Radius</p>
@@ -511,89 +493,157 @@
 					<div class="planet_rotation_slider"></div>
 				</div>
 				<div class="meteor-check-container">
-					<!-- <input type="checkbox" class="meteor-check"><label for="meteor-check">Meteor belt</label> -->
 					<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
 				</div>
 
-				<button class="delete-planet-button">Delete</button>
-				<button class="edit-done-button">Done</button>
-			</div>
+				<p id="create-planet-texture-label">Textures</p>
 
-			<div id="edit-existing-planet-moons-container">
-				<button id="add-moon-button">Add moon</button>
-
-				<div id="moon-properties-container">
-					<div id="moon-radius-container">
-						<p class="edit-created-moon-label">Moon radius</p>
-						<div id="moon-radius-slider"></div>
-					</div>
-					<div id="moon-rotation-container">
-						<p class="edit-created-moon-label">Moon rotation</p>
-						<div id="moon-rotation-slider"></div>
-					</div>
-				</div>
-				<button class="edit-done-button">Done</button>
-			</div>
-
-		</div>
-
-			<!-- build menu -->
-			<div id="accordion-container">
-				<div id="accordion">
-				  <h2>Build</h2>
-				  <div id="build-image-container">
-					<tr>
-					<img src="images/volcano.jpg" class="goose" onclick="showBuild(1);">
-					<img src="images/vindkraftverk.jpg" class="goose" onclick="showBuild(2);"><br>
-					<img src="images/eiffel.png" class="goose" onclick="showBuild(3);">
-					<img src="images/satellite.png" class="goose" onclick="showBuild(4);"><br>
-					<img src="images/eiffel.png" class="goose" onclick="showBuild(5);">
-					<img src="images/goose.png" class="goose" onclick="showBuild(6);">
-					</tr>
-				  </div>
-				  <h2>Trade</h2>
-				  <div id="build-image-container">
-					<tr>
-					<img src="images/goose.png" class="goose">
-					<img src="images/satellite.png" class="goose"><br>
-					<img src="images/eiffel.png" class="goose">
-					<img src="images/satellite.png" class="goose"><br>
-					<img src="images/eiffel.png" class="goose">
-					<img src="images/goose.png" class="goose">
-					</tr>
-				  </div>
-				  
-				  <h2>Chat</h2>
-				  <div id="build-image-container">
-				  <p>Send text to älgen</p>
-				  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
-					<form action="">
-						<input type="submit" value="Send">
-					</form>
-				  </div>
+				<div id="create-planet-texture-container">
+					<img src="textures/earthmap.jpg" class="earth-tex-img">
+					<img src="textures/cloudy.jpg" class="cloudy-tex-img">
+					<img src="textures/alien.jpg" class="alien-tex-img">
+					<br>
+					<img src="textures/desolate.png" class="desolate-tex-img">
+					<img src="textures/klendathu.png" class="klendathu-tex-img">
+					<img src="textures/sandy.jpg" class="sandy-tex-img">
+					<br>
+					<img src="textures/scarl.png" class="scarl-tex-img">
+					<img src="textures/steeltexture.jpg" class="steel-tex-img">
 				</div>
 
-				<button class="edit-done-button">Done</button>
+				<div id="save-planet-container">
+					<button id="save_planet_button">Save</button>
+				</div>
 			</div>
 
-		<div id="jump-system-container">
-			<button id="jump-system-button">
-				<i class="fa fa-chevron-down fa-fw"></i>
-				View system
-				<i class="fa fa-chevron-down fa-fw"></i>
-			</button>
-		</div>
+			<div id="edit-planet-tabs">
+				<ul>
+				    <li><a href="#edit-planet-properties">Properties</a></li>
+				    <li><a href="#edit-existing-planet-moons-container">Moons</a></li>
+			  	</ul>
 
-		<div id="jump-planet-moon-container">
-			<button class="jump-planet-moon-buttons" id="jump-planet-button">
-				<i class="fa fa-eye fa-fw"></i>
-				View planet
-			</button>
-			<button class="jump-planet-moon-buttons" id="jump-moon-button">
-				<i class="fa fa-eye fa-fw"></i>
-				View moon
-			</button>
+				<div id="edit-planet-properties">
+					<div id="edit-texture-accordion-container">
+						<div id="texture-accordion">
+							<h2>Textures</h2>
+							<div id="edit-texture-image-container">
+								<tr>
+								<img src="textures/earthmap.jpg" class="accordion-tex-img earth-tex-img">
+								<img src="textures/cloudy.jpg" class="accordion-tex-img cloudy-tex-img">
+								<br>
+								<img src="textures/alien.jpg" class="accordion-tex-img alien-tex-img">
+								<img src="textures/desolate.png" class="accordion-tex-img desolate-tex-img">
+								<br>
+								<img src="textures/klendathu.png" class="accordion-tex-img klendathu-tex-img">
+								<img src="textures/sandy.jpg" class="accordion-tex-img sandy-tex-img">
+								<br>
+								<img src="textures/scarl.png" class="accordion-tex-img scarl-tex-img">
+								<img src="textures/steeltexture.jpg" class="accordion-tex-img steel-tex-img">
+								</tr>
+							</div>
+						</div>	
+					</div>
+
+					<div class="planet-radius-container">
+						<p class="edit-created-planet-label">Radius</p>
+						<div class="planet_radius_slider"></div>
+					</div>
+					<div class="planet-size-container">
+						<p class="edit-created-planet-label">Size</p>
+						<div class="planet_size_slider"></div>
+					</div>
+					<div class="planet-rotation-container">
+						<p class="edit-created-planet-label">Rotation speed</p>
+						<div class="planet_rotation_slider"></div>
+					</div>
+					<div class="meteor-check-container">
+						<!-- <input type="checkbox" class="meteor-check"><label for="meteor-check">Meteor belt</label> -->
+						<input type="checkbox" class="meteor-check"><label for="meteor-check" class="meteor-check-label">Meteor belt</label>
+					</div>
+
+					<button class="delete-planet-button">Delete</button>
+					<button class="edit-done-button">Done</button>
+				</div>
+
+				<div id="edit-existing-planet-moons-container">
+					<button id="add-moon-button">Add moon</button>
+
+					<div id="moon-properties-container">
+						<div id="moon-radius-container">
+							<p class="edit-created-moon-label">Moon radius</p>
+							<div id="moon-radius-slider"></div>
+						</div>
+						<div id="moon-rotation-container">
+							<p class="edit-created-moon-label">Moon rotation</p>
+							<div id="moon-rotation-slider"></div>
+						</div>
+					</div>
+					<button class="edit-done-button">Done</button>
+				</div>
+
+			</div>
+
+				<!-- build menu -->
+				<div id="accordion-container">
+					<div id="accordion">
+					  <h2>Build</h2>
+					  <div id="build-image-container">
+						<tr>
+						<img src="images/volcano.jpg" class="goose" onclick="showBuild(1);">
+						<img src="images/vindkraftverk.jpg" class="goose" onclick="showBuild(2);"><br>
+						<img src="images/eiffel.png" class="goose" onclick="showBuild(3);">
+						<img src="images/satellite.png" class="goose" onclick="showBuild(4);"><br>
+						<img src="images/eiffel.png" class="goose" onclick="showBuild(5);">
+						<img src="images/goose.png" class="goose" onclick="showBuild(6);">
+						</tr>
+					  </div>
+					  <h2>Trade</h2>
+					  <div id="build-image-container">
+						<tr>
+						<img src="images/goose.png" class="goose">
+						<img src="images/satellite.png" class="goose"><br>
+						<img src="images/eiffel.png" class="goose">
+						<img src="images/satellite.png" class="goose"><br>
+						<img src="images/eiffel.png" class="goose">
+						<img src="images/goose.png" class="goose">
+						</tr>
+					  </div>
+					  
+					  <h2>Chat</h2>
+					  <div id="build-image-container">
+					  <p>Send text to älgen</p>
+					  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
+						<form action="">
+							<input type="submit" value="Send">
+						</form>
+					  </div>
+					</div>
+
+					<button class="edit-done-button">Done</button>
+				</div>
+
+			<div id="jump-system-container">
+				<button id="jump-system-button">
+					<i class="fa fa-chevron-down fa-fw"></i>
+					View system
+					<i class="fa fa-chevron-down fa-fw"></i>
+				</button>
+			</div>
+
+			<div id="jump-planet-moon-container">
+				<button class="jump-planet-moon-buttons" id="jump-planet-button">
+					<i class="fa fa-eye fa-fw"></i>
+					View planet
+				</button>
+				<button class="jump-planet-moon-buttons" id="jump-moon-button">
+					<i class="fa fa-eye fa-fw"></i>
+					View moon
+				</button>
+			</div>
 		</div>
+		
+
+
 		<script>
 
 		// Basic global variables
@@ -630,6 +680,7 @@
 		var jumpInAction;
 		var thereArePlanets = false;
 		var thereAreMoons = false;
+		var editAccess = true;	//allow editing planet if owned
 		
 		// Variables for building on planets/moons
 		var buildHouseOk;
@@ -648,6 +699,8 @@
 		//Json objects
 		var volcano;
 		var windmill;
+		var bridge;
+		var goose;
 
 		//Temporary movement variables
 		var posx, posz, roty, timer = 0;
@@ -719,10 +772,13 @@
 
 		var music;				//global var for music property, see playMusic()
 		var currentSong = "";	//store name of current music file being played
+		var soundOn = true;
+		var musicOn = false;
 
 		//Menu
 		var planetPropertiesFl;
 		var moonPropertiesFl;
+		var showMenu = true;
 
 		// User variables
 		var user;
@@ -732,14 +788,26 @@
 		var userPassword;
 
 		// Database variables
-		var dbFunctionality = false;
+		var dbFunctionality = true;
 		var dbPlanet;
 		var planetToSpawn;
+
+		//music
+		var song1 = new Audio('music/myGalaxyMusic.mp3'); 
+		song1.addEventListener('ended', function() {
+		    this.currentTime = 0;
+		    this.play();
+		}, false);
+		
+		
+
 
 		init();
 		animate();
 
 		function init() {
+
+
 			$container = $('#container');
 
 			scene = new THREE.Scene();
@@ -762,6 +830,12 @@
 			
 			windmill = new THREE.Object3D;
 			scene.add(windmill);
+
+			bridge = new THREE.Object3D;
+			scene.add(bridge);
+
+			goose = new THREE.Object3D;
+			scene.add(goose);
 
 
 			//Create a material for the planet toruses
@@ -895,7 +969,7 @@
 			//customSunMaterial.uniforms[ 'cameraPos' ].value = camera.position;
 
 			//Variabeln time används till timern och även planeternas rotation.
-			time = (Date.now() * 0.000005 - Math.floor((Date.now() * 0.000005)))*100;
+			time = Date.now() * 0.0005;
 
 			//Handles the jumps between planets.	
 			if(jumpPlanetOk && activePlanet){
@@ -930,16 +1004,16 @@
 
 				//The following lines makes the planets orbit.
 				orbit = planetOrbitRadiuses[i][1];
-				if(currentRotationSpeed == previousRotationSpeed){
+				//if(currentRotationSpeed == previousRotationSpeed){
 					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10) * orbit;
 					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10) * orbit;
 					// console.log(time*currentRotationSpeed*10);
 					//console.log(time*currentRotationSpeed*10);
-				} else {
-					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
-					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
+				//} else {
+				//	currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
+				//	currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
 					//console.log(time*currentRotationSpeed*10 - rotationNormalizer);
-				}
+				//}
 			}
 
 			// planet rotations about self (ha som variabel?)

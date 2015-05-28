@@ -78,22 +78,22 @@ $(function() {
 
 $(document).ready(function(){
 	$('.meteor-check').iCheck({
-		checkboxClass: 'icheckbox_square-green',
+		checkboxClass: 'icheckbox_square-yellow',
 		increaseArea: '20%' // optional
 	});
 	$('.meteor-check').on('ifChecked', function(event){
 		for (var i = 0; i < meteorbelts.length; ++i) {
 			if (meteorbelts[i][0] == activePlanet) {
-			mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
-			visibility(mesh.children[3],true); //Show clicked background
+				mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+				visibility(mesh.children[3],true); //Show clicked background
 			}
 		}
 	});
 	$('.meteor-check').on('ifUnchecked', function(event){
 		for (var i = 0; i < meteorbelts.length; ++i) {
 			if (meteorbelts[i][0] == activePlanet) {
-			mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
-			visibility(mesh.children[3],false); //Show clicked background
+				mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+				visibility(mesh.children[3],false); //Show clicked background
 			}
 		}
 	});
@@ -208,13 +208,41 @@ $(document).ready(function() {
     $('#add-planet-button').click(function() {
         selectPlanetsOk = false;
 
+        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false);
+
         //reset slider values to inital values
         $( ".planet_radius_slider" ).slider( "option", "value", 80 );
 		$( ".planet_size_slider" ).slider( "option", "value", 1 );
 		$('.planet_rotation_slider').slider( "option", "value", 0.001 );
 
         menusOnCreatePlanet();
-        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false);
+    });    
+});
+
+
+$(document).ready(function() {     
+    $('#music-button').click(function() {
+       if(!musicOn){
+       	    song1.play();
+       		document.getElementById("play-pause-icon").className = "fa fa-pause fa-fw fa-1x";
+       		musicOn = true;
+       }else{
+       	    song1.pause();
+       		document.getElementById("play-pause-icon").className = "fa fa-play fa-fw fa-1x";
+       		musicOn = false;
+       }
+    });    
+});
+
+$(document).ready(function() {     
+    $('#sound-button').click(function() {
+        if(!soundOn){
+        		soundOn = true;
+        		document.getElementById("sound-check-icon").className = "fa fa-volume-up fa-fw fa-1x";
+        }else{
+        		soundOn = false;
+        		document.getElementById("sound-check-icon").className = "fa fa-volume-off fa-fw fa-1x";
+        }
     });    
 });
 
@@ -246,35 +274,42 @@ $(document).ready(function() {
 
 $(document).ready(function() {     
     $('#edit-planet-button').click(function() {
-        selectPlanetsOk = false;
+        
+    	if(editAccess) {
+	        selectPlanetsOk = false;
 
-        var radius;
-		for (var i = 0; i < planetPaths.length; ++i) {
-			if (planetPaths[i][0] == activePlanet) {
-				radius = planetOrbitRadiuses[i][1]; 
+	        var radius;
+			for (var i = 0; i < planetPaths.length; ++i) {
+				if (planetPaths[i][0] == activePlanet) {
+					radius = planetOrbitRadiuses[i][1]; 
+				}
 			}
-		}
 
-        var size;
-        for (var i = 0; i < planetSizes.length; i++) {
-        	if(planetSizes[i][0] == activePlanet) {
-        		size = planetSizes[i][1];
-        	}
-        }
+	        var size;
+	        for (var i = 0; i < planetSizes.length; i++) {
+	        	if(planetSizes[i][0] == activePlanet) {
+	        		size = planetSizes[i][1];
+	        	}
+	        }
 
-		var rotation;
-		for (var i = 0; i < planetSpeeds.length; i++) {
-			if(planetSpeeds[i][0] == activePlanet) {
-				rotation = planetSpeeds[i][1];
+			var rotation;
+			for (var i = 0; i < planetSpeeds.length; i++) {
+				if(planetSpeeds[i][0] == activePlanet) {
+					rotation = planetSpeeds[i][1];
+				}
 			}
-		}
 
-        //update slider values
-        $( ".planet_radius_slider" ).slider( "option", "value", radius );
-		$( ".planet_size_slider" ).slider( "option", "value", size );
-		$('.planet_rotation_slider').slider( "option", "value", rotation );
+	        //update slider values
+	        $( ".planet_radius_slider" ).slider( "option", "value", radius );
+			$( ".planet_size_slider" ).slider( "option", "value", size );
+			$( ".planet_rotation_slider" ).slider( "option", "value", rotation );
 
-        menusOnEditPlanet();
+	        menusOnEditPlanet();
+	    }
+
+	    else {
+	    	console.log("user has no access to edit this planet");
+	    }
     });    
 });
 
@@ -325,8 +360,15 @@ $(document).ready(function() {
 
 $(document).ready(function() {     
     $('#build-planet-button').click(function() {
-    	selectPlanetsOk = false;
-        menusOnBuildPlanet();
+    	
+    	if(editAccess) {
+	    	selectPlanetsOk = false;
+	        menusOnBuildPlanet();
+	    }
+	    
+        else {
+	    	console.log(user.getUsername() + " has no access to edit this planet");
+	    }
     });    
 });
 
@@ -372,6 +414,14 @@ $(document).ready(function() {
 	})
 
 	$("#build-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#music-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#sound-button").mouseup(function(){
 	    $(this).blur();
 	})
 });

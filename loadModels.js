@@ -21,7 +21,7 @@ THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 loader2 = new THREE.OBJMTLLoader();
 
 
-//************* load volcano ***********************
+//************* JSON ***********************
 loader.load("obj/volcano.js", 
 
 			function(geometry) {
@@ -37,16 +37,31 @@ loader.load("obj/volcano.js",
 				visibility(volcano,false);
 		});
 
-//************* load house ***********************
+//************* OBJ ***********************
 
 loader2.load( "obj/windmill.obj", "obj/windmill.mtl", function(object){ 
 		
-		object.scale.set(0.5, 0.5, 0.5);
+		object.scale.set(0.2, 0.2, 0.2);
 		windmill.add(object);
 		windmill.traverse( function ( object ) { object.visible = false; } );
 		}, onProgress, onError);
 
-	
+
+
+loader2.load( "obj/bridge.obj", "obj/bridge.mtl", function(object){ 
+		
+		object.scale.set(0.7, 0.7, 0.7);
+		bridge.add(object);
+		bridge.traverse( function ( object ) { object.visible = false; } );
+		}, onProgress, onError);
+
+loader2.load( "obj/goose.obj", "obj/goose.mtl", function(object){ 
+		
+		object.scale.set(0.7, 0.7, 0.7);
+		goose.add(object);
+		goose.traverse( function ( object ) { object.visible = false; } );
+		}, onProgress, onError);
+
 
 /*
 loader.load("obj/test1.js", 

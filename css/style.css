@@ -14,6 +14,11 @@ img{
 	margin: 0px;
 	padding: 0px;
 }
+
+audio{
+	margin: 0px;
+	padding: 0px;
+}
 /************* GENERAL GUI *********************/
 .edit-created-planet-container {
 	position: absolute;
@@ -32,7 +37,13 @@ img{
 	border-radius: 5px;
 	z-index: 22;
 }
+
+.planet-name-label {
+	padding-top: 40px; /*funkar inte*/
+}
+
 .edit-created-planet-label {
+	position:relative;
 	color: white;
 	margin-left: 20px;
 	margin-bottom: 10px;
@@ -42,8 +53,9 @@ img{
 
 #planet-name-field {
 	position: absolute;
-	width: 60%;
-	left: 20%;
+	top: 20px;
+	width: 70%;
+	left: 5%;
 	background: rgba(150, 150, 150, 0.9);	
 	margin-top: 1px;
 	margin-bottom: 10px;
@@ -172,6 +184,45 @@ img{
 	cursor: pointer;	
 }
 
+#sound-button-container {
+	position:absolute;
+	bottom: 80px;
+	right: 10px;
+	height: 60px;
+	min-height: 60px;
+	min-width: 50px;
+	max-width: 60px;
+	width: 8%;
+	cursor: pointer;	
+}
+
+#sound-button-container button {
+	width: 100%;
+	height: 100%;
+	background: rgb(30, 30, 30);
+	padding: 10px 5px;
+	margin-bottom: 10px; /*push down edit-planet-button*/
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	color: rgb(245, 229, 215);
+	font-size: 18px;	
+	border: 1px solid rgb(0, 0, 0);	
+	border-radius: 7px;	
+	transition: all 0.1s linear;
+}
+#sound-button-container button:hover {
+	background: rgba(194, 234, 237, 1);
+	color: rgb(10, 10, 10);
+}
+#sound-button-container button:active,
+#sound-button-container button:focus {
+	
+	background: rgb(40, 137, 154);
+	position: relative;
+	top: 1px;
+	border: 1px solid rgb(12, 76, 87);	
+	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
+}
+
 .add-edit-planet-text {
 	margin: 0;
 	padding: 5px 0 10px 0;
@@ -215,6 +266,10 @@ img{
 	left: 20px;
 }
 
+.planet-radius-container{
+	position: aboslute;
+	margin-top: 30px;
+}
 .planet-radius-container,
 .planet-size-container,
 .planet-rotation-container{
@@ -457,6 +512,56 @@ p.user_info {
 	-o-animation-name: fadeOutLeft;
 	animation-name: fadeOutLeft;
 }
+
+/*** planet info ***/
+#planet-info-container{
+	position: absolute;
+	top: 250px;
+	right: 10px;
+	height: 65px;
+	min-width: 150px;
+	/*max-width: 100px;	*/
+	background: rgb(10, 10, 10);
+	border: 1px solid rgba(100, 100, 100,0.6);
+	box-shadow:	
+		0pt 2px 5px rgba(10, 10, 30,  0.7),	
+		0px 0px 8px 5px rgba(100, 100, 100, 0.3) inset;
+	border-radius: 5px;
+}
+
+#planet-info-table{
+	border: none;
+	width: 10%;
+	height: 50%;
+}
+#planet-info-table td{
+	padding-left: 1px;
+	float: right;
+}
+/*.planet-info-table-text{
+	position: absolute;
+	color: white;
+	margin: 10px 10px 10px 20px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 15px;
+}*/
+
+#planet-info-owner,
+#planet-info-name{
+	position: absolute;
+	color: white;
+	margin: 10px 10px 10px 20px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 15px;
+	text-align: right;
+}
+
+/*#planet-info-name{
+	border-bottom:1px solid #EEE;
+}
+#planet-info-owner{
+	border-top:1px solid #CCC;
+}*/
 
 /***** VIEWS ******/
 #jump-system-container {
