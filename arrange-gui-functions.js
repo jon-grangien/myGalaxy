@@ -20,6 +20,7 @@ function menusOnLogin() {
     // Show user menu with username
     $('#user_menu').show("fast");
     $(".user_info").text(user.getUsername());
+    $("#sound-button-container").css({"bottom": "150px" });  //move out
 }
 
 function menusOnLogout() {
@@ -27,6 +28,8 @@ function menusOnLogout() {
     $('#user_menu').hide("fast");
     $('#login').show("fast");
     $('#register').show("fast");
+
+    $("#sound-button-container").css({"bottom": "110px" });
 }
 
 function menusOnCreatePlanet() {
@@ -112,7 +115,9 @@ function buttonsOnAddMoon() {
 
 // When zoomed in on planet
 function buttonsOnViewPlanet() {
-    document.getElementById('multiaudio6').play();
+    if(soundOn)
+        document.getElementById('multiaudio6').play();
+
     $('#add-planet-button').hide();
     $('#jump-planet-button').hide();
     $('#build-planet-button').show();
@@ -126,7 +131,9 @@ function buttonsOnViewPlanet() {
 
 // When zoomed in on moon
 function buttonsOnViewMoon() {
-    document.getElementById('multiaudio6').play();
+    if(soundOn)
+        document.getElementById('multiaudio6').play();
+
     $('#add-planet-button').hide();
     $('#jump-moon-button').hide();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in
@@ -138,7 +145,9 @@ function buttonsOnViewMoon() {
 
 // When viewing system
 function buttonsOnViewSystem() {
-    document.getElementById('multiaudio7').play();
+    if(soundOn)
+        document.getElementById('multiaudio7').play();
+
     $('#build-planet-button').hide();
     $('#add-planet-button').show();
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in

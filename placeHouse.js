@@ -59,7 +59,9 @@ function showHouse(pos) {
 
 function createHouse(pos) {
 	console.log("create house planet");
-	document.getElementById('multiaudio3').play();
+	
+	if(soundOn)
+		document.getElementById('multiaudio3').play();
 
 	if(jumpPlanetOk) {
 

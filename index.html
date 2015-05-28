@@ -38,6 +38,16 @@
 		<script src="ui-functionality.js"></script>
 		<script src="db-functionality.js"></script>
 
+		<!--Audio-->
+		<audio id="multiaudio1" src="sounds/addPlanet1.mp3" preload="auto"></audio>
+		<audio id="multiaudio2" src="sounds/build1.mp3" preload="auto"></audio>
+		<audio id="multiaudio3" src="sounds/build4.mp3" preload="auto"></audio>
+		<audio id="multiaudio4" src="sounds/click2.mp3" preload="auto"></audio>
+		<audio id="multiaudio5" src="sounds/zoom1.mp3" preload="auto"></audio>
+		<audio id="multiaudio6" src="sounds/zoomIn.mp3" preload="auto"></audio>
+		<audio id="multiaudio7" src="sounds/zoomOut.mp3" preload="auto"></audio>
+
+
 		<script type="x-shader/x-vertex" id="vertexShaderProcedural">
 			vec3 mod289(vec3 x) {
 			  return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -430,6 +440,21 @@
 			</button>
 		</div>
 
+		<div id="sound-button-container">
+			<button id="music-button">
+				<i id="play-pause-icon" class="fa fa-play fa-fw fa-2x"></i>
+				<i class="fa fa-music fa-fw fa-2x"></i>
+			</button>
+
+			<button id="sound-button">
+				<i id="sound-check-icon" class="fa fa-volume-up fa-fw fa-2x"></i>
+				<p class="add-edit-planet-text">Sounds </p>
+			</button>
+
+		</div>
+
+
+
 		<div class="edit-created-planet-container">
 			<label for="planet-name-field" class="edit-created-planet-label">Name</label> <br>
 			<input type="text" id="planet-name-field" name="planet-name-field">
@@ -595,14 +620,7 @@
 			</button>
 		</div>
 
-		//Audio
-		<audio id="multiaudio1" src="sounds/addPlanet1.mp3" preload="auto"></audio>
-		<audio id="multiaudio2" src="sounds/build1.mp3" preload="auto"></audio>
-		<audio id="multiaudio3" src="sounds/build4.mp3" preload="auto"></audio>
-		<audio id="multiaudio4" src="sounds/click2.mp3" preload="auto"></audio>
-		<audio id="multiaudio5" src="sounds/zoom1.mp3" preload="auto"></audio>
-		<audio id="multiaudio6" src="sounds/zoomIn.mp3" preload="auto"></audio>
-		<audio id="multiaudio7" src="sounds/zoomOut.mp3" preload="auto"></audio>
+		
 
 
 		<script>
@@ -730,6 +748,8 @@
 
 		var music;				//global var for music property, see playMusic()
 		var currentSong = "";	//store name of current music file being played
+		var soundOn = true;
+		var musicOn = false;
 
 		//Menu
 		var planetPropertiesFl;
@@ -747,6 +767,13 @@
 		var dbPlanet;
 		var planetToSpawn;
 
+		//music
+		var song1 = new Audio('music/myGalaxyMusic.mp3'); 
+		song1.addEventListener('ended', function() {
+		    this.currentTime = 0;
+		    this.play();
+		}, false);
+		
 		
 
 
@@ -754,6 +781,7 @@
 		animate();
 
 		function init() {
+
 
 			$container = $('#container');
 

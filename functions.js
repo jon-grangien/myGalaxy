@@ -118,7 +118,10 @@ function onWindowResize() {
 
 // Planet spawn
 function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, isLoadedPlanet){
-	document.getElementById('multiaudio1').play();
+	
+	if(soundOn)
+		document.getElementById('multiaudio1').play();
+	
 	thereArePlanets = true;
 	activeMoon = null;
 
@@ -662,7 +665,7 @@ function onDocumentMouseDown( event ) {
 					activeMoon = null;
 			}
 
-			if(!jumpPlanetOk)
+			if(!jumpPlanetOk && soundOn)
 				document.getElementById('multiaudio4').play();
 			// console.log("clicked object is a planet");
 		}
@@ -674,7 +677,7 @@ function onDocumentMouseDown( event ) {
 				planetIsSelected = true;
 
 				// console.log("clicked object is a moon");
-				if(!jumpMoonOk)
+				if(!jumpMoonOk && soundOn)
 					document.getElementById('multiaudio4').play();
 			}
 		}

@@ -220,6 +220,33 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {     
+    $('#music-button').click(function() {
+       if(!musicOn){
+       	    song1.play();
+       		document.getElementById("play-pause-icon").className = "fa fa-pause fa-fw fa-2x";
+       		musicOn = true;
+       }else{
+       	    song1.pause();
+       		document.getElementById("play-pause-icon").className = "fa fa-play fa-fw fa-2x";
+       		musicOn = false;
+       }
+    });    
+});
+
+$(document).ready(function() {     
+    $('#sound-button').click(function() {
+        if(!soundOn){
+        		soundOn = true;
+        		document.getElementById("sound-check-icon").className = "fa fa-volume-up fa-fw fa-2x";
+        }else{
+        		soundOn = false;
+        		document.getElementById("sound-check-icon").className = "fa fa-volume-off fa-fw fa-2x";
+        }
+    });    
+});
+
+
+$(document).ready(function() {     
     $('#add-moon-button').click(function() {
         // selectPlanetsOk = false;   går inte än
         addMoon();
@@ -372,6 +399,14 @@ $(document).ready(function() {
 	})
 
 	$("#build-planet-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#music-button").mouseup(function(){
+	    $(this).blur();
+	})
+
+	$("#sound-button").mouseup(function(){
 	    $(this).blur();
 	})
 });
