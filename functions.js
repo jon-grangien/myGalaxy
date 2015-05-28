@@ -1012,17 +1012,17 @@ function keyDown(e){
     		keynum = e.which;
          }
     //alert(String.fromCharCode(keynum));
-    if(String.fromCharCode(keynum) == "H"){
+    // if(String.fromCharCode(keynum) == "H"){
 
-    	// console.log(activePlanetSize);
-    	if(showOrbits){
-    		showOrbits = false;
-    	}
-    	else
-    		showOrbits = true;
+    // 	// console.log(activePlanetSize);
+    // 	if(showOrbits){
+    // 		showOrbits = false;
+    // 	}
+    // 	else
+    // 		showOrbits = true;
 
-    	showOrbitsFunction();
-    }
+    // 	showOrbitsFunction();
+    // }
 
     if(String.fromCharCode(keynum) == "D"){
 
