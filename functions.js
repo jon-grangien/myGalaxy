@@ -1016,19 +1016,21 @@ function showOrbitsFunction(){
 
 function showBuild(input){
 	if(input == 1){
-		console.log('GOOOSE'); 
+		console.log('VOLCANO'); 
 		buildHouseOk = true;
 		building = input;
 	}
 
 	if(input == 2){
-		console.log('TOWER'); 
+		console.log('WINDMILL'); 
 		buildHouseOk = true;
 		building = input;
 	}
 
 	if(input == 3){
-		console.log('FISH'); 
+		console.log('BRIDGE'); 
+		buildHouseOk = true;
+		building = input;
 	}
 
 	if(input == 4){

@@ -17,6 +17,12 @@ function showHouse(pos) {
 			windmill.lookAt({ x: 0, y: 0, z: 0 });	
 		}
 
+		if(building == 3){
+			bridge.traverse( function ( object ) { object.visible = true; } );
+			bridge.position.copy({ x: pos.x*activePlanetSize, y: pos.y*activePlanetSize, z: pos.z*activePlanetSize });
+			bridge.lookAt({ x: 0, y: 0, z: 0 });	
+		}
+
 		
 	} else if(jumpMoonOk) {
 		//console.log("show house moon");
@@ -98,7 +104,7 @@ function createHouse(pos) {
 					object.position.copy( pos );
 					for (var i = 0; i < planetSizes.length; i++) {
 						if (planetSizes[i][0] == activePlanet) {
-							buildingSize = 0.5/planetSizes[i][1];
+							buildingSize = 0.2/planetSizes[i][1];
 						}
 					}
 					object.scale.set(buildingSize,buildingSize,buildingSize);
@@ -107,9 +113,6 @@ function createHouse(pos) {
 					meshes.push(object);
 					
 					}, onProgress, onError);
-
-
-
 
 			/*loader.load("obj/test1.js", 
 
@@ -127,6 +130,26 @@ function createHouse(pos) {
 					meshes.push(object);
 
 			});	*/
+		}
+
+		if(building == 3){
+
+			loader2.load( "obj/bridge.obj", "obj/bridge.mtl", function(object){ 
+					
+					activePlanet.children[4].add(object);
+					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
+					object.position.copy( pos );
+					for (var i = 0; i < planetSizes.length; i++) {
+						if (planetSizes[i][0] == activePlanet) {
+							buildingSize = 0.7/planetSizes[i][1];
+						}
+					}
+					object.scale.set(buildingSize,buildingSize,buildingSize);
+					object.lookAt({ x: 0, y: 0, z: 0 });
+
+					meshes.push(object);
+					
+					}, onProgress, onError);
 		}
 
 		
@@ -156,5 +179,6 @@ function createHouse(pos) {
 
 	visibility(volcano,false);
 	windmill.traverse( function ( object ) { object.visible = false; } );
+	bridge.traverse( function ( object ) { object.visible = false; } );
 
 }
