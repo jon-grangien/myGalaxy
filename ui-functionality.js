@@ -78,22 +78,22 @@ $(function() {
 
 $(document).ready(function(){
 	$('.meteor-check').iCheck({
-		checkboxClass: 'icheckbox_square-green',
+		checkboxClass: 'icheckbox_square-yellow',
 		increaseArea: '20%' // optional
 	});
 	$('.meteor-check').on('ifChecked', function(event){
 		for (var i = 0; i < meteorbelts.length; ++i) {
 			if (meteorbelts[i][0] == activePlanet) {
-			mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
-			visibility(mesh.children[3],true); //Show clicked background
+				mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+				visibility(mesh.children[3],true); //Show clicked background
 			}
 		}
 	});
 	$('.meteor-check').on('ifUnchecked', function(event){
 		for (var i = 0; i < meteorbelts.length; ++i) {
 			if (meteorbelts[i][0] == activePlanet) {
-			mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
-			visibility(mesh.children[3],false); //Show clicked background
+				mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+				visibility(mesh.children[3],false); //Show clicked background
 			}
 		}
 	});
