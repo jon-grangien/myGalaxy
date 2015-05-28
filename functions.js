@@ -119,8 +119,9 @@ function onWindowResize() {
 // Planet spawn
 function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, isLoadedPlanet){
 	
-	if(soundOn)
+	if(soundOn && (!isLoadedPlanet)) {
 		document.getElementById('multiaudio1').play();
+	}
 	
 	thereArePlanets = true;
 	// activePlanet = null;
