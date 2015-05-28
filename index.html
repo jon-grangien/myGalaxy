@@ -444,12 +444,12 @@
 
 			<div id="sound-button-container">
 				<button id="music-button">
-					<i id="play-pause-icon" class="fa fa-play fa-fw fa-2x"></i>
-					<i class="fa fa-music fa-fw fa-2x"></i>
+					<i id="play-pause-icon" class="fa fa-play fa-fw fa-1x"></i>
+					<i class="fa fa-music fa-fw fa-1x"></i>
 				</button>
 
 				<button id="sound-button">
-					<i id="sound-check-icon" class="fa fa-volume-up fa-fw fa-2x"></i>
+					<i id="sound-check-icon" class="fa fa-volume-up fa-fw fa-1x"></i>
 					<p class="add-edit-planet-text">Sounds </p>
 				</button>
 
@@ -681,6 +681,7 @@
 		var volcano;
 		var windmill;
 		var bridge;
+		var goose;
 
 		//Temporary movement variables
 		var posx, posz, roty, timer = 0;
@@ -814,6 +815,9 @@
 			bridge = new THREE.Object3D;
 			scene.add(bridge);
 
+			goose = new THREE.Object3D;
+			scene.add(goose);
+
 
 			//Create a material for the planet toruses
 			planetOrbitMaterial = new THREE.MeshBasicMaterial({color:0x27241c,opacity:1,transparent:false});
@@ -869,7 +873,7 @@
 			});
 
 			addSun();
-			turnOnLensFlare(true);
+			turnOnLensFlare(false);
 
 			loadStars();
 			for (var i = 0; i < stars.length; ++i){

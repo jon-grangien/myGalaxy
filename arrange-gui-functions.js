@@ -20,7 +20,7 @@ function menusOnLogin() {
     // Show user menu with username
     $('#user_menu').show("fast");
     $(".user_info").text(user.getUsername());
-    $("#sound-button-container").css({"bottom": "150px" });  //move out
+    $("#sound-button-container").css({"bottom": "120px" });  //move out
 }
 
 function menusOnLogout() {
@@ -29,7 +29,7 @@ function menusOnLogout() {
     $('#login').show("fast");
     $('#register').show("fast");
 
-    $("#sound-button-container").css({"bottom": "110px" });
+    $("#sound-button-container").css({"bottom": "80px" });
 }
 
 function menusOnCreatePlanet() {

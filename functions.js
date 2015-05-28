@@ -1034,7 +1034,9 @@ function showBuild(input){
 	}
 
 	if(input == 4){
-		console.log('LIBRARY'); 
+		console.log('GOOSE'); 
+		buildHouseOk = true;
+		building = input;
 	}
 
 	if(input == 5){

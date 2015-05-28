@@ -55,6 +55,13 @@ loader2.load( "obj/bridge.obj", "obj/bridge.mtl", function(object){
 		bridge.traverse( function ( object ) { object.visible = false; } );
 		}, onProgress, onError);
 
+loader2.load( "obj/goose.obj", "obj/goose.mtl", function(object){ 
+		
+		object.scale.set(0.7, 0.7, 0.7);
+		goose.add(object);
+		goose.traverse( function ( object ) { object.visible = false; } );
+		}, onProgress, onError);
+
 
 /*
 loader.load("obj/test1.js", 

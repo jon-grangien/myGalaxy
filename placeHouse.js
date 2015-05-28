@@ -23,6 +23,12 @@ function showHouse(pos) {
 			bridge.lookAt({ x: 0, y: 0, z: 0 });	
 		}
 
+		if(building == 4){
+			goose.traverse( function ( object ) { object.visible = true; } );
+			goose.position.copy({ x: pos.x*activePlanetSize, y: pos.y*activePlanetSize, z: pos.z*activePlanetSize });
+			goose.lookAt({ x: 0, y: 0, z: 0 });	
+		}
+
 		
 	} else if(jumpMoonOk) {
 		//console.log("show house moon");
@@ -152,6 +158,26 @@ function createHouse(pos) {
 					}, onProgress, onError);
 		}
 
+		if(building == 4){
+
+			loader2.load( "obj/goose.obj", "obj/goose.mtl", function(object){ 
+					
+					activePlanet.children[4].add(object);
+					activePlanet.children[5].remove(activePlanet.children[5].children[0]);
+					object.position.copy( pos );
+					for (var i = 0; i < planetSizes.length; i++) {
+						if (planetSizes[i][0] == activePlanet) {
+							buildingSize = 0.7/planetSizes[i][1];
+						}
+					}
+					object.scale.set(buildingSize,buildingSize,buildingSize);
+					object.lookAt({ x: 0, y: 0, z: 0 });
+
+					meshes.push(object);
+					
+					}, onProgress, onError);
+		}
+
 		
 
 	} else if(jumpMoonOk) {
@@ -180,5 +206,6 @@ function createHouse(pos) {
 	visibility(volcano,false);
 	windmill.traverse( function ( object ) { object.visible = false; } );
 	bridge.traverse( function ( object ) { object.visible = false; } );
+	goose.traverse( function ( object ) { object.visible = false; } );
 
 }

@@ -223,11 +223,11 @@ $(document).ready(function() {
     $('#music-button').click(function() {
        if(!musicOn){
        	    song1.play();
-       		document.getElementById("play-pause-icon").className = "fa fa-pause fa-fw fa-2x";
+       		document.getElementById("play-pause-icon").className = "fa fa-pause fa-fw fa-1x";
        		musicOn = true;
        }else{
        	    song1.pause();
-       		document.getElementById("play-pause-icon").className = "fa fa-play fa-fw fa-2x";
+       		document.getElementById("play-pause-icon").className = "fa fa-play fa-fw fa-1x";
        		musicOn = false;
        }
     });    
@@ -237,10 +237,10 @@ $(document).ready(function() {
     $('#sound-button').click(function() {
         if(!soundOn){
         		soundOn = true;
-        		document.getElementById("sound-check-icon").className = "fa fa-volume-up fa-fw fa-2x";
+        		document.getElementById("sound-check-icon").className = "fa fa-volume-up fa-fw fa-1x";
         }else{
         		soundOn = false;
-        		document.getElementById("sound-check-icon").className = "fa fa-volume-off fa-fw fa-2x";
+        		document.getElementById("sound-check-icon").className = "fa fa-volume-off fa-fw fa-1x";
         }
     });    
 });
