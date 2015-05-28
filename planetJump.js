@@ -74,7 +74,7 @@ function planetJump(){
 			//Möjliggör ändring av transparens
 			planetOrbitMaterial.transparent = true;
 
-			console.log("Paborjar hopp");
+			// console.log("Paborjar hopp");
 			
 			if(showOrbits){
 				showOrbitsFunction();
@@ -113,7 +113,7 @@ function planetJump(){
 				if(Math.abs(clickableObjects[i].rotation.z) > Math.PI*2)
 					clickableObjects[i].rotation.z = clickableObjects[i].rotation.z - Math.PI*2;
 				
-			console.log("Fardig med hopp");
+			// console.log("Fardig med hopp");
 			
 			showOrbits = false;
 			showOrbitsFunction();
