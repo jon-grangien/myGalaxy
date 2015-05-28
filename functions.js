@@ -782,6 +782,7 @@ function onDocumentMouseDown( event ) {
 	     	$('#edit-planet-tabs').hide();
 			$('#accordion-container').hide();
 			$("#jump-planet-moon-container").css({"right": "120px" });  //move in
+		    $('#planet-info-container').hide();
 
 			if(!jumpPlanetOk && !jumpMoonOk) {     //not viewing planet/moon
 			    $('#edit-planet-button').hide();
@@ -1041,6 +1042,7 @@ function keyDown(e){
 			selectPlanetsOk = true;
 			planetIsSelected = false;
 			$('#jump-planet-button').hide();
+		    $('#planet-info-container').hide();
 				
 
          	for (var i = 0; i < clickedShells.length; ++i) {
@@ -1062,6 +1064,7 @@ function keyDown(e){
 
          	activePlanet = null;
          	activeMoon = null;
+
     	}
     	
     }
