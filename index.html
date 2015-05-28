@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>My Galaxy</title>
+		<title>Galaxy Goose</title>
 
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/animate.css">
@@ -950,7 +950,7 @@
 			//customSunMaterial.uniforms[ 'cameraPos' ].value = camera.position;
 
 			//Variabeln time används till timern och även planeternas rotation.
-			time = (Date.now() * 0.000005 - Math.floor((Date.now() * 0.000005)))*100;
+			time = Date.now() * 0.0005;
 
 			//Handles the jumps between planets.	
 			if(jumpPlanetOk && activePlanet){
@@ -985,16 +985,16 @@
 
 				//The following lines makes the planets orbit.
 				orbit = planetOrbitRadiuses[i][1];
-				if(currentRotationSpeed == previousRotationSpeed){
+				//if(currentRotationSpeed == previousRotationSpeed){
 					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10) * orbit;
 					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10) * orbit;
 					// console.log(time*currentRotationSpeed*10);
 					//console.log(time*currentRotationSpeed*10);
-				} else {
-					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
-					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
+				//} else {
+				//	currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
+				//	currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
 					//console.log(time*currentRotationSpeed*10 - rotationNormalizer);
-				}
+				//}
 			}
 
 			// planet rotations about self (ha som variabel?)
