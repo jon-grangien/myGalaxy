@@ -662,6 +662,7 @@
 		var jumpInAction;
 		var thereArePlanets = false;
 		var thereAreMoons = false;
+		var editAccess = true;	//allow editing planet if owned
 		
 		// Variables for building on planets/moons
 		var buildHouseOk;
@@ -769,7 +770,7 @@
 		var userPassword;
 
 		// Database variables
-		var dbFunctionality = false;
+		var dbFunctionality = true;
 		var dbPlanet;
 		var planetToSpawn;
 
@@ -873,7 +874,7 @@
 			});
 
 			addSun();
-			turnOnLensFlare(false);
+			turnOnLensFlare(true);
 
 			loadStars();
 			for (var i = 0; i < stars.length; ++i){

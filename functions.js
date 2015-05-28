@@ -123,7 +123,7 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 		document.getElementById('multiaudio1').play();
 	
 	thereArePlanets = true;
-	activeMoon = null;
+	// activePlanet = null;
 
 	//Turn off planet clicked background
 	for (var i = 0; i < clickedShells.length; ++i) {
@@ -132,6 +132,18 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 			visibility(mesh.children[2],false); //Show clicked background
 		}
 	}
+	
+ 	//Hides moon clicked
+ 	for (var i = 0; i < clickedMoonShells.length; ++i) {
+ 		if (clickedMoonShells[i][0] == activeMoon) {
+ 			
+ 			mesh = clickedMoonShells[i][0];
+ 			visibility(mesh.children[2],false);
+ 		}
+ 	}
+
+	activeMoon = null;
+ 	activePlanet = null;
 
 	// Atmosphere
 	var atmosphereGeometry = new THREE.SphereGeometry( 12.5, 60, 60 );
@@ -619,7 +631,6 @@ function onDocumentMouseDown( event ) {
 	if (!selectPlanetsOk && !buildHouseOk) {
 		return;		//do nothing (disable functionality)
 	}
-
 	
 	event.preventDefault();
 	mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
@@ -650,8 +661,6 @@ function onDocumentMouseDown( event ) {
 
 	// Handle active object if no jumping and if not editing
 	if ( intersects.length > 0 && !jumpInAction && selectPlanetsOk) {
-		var planetIsSelected = false; 
-
 
 		var clickedObject = intersects[0].object;
 		if(jumpPlanetOk)
@@ -689,6 +698,7 @@ function onDocumentMouseDown( event ) {
 		if (planetIsSelected && !jumpPlanetOk && !jumpMoonOk) {
 			showButtonsForActivePlanet();
 		}
+
 	}
 	
 	// House functionality if house function called and if editing
@@ -742,11 +752,43 @@ function onDocumentMouseDown( event ) {
 		}
 	}
 
+	var planetIsSelected = false; 
+
+	if(user && dbFunctionality) {
+		editAccess = false;
+
+		for (var i = 0; i < planetIds.length; ++i) {
+			if(activePlanet == planetIds[i][0]) {
+				if(user.id == planetIds[i][2]) {
+					editAccess = true;
+					// console.log("user " + user.getUsername() + " (" + user.id + ") has access to this planet");
+				}
+			}
+		}
+
+		// if(!editAccess) {
+		// 	// console.log("user " + user.getUsername() + " (" + user.id + ") does not have access to this planet");
+		// }
+
+		if (!editAccess) {
+			$('#edit-planet-button').css({"color": "rgb(60, 60, 60)",
+										  "opacity": "0.7"});
+			$('#build-planet-button').css({"color": "rgb(60, 60, 60)",
+										  "opacity": "0.7"});
+		}
+
+		else {
+			$('#edit-planet-button').css({"color": "rgb(245, 229, 215)",
+										  "opacity": "1"});
+			$('#build-planet-button').css({"color": "rgb(245, 229, 215)",
+										  "opacity": "1"});
+		}
+	}
 
 }
 
 
-//Hover funktion, visar att planeter är tryckbara
+//Hover-funktion, visar att planeter är tryckbara
 function onMouseMove( event ) {
 	if(!selectPlanetsOk && !buildHouseOk) {
 		return;		//do nothing (disable functionality)
@@ -936,7 +978,7 @@ function keyDown(e){
     //alert(String.fromCharCode(keynum));
     if(String.fromCharCode(keynum) == "H"){
 
-    	console.log(activePlanetSize);
+    	// console.log(activePlanetSize);
     	if(showOrbits){
     		showOrbits = false;
     	}
