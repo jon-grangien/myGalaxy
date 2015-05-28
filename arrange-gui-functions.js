@@ -153,7 +153,7 @@ function buttonsOnViewSystem() {
     $("#jump-planet-moon-container").css({"right": "120px" });  //move in
     $('#accordion-container').hide();
 
-    console.log("viewing system");
+    // console.log("viewing system");
 
     if(thereArePlanets && activePlanet) {
         $('#jump-planet-button').show();
