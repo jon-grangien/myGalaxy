@@ -374,7 +374,10 @@ function updatePlanetTexture(textureFile) {
 // Add moon to active planet (gui)
 function addMoon() {
 	thereAreMoons = true;
-	
+
+	if(soundOn)
+		document.getElementById('multiaudio8').play();
+
 	//Turn off moon clicked background
 	for (var i = 0; i < clickedMoonShells.length; ++i) {
 		if (clickedMoonShells[i][0] == activeMoon) {
@@ -984,6 +987,19 @@ function keyDown(e){
          	activeMoon = null;
     	}
     	
+    }
+
+
+    if(String.fromCharCode(keynum) == "Q"){
+
+    	if(showMenu){
+    		$('#all-panels').hide();
+    		showMenu = false
+    	}
+    	else{
+    		$('#all-panels').show();
+    		showMenu = true;
+    	}
     }
 }
 
