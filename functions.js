@@ -1013,19 +1013,19 @@ function keyDown(e){
     		keynum = e.which;
          }
     //alert(String.fromCharCode(keynum));
-    // if(String.fromCharCode(keynum) == "H"){
+    if(String.fromCharCode(keynum) == "W" && e.shiftKey){
 
-    // 	// console.log(activePlanetSize);
-    // 	if(showOrbits){
-    // 		showOrbits = false;
-    // 	}
-    // 	else
-    // 		showOrbits = true;
+    	// console.log(activePlanetSize);
+     	if(showOrbits){
+     		showOrbits = false;
+     	}
+     	else
+     		showOrbits = true;
 
-    // 	showOrbitsFunction();
-    // }
+     	showOrbitsFunction();
+     }
 
-    if(String.fromCharCode(keynum) == "D"){
+    if(String.fromCharCode(keynum) == "E" && e.shiftKey){
 
     	if(!jumpPlanetOk && !jumpMoonOk){
          	$('#edit-planet-tabs').hide();
@@ -1071,7 +1071,7 @@ function keyDown(e){
     }
 
 
-    if(String.fromCharCode(keynum) == "Q"){
+    if(String.fromCharCode(keynum) == "Q" && e.shiftKey){
 
     	if(showMenu){
     		$('#all-panels').hide();
