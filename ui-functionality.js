@@ -206,16 +206,18 @@ $( "#texture-accordion" ).accordion({
 
 $(document).ready(function() {     
     $('#add-planet-button').click(function() {
-        selectPlanetsOk = false;
+        if(user) {
+	        selectPlanetsOk = false;
 
-        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false);
+	        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false);
 
-        //reset slider values to inital values
-        $( ".planet_radius_slider" ).slider( "option", "value", 80 );
-		$( ".planet_size_slider" ).slider( "option", "value", 1 );
-		$('.planet_rotation_slider').slider( "option", "value", 0.001 );
+	        //reset slider values to inital values
+	        $( ".planet_radius_slider" ).slider( "option", "value", 80 );
+			$( ".planet_size_slider" ).slider( "option", "value", 1 );
+			$('.planet_rotation_slider').slider( "option", "value", 0.001 );
 
-        menusOnCreatePlanet();
+	        menusOnCreatePlanet();
+	    }
     });    
 });
 
@@ -275,7 +277,7 @@ $(document).ready(function() {
 $(document).ready(function() {     
     $('#edit-planet-button').click(function() {
         
-    	if(editAccess) {
+    	if(user && editAccess) {
 	        selectPlanetsOk = false;
 
 	        var radius;
@@ -361,7 +363,7 @@ $(document).ready(function() {
 $(document).ready(function() {     
     $('#build-planet-button').click(function() {
     	
-    	if(editAccess) {
+    	if(user && editAccess) {
 	    	selectPlanetsOk = false;
 	        menusOnBuildPlanet();
 	    }
