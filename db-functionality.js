@@ -11,6 +11,7 @@ function createAccount() {
 			username = newUsername;
 			userPassword = newUserPassword;
 			login();
+			buttonsForLoggedInUser();
 		},
 		error: function(user, error) {
 			// Show error message and let the user try again
