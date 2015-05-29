@@ -11,6 +11,8 @@ function createAccount() {
 			username = newUsername;
 			userPassword = newUserPassword;
 			login();
+			$('#add-planet-button').css({"color": "rgb(245, 229, 215)",
+                                  "opacity": "1.0"});
 			buttonsForLoggedInUser();
 		},
 		error: function(user, error) {
@@ -36,6 +38,7 @@ function login() {
 
 function logout() {
 	Parse.User.logOut();
+	user = null;
 	menusOnLogout();
 	buttonsForNonLoggedInUser();
 	// console.log("logged out");

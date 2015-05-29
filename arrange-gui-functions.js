@@ -183,10 +183,10 @@ function buttonsOnViewSystem() {
 }
 
 function buttonsForLoggedInUser() {
-    $('#edit-planet-button').css({"color": "rgb(245, 229, 215)",
+    $('#add-planet-button').css({"color": "rgb(245, 229, 215)",
                                   "opacity": "1.0"});
     $('#edit-planet-button').css({"color": "rgb(245, 229, 215)",
-                                      "opacity": "0.7"});
+                                      "opacity": "1.0"});
     $('#build-planet-button').css({"color": "rgb(245, 229, 215)",
                                   "opacity": "1.0"});
 }
