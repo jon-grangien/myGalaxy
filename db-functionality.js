@@ -37,6 +37,7 @@ function login() {
 function logout() {
 	Parse.User.logOut();
 	menusOnLogout();
+	buttonsForNonLoggedInUser();
 	// console.log("logged out");
 
 }
