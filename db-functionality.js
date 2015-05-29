@@ -28,6 +28,7 @@ function login() {
 			user = loggedinuser;
 			menusOnLogin();
 			// console.log("logged in!");
+			buttonsForLoggedInUser();
 		},
 		error: function(user, error) {
 		// The login failed. Check error to see why.
