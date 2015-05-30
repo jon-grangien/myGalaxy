@@ -979,22 +979,20 @@
 				currentRotationSpeed = planetSpeeds[i][1];
 				previousRotationSpeed = planetSpeeds[i][2];
 				
-				rotationNormalizer = previousRotationSpeed * planetSpeeds[i][3] * 10;
-				//console.log(planetSpeeds[i][1]);
-				//console.log(planetSpeeds[i][2]);
+				rotationNormalizer = planetSpeeds[i][4];
 
 				//The following lines makes the planets orbit.
 				orbit = planetOrbitRadiuses[i][1];
-				//if(currentRotationSpeed == previousRotationSpeed){
-					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10) * orbit;
-					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10) * orbit;
+				if(currentRotationSpeed == previousRotationSpeed){
+					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed) * orbit;
+					currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed) * orbit;
 					// console.log(time*currentRotationSpeed*10);
 					//console.log(time*currentRotationSpeed*10);
-				//} else {
-				//	currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
-				//	currentPlanetGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*10 - rotationNormalizer) * orbit;
-					//console.log(time*currentRotationSpeed*10 - rotationNormalizer);
-				//}
+				} else {
+					//The following lines makes the planets orbit with compensation for earlier rotationspeeds.
+					currentPlanetGroup.children[0].position.x = Math.cos( rotationNormalizer + (time - planetSpeeds[i][3])*planetSpeeds[i][1]) * orbit;
+					currentPlanetGroup.children[0].position.y = Math.sin( rotationNormalizer + (time - planetSpeeds[i][3])*planetSpeeds[i][1]) * orbit;
+				}
 			}
 
 			// planet rotations about self (ha som variabel?)
@@ -1006,12 +1004,21 @@
 			for (var i = 0; i < moonSpeeds.length; ++i) {
 				currentMoonGroup = moonSpeeds[i][0].parent;
 				currentRotationSpeed = moonSpeeds[i][1];
+				previousRotationSpeed = moonSpeeds[i][2];
+
+				rotationNormalizer = moonSpeeds[i][4];
 				
 				orbit = moonOrbitRadiuses[i][1];
 
-				//The following lines makes the moons orbit.
-				currentMoonGroup.children[0].position.x = Math.cos( time*currentRotationSpeed*100) * orbit;
-				currentMoonGroup.children[0].position.y = Math.sin( time*currentRotationSpeed*100) * orbit;
+				if(currentRotationSpeed == previousRotationSpeed){
+					//The following lines makes the moons orbit.
+					currentMoonGroup.children[0].position.x = Math.cos( time*currentRotationSpeed) * orbit;
+					currentMoonGroup.children[0].position.y = Math.sin( time*currentRotationSpeed) * orbit;
+				} else {
+					//The following lines makes the moons orbit with compensation for earlier rotationspeeds.
+					currentMoonGroup.children[0].position.x = Math.cos( rotationNormalizer + (time - moonSpeeds[i][3])*moonSpeeds[i][1]) * orbit;
+					currentMoonGroup.children[0].position.y = Math.sin( rotationNormalizer + (time - moonSpeeds[i][3])*moonSpeeds[i][1]) * orbit;
+				}
 
 				//The following line is needed to be able to jump to moons.
 				currentMoonGroup.rotation.z = -currentMoonGroup.parent.rotation.z;

@@ -220,8 +220,8 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 	tempArray = [activePlanet, name];
 	planetNames.push(tempArray);
 
-	// Push to planetSpeeds (planets|rotationSpeeds)
-	tempArray = [activePlanet, activeRotationSpeed, activeRotationSpeed];
+	// Push to planetSpeeds (planets|rotationSpeeds|previousRotationSpeed|oldTime|rotationCompensator)
+	tempArray = [activePlanet, activeRotationSpeed, 0, 0, 0];
 	planetSpeeds.push(tempArray);
 
 	// Push to planets (planets|moons)
@@ -463,7 +463,7 @@ function addMoon() {
 	}
 
 	// Push moon object + rotationSpeed
-	tempArray = [activeMoon, activeRotationSpeed, activeRotationSpeed];
+	tempArray = [activeMoon, activeRotationSpeed, 0, 0, 0];
 	moonSpeeds.push(tempArray);
 
 	// Push to planetPaths

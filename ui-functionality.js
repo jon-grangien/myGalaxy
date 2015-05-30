@@ -55,19 +55,26 @@ $(function() {
 
 $(function() {
 	$( ".planet_rotation_slider" ).slider({
-		min: 0.001,
-		max: 0.05,
-		value: 0.001,
-		step: 0.001,
+		min: 0.01,
+		max: 0.25,
+		value: 0.01,
+		step: 0.01,
 		change: function(event, ui) {
 			for (var i = 0; i < planetSpeeds.length; ++i) {
 				if (planetSpeeds[i][0] == activePlanet) {	//where first element is active planet
 					if(planetSpeeds[i][1] != ui.value) {
+
+						if(planetSpeeds[i][4] == 0){
+							planetSpeeds[i][4] = planetSpeeds[i][1] * time;
+						} else {
+							planetSpeeds[i][4] = planetSpeeds[i][4] + (time-planetSpeeds[i][3])*planetSpeeds[i][1];
+						}
+						//Change third element to old rotationspeed.
 						planetSpeeds[i][2] = planetSpeeds[i][1];
 					}
-					
+					//Save the point of time as the fourth element.
 					planetSpeeds[i][1] = ui.value;		//change second element to slider value
-					planetSpeeds[i][3] = time;
+					planetSpeeds[i][3] = time ;
 				}
 			}
 
@@ -123,14 +130,31 @@ $(function() {
 
 $(function() {
 	$( "#moon-rotation-slider" ).slider({
-		min: 0.001,
-		max: 0.01,
-		value: 0.001,
-		step: 0.001,
+		min: 0.1,
+		max: 1,
+		value: 0.1,
+		step: 0.1,
 		slide: function(event, ui) {
 			for (var i = 0; i < moonSpeeds.length; ++i) {
 				if (moonSpeeds[i][0] == activeMoon) {	//where first element is active planet
-					moonSpeeds[i][1] = ui.value;		//change second element to slider value
+
+					if(moonSpeeds[i][1] != ui.value) {
+
+						if(moonSpeeds[i][4] == 0){
+							moonSpeeds[i][4] = moonSpeeds[i][1] * time;
+						} else {
+							moonSpeeds[i][4] = moonSpeeds[i][4] + (time-moonSpeeds[i][3])*moonSpeeds[i][1];
+						}
+						//Change third element to old rotationspeed.
+						moonSpeeds[i][2] = moonSpeeds[i][1];
+					}
+						//Save the point of time as the fourth element.
+						moonSpeeds[i][1] = ui.value;		//change second element to slider value
+						moonSpeeds[i][3] = time ;
+					
+
+
+					//moonSpeeds[i][1] = ui.value;		//change second element to slider value
 				}
 			}
 		}
