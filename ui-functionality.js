@@ -456,3 +456,15 @@ $(document).ready(function(){
   	stopQueue: true
   });  
 });
+
+$(document).ready(function() {     
+    $('#solar-room').click(function() {
+    	removeAllPlanetsLocally();
+        console.log("solar system clicked");
+    });  
+
+    $('#kaiser-room').click(function() {
+    	removeAllPlanetsLocally();
+        console.log("kaiser crescent clicked");
+    });      
+});
