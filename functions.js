@@ -524,7 +524,7 @@ function addMoon() {
 	// console.log("moon spawned");
 }
 
-function removePlanet(removingAll) {
+function removePlanet() {
 	//print array
 	// console.log("array before/after delete:")
 	// for (var i = 0; i < array.length; ++i) {
@@ -566,23 +566,6 @@ function removePlanet(removingAll) {
 		}
 	}
 
-	// Find and remove planet from sun
-	for (var i = 0; i < planetGroups.length; ++i) {
-	    if (planetGroups[i].children[0] == activePlanet){
-	    	planetGroups[i].remove(0);				//remove planet (child) from planetGroup (parent)
-	    	sunSphere.remove(planetGroups[i]);		//remove planetGroup (child) from sun (parent)
-	    }
-	}
-
-
-	// Delete from planetPaths (planet|path)
-	for (var i = 0; i < planetPaths.length; ++i) {
-		if (planetPaths[i][0] == activePlanet) {
-			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
-			planetPaths.splice(i, 1) //remove 1 element (array) from index 0
-		}
-	}
-
 	// Delete from planetIds (planet|planet id|owner user id)
 	for (var i = 0; i < planetIds.length; ++i) {
 		if (planetIds[i][0] == activePlanet) {
@@ -590,13 +573,41 @@ function removePlanet(removingAll) {
 		}
 	}
 
-	if(!removingAll) {
-		// Delete from planets (planets|moons)
-		for (var i = 0; i < planets.length; ++i) {
-			if (planets[i][0] == activePlanet) {
-				planets.splice(i, 1);	//remove 1 element (array) from index i
-			}
+	
+	// Delete from planetPaths (planet|path)
+	for (var i = 0; i < planetPaths.length; ++i) {
+		if (planetPaths[i][0] == activePlanet) {
+			sunSphere.remove(planetPaths[i][1]);	//remove orbit (child) from sun (parent)
+			planetPaths.splice(i, 1) //remove 1 element (array) from index 0
+			
 		}
+	}
+
+	// Delete from planets (planets|moons)
+	for (var i = 0; i < planets.length; ++i) {
+		if (planets[i][0] == activePlanet) {
+			planets.splice(i, 1);	//remove 1 element (array) from index i
+		}
+	}
+
+	// Delete from clickableObjects
+	for (var i = 0; i < clickableObjects.length; ++i) {
+		if (clickableObjects[i] == activePlanet) {
+			clickableObjects.splice(i, 1) //remove 1 element (array) from index i
+		}
+	}
+
+	// Find and remove planet from sun
+	for (var i = 0; i < planetGroups.length; ++i) {
+	    if (planetGroups[i].children[0] == activePlanet){
+	    	// planetGroups[i].remove();				//remove planet (child) from planetGroup (parent)
+	    	sunSphere.remove(planetGroups[i]);		//remove planetGroup (child) from sun (parent)
+	    	planetGroups[i].remove(activePlanet);
+
+	    	//deallocate
+			activePlanet.material.dispose();
+			activePlanet.geometry.dispose();
+	    }
 	}
 
 	activePlanet = null;
@@ -606,12 +617,48 @@ function removeAllPlanetsLocally() {
 	// Iterate through planets
 	for (var i = 0; i < planets.length; ++i) {
 		activePlanet = planets[i][0];	//for each active planet
-		removePlanet(true);				//delete everything with removeAll flag true
-		// console.log("planet removed");
+
+		// remove planet path
+		for (var j = 0; j < planetPaths.length; ++j) {
+			if (planetPaths[j][0] == activePlanet) {
+				sunSphere.remove(planetPaths[j][1]);	//remove orbit (child) from sun (parent)				
+				planetPaths.splice(j, 1) //remove 1 element (array) from index 0
+			}
+		}
+
+		// remove planetGroup from sun and planet from planetGroup
+		for (var j = 0; j < planetGroups.length; ++j) {
+		    if (planetGroups[j].children[0] == activePlanet){
+		    	sunSphere.remove(planetGroups[j]);		//remove planetGroup (child) from sun (parent)
+		    	planetGroups[j].remove(activePlanet);	//remove planet (child) from planetGroup (parent)
+
+		    	//deallocate
+				activePlanet.material.dispose();
+				activePlanet.geometry.dispose();
+		    }
+		}
 	}
 
-	// clear planets array
+	// clear arrays
 	planets = [];
+	clickableObjects = [];
+	planetSpeeds = [];
+	moonSpeeds = [];
+	planetPaths = [];
+	moonPaths = [];
+	planetObjects = [];
+	moonObjects = [];
+	hoverShells = [];
+	hoverMoonShells = [];
+	clickedShells = [];
+	clickedMoonShells = [];
+	planetSizes = [];
+	meteorbelts = [];	
+	planetIds = [];
+	planetTextureFiles = [];	
+	planetNames = [];		
+	planetMeteorbeltStates = [];
+	planetOrbitRadiuses = [];
 }
 
 function buildHouse() {

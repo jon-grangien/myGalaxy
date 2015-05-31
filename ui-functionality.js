@@ -362,7 +362,7 @@ $(document).ready(function() {
 $(document).ready(function() {     
     $('.delete-planet-button').click(function() {
     	deletePlanetFromDB();	//before removePlanet() which sets activePlanet to null
-        removePlanet(false);	//removing all planets false
+        removePlanet();	//removing all planets false
         selectPlanetsOk = true;
         
         if(jumpPlanetOk && jumpMoonOk) {     //viewing planet/moon
