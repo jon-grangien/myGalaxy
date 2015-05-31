@@ -832,6 +832,67 @@ p.user_info {
 	transition: all 0.1s linear;
 }
 
+.room-container {
+	position: absolute;
+	bottom: 0px;
+	right: 200px;
+	width: 100px;
+	background: rgb(30, 30, 30);
+	border: 1px solid rgb(0, 0, 0);	
+	border-radius: 3px;	
+	height: 40px;
+	font-size: 15px;
+	transition: all 0.1s linear;
+}
+
+.top-menu-main{
+  position: relative;
+  float: left;
+  list-style: none;
+  margin: 0;
+}
+
+.top-menu-main a {
+	display: block;
+	text-decoration: none;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	color: rgb(245, 229, 215);
+	padding: 10px 15px;
+	height: 38px;
+	line-height: 3.8;
+	padding: 0 15px;
+	text-align: center;
+}
+
+ul.room-menu {
+	bottom: 38px;
+	cursor: pointer;
+	display: none;
+	min-width: 100%;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+	white-space: nowrap;
+	-moz-box-shadow: 0 0 8px #333;
+	-webkit-box-shadow: 0 0 8px #333;
+	box-shadow: 0 0 8px #333;
+}
+
+ul.room-menu > li {
+	margin: 0px;
+	padding: 10px 30px;
+	background: #333;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	color: #fff;
+	white-space: nowrap;
+	list-style: none;
+}
+
+ul.room-menu > li.hover {
+	background: #cfcfcf;
+	color: #333;
+}
+
 /******** PLANET BUILD GUI ********/
 #accordion-container {	/*same as edit-planet-tabs*/
 	position: absolute;

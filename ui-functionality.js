@@ -447,3 +447,12 @@ $(document).ready(function() {
 	    $(this).blur();
 	})
 });
+
+$(document).ready(function(){
+  $(".room-container").slideupmenu({
+  	slideUpSpeed: 150, 
+  	slideDownSpeed: 200, 
+  	ease: "easeOutQuad", 
+  	stopQueue: true
+  });  
+});
