@@ -71,10 +71,10 @@ $(function() {
 						}
 						//Change third element to old rotationspeed.
 						planetSpeeds[i][2] = planetSpeeds[i][1];
+						//Save the point of time as the fourth element.
+						planetSpeeds[i][1] = ui.value;		//change second element to slider value
+						planetSpeeds[i][3] = time ;
 					}
-					//Save the point of time as the fourth element.
-					planetSpeeds[i][1] = ui.value;		//change second element to slider value
-					planetSpeeds[i][3] = time ;
 				}
 			}
 
@@ -147,14 +147,10 @@ $(function() {
 						}
 						//Change third element to old rotationspeed.
 						moonSpeeds[i][2] = moonSpeeds[i][1];
-					}
 						//Save the point of time as the fourth element.
 						moonSpeeds[i][1] = ui.value;		//change second element to slider value
 						moonSpeeds[i][3] = time ;
-					
-
-
-					//moonSpeeds[i][1] = ui.value;		//change second element to slider value
+					}
 				}
 			}
 		}
