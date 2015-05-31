@@ -460,11 +460,40 @@ $(document).ready(function(){
 $(document).ready(function() {     
     $('#solar-room').click(function() {
     	removeAllPlanetsLocally();
-        console.log("solar system clicked");
+    	deselect();
+        loadPlanetsFromDB("Solar System");
+        currentSystem = "Solar System";
     });  
 
     $('#kaiser-room').click(function() {
     	removeAllPlanetsLocally();
-        console.log("kaiser crescent clicked");
-    });      
+    	deselect();
+        loadPlanetsFromDB("Kaiser Crescent");
+        currentSystem = "Kaiser Crescent";
+
+    });
+
+    $('#sixten-room').click(function() {
+    	removeAllPlanetsLocally();
+    	deselect();
+        loadPlanetsFromDB("Sixten Sigma");
+        currentSystem = "Sixten Sigma";
+
+    });   
+
+    $('#morbit-room').click(function() {
+    	removeAllPlanetsLocally();
+    	deselect();
+        loadPlanetsFromDB("Morbit Nebula");
+        currentSystem = "Morbit Nebula";
+
+    });   
+
+    $('#k4-room').click(function() {
+    	removeAllPlanetsLocally();
+    	deselect();
+        loadPlanetsFromDB("K4 Cluster");
+        currentSystem = "K4 Cluster";
+
+    });     
 });

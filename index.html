@@ -649,6 +649,9 @@
 					<ul class="room-menu">
 					    <li id="solar-room">Solar system</li>
 					    <li id="kaiser-room">Kaiser Crescent</li>
+					    <li id="sixten-room">Sixten Sigma</li>
+					    <li id="morbit-room">Morbit Nebula</li>
+					    <li id="k4-room">K4 Cluster</li>
 					</ul>
 					<a href="#" class="menu-item-text">Systems</a> 
 				</div>
@@ -804,6 +807,7 @@
 		var dbFunctionality = true;
 		var dbPlanet;
 		var planetToSpawn;
+		var currentSystem;
 
 		//music
 		var song1 = new Audio('music/myGalaxyMusic.mp3'); 
@@ -889,7 +893,7 @@
 			}
 
 			if (dbFunctionality) {
-				loadPlanetsFromDB();
+				loadPlanetsFromDB("Solar System");
 			}
 
 			// LOGIN/REGISTER

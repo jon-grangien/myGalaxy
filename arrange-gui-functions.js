@@ -125,6 +125,23 @@ function menusOnDeletePlanetSystemView() {
     $('#add-planet-button').show();
 }
 
+function menusOnDeselect() {
+    $('#edit-planet-tabs').hide();
+    $('#accordion-container').hide();
+    $("#jump-planet-moon-container").css({"right": "120px" });  //move in
+    $('#planet-info-container').hide();
+    $('#jump-planet-button').hide();
+    $('#planet-info-container').hide();
+
+    if(!jumpPlanetOk && !jumpMoonOk) {     //not viewing planet/moon
+        $('#edit-planet-button').hide();
+        $('#add-planet-button').show();
+    } else {
+        $('#build-planet-button').show();   //viewing planet/moon
+
+    }
+}
+
 function buttonsOnAddMoon() {
     $('#jump-moon-button').show();
 }

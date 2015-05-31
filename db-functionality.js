@@ -53,6 +53,7 @@ function saveNewPlanetToDB() {
 
 		dbPlanet.set("ownerName", username);
 		dbPlanet.set("ownerId", user.id);
+		dbPlanet.set("system", currentSystem); //global
 
 		// Initial values
 		dbPlanet.set("name" , "");
@@ -206,11 +207,11 @@ function deletePlanetFromDB() {
 }
 
 // Load planets from db
-function loadPlanetsFromDB() {
+function loadPlanetsFromDB(system) {
 	if(dbFunctionality) {
 		var Planet = Parse.Object.extend("Planet");		//make global
 		var query = new Parse.Query(Planet);
-		// query.equalTo("playerName", "Dan Stemkoski");
+		query.equalTo("system", system);
 		query.find({
 			success: function(results) {
 				console.log("Successfully retrieved " + results.length + " planets:");
