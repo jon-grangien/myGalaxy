@@ -231,6 +231,8 @@ function loadPlanetsFromDB(system) {
 					console.log(object.get('ownerName') + ' - ' + object.get('name') + ' ' + object.id + ' - ' + object.get('texture'));
 		    		addPlanet(object.id, object.get('ownerId'), object.get('name'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'), object.get('meteorBelt'), true);
 		    	}
+		    	
+		    	deselect();
 
 			},
 		  	error: function(error) {

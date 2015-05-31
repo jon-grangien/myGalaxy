@@ -239,6 +239,7 @@ $( "#texture-accordion" ).accordion({
 $(document).ready(function() {     
     $('#add-planet-button').click(function() {
         if(user) {
+        	deselect();
 	        selectPlanetsOk = false;
 
 	        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false, false);
@@ -483,39 +484,39 @@ $(document).ready(function(){
 
 $(document).ready(function() {     
     $('#solar-room').click(function() {
-    	removeAllPlanetsLocally();
     	deselect();
+    	removeAllPlanetsLocally();
         loadPlanetsFromDB("Solar System");
         currentSystem = "Solar System";
     });  
 
     $('#kaiser-room').click(function() {
-    	removeAllPlanetsLocally();
     	deselect();
+    	removeAllPlanetsLocally();
         loadPlanetsFromDB("Kaiser Crescent");
         currentSystem = "Kaiser Crescent";
 
     });
 
     $('#sixten-room').click(function() {
-    	removeAllPlanetsLocally();
     	deselect();
+    	removeAllPlanetsLocally();
         loadPlanetsFromDB("Sixten Sigma");
         currentSystem = "Sixten Sigma";
 
     });   
 
     $('#morbit-room').click(function() {
-    	removeAllPlanetsLocally();
     	deselect();
+    	removeAllPlanetsLocally();
         loadPlanetsFromDB("Morbit Nebula");
         currentSystem = "Morbit Nebula";
 
     });   
 
     $('#k4-room').click(function() {
-    	removeAllPlanetsLocally();
     	deselect();
+    	removeAllPlanetsLocally();
         loadPlanetsFromDB("K4 Cluster");
         currentSystem = "K4 Cluster";
 
