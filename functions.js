@@ -509,7 +509,7 @@ function addMoon() {
 	// console.log("moon spawned");
 }
 
-function deletePlanet() {
+function removePlanet(removingAll) {
 	//print array
 	// console.log("array before/after delete:")
 	// for (var i = 0; i < array.length; ++i) {
@@ -520,13 +520,6 @@ function deletePlanet() {
 	for (var i = 0; i < planetSpeeds.length; ++i) {
 		if (planetSpeeds[i][0] == activePlanet) {
 			planetSpeeds.splice(i, 1);	//remove 1 element (array) from index i
-		}
-	}
-
-	// Delete from planets (planets|moons)
-	for (var i = 0; i < planets.length; ++i) {
-		if (planets[i][0] == activePlanet) {
-			planets.splice(i, 1);	//remove 1 element (array) from index i
 		}
 	}
 
@@ -582,7 +575,28 @@ function deletePlanet() {
 		}
 	}
 
+	if(!removingAll) {
+		// Delete from planets (planets|moons)
+		for (var i = 0; i < planets.length; ++i) {
+			if (planets[i][0] == activePlanet) {
+				planets.splice(i, 1);	//remove 1 element (array) from index i
+			}
+		}
+	}
+
 	activePlanet = null;
+}
+
+function removeAllPlanetsLocally() {
+	// Iterate through planets
+	for (var i = 0; i < planets.length; ++i) {
+		activePlanet = planets[i][0];	//for each active planet
+		removePlanet(true);				//delete everything with removeAll flag true
+		// console.log("planet removed");
+	}
+
+	// clear planets array
+	planets = [];
 }
 
 function buildHouse() {
