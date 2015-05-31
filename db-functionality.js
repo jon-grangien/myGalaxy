@@ -11,6 +11,7 @@ function createAccount() {
 			username = newUsername;
 			userPassword = newUserPassword;
 			login();
+			buttonsForLoggedInUser();
 		},
 		error: function(user, error) {
 			// Show error message and let the user try again
@@ -36,6 +37,7 @@ function login() {
 function logout() {
 	Parse.User.logOut();
 	menusOnLogout();
+	buttonsForNonLoggedInUser();
 	// console.log("logged out");
 
 }
@@ -124,7 +126,7 @@ function updatePlanetInDB() {
 			}
 		}
 
-		// Get name
+		// Get planet name
 		for (var i = 0; i < planetNames.length; i++) {
 			if (planetNames[i][0] == activePlanet) {
 				planetName = planetNames[i][1];
@@ -132,6 +134,19 @@ function updatePlanetInDB() {
 		}
 
 		var Planet = Parse.Object.extend("Planet");
+		
+		// var planetOwner;
+		// var query = new Parse.Query(Planet);
+		// query.get(planetId, {
+		//   success: function(planet) {
+		//     planetOwner = planet.get('ownerName');
+		//   },
+		//   error: function(object, error) {
+		//     // The object was not retrieved successfully.
+		//     console.log("failed to retrieve " + object + ', ' + error);
+		//   }
+		// });
+		
 		var dbPlanet = new Planet();
 		dbPlanet.id = planetId;
 
@@ -145,7 +160,7 @@ function updatePlanetInDB() {
 		dbPlanet.save(null, {
 		  success: function(dbPlanet) {
 		    // Execute any logic that should take place after the object is saved.
-		    console.log('Updated ' + dbPlanet.get("ownerName") + '\'s object (objectId: ' + dbPlanet.id + ')');
+		    console.log('Updated object (id ' + dbPlanet.id + ')');
 		  },
 		  error: function(dbPlanet, error) {
 		    // Execute any logic that should take place if the save fails.
@@ -194,7 +209,7 @@ function loadPlanetsFromDB() {
 		// query.equalTo("playerName", "Dan Stemkoski");
 		query.find({
 			success: function(results) {
-				console.log("Successfully retrieved " + results.length + " planets.");
+				console.log("Successfully retrieved " + results.length + " planets:");
 				// Do something with the returned Parse.Object values
 				for (var i = 0; i < results.length; i++) { 
 					var object = results[i];

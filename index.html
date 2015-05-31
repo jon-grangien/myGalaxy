@@ -373,7 +373,6 @@
 	<body onkeydown="keyDown(event)">
 		<div id="container"></div>
 
-		<!-- Account GUI -->
 		<div id="all-panels">
 			<div id="account-gui-container">
 				<!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
@@ -422,6 +421,25 @@
 				<div id="user-button-container">
 					<button onClick="logout()">Log out</button>
 				</div>
+			</div>
+
+			<!-- planet info box -->
+			<div id="planet-info-container">
+				<!-- <p id="planet-info-name">Name:</p> 
+				<br>
+				<p id="planet-info-owner">Owned by:</p> -->
+				<table id="planet-info-table"  cellspacing="1" cellpadding="1">
+					<tr id="planet-info-name-row">
+						<td>
+							<p id="planet-info-name">name</p>
+						</td>
+					</tr>
+					<tr id="planet-info-owner-row">
+						<td>
+							<p id="planet-info-owner">owner</p>
+						</td>
+					</tr>
+				</table>
 			</div>
 
 			<!-- general GUI -->
@@ -662,6 +680,7 @@
 		var jumpInAction;
 		var thereArePlanets = false;
 		var thereAreMoons = false;
+		var editAccess = true;	//allow editing planet if owned
 		
 		// Variables for building on planets/moons
 		var buildHouseOk;
@@ -769,7 +788,7 @@
 		var userPassword;
 
 		// Database variables
-		var dbFunctionality = false;
+		var dbFunctionality = true;
 		var dbPlanet;
 		var planetToSpawn;
 
@@ -853,6 +872,7 @@
     		    
 			} else {
 			    console.log("no user logged in");
+			    buttonsForNonLoggedInUser();
 			}
 
 			if (dbFunctionality) {
@@ -873,7 +893,7 @@
 			});
 
 			addSun();
-			turnOnLensFlare(false);
+			turnOnLensFlare(true);
 
 			loadStars();
 			for (var i = 0; i < stars.length; ++i){

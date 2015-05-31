@@ -513,6 +513,56 @@ p.user_info {
 	animation-name: fadeOutLeft;
 }
 
+/*** planet info ***/
+#planet-info-container{
+	position: absolute;
+	top: 250px;
+	right: 10px;
+	height: 65px;
+	min-width: 150px;
+	/*max-width: 100px;	*/
+	background: rgb(10, 10, 10);
+	border: 1px solid rgba(100, 100, 100,0.6);
+	box-shadow:	
+		0pt 2px 5px rgba(10, 10, 30,  0.7),	
+		0px 0px 8px 5px rgba(100, 100, 100, 0.3) inset;
+	border-radius: 5px;
+}
+
+#planet-info-table{
+	border: none;
+	width: 10%;
+	height: 50%;
+}
+#planet-info-table td{
+	padding-left: 1px;
+	float: right;
+}
+/*.planet-info-table-text{
+	position: absolute;
+	color: white;
+	margin: 10px 10px 10px 20px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 15px;
+}*/
+
+#planet-info-owner,
+#planet-info-name{
+	position: absolute;
+	color: white;
+	margin: 10px 10px 10px 20px;
+	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+	font-size: 15px;
+	text-align: right;
+}
+
+/*#planet-info-name{
+	border-bottom:1px solid #EEE;
+}
+#planet-info-owner{
+	border-top:1px solid #CCC;
+}*/
+
 /***** VIEWS ******/
 #jump-system-container {
 	position: absolute;
