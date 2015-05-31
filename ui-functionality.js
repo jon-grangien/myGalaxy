@@ -95,12 +95,24 @@ $(document).ready(function(){
 				visibility(mesh.children[3],true); //Show clicked background
 			}
 		}
+
+		for (var i = 0; i < planetMeteorbeltStates.length; ++i) {
+			if (activePlanet == planetMeteorbeltStates[i][0]) {
+				planetMeteorbeltStates[i][1] = true;
+			}
+		}
 	});
 	$('.meteor-check').on('ifUnchecked', function(event){
 		for (var i = 0; i < meteorbelts.length; ++i) {
 			if (meteorbelts[i][0] == activePlanet) {
 				mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
 				visibility(mesh.children[3],false); //Show clicked background
+			}
+		}
+
+		for (var i = 0; i < planetMeteorbeltStates.length; ++i) {
+			if (activePlanet == planetMeteorbeltStates[i][0]) {
+				planetMeteorbeltStates[i][1] = false;
 			}
 		}
 	});
@@ -229,7 +241,7 @@ $(document).ready(function() {
         if(user) {
 	        selectPlanetsOk = false;
 
-	        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false);
+	        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false, false);
 
 	        //reset slider values to inital values
 	        $( ".planet_radius_slider" ).slider( "option", "value", 80 );
@@ -325,6 +337,18 @@ $(document).ready(function() {
 	        $( ".planet_radius_slider" ).slider( "option", "value", radius );
 			$( ".planet_size_slider" ).slider( "option", "value", size );
 			$( ".planet_rotation_slider" ).slider( "option", "value", rotation );
+
+			//update meteor state checkbox
+			for (var i = 0; i < planetMeteorbeltStates.length; ++i) {
+				if (activePlanet == planetMeteorbeltStates[i][0]) {
+					if(planetMeteorbeltStates[i][1]) {
+						$('.meteor-check').iCheck('check');
+					} else {
+						$('.meteor-check').iCheck('uncheck');						
+					}
+
+				}
+			};
 
 	        menusOnEditPlanet();
 	    }

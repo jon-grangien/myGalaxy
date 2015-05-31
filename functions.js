@@ -117,7 +117,7 @@ function onWindowResize() {
 }
 
 // Planet spawn
-function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, isLoadedPlanet){
+function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, meteorBeltState, isLoadedPlanet){
 	
 	if(soundOn && (!isLoadedPlanet)) {
 		document.getElementById('multiaudio1').play();
@@ -216,6 +216,16 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 	planetGroups.push(activeGroup);
 	addMeteorbelt();
 
+	// show meteorbelt if on
+	if(meteorBeltState) {
+		for (var i = 0; i < meteorbelts.length; ++i) {
+			if (meteorbelts[i][0] == activePlanet) {
+				mesh = meteorbelts[i][0];	//Extraxt clicked-mesh from array
+				visibility(mesh.children[3],true); //Show clicked background
+			}
+		}
+	}
+	
 	for (var i = 0; i < planetGroups.length; ++i) {
 	    if (planetGroups[i] == activeGroup){
 	    	sunSphere.add(planetGroups[i]);
@@ -226,6 +236,7 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 	activePlanet.scale.x = size;
 	activePlanet.scale.y = size;
 	activePlanet.scale.z = size;
+
 
 	var tempArray;
 
@@ -252,6 +263,10 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 	// Push to planetPaths
 	tempArray = [activePlanet, path];
 	planetPaths.push(tempArray);
+
+	// Push to planetMeteorbeltStates
+	tempArray = [activePlanet, meteorBeltState];
+	planetMeteorbeltStates.push(tempArray);
 
 	// Push to hoverShells
 	tempArray = [activePlanet, hoverShell];

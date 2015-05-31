@@ -61,6 +61,7 @@ function saveNewPlanetToDB() {
 		dbPlanet.set("radius", 80);
 		dbPlanet.set("size", 1);	
 		dbPlanet.set("rotationSpeed", 0.001);
+		dbPlanet.set("meteorBelt", false);
 
 		dbPlanet.save(null, {
 		  success: function(dbPlanet) {
@@ -94,6 +95,7 @@ function updatePlanetInDB() {
 		var planetRotationSpeed;
 		var planetTexture;
 		var planetName;
+		var planetMeteorbelt;
 
 		// Get id's
 		for (var i = 0; i < planetIds.length; ++i) {
@@ -138,6 +140,13 @@ function updatePlanetInDB() {
 			}
 		}
 
+		// Get planet meteorbelt state
+		for (var i = 0; i < planetMeteorbeltStates.length; i++) {
+			if (planetMeteorbeltStates[i][0] == activePlanet) {
+				planetMeteorbelt = planetMeteorbeltStates[i][1];
+			}
+		}
+
 		var Planet = Parse.Object.extend("Planet");
 		
 		// var planetOwner;
@@ -161,6 +170,7 @@ function updatePlanetInDB() {
 		dbPlanet.set("radius", planetRadius);
 		dbPlanet.set("size", planetSize);	
 		dbPlanet.set("rotationSpeed", planetRotationSpeed);
+		dbPlanet.set("meteorBelt", planetMeteorbelt);
 
 		dbPlanet.save(null, {
 		  success: function(dbPlanet) {
@@ -219,7 +229,7 @@ function loadPlanetsFromDB(system) {
 				for (var i = 0; i < results.length; i++) { 
 					var object = results[i];
 					console.log(object.get('ownerName') + ' - ' + object.get('name') + ' ' + object.id + ' - ' + object.get('texture'));
-		    		addPlanet(object.id, object.get('ownerId'), object.get('name'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'), true);
+		    		addPlanet(object.id, object.get('ownerId'), object.get('name'), object.get('texture'), object.get('radius'), object.get('size'), object.get('rotationSpeed'), object.get('meteorBelt'), true);
 		    	}
 
 			},
