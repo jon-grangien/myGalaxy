@@ -2,7 +2,7 @@ $(function() {
 	$( ".planet_radius_slider" ).slider({
 		min: 130,
 		max: 900,
-		value: 100,
+		value: 150,
 		step: 1,
 		slide: function(event, ui) {
 			// activePlanet.position.x = ui.value;  påverkar inte
