@@ -58,7 +58,7 @@ function saveNewPlanetToDB() {
 		// Initial values
 		dbPlanet.set("name" , "");
 		dbPlanet.set("texture", "earthmap.jpg");
-		dbPlanet.set("radius", 80);
+		dbPlanet.set("radius", 150);
 		dbPlanet.set("size", 1);	
 		dbPlanet.set("rotationSpeed", 0.001);
 		dbPlanet.set("meteorBelt", false);

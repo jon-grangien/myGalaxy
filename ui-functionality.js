@@ -1,8 +1,8 @@
 $(function() {
 	$( ".planet_radius_slider" ).slider({
-		min: 30,
-		max: 600,
-		value: 80,
+		min: 130,
+		max: 900,
+		value: 100,
 		step: 1,
 		slide: function(event, ui) {
 			// activePlanet.position.x = ui.value;  påverkar inte
@@ -28,7 +28,7 @@ $(function() {
 $(function() {
 	$( ".planet_size_slider" ).slider({
 		min: 1,
-		max: 5,
+		max: 4,
 		value: 1,
 		step: 0.01,
 		slide: function(event, ui) {
@@ -242,10 +242,10 @@ $(document).ready(function() {
         	deselect();
 	        selectPlanetsOk = false;
 
-	        addPlanet(0, 0, "", "earthmap.jpg", 80, 1, 0.001, false, false);
+	        addPlanet(0, 0, "", "earthmap.jpg", 150, 1, 0.001, false, false);
 
 	        //reset slider values to inital values
-	        $( ".planet_radius_slider" ).slider( "option", "value", 80 );
+	        $( ".planet_radius_slider" ).slider( "option", "value", 150 );
 			$( ".planet_size_slider" ).slider( "option", "value", 1 );
 			$('.planet_rotation_slider').slider( "option", "value", 0.001 );
 
