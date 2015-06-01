@@ -776,7 +776,7 @@ function onDocumentMouseDown( event ) {
 			showButtonsForActivePlanet();
 		}
 
-		if(user && dbFunctionality) {
+		if(dbFunctionality) {
 
 			// get planet name
 			var planetName;
@@ -814,11 +814,13 @@ function onDocumentMouseDown( event ) {
 
 			editAccess = false;
 
-			for (var i = 0; i < planetIds.length; ++i) {
-				if(activePlanet == planetIds[i][0]) {
-					if(user.id == planetIds[i][2]) {
-						editAccess = true;
-						// console.log("user " + user.getUsername() + " (" + user.id + ") has access to this planet");
+			if (user) {
+				for (var i = 0; i < planetIds.length; ++i) {
+					if(activePlanet == planetIds[i][0]) {
+						if(user.id == planetIds[i][2]) {
+							editAccess = true;
+							// console.log("user " + user.getUsername() + " (" + user.id + ") has access to this planet");
+						}
 					}
 				}
 			}
