@@ -1,18 +1,3 @@
-// Menus that aren't supposed to show initially (prestanda?)
-function initiallyHideMenus() {
-    $('#user_menu').hide();
-    $('.edit-created-planet-container').hide();
-    $('.bygg-main').hide();
-    $('#edit-existing-planet-container').hide();
-    $('#edit-planet-button').hide();
-    $('#jump-planet-button').hide();
-    $('#jump-moon-button').hide();
-    $('#edit-planet-tabs').hide();
-    $('#build-planet-button').hide();
-    $('#accordion-container').hide();
-    $('#planet-info-container').hide();
-}
-
 function menusOnLogin() {
 	// Hide login/create menus
     $('#login').hide("fast");

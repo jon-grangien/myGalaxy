@@ -21,6 +21,7 @@ audio{
 }
 /************* GENERAL GUI *********************/
 .edit-created-planet-container {
+	display: none;
 	position: absolute;
 	top: 1%;
 	right: 10px;
@@ -231,6 +232,7 @@ audio{
 }
 
 #add-button-container button {
+	display: none;
 	width: 100%;
 	height: 100%;
 	background: rgb(30, 30, 30);
@@ -435,6 +437,7 @@ input {
 
 /*logged in user menu*/
 #user_menu {
+	display: none;
 	position: absolute;
 	/*top: 0px;*/
 	bottom: 0px;
@@ -512,6 +515,7 @@ p.user_info {
 
 /*** planet info ***/
 #planet-info-container{
+	display: none;
 	position: absolute;
 	top: 250px;
 	right: 10px;
@@ -599,6 +603,11 @@ p.user_info {
 	heigth: 40px;
 }
 
+#jump-planet-button,
+#jump-moon-button{
+	display: none;
+}
+
 .jump-planet-moon-buttons {
 	float: right;
 	/*min-width: 45px;*/
@@ -665,6 +674,7 @@ p.user_info {
 }*/
 
 #edit-planet-tabs {
+	display: none;
 	position: absolute;
 	top: 1%;
 	right: 10px;
@@ -712,6 +722,10 @@ p.user_info {
 	border-radius: 3px;
 	-webkit-filter: brightness(150%);
 	cursor: pointer;
+}
+
+#edit-existing-planet-container{
+	display: none;
 }
 
 #edit-existing-planet-moon-container {
@@ -859,7 +873,11 @@ ul.room-menu li:hover {
 }
 
 /******** PLANET BUILD GUI ********/
+.bygg-main{
+	display: none;
+}
 #accordion-container {	/*same as edit-planet-tabs*/
+	display: none;
 	position: absolute;
 	top: 1%;
 	right: 10px;
