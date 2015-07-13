@@ -259,10 +259,52 @@ function unlockAchievement(achId, userId) {
 
 	    console.log("user " + userId + " unlocked achievement " + achTitle);
 	    console.log("desc: " + achDesc + " | " + achPoints + " points");
+
+	    var UserUnlockedAchievements = Parse.Object.extend("UserUnlockedAchievements");
+	    var unlocked = new UserUnlockedAchievements();
+	    unlocked.set("achId", achId);
+	    unlocked.set("userId", userId);
+
+	    unlocked.save(null, {
+	      success: function(dbPlanet) {
+		    console.log('New object UserUnlockedAchievements saved with objectId: ' + unlocked.id);
+
+
+	      },
+	      error: function(dbPlanet, error) {
+	        console.log('Failed to create new object UserUnlockedAchievements, with error: ' + error.message);
+	      }
+	    });
+
+
 	  },
 	  error: function(object, error) {
 	    // The object was not retrieved successfully.
 	    console.log("failed to retrieve " + object + ', ' + error);
 	  }
 	});
+
+	// var Planet = Parse.Object.extend("Planet");
+	// var dbPlanet = new Planet();
+
+	// dbPlanet.set("ownerName", username);
+	// dbPlanet.set("ownerId", user.id);
+	// dbPlanet.set("system", currentSystem); //global
+
+	// dbPlanet.save(null, {
+	//   success: function(dbPlanet) {
+	//     // Execute any logic that should take place after the object is saved.
+	//     console.log('New object saved with objectId: ' + dbPlanet.id);
+
+	//     // Push to planetIds
+	//     var tempArray = [activePlanet, dbPlanet.id, user.id];
+	//     planetIds.push(tempArray);
+
+	//   },
+	//   error: function(dbPlanet, error) {
+	//     // Execute any logic that should take place if the save fails.
+	//     // error is a Parse.Error with an error code and message.
+	//     console.log('Failed to create new object, with error: ' + error.message);
+	//   }
+	// });
 }
