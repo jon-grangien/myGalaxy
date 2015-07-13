@@ -1188,38 +1188,7 @@ function showOrbitsFunction(){
 	}
 }
 
-
-function showBuild(input){
-	if(input == 1){
-		console.log('VOLCANO'); 
-		buildHouseOk = true;
-		building = input;
-	}
-
-	if(input == 2){
-		console.log('WINDMILL'); 
-		buildHouseOk = true;
-		building = input;
-	}
-
-	if(input == 3){
-		console.log('BRIDGE'); 
-		buildHouseOk = true;
-		building = input;
-	}
-
-	if(input == 4){
-		console.log('GOOSE'); 
-		buildHouseOk = true;
-		building = input;
-	}
-
-	if(input == 5){
-		console.log('SATELLITE'); 
-	}
-
-	if(input == 6){
-		console.log('ANTKA'); 
-	}
-
+function build(input){
+	buildHouseOk = true;
+	building = input;
 }
