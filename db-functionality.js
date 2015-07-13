@@ -14,6 +14,8 @@ function createAccount() {
 			$('#add-planet-button').css({"color": "rgb(245, 229, 215)",
                                   "opacity": "1.0"});
 			buttonsForLoggedInUser();
+
+			unlockAchievement('8jrXPu4yYe', user.id);	
 		},
 		error: function(user, error) {
 			// Show error message and let the user try again
@@ -240,4 +242,27 @@ function loadPlanetsFromDB(system) {
 			}
 		});
 	}
+}
+
+function unlockAchievement(achId, userId) {
+	var achTitle;
+	var achDesc;
+	var achPoints;
+
+	var achievement = Parse.Object.extend("Achievement");
+	var query = new Parse.Query(achievement);
+	query.get(achId, {
+	  success: function(achievement) {
+	    achTitle = achievement.get('title');
+	    achDesc = achievement.get('description');
+	    achPoints = achievement.get('points');
+
+	    console.log("user " + userId + " unlocked achievement " + achTitle);
+	    console.log("desc: " + achDesc + " | " + achPoints + " points");
+	  },
+	  error: function(object, error) {
+	    // The object was not retrieved successfully.
+	    console.log("failed to retrieve " + object + ', ' + error);
+	  }
+	});
 }
