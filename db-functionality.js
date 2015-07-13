@@ -257,18 +257,15 @@ function unlockAchievement(achId, userId) {
 	    achDesc = achievement.get('description');
 	    achPoints = achievement.get('points');
 
-	    console.log("user " + userId + " unlocked achievement " + achTitle);
-	    console.log("desc: " + achDesc + " | " + achPoints + " points");
-
 	    var UserUnlockedAchievements = Parse.Object.extend("UserUnlockedAchievements");
 	    var unlocked = new UserUnlockedAchievements();
 	    unlocked.set("achId", achId);
 	    unlocked.set("userId", userId);
-
 	    unlocked.save(null, {
 	      success: function(dbPlanet) {
-		    console.log('New object UserUnlockedAchievements saved with objectId: ' + unlocked.id);
+		    // console.log('New object UserUnlockedAchievements saved with objectId: ' + unlocked.id);
 
+		    displayUnlockedAchievement(achTitle, achDesc, achPoints);
 
 	      },
 	      error: function(dbPlanet, error) {

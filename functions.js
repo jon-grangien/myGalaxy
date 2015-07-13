@@ -1188,6 +1188,11 @@ function showOrbitsFunction(){
 	}
 }
 
+function displayUnlockedAchievement(title, desc, points) {
+	console.log("unlocked achievement: " + title);
+	console.log("desc: " + desc + " | " + points + " points");
+}
+
 function build(input){
 	buildHouseOk = true;
 	building = input;
