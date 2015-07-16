@@ -1245,7 +1245,8 @@ function showLoadingSpinner() {
 function checkIfDoneLoading() {
 	console.log("loading (" + calculateLoadedPercent() + "%). textures: " + loadedTextures + "/" + texturesToLoad 
 		+ ", models: " + loadedModels + "/" + modelsToLoad);
-	calculateLoadedPercent();
+	
+	$("#loading-text").text(calculateLoadedPercent() + "% loaded");
 
 	if( ((loadedTextures == texturesToLoad) && (loadedModels == modelsToLoad)) || (frameCounter == 100)) {
 		camera.position.z = 0;		//put camera in sun and allow for zoom out
