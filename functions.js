@@ -1233,8 +1233,8 @@ function showLoadingSpinner() {
 	, className: 'spinner' // The CSS class to assign to the spinner
 	, top: '51%' // Top position relative to parent
 	, left: '50%' // Left position relative to parent
-	, shadow: false // Whether to render a shadow
-	, hwaccel: false // Whether to use hardware acceleration
+	, shadow: true // Whether to render a shadow
+	, hwaccel: true // Whether to use hardware acceleration
 	, position: 'absolute' // Element positioning
 	}
 
