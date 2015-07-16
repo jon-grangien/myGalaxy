@@ -1243,8 +1243,9 @@ function showLoadingSpinner() {
 }
 
 function checkIfDoneLoading() {
-	console.log("loaded textures: " + loadedTextures + "/" + texturesToLoad 
-		+ ", loaded models: " + loadedModels + "/" + modelsToLoad);
+	console.log("loading (" + calculateLoadedPercent() + "%). textures: " + loadedTextures + "/" + texturesToLoad 
+		+ ", models: " + loadedModels + "/" + modelsToLoad);
+	calculateLoadedPercent();
 
 	if( ((loadedTextures == texturesToLoad) && (loadedModels == modelsToLoad)) || (frameCounter == 100)) {
 		camera.position.z = 0;		//put camera in sun and allow for zoom out
@@ -1252,6 +1253,14 @@ function checkIfDoneLoading() {
 		$("#dim-screen").hide();
 		appLoaded = true;
 	}
+}
+
+function calculateLoadedPercent() {
+	var loaded = (loadedTextures + loadedModels);
+	var total = (texturesToLoad + modelsToLoad);
+	var percentage = (loaded / total) * 100;
+
+	return Math.round(percentage);
 }
 
 function build(input){
