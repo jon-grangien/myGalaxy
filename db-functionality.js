@@ -232,7 +232,7 @@ function loadPlanetsFromDB(system) {
 			success: function(results) {
 				console.log("Successfully retrieved " + results.length + " planets:");
 
-				setTexturesToLoad(results.length);
+				incrementTexturesToLoad(results.length);
 
 				for (var i = 0; i < results.length; i++) { 
 					var object = results[i];

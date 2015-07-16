@@ -692,6 +692,9 @@
 		var proceduralSunMaterial;
 		var start = Date.now();
 		var proceduralSun;
+		var textureFlare0;
+		var textureFlare2;
+		var textureFlare3;
 
 		//Lensflare
 		var lensFlare;
@@ -839,7 +842,10 @@
 		function init() {
 			
 			showLoadingSpinner();
-			setModelsToLoad(modelNames.length);
+
+			// Number of models loading initially
+			// loadModels.js
+			incrementModelsToLoad(modelNames.length);
 
 			$container = $('#container');
 
@@ -924,6 +930,11 @@
 			    newUserPassword = jQuery("#password_register_field").val();
 			    createAccount();	//newUsername, newUserPassword global
 			});
+
+			incrementTexturesToLoad(3);
+			textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare02.png", null, incrementTextureCount() );
+			textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png", null, incrementTextureCount() );
+			textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png", null, incrementTextureCount() );
 
 			addSun();
 			turnOnLensFlare(true);

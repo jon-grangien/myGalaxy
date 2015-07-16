@@ -1,11 +1,4 @@
-var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare02.png" );
-var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
-var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
-
-
-
 function addLight( h, s, l, x, y, z ) {
-
 	var light = new THREE.PointLight( 0xffffff, 1.5, 4500 );
 	light.color.setHSL( h, s, l );
 	light.position.set( x, y, z );
@@ -55,13 +48,14 @@ function addSun(){
 	clickedObject = sunSphere;
 
 
-	//Procedural Sun	
+	//Procedural Sun
+	incrementTexturesToLoad(1);
     proceduralSunMaterial = new THREE.ShaderMaterial( {
 
 	    uniforms: { 
 	        tExplosion: {
 	            type: "t", 
-	            value: THREE.ImageUtils.loadTexture( 'textures/explosion.png' )
+	            value: THREE.ImageUtils.loadTexture( 'textures/explosion.png', null, incrementTextureCount() )
 	        },
 	        time: { // float initialized to 0
 	            type: "f", 
@@ -1049,11 +1043,12 @@ function visibility(object, bool){
 function loadStars(){
 	geometry = new THREE.Geometry();
 	
-	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png" );
-	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png" );
-	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star13.png" );
-	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star14.png" );
-	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/star15.png" );
+	incrementTexturesToLoad(5);
+	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png", null, incrementTextureCount() );
+	sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/star12.png", null, incrementTextureCount() );
+	sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/star13.png", null, incrementTextureCount() );
+	sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/star14.png", null, incrementTextureCount() );
+	sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/star15.png", null, incrementTextureCount() );
 	
 	for ( i = 0; i < 20000; i ++ ) {
 
@@ -1193,18 +1188,28 @@ function displayUnlockedAchievement(title, desc, points) {
 	console.log("desc: " + desc + " | " + points + " points");
 }
 
-function setTexturesToLoad(amount) {
-	texturesToLoad = amount;
+function incrementTexturesToLoad(amount) {
+	if(texturesToLoad == -1)	//initial value
+		texturesToLoad = amount;
+	else
+		texturesToLoad += amount;
 }
 
-function setModelsToLoad(amount) {
-	modelsToLoad = amount;
+function incrementModelsToLoad(amount) {
+	if(modelsToLoad == -1)		//initial value
+		modelsToLoad = amount;
+	else
+		modelsToLoad += amount;
 }
 
+// Counts textures loaded
+// Only those needed to load on start relevant
 function incrementTextureCount() {
 	++loadedTextures;
 }
 
+// Counts textures loaded
+// Only those needed to load on start relevant
 function incrementModelCount() {
 	++loadedModels;
 }
