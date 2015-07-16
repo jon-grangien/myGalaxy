@@ -167,7 +167,7 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 
 	// Planet
 	var sphereGeometry = new THREE.SphereGeometry( 11, 60, 60 );
-	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/' + textureFile )} );
+	var sphereMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/' + textureFile, null, incrementTextureCount() )} );
 	activePlanet = new THREE.Mesh(sphereGeometry, sphereMaterial);	//activePlanet is a global var
 	activePlanet.material.map.minFilter = THREE.NearestFilter;
 
@@ -1191,6 +1191,62 @@ function showOrbitsFunction(){
 function displayUnlockedAchievement(title, desc, points) {
 	console.log("unlocked achievement: " + title);
 	console.log("desc: " + desc + " | " + points + " points");
+}
+
+function setTexturesToLoad(amount) {
+	texturesToLoad = amount;
+}
+
+function setModelsToLoad(amount) {
+	modelsToLoad = amount;
+}
+
+function incrementTextureCount() {
+	++loadedTextures;
+}
+
+function incrementModelCount() {
+	++loadedModels;
+}
+
+function showLoadingSpinner() {
+	var opts = {
+	  lines: 17 // The number of lines to draw
+	, length: 1 // The length of each line
+	, width: 6 // The line thickness
+	, radius: 45 // The radius of the inner circle
+	, scale: 1.25 // Scales overall size of the spinner
+	, corners: 1 // Corner roundness (0..1)
+	, color: '#fff' // #rgb or #rrggbb or array of colors
+	, opacity: 0.15 // Opacity of the lines
+	, rotate: 0 // The rotation offset
+	, direction: 1 // 1: clockwise, -1: counterclockwise
+	, speed: 1.5 // Rounds per second
+	, trail: 74 // Afterglow percentage
+	, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+	, zIndex: 2e9 // The z-index (defaults to 2000000000)
+	, className: 'spinner' // The CSS class to assign to the spinner
+	, top: '51%' // Top position relative to parent
+	, left: '50%' // Left position relative to parent
+	, shadow: false // Whether to render a shadow
+	, hwaccel: false // Whether to use hardware acceleration
+	, position: 'absolute' // Element positioning
+	}
+
+	var target = document.getElementById('dim-screen');
+	spinner = new Spinner(opts).spin(target);
+}
+
+function checkIfDoneLoading() {
+	console.log("loaded textures: " + loadedTextures + "/" + texturesToLoad 
+		+ ", loaded models: " + loadedModels + "/" + modelsToLoad);
+
+	if( ((loadedTextures == texturesToLoad) && (loadedModels == modelsToLoad)) || (frameCounter == 100)) {
+		camera.position.z = 0;		//put camera in sun and allow for zoom out
+		spinner.stop();				
+		$("#dim-screen").hide();
+		appLoaded = true;
+	}
 }
 
 function build(input){

@@ -231,7 +231,9 @@ function loadPlanetsFromDB(system) {
 		query.find({
 			success: function(results) {
 				console.log("Successfully retrieved " + results.length + " planets:");
-				// Do something with the returned Parse.Object values
+
+				setTexturesToLoad(results.length);
+
 				for (var i = 0; i < results.length; i++) { 
 					var object = results[i];
 					console.log(object.get('ownerName') + ' - ' + object.get('name') + ' ' + object.id + ' - ' + object.get('texture'));

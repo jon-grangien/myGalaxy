@@ -1,6 +1,5 @@
-
-
-//************ LOADERS ********************/
+// Models used (add name when implementing new obj model)
+var modelNames = ['volcano', 'windmill', 'bridge', 'goose'];
 
 //JSON
 loader = new THREE.JSONLoader();
@@ -22,45 +21,42 @@ loader2 = new THREE.OBJMTLLoader();
 
 
 //************* JSON ***********************
-loader.load("obj/volcano.js", 
+loader.load("obj/volcano.js", function(geometry) {
+	volcano = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/volcano.png")}));
+	scene.add(volcano);
+	
+	volcano.scale.set(0.5, 0.5, 0.5);
 
-			function(geometry) {
+	volcano.receiveShadow = true;
+	volcano.castShadow = true;
+	volcano.transparent = true;
+	visibility(volcano,false);
 
-				volcano = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture("obj/volcano.png")}));
-				scene.add(volcano);
-				
-				volcano.scale.set(0.5, 0.5, 0.5);
-
-				volcano.receiveShadow = true;
-				volcano.castShadow = true;
-				volcano.transparent = true;
-				visibility(volcano,false);
-		});
+	incrementModelCount();
+});
 
 //************* OBJ ***********************
 
 loader2.load( "obj/windmill.obj", "obj/windmill.mtl", function(object){ 
-		
-		object.scale.set(0.2, 0.2, 0.2);
-		windmill.add(object);
-		windmill.traverse( function ( object ) { object.visible = false; } );
-		}, onProgress, onError);
+	object.scale.set(0.2, 0.2, 0.2);
+	windmill.add(object);
+	windmill.traverse( function ( object ) { object.visible = false; } );
+	incrementModelCount();
+}, onProgress, onError);	
 
-
-
-loader2.load( "obj/bridge.obj", "obj/bridge.mtl", function(object){ 
-		
-		object.scale.set(0.7, 0.7, 0.7);
-		bridge.add(object);
-		bridge.traverse( function ( object ) { object.visible = false; } );
-		}, onProgress, onError);
+loader2.load( "obj/bridge.obj", "obj/bridge.mtl", function(object){ 	
+	object.scale.set(0.7, 0.7, 0.7);
+	bridge.add(object);
+	bridge.traverse( function ( object ) { object.visible = false; } );
+	incrementModelCount();
+}, onProgress, onError);
 
 loader2.load( "obj/goose.obj", "obj/goose.mtl", function(object){ 
-		
-		object.scale.set(0.7, 0.7, 0.7);
-		goose.add(object);
-		goose.traverse( function ( object ) { object.visible = false; } );
-		}, onProgress, onError);
+	object.scale.set(0.7, 0.7, 0.7);
+	goose.add(object);
+	goose.traverse( function ( object ) { object.visible = false; } );
+	incrementModelCount();
+}, onProgress, onError);
 
 
 /*

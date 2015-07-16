@@ -31,6 +31,7 @@
 		<script type="text/javascript" src="js/dat.gui.min.js"></script>
 		<script src="js/TrackballControls.js"></script>
 		<script src="js/stats.min.js"></script>
+		<script src="js/spin.min.js"></script>
 
 		<script src="planetJump.js"></script>
 		<script src="placeHouse.js"></script>
@@ -376,6 +377,12 @@
 	<body onkeydown="keyDown(event)">
 		<div id="container"></div>
 
+		<div id="dim-screen">
+			<div id="loading-text-container">
+				<p id="loading-text">loading</p>
+			</div>
+		</div>
+
 		<div id="all-panels">
 			<div id="account-gui-container">
 				<!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
@@ -665,6 +672,15 @@
 		// Basic global variables
 		var $container, camera, scene, renderer, stats, time;
 
+		// variables for handling loading of app
+		var appLoaded = false;
+		var texturesToLoad = -1;  //prevent initially equal to loadedTextures
+		var loadedTextures = 0;
+		var modelsToLoad = -1;    //prevent initially equal to loadedModels
+		var loadedModels = 0;
+		var spinner;
+		var frameCounter = 0;
+
 		// Meshes for planets
 		var sunSphere;
 		var sunCore;
@@ -816,15 +832,14 @@
 		    this.currentTime = 0;
 		    this.play();
 		}, false);
-		
-		
-
 
 		init();
 		animate();
 
 		function init() {
-
+			
+			showLoadingSpinner();
+			setModelsToLoad(modelNames.length);
 
 			$container = $('#container');
 
@@ -832,7 +847,10 @@
 			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
 			scene.fog.color.setHSL( 0.51, 0.4, 0.01 );
 			camera = new THREE.PerspectiveCamera( 15, window.innerWidth/window.innerHeight, 0.1, 20000 );
-			camera.position.z = 0;
+
+			// all in view during loading, resets to 0 on app load (checkIfDoneLoading function)
+			camera.position.z = 5000;
+
 			scene.add(camera);
 			
 			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
@@ -917,10 +935,6 @@
 
 			buildHouseOk = false;
 
-
-
-
-
 			/************** FPS counter *************/
 			stats = new Stats();
 			stats.setMode(0); // 0: fps, 1: ms
@@ -980,6 +994,10 @@
 		}
 
 		function render() {
+			if (! appLoaded) {
+				++frameCounter;	//when 100, load app regardless
+				checkIfDoneLoading();
+			}
 
 			//Procedural sun
 			proceduralSunMaterial.uniforms[ 'time' ].value = .000025 * ( Date.now() - start );
@@ -993,10 +1011,9 @@
 				planetJump();
 			} else if(jumpMoonOk && activeMoon) {
 				moonJump();
-			} else {
+			} else if(appLoaded){
 				jumpToSun();
 			}
-
 
 			if (planetNeedsInitialShift && activePlanet) {
 				activePlanet.position.x += 80;
@@ -1017,7 +1034,7 @@
 				
 				rotationNormalizer = planetSpeeds[i][4];
 
-				//The following lines makes the planets orbit.
+				//The following lines make the planets orbit.
 				orbit = planetOrbitRadiuses[i][1];
 				if(currentRotationSpeed == previousRotationSpeed){
 					currentPlanetGroup.children[0].position.x = Math.cos( time*currentRotationSpeed) * orbit;
@@ -1025,13 +1042,13 @@
 					// console.log(time*currentRotationSpeed*10);
 					//console.log(time*currentRotationSpeed*10);
 				} else {
-					//The following lines makes the planets orbit with compensation for earlier rotationspeeds.
+					//The following lines make the planets orbit with compensation for earlier rotationspeeds.
 					currentPlanetGroup.children[0].position.x = Math.cos( rotationNormalizer + (time - planetSpeeds[i][3])*planetSpeeds[i][1]) * orbit;
 					currentPlanetGroup.children[0].position.y = Math.sin( rotationNormalizer + (time - planetSpeeds[i][3])*planetSpeeds[i][1]) * orbit;
 				}
 			}
 
-			// planet rotations about self (ha som variabel?)
+			// planet rotations about self
 			for (var i = 0; i < planets.length; ++i) {
 				planets[i][0].rotation.z += 0.001;
 			}
@@ -1047,11 +1064,11 @@
 				orbit = moonOrbitRadiuses[i][1];
 
 				if(currentRotationSpeed == previousRotationSpeed){
-					//The following lines makes the moons orbit.
+					//The following lines make the moons orbit.
 					currentMoonGroup.children[0].position.x = Math.cos( time*currentRotationSpeed) * orbit;
 					currentMoonGroup.children[0].position.y = Math.sin( time*currentRotationSpeed) * orbit;
 				} else {
-					//The following lines makes the moons orbit with compensation for earlier rotationspeeds.
+					//The following lines make the moons orbit with compensation for earlier rotationspeeds.
 					currentMoonGroup.children[0].position.x = Math.cos( rotationNormalizer + (time - moonSpeeds[i][3])*moonSpeeds[i][1]) * orbit;
 					currentMoonGroup.children[0].position.y = Math.sin( rotationNormalizer + (time - moonSpeeds[i][3])*moonSpeeds[i][1]) * orbit;
 				}
