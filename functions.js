@@ -1233,8 +1233,21 @@ function displayUnlockedAchievement(title, desc, points) {
 			$(".achievement-box").fadeOut();
 		}, 5000);
 	}, 4000);
+}
 
+function changeSolarSystem(name) {
+	deselect();
+	removeAllPlanetsLocally();
 
+	$("#all-panels").hide();
+	$("#dim-screen").addClass("transparent-50");
+	$("#dim-screen").show();
+	showLoadingSpinner();
+	resetLoadingStats();
+	loadingOtherSystem = true;
+
+    loadPlanetsFromDB(name);
+    currentSystem = name;
 }
 
 function incrementTexturesToLoad(amount) {
@@ -1261,6 +1274,16 @@ function incrementTextureCount() {
 // Only those needed to load on start relevant
 function incrementModelCount() {
 	++loadedModels;
+}
+
+// Resets vars keeping track of loaded items
+function resetLoadingStats() {
+	texturesToLoad = -1;
+	loadedTextures = 0;
+	modelsToLoad = -1;
+	loadedModels = 0;
+	frameCounter = 0;
+	$("#loading-text").text("0% loaded");
 }
 
 function showLoadingSpinner() {
@@ -1291,24 +1314,51 @@ function showLoadingSpinner() {
 	spinner = new Spinner(opts).spin(target);
 }
 
-function checkIfDoneLoading() {
+function checkIfDoneLoading(firstLoad) {
 	console.log("loading (" + calculateLoadedPercent() + "%). textures: " + loadedTextures + "/" + texturesToLoad 
 		+ ", models: " + loadedModels + "/" + modelsToLoad);
 	
-	$("#loading-text").text(calculateLoadedPercent() + "% loaded");
+	// First Time app is loading
+	if (firstLoad) {
+		$("#loading-text").text(calculateLoadedPercent(false) + "% loaded");
 
-	if( ((loadedTextures == texturesToLoad) && (loadedModels == modelsToLoad)) || (frameCounter == 150)) {
-		camera.position.z = 0;		//put camera in sun and allow for zoom out
-		spinner.stop();		
-		$("#dim-screen").fadeOut();
-		appLoaded = true;
+		if( ((loadedTextures == texturesToLoad) && (loadedModels == modelsToLoad)) || (frameCounter == 150)) {
+			camera.position.z = 0;		//put camera in sun and allow for zoom out
+			spinner.stop();		
+			$("#dim-screen").fadeOut();
+			appLoaded = true;
+		}
+	}
+
+	// When changing systems
+	else {
+		$("#loading-text").text(calculateLoadedPercent(true) + "% loaded");
+
+		if(loadedTextures == texturesToLoad) {
+			spinner.stop();
+			$("#dim-screen").fadeOut();
+			$("#all-panels").fadeIn();
+			loadingOtherSystem = false;
+		}
 	}
 }
 
-function calculateLoadedPercent() {
-	var loaded = (loadedTextures + loadedModels);
-	var total = (texturesToLoad + modelsToLoad);
-	var percentage = (loaded / total) * 100;
+function calculateLoadedPercent(justTextures) {
+	var percentage = 0;
+	var loaded = 0;
+	var total = 0;
+
+	if (justTextures) {
+		loaded = loadedTextures;
+		total = texturesToLoad;
+		percentage = (loaded / total) * 100;
+	}
+
+	else {
+		loaded = (loadedTextures + loadedModels);
+		total = (texturesToLoad + modelsToLoad);
+		percentage = (loaded / total) * 100;
+	}
 
 	return Math.round(percentage);
 }

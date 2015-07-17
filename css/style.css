@@ -32,6 +32,10 @@ audio{
     z-index: 100;
 }
 
+.transparent-50 {
+	opacity: 0.5;
+}
+
 #loading-text-container {
 	position: absolute;
 	width: 30%;

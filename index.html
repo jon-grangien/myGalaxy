@@ -379,7 +379,7 @@
 
 		<div id="dim-screen">
 			<div id="loading-text-container">
-				<p id="loading-text">loading</p>
+				<p id="loading-text">0% loaded</p>
 			</div>
 		</div>
 
@@ -674,9 +674,9 @@
 					<a href="#" class="menu-item-text">Systems</a> 
 				</div>
 			</div>
-		</div>
-		
 
+			<div id="fps-div"></div>
+		</div>
 
 		<script>
 
@@ -685,6 +685,7 @@
 
 		// variables for handling loading of app
 		var appLoaded = false;
+		var loadingOtherSystem = false;
 		var texturesToLoad = -1;  //prevent initially equal to loadedTextures
 		var loadedTextures = 0;
 		var modelsToLoad = -1;    //prevent initially equal to loadedModels
@@ -967,7 +968,7 @@
 			stats.domElement.style.left = '1%';
 			stats.domElement.style.bottom = '1%';
 
-			$container.append( stats.domElement );
+			$("#fps-div").append( stats.domElement );
 
 			var update = function() {
 			    stats.begin();
@@ -1017,9 +1018,16 @@
 		}
 
 		function render() {
+			// First time app is loading
 			if (! appLoaded) {
 				++frameCounter;	//when 150, load app regardless
-				checkIfDoneLoading();
+				checkIfDoneLoading(true);
+			}
+
+			// When changing solar system
+			if(loadingOtherSystem) {
+				++frameCounter;
+				checkIfDoneLoading(false);
 			}
 
 			//Procedural sun

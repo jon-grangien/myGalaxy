@@ -482,43 +482,24 @@ $(document).ready(function(){
   });  
 });
 
-$(document).ready(function() {     
+$(document).ready(function() {
     $('#solar-room').click(function() {
-    	deselect();
-    	removeAllPlanetsLocally();
-        loadPlanetsFromDB("Solar System");
-        currentSystem = "Solar System";
+    	changeSolarSystem("Solar System");
     });  
 
     $('#kaiser-room').click(function() {
-    	deselect();
-    	removeAllPlanetsLocally();
-        loadPlanetsFromDB("Kaiser Crescent");
-        currentSystem = "Kaiser Crescent";
-
+    	changeSolarSystem("Kaiser Crescent");
     });
 
     $('#sixten-room').click(function() {
-    	deselect();
-    	removeAllPlanetsLocally();
-        loadPlanetsFromDB("Sixten Sigma");
-        currentSystem = "Sixten Sigma";
-
+    	changeSolarSystem("Sixten Sigma");
     });   
 
     $('#morbit-room').click(function() {
-    	deselect();
-    	removeAllPlanetsLocally();
-        loadPlanetsFromDB("Morbit Nebula");
-        currentSystem = "Morbit Nebula";
-
+    	changeSolarSystem("Morbit Nebula");
     });   
 
     $('#k4-room').click(function() {
-    	deselect();
-    	removeAllPlanetsLocally();
-        loadPlanetsFromDB("K4 Cluster");
-        currentSystem = "K4 Cluster";
-
+    	changeSolarSystem("K4 Cluster");
     });     
 });
