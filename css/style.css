@@ -968,7 +968,7 @@ ul.room-menu li:hover {
 .achievement-box {
 	display: none;
 	position: absolute;
-	min-width: 300px;
+	min-width: 400px;
 	min-height: 90px;
 	width: 25%;
 	left: -50px;	/*before animation slide*/

@@ -274,6 +274,10 @@ function addPlanet(id, ownerId, name, textureFile, radius, size, rotationSpeed, 
 	tempArray = [activePlanet, radius];
 	planetOrbitRadiuses.push(tempArray);
 
+	// Push to planetAmountObjects
+	tempArray = [activePlanet, 0];
+	planetAmountObjects.push(tempArray);
+
 	if(isLoadedPlanet) {
 		// Planet is loaded from db and needs id's specified
 		var tempArray = [activePlanet, id, ownerId];
@@ -577,6 +581,15 @@ function removePlanet() {
 		}
 	}
 
+	// Delete from planetAmountObjects (planet|amount objects)
+	for (var i = 0; i < planetAmountObjects.length; ++i) {
+		if (planetAmountObjects[i][0] == activePlanet) {
+			sunSphere.remove(planetAmountObjects[i][1]);	//remove orbit (child) from sun (parent)
+			planetAmountObjects.splice(i, 1) //remove 1 element (array) from index 0
+			
+		}
+	}
+
 	// Delete from planets (planets|moons)
 	for (var i = 0; i < planets.length; ++i) {
 		if (planets[i][0] == activePlanet) {
@@ -845,6 +858,18 @@ function onDocumentMouseDown( event ) {
 		
 		//Konvertera den globala koordinaten till det klickade objektets lokala koordinatsystem.
 		createHouse(intersects[0].object.worldToLocal(intersects[0].point));
+
+		// increment object count for planet
+		for (var i = 0; i < planetAmountObjects.length; i++) {
+			if(planetAmountObjects[i][0] == activePlanet) {
+				++planetAmountObjects[i][1];
+
+				// Unlock "damnit jim im a doctor (10 objects on a planet)"
+				if(planetAmountObjects[i][1] == 10) {
+					unlockAchievement("uqFdEiD5Ob", user.id);
+				}
+			}
+		}
 
 		buildHouseOk = false;
 	}
