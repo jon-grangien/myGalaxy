@@ -1186,6 +1186,30 @@ function showOrbitsFunction(){
 function displayUnlockedAchievement(title, desc, points) {
 	console.log("unlocked achievement: " + title);
 	console.log("desc: " + desc + " | " + points + " points");
+
+	$(".achievement-text").text(title);
+	$(".achievement-points").text(points + " pts");
+	// $(".achievement-box").show("slide", { direction: "left" }, 1500);
+	
+	// Delay 1 sec before achievement displays
+	// (useful to avoid sound effects overlapping, etc)
+	setTimeout(function() { 
+		$(".achievement-box").animate({left:20, opacity:"show"}, 500);
+	}, 1000);
+
+	setTimeout(function() {
+		$(".achievement-text").fadeOut("slow", function() {
+			$(".achievement-text").text(desc);
+			$(".achievement-text").fadeIn();
+		});
+		
+		// fade out after 5 sec
+		setTimeout(function() { 
+			$(".achievement-box").fadeOut();
+		}, 5000);
+	}, 4000);
+
+
 }
 
 function incrementTexturesToLoad(amount) {
