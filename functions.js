@@ -1299,8 +1299,8 @@ function checkIfDoneLoading() {
 
 	if( ((loadedTextures == texturesToLoad) && (loadedModels == modelsToLoad)) || (frameCounter == 150)) {
 		camera.position.z = 0;		//put camera in sun and allow for zoom out
-		spinner.stop();				
-		$("#dim-screen").hide();
+		spinner.stop();		
+		$("#dim-screen").fadeOut();
 		appLoaded = true;
 	}
 }
