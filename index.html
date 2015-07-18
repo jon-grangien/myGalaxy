@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="css/style.css">
 		<link href="css/square/yellow.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/font-awesome-4.3.0/css/font-awesome.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 		<!-- jquery libs -->
 		<!-- // <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
@@ -17,6 +18,7 @@
 		<script src="js/jquery.slideup.menu.1.0.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 		<script src="js/icheck.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 		<!-- parse -->
   		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
@@ -375,7 +377,7 @@
 
 	</head>
 	<body onkeydown="keyDown(event)">
-		<div id="container"></div>
+		<div id="gl-container"></div>
 
 		<div id="dim-screen">
 			<div id="loading-text-container">
@@ -604,51 +606,53 @@
 
 			</div>
 
-				<!-- build menu -->
-				<div id="accordion-container">
-					<div id="accordion">
-					  <h2>Build</h2>
-					  <div id="build-image-container">
-						<tr>
-						<img src="images/volcano.jpg" class="goose" onclick="build(1);">
-						<img src="images/vindkraftverk.jpg" class="goose" onclick="build(2);"><br>
-						<img src="images/eiffel.png" class="goose" onclick="build(3);">
-						<img src="images/satellite.png" class="goose" onclick="build(4);"><br>
-						<img src="images/eiffel.png" class="goose" onclick="build(5);">
-						<img src="images/goose.png" class="goose" onclick="build(6);">
-						</tr>
-					  </div>
-					  <h2>Trade</h2>
-					  <div id="build-image-container">
-						<tr>
-						<img src="images/goose.png" class="goose">
-						<img src="images/satellite.png" class="goose"><br>
-						<img src="images/eiffel.png" class="goose">
-						<img src="images/satellite.png" class="goose"><br>
-						<img src="images/eiffel.png" class="goose">
-						<img src="images/goose.png" class="goose">
-						</tr>
-					  </div>
-					  
-					  <h2>Chat</h2>
-					  <div id="build-image-container">
-					  <p>Send text to älgen</p>
-					  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
-						<form action="">
-							<input type="submit" value="Send">
-						</form>
-					  </div>
-					</div>
-
-					<button class="edit-done-button">Done</button>
+			<!-- build menu -->
+			<div id="accordion-container">
+				<div id="accordion">
+				  <h2>Build</h2>
+				  <div id="build-image-container">
+					<tr>
+					<img src="images/volcano.jpg" class="goose" onclick="build(1);">
+					<img src="images/vindkraftverk.jpg" class="goose" onclick="build(2);"><br>
+					<img src="images/eiffel.png" class="goose" onclick="build(3);">
+					<img src="images/satellite.png" class="goose" onclick="build(4);"><br>
+					<img src="images/eiffel.png" class="goose" onclick="build(5);">
+					<img src="images/goose.png" class="goose" onclick="build(6);">
+					</tr>
+				  </div>
+				  <h2>Trade</h2>
+				  <div id="build-image-container">
+					<tr>
+					<img src="images/goose.png" class="goose">
+					<img src="images/satellite.png" class="goose"><br>
+					<img src="images/eiffel.png" class="goose">
+					<img src="images/satellite.png" class="goose"><br>
+					<img src="images/eiffel.png" class="goose">
+					<img src="images/goose.png" class="goose">
+					</tr>
+				  </div>
+				  
+				  <h2>Chat</h2>
+				  <div id="build-image-container">
+				  <p>Send text to älgen</p>
+				  <textarea cols="12.5" rows="5" name="comment"></textarea><br>
+					<form action="">
+						<input type="submit" value="Send">
+					</form>
+				  </div>
 				</div>
 
-			<div id="jump-system-container">
-				<button id="jump-system-button">
-					<i class="fa fa-chevron-down fa-fw"></i>
-					View system
-					<i class="fa fa-chevron-down fa-fw"></i>
-				</button>
+				<button class="edit-done-button">Done</button>
+			</div>
+
+			<div class="col-xs-2 col-xs-offset-5">
+				<div id="jump-system-container">
+					<button id="jump-system-button">
+						<i class="fa fa-chevron-down fa-fw jump-system-left-i"></i>
+						View system
+						<i class="fa fa-chevron-down fa-fw jump-system-right-i"></i>
+					</button>
+				</div>
 			</div>
 
 			<div id="jump-planet-moon-container">
@@ -860,7 +864,7 @@
 			// loadModels.js
 			incrementModelsToLoad(modelNames.length);
 
-			$container = $('#container');
+			$container = $('#gl-container');
 
 			scene = new THREE.Scene();
 			scene.fog = new THREE.Fog( 0x000000, 3500, 15000 );
@@ -986,10 +990,10 @@
 			// controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 			window.addEventListener( 'resize', onWindowResize, false );
-			document.getElementById("container").addEventListener( 'mousedown', onDocumentMouseDown, true );
-			document.getElementById("container").addEventListener( 'touchstart', onDocumentTouchStart, true );
-			document.getElementById("container").addEventListener( 'mousemove', onMouseMove, false );
-			document.getElementById("container").addEventListener( 'DOMMouseScroll', wheel, false );
+			document.getElementById("gl-container").addEventListener( 'mousedown', onDocumentMouseDown, true );
+			document.getElementById("gl-container").addEventListener( 'touchstart', onDocumentTouchStart, true );
+			document.getElementById("gl-container").addEventListener( 'mousemove', onMouseMove, false );
+			document.getElementById("gl-container").addEventListener( 'DOMMouseScroll', wheel, false );
 		
 		}
 

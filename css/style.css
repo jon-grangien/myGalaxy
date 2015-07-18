@@ -20,7 +20,7 @@ audio{
 	padding: 0px;
 }
 
-#dim-screen{
+#dim-screen {
     position:fixed;
     padding:0;
     margin:0;
@@ -594,13 +594,18 @@ p.user_info {
 }*/
 
 /***** VIEWS ******/
+.full-width {
+	padding:0;
+    margin:0;
+	width: 100%;
+}
+
 #jump-system-container {
 	position: absolute;
 	bottom: 20px;
-	left: 42%;
-	max-width: 16%;
-	min-width: 200px;
+	right: 2%;	/*small manual adjustment lol*/
 	height: 40px;
+	width: 100%;
 }
 
 #jump-system-button {
@@ -608,7 +613,7 @@ p.user_info {
 	height: 100%;
 	background: rgb(30, 30, 30);
 	color: rgb(245, 229, 215);
-	padding: 10px 15px;
+	padding: 10px 0px;
 	border: 1px solid rgb(0, 0, 0);	
 	border-radius: 3px;	
 	transition: all 0.1s linear;
@@ -626,8 +631,14 @@ p.user_info {
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 
-#jump-system-container i {
-	padding: 0 5%;
+.jump-system-left-i {
+	position: absolute;
+	left: 10%;
+}
+
+.jump-system-right-i {
+	position: absolute;
+	right: 10%;	
 }
 
 #jump-planet-moon-container {
