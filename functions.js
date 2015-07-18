@@ -1196,6 +1196,11 @@ function keyDown(e){
     		showMenu = true;
     	}
     }
+
+    // shift + space bar
+    if(e.keyCode == 32 && e.shiftKey){
+    	$("#jump-system-button").click();
+    }
 }
 
 
