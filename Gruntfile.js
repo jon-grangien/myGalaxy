@@ -9,12 +9,13 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'minBuild/myGalaxyJS.min.js': ['src/.js', 'src/input2.js']
+          'minBuild/myGalaxyJS.min.js': ['js-includes/*.js'],
+          'minBuild/libJS': ['js/*.js']
         }
       }
     },
     jshint: {
-      files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
+      files: ['Gruntfile.js', 'js-includes/*.js'],
       options: {
         // options here to override JSHint defaults
         globals: {
