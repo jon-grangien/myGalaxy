@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       dist: {
         files: {
           'minBuild/myGalaxyJS.min.js': ['js-includes/*.js'],
-          'minBuild/libJS': ['js/*.js']
+          'minBuild/libJS.js': ['js/*.js']
         }
       }
     },
@@ -29,8 +29,9 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+  // grunt.loadNpmTasks('grunt-contrib-jshint');
 
-  grunt.registerTask('default', ['jshint', 'uglify']);
+  // grunt.registerTask('default', ['jshint', 'uglify']);
+  grunt.registerTask('default', ['uglify']);
 
 };
