@@ -1327,7 +1327,7 @@ function checkIfDoneLoading(firstLoad) {
 	if (firstLoad) {
 		$("#loading-text").text(calculateLoadedPercent(false) + "% loaded");
 
-		if( ((loadedTextures == texturesToLoad) && (loadedModels == modelsToLoad)) || (frameCounter == 150)) {
+		if( ((loadedTextures == texturesToLoad) && (loadedModels >= modelsToLoad - 1) && frameCounter >= 40) || (frameCounter >= 150)) {
 			camera.position.z = 0;		//put camera in sun and allow for zoom out
 			spinner.stop();		
 			$("#dim-screen").fadeOut();
