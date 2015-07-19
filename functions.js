@@ -1320,8 +1320,8 @@ function showLoadingSpinner() {
 }
 
 function checkIfDoneLoading(firstLoad) {
-	console.log("loading (" + calculateLoadedPercent() + "%). textures: " + loadedTextures + "/" + texturesToLoad 
-		+ ", models: " + loadedModels + "/" + modelsToLoad);
+	// console.log("loading (" + calculateLoadedPercent() + "%). textures: " + loadedTextures + "/" + texturesToLoad 
+		// + ", models: " + loadedModels + "/" + modelsToLoad);
 	
 	// First Time app is loading
 	if (firstLoad) {
