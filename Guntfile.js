@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'dest/output.min.js': ['src/input1.js', 'src/input2.js']
+          'minBuild/myGalaxyJS.min.js': ['src/.js', 'src/input2.js']
         }
       }
     },
