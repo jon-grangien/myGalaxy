@@ -50,12 +50,14 @@ function addSun(){
 
 	//Procedural Sun
 	incrementTexturesToLoad(1);
-    proceduralSunMaterial = new THREE.ShaderMaterial( {
+    var sunTexture = THREE.ImageUtils.loadTexture( 'textures/explosion.png', null, incrementTextureCount() );
+    sunTexture.minFilter = THREE.LinearFilter;
 
+    proceduralSunMaterial = new THREE.ShaderMaterial( {
 	    uniforms: { 
 	        tExplosion: {
 	            type: "t", 
-	            value: THREE.ImageUtils.loadTexture( 'textures/explosion.png', null, incrementTextureCount() )
+	            value: sunTexture
 	        },
 	        time: { // float initialized to 0
 	            type: "f", 
@@ -305,6 +307,7 @@ function addMeteorbelt(){
 	geometry = new THREE.Geometry();
 
 	sprite1 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor11.png" );
+	sprite1.minFilter = THREE.LinearFilter;
 	//sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/meteor2.png" );
 
 
