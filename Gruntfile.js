@@ -7,11 +7,17 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %> */ \n'
       },
-      dist: {
-        files: {
-          'minBuild/myGalaxyJS.min.js': ['js-includes/*.js'],
-          'minBuild/libJS.js': ['js/*.js']
-        }
+      build: {
+        src: [
+          'js/MTLLoader.js',
+          'js/DDSLoader.js',
+          'js/OBJMTLLoader.js',
+          'js/OBJLoader.js',
+          'js/OrbitControls.js',
+          'js/TrackballControls.js',
+          'js-includes/*.js'
+        ],
+        dest: 'minBuild/myGalaxyJS.min.js'
       }
     },
     jshint: {
